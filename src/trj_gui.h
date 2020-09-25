@@ -24,6 +24,9 @@
 
 typedef struct trj_gui
 {
+	float32_t w_height;
+	float32_t w_width;
+	
 	s_trj_eng eng;
 	s_trj_obj st_eng_obj[255];
 	

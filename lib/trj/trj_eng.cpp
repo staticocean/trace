@@ -14,6 +14,8 @@ uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init_attr attr)
 uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj obj)
 {
 	self->objects[self->objects_offset] = obj;
+	self->objects[self->objects_offset].id = self->objects_offset;
+	
 	self->objects_offset++;
 	
 	return 0x00;
@@ -39,13 +41,6 @@ uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj obj)
 //
 //    return;
 //}
-
-//------------------------------------------------------------------------------
-
-//    def __init__(self, objects):
-//
-//        self.objects = objects;
-//        self.update_forces();
 
 //------------------------------------------------------------------------------
 

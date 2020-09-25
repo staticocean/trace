@@ -36,8 +36,13 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 		if (filter.PassFilter((char*) filter_data[i]))
 		{
 			s_trj_obj *obj = &self->objects[i];
+			bool node_sel = gui->sel_item == &self->objects[i];
 			
-			bool node_open = ImGui::TreeNodeEx((void*) i, 0x00, (char*) obj->name);
+			bool node_open = ImGui::TreeNodeEx((void*) i,
+					(node_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+					| ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
+					(char*) obj->name);
+			
 			if(ImGui::IsItemClicked()) { __sel_object__(gui, &self->objects[i]); }
 			
 			char *hide_label[2] = { "hide", "show" };

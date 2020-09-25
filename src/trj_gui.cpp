@@ -5,6 +5,9 @@
 
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 {
+	self->w_height = 800;
+	self->w_width  = 800;
+	
 	self->gui_eng.sel_item = NULL;
 	self->gui_eng.sel_type = 0x00;
 	self->gui_eng.obj_hide = self->st_gui_eng_objhide;
@@ -41,7 +44,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 uint8_t trj_gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
-					 | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove;
+					 | ImGuiWindowFlags_NoMove;
 	
 	bool show_demo_window = true;
 	
@@ -75,6 +78,16 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			default: break;
 		}
 	}
+	
+	ImGui::End();
+	
+	// Main view
+	
+//	ImGui::SetNextWindowPos((ImVec2) { 400, (float) self->gui_menu.height });
+//	ImGui::SetNextWindowSize((ImVec2) { 0, 0 });
+	ImGui::SetNextWindowPos((ImVec2) { 400, (float) self->gui_menu.height });
+	ImGui::SetNextWindowSize((ImVec2) { self->w_width-400, 0 });
+	ImGui::Begin("main_view", NULL, static_flags);
 	
 	ImGui::End();
 	

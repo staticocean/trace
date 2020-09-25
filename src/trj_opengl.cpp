@@ -99,6 +99,8 @@ int main(int, char**)
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
+		static int display_w = 800, display_h = 800;
+		
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
         // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
@@ -110,12 +112,14 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        trj_gui_main(&trj_gui);
+	
+		trj_gui.w_height = display_h;
+		trj_gui.w_width = display_w;
+  
+		trj_gui_main(&trj_gui);
 
         // Rendering
         ImGui::Render();
-        static int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
