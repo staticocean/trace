@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.16)
+project(trj)
+
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wundefined-internal")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wdeprecated-declarations")
+
+include_directories(./)
+include_directories(lib/imgui/)
+include_directories(lib/opengl/)
+include_directories(lib/fmt/)
+include_directories(lib/trj/)
+include_directories(lib/picoc/)
+
+#include_directories(lib/tcc/)
+#include_directories(lib/tcc/lib/)
+
+file(GLOB src_main      "src/trj_opengl.cpp" "src/trj_gui*.*")
+file(GLOB src_imgui     "lib/imgui/*.*")
+file(GLOB src_opengl    "lib/opengl/*.*")
+file(GLOB src_fmt       "lib/fmt/*.*")
+file(GLOB src_trj       "lib/trj/*.*")
+file(GLOB src_picoc     "lib/picoc/*.*" "lib/picoc/cstdlib/*.*")
+#file(GLOB src_tcc       "lib/tcc/*.*" "lib/tcc/lib/*.*")
+
+list(REMOVE_ITEM ${src_main}  "src/trj_webgl.*")
+list(REMOVE_ITEM ${src_picoc} "lib/picoc/cstdlib/unistd.c")
+list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/library_unix.c")
+list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/platform_unix.c")
+
+add_executable(trj ${src_main} ${src_imgui} ${src_opengl} ${src_fmt} ${src_trj} ${src_picoc})
+
+find_library(lib_opengl32 opengl32)
+target_link_libraries(trj LINK_PUBLIC ${lib_opengl32})
+message( ${lib_opengl32} )
+
+find_library(lib_glfw3_x86 glfw3_x86 lib/opengl/static/)
+target_link_libraries(trj LINK_PUBLIC ${lib_glfw3_x86})
+message( ${lib_glfw3_x86} )
+
+#target_link_libraries(trj LINK_PUBLIC kernel32)
+#target_link_libraries(trj LINK_PUBLIC user32)
+#target_link_libraries(trj LINK_PUBLIC gdi32)
+#target_link_libraries(trj LINK_PUBLIC winspool)
+#target_link_libraries(trj LINK_PUBLIC comdlg32)
+#target_link_libraries(trj LINK_PUBLIC advapi32)
+#target_link_libraries(trj LINK_PUBLIC shell32)
+#target_link_libraries(trj LINK_PUBLIC ole32)
+#target_link_libraries(trj LINK_PUBLIC oleaut32)
+#target_link_libraries(trj LINK_PUBLIC uuid)
+#target_link_libraries(trj LINK_PUBLIC odbc32)
+#target_link_libraries(trj LINK_PUBLIC odbccp32)
+

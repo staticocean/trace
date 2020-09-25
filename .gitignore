@@ -1,0 +1,11 @@
+*.exe
+*.obj
+*.rsp
+*.pdb
+*.cbp
+*.*cache
+*.wasm
+*.wasm.*
+*.data
+*.bin
+*.cmake
