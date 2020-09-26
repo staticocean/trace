@@ -390,7 +390,7 @@ inline Iterator base_iterator(Iterator, Iterator it) {
   return it;
 }
 
-// An output iterator that counts the number of objects written to it and
+// An output iterator that counts the number of obj_list written to it and
 // discards them.
 class counting_iterator {
  private:
@@ -447,7 +447,7 @@ template <typename OutputIt> class truncating_iterator_base {
   size_t count() const { return count_; }
 };
 
-// An output iterator that truncates the output and counts the number of objects
+// An output iterator that truncates the output and counts the number of obj_list
 // written to it.
 template <typename OutputIt,
           typename Enable = typename std::is_void<

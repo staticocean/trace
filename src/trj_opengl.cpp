@@ -114,7 +114,7 @@ int main(int, char**)
         ImGui::NewFrame();
 	
 		trj_gui.w_height = display_h;
-		trj_gui.w_width = display_w;
+		trj_gui.w_width  = display_w;
   
 		trj_gui_main(&trj_gui);
 

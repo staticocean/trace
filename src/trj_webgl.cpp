@@ -31,14 +31,14 @@ EM_JS(void, resizeCanvas, (), {
   js_resizeCanvas();
 });
 
+static s_trj_gui gui;
+
 void loop()
 {
-  static s_trj_gui gui;
-  
-  trj_gui_init(&gui, (s_trj_gui_init_attr) { });
-
   int width = canvas_get_width();
   int height = canvas_get_height();
+  
+  static int display_w = 0, display_h = 0;
 
   glfwSetWindowSize(g_window, width, height);
 
@@ -47,12 +47,14 @@ void loop()
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
-
+	
+  gui.w_height = display_h;
+  gui.w_width  = display_w;
+		
   trj_gui_main(&gui);
 
   ImGui::Render();
 
-  int display_w, display_h;
   glfwMakeContextCurrent(g_window);
   glfwGetFramebufferSize(g_window, &display_w, &display_h);
   glViewport(0, 0, display_w, display_h);
@@ -66,7 +68,7 @@ void loop()
 
 int init()
 {
-  if( !glfwInit() )
+	if( !glfwInit() )
   {
       fprintf( stderr, "Failed to initialize GLFW\n" );
       return 1;
@@ -114,8 +116,10 @@ int init()
   glfwSetCharCallback       (g_window, ImGui_ImplGlfw_CharCallback       );
   
   resizeCanvas();
-
-  return 0;
+	
+	trj_gui_init(&gui, (s_trj_gui_init_attr) { });
+	
+	return 0;
 }
 
 

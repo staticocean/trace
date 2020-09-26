@@ -16,10 +16,13 @@
 
 typedef struct trj_obj
 {
+	struct trj_obj *obj_list;
+	uint32_t *obj_count;
+	
     struct trj_obj *ref;
 
     uint32_t id;
-    uint8_t  name[255];
+    char name[255];
 
     vlf_t time[3];
 	vlf_t pos[3][3];

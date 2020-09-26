@@ -19,6 +19,7 @@
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"
 #include "trj_gui_menu.h"
+#include "trj_gui_traj.h"
 
 //------------------------------------------------------------------------------
 
@@ -187,9 +188,9 @@ int tcc_test(void);
  obj_system.proc_update = NULL;
 
  trj_eng_t engine;
- engine.objects[0] = &obj_earth;
- engine.objects[1] = &obj_system;
- engine.objects_offset = 0x02;
+ engine.obj_list[0] = &obj_earth;
+ engine.obj_list[1] = &obj_system;
+ engine.obj_count = 0x02;
 
  uint32_t i;
 

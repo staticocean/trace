@@ -19,12 +19,13 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init_attr) { .st_objects = self->st_eng_obj });
 	
-	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 00" });
-	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 01" });
-	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 02" });
-	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 03" });
+	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 00", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 01", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 02", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 03", .ref = &self->eng.obj_list[0] });
 	
 	ImGui::StyleColorsDark();
+//	ImGui::StyleColorsLight();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	
@@ -44,7 +45,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 uint8_t trj_gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
-					 | ImGuiWindowFlags_NoMove;
+					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
 	
 	bool show_demo_window = true;
 	
@@ -53,154 +54,79 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	trj_gui_menu_main(&self->gui_menu);
 	
-	// Object list
-	ImGui::SetNextWindowPos((ImVec2) { 0, (float) self->gui_menu.height });
-	ImGui::SetNextWindowSize((ImVec2) { 200, 0 });
-	ImGui::Begin("eng_objlist", NULL, static_flags);
-	trj_gui_eng_objlist(&self->gui_eng, &self->eng);
-	ImGui::End();
-	
-	// Object edit
-	ImGui::SetNextWindowPos((ImVec2) { 200, (float) self->gui_menu.height });
-	ImGui::SetNextWindowSize((ImVec2) { 200, 0 });
-	ImGui::Begin("item_edit", NULL, static_flags);
-	
-	if (self->gui_eng.sel_item != NULL)
 	{
-		switch (self->gui_eng.sel_type)
-		{
-			case 0x00:
-			{
-				trj_gui_obj_edit((s_trj_obj*) self->gui_eng.sel_item);
-				break;
-			}
-			
-			default: break;
-		}
+		// Object list
+		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height});
+		ImGui::SetNextWindowSize((ImVec2) {200, self->w_height - self->gui_menu.height});
+		ImGui::Begin("obj_list", NULL, static_flags);
+		trj_gui_eng_objlist(&self->gui_eng, &self->eng);
+		ImGui::End();
 	}
 	
-	ImGui::End();
+	{
+		// Object edit
+		ImGui::SetNextWindowPos((ImVec2) {200, (float) self->gui_menu.height});
+		ImGui::SetNextWindowSize((ImVec2) {200, self->w_height - self->gui_menu.height});
+		ImGui::Begin("item_edit", NULL, static_flags);
+		
+		if (self->gui_eng.sel_item != NULL)
+		{
+			switch (self->gui_eng.sel_type)
+			{
+				case 0x00:
+				{
+					trj_gui_obj_edit((s_trj_obj *) self->gui_eng.sel_item);
+					break;
+				}
+				
+				default:
+					break;
+			}
+		}
+		
+		ImGui::End();
+	}
 	
-	// Main view
+	{
+		// Main view
+		
+		//	ImGui::SetNextWindowPos((ImVec2) { 400, (float) self->gui_menu.height });
+		//	ImGui::SetNextWindowSize((ImVec2) { 0, 0 });
+		ImGui::SetNextWindowPos((ImVec2) {400, (float) self->gui_menu.height});
+		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height});
+		ImGui::Begin("main_view", NULL, static_flags);
+		
+		ImVec2 values[255];
+		static int pt_count = 8;
+		
+		for (int i = 0; i < pt_count; ++i)
+		{
+			values[i] = ImVec2(i, i % 4);
+		}
+		
+		CurveEditor("##ce", (float*) values, pt_count, ImVec2(400, 400),
+					(ImU32) CurveEditorFlags::SHOW_GRID | (ImU32) CurveEditorFlags::NO_TANGENTS, &pt_count);
+		
+		ImGui::End();
+	}
 	
-//	ImGui::SetNextWindowPos((ImVec2) { 400, (float) self->gui_menu.height });
-//	ImGui::SetNextWindowSize((ImVec2) { 0, 0 });
-	ImGui::SetNextWindowPos((ImVec2) { 400, (float) self->gui_menu.height });
-	ImGui::SetNextWindowSize((ImVec2) { self->w_width-400, 0 });
-	ImGui::Begin("main_view", NULL, static_flags);
-	
-	ImGui::End();
+	{
+		// Scripting view
+		char src_data[1024];
+		
+		ImGui::Begin("script_edit", NULL, ImGuiWindowFlags_NoCollapse);
+		
+		ImGui::InputTextMultiline("", src_data, 1024);
+		
+		if (ImGui::Button("compile"))
+		{
+		
+		}
+		
+		ImGui::End();
+	}
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
-//
-///* this function is called by the generated code */
-//int fadd(int a, int b)
-//{
-//	return a + b;
-//}
-//
-//int32_t tcc_test(void)
-//{
-//	/* this strinc is referenced by the generated code */
-//	static const char hello[] = "Hello World!";
-//
-//	static const char* program = \
-//	"#include <tcclib.h>\n" /* include the "Simple libc header for TCC" */
-//	"extern int add(int a, int b);\n"
-//	"extern int foo(int a);\n"
-//	"#ifdef _WIN32\n" /* dynamically linked data needs 'dllimport' */
-//	" __attribute__((dllimport))\n"
-//	"#endif\n"
-//	"extern const char hello[];\n"
-//	"int fib(int n)\n"
-//	"{\n"
-//	"    if (n <= 2)\n"
-//	"        return 1;\n"
-//	"    else\n"
-//	"        return fib(n-1) + fib(n-2);\n"
-//	"}\n"
-//	"\n"
-//	"int foo(int n)\n"
-//	"{\n"
-//	"    return 32*32;\n"
-//	"}\n";
-//
-//	int i;
-//
-//	TCCState *s = tcc_new();
-//
-//	if (!s) {
-//		fprintf(stderr, "Could not create tcc state\n");
-//		exit(1);
-//	}
-//
-//	/* if tcclib.h and libtcc1.a are not installed, where can we find them */
-//
-//	#ifdef __EMSCRIPTEN__
-//
-//	tcc_set_lib_path(s, "/lib");
-//	tcc_add_include_path(s, "/lib");
-//	tcc_add_include_path(s, "/include");
-//	tcc_add_include_path(s, "/include/winapi");
-//	tcc_add_include_path(s, "/include/tcc");
-//	tcc_add_include_path(s, "/include/sys");
-//	tcc_add_include_path(s, "/include/sec_api");
-//	tcc_add_sysinclude_path(s, "/lib");
-//	tcc_add_sysinclude_path(s, "/include");
-//	tcc_add_sysinclude_path(s, "/include/winapi");
-//	tcc_add_sysinclude_path(s, "/include/tcc");
-//	tcc_add_sysinclude_path(s, "/include/sys");
-//	tcc_add_sysinclude_path(s, "/include/sec_api");
-//
-//	#else
-//
-//	tcc_set_lib_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\lib");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\lib");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\winapi");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\tcc");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\sys");
-//	tcc_add_include_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\sec_api");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\lib");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\winapi");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\tcc");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\sys");
-//	tcc_add_sysinclude_path(s, "C:\\Users\\cel\\dev\\git\\bitbucket\\trajectory\\src\\cmake-build-debug\\include\\sec_api");
-//
-//	#endif
-//
-//	/* MUST BE CALLED before any compilation */
-//	tcc_set_output_type(s, TCC_OUTPUT_MEMORY);
-//
-//	tcc_set_options(s, "-nostdlib");
-//
-//	if (tcc_compile_string(s, program) > 0) {
-//		printf("Compilation error !\n");
-//		return 2;
-//	}
-//
-//	/* as a test, we add symbols that the compiled program can use.
-//	   You may also open a dll with tcc_add_dll() and use symbols from that */
-////	tcc_add_symbol(s, "add", (const void *) fadd);
-////	tcc_add_symbol(s, "hello", (const void *) hello);
-//
-//	/* relocate the code */
-//	if (tcc_relocate(s, TCC_RELOCATE_AUTO) < 0) return 1;
-//
-//	/* get entry symbol */
-//
-//	int32_t (*func)(int32_t) = (int32_t (*)(int32_t)) tcc_get_symbol(s, "foo");
-//	if (tcc_get_symbol(s, "foo") == 0x00) return 2;
-//
-//	/* run the code */
-//	int32_t res = func(32);
-//
-//	/* delete the state */
-//	tcc_delete(s);
-//
-//	return res;
-//}

@@ -721,7 +721,7 @@ static void ShowDemoWindowWidgets()
                 ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
             // 'selection_mask' is dumb representation of what may be user-side selection state.
-            //  You may retain selection state inside or outside your objects in whatever format you see fit.
+            //  You may retain selection state inside or outside your obj_list in whatever format you see fit.
             // 'node_clicked' is temporary storage of what node we have clicked to process selection at the end
             /// of the loop. May be a pointer to your own node type, etc.
             static int selection_mask = (1 << 2);
@@ -1021,7 +1021,7 @@ static void ShowDemoWindowWidgets()
         //   When Selectable() has been clicked it returns true and you can alter selection state accordingly.
         // - The one taking "bool* p_selected" as a read-write selection information (convenient in some cases)
         // The earlier is more flexible, as in real application your selection may be stored in many different ways
-        // and not necessarily inside a bool value (e.g. in flags within objects, as an external list, etc).
+        // and not necessarily inside a bool value (e.g. in flags within obj_list, as an external list, etc).
         if (ImGui::TreeNode("Basic"))
         {
             static bool selection[5] = { false, true, false, false, false };
@@ -4772,7 +4772,7 @@ static void ShowExampleAppPropertyEditor(bool* p_open)
 
     HelpMarker(
         "This example shows how you may implement a property editor using two columns.\n"
-        "All objects/fields data are dummies here.\n"
+        "All obj_list/fields data are dummies here.\n"
         "Remember that in many simple cases, you can use ImGui::SameLine(xxx) to position\n"
         "your cursor horizontally instead of using the Columns() API.");
 
@@ -4780,7 +4780,7 @@ static void ShowExampleAppPropertyEditor(bool* p_open)
     ImGui::Columns(2);
     ImGui::Separator();
 
-    // Iterate placeholder objects (all the same data)
+    // Iterate placeholder obj_list (all the same data)
     for (int obj_i = 0; obj_i < 3; obj_i++)
         ShowPlaceholderObject("Object", obj_i);
 

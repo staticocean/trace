@@ -286,6 +286,114 @@ lib\imgui\imgui_widgets.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.s
 .PHONY : lib\imgui\imgui_widgets.cpp.s
 
+lib\imguizmo\ImCurveEdit.obj: lib\imguizmo\ImCurveEdit.cpp.obj
+
+.PHONY : lib\imguizmo\ImCurveEdit.obj
+
+# target to build an object file
+lib\imguizmo\ImCurveEdit.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj
+.PHONY : lib\imguizmo\ImCurveEdit.cpp.obj
+
+lib\imguizmo\ImCurveEdit.i: lib\imguizmo\ImCurveEdit.cpp.i
+
+.PHONY : lib\imguizmo\ImCurveEdit.i
+
+# target to preprocess a source file
+lib\imguizmo\ImCurveEdit.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.i
+.PHONY : lib\imguizmo\ImCurveEdit.cpp.i
+
+lib\imguizmo\ImCurveEdit.s: lib\imguizmo\ImCurveEdit.cpp.s
+
+.PHONY : lib\imguizmo\ImCurveEdit.s
+
+# target to generate assembly for a file
+lib\imguizmo\ImCurveEdit.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.s
+.PHONY : lib\imguizmo\ImCurveEdit.cpp.s
+
+lib\imguizmo\ImGradient.obj: lib\imguizmo\ImGradient.cpp.obj
+
+.PHONY : lib\imguizmo\ImGradient.obj
+
+# target to build an object file
+lib\imguizmo\ImGradient.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj
+.PHONY : lib\imguizmo\ImGradient.cpp.obj
+
+lib\imguizmo\ImGradient.i: lib\imguizmo\ImGradient.cpp.i
+
+.PHONY : lib\imguizmo\ImGradient.i
+
+# target to preprocess a source file
+lib\imguizmo\ImGradient.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.i
+.PHONY : lib\imguizmo\ImGradient.cpp.i
+
+lib\imguizmo\ImGradient.s: lib\imguizmo\ImGradient.cpp.s
+
+.PHONY : lib\imguizmo\ImGradient.s
+
+# target to generate assembly for a file
+lib\imguizmo\ImGradient.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.s
+.PHONY : lib\imguizmo\ImGradient.cpp.s
+
+lib\imguizmo\ImGuizmo.obj: lib\imguizmo\ImGuizmo.cpp.obj
+
+.PHONY : lib\imguizmo\ImGuizmo.obj
+
+# target to build an object file
+lib\imguizmo\ImGuizmo.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj
+.PHONY : lib\imguizmo\ImGuizmo.cpp.obj
+
+lib\imguizmo\ImGuizmo.i: lib\imguizmo\ImGuizmo.cpp.i
+
+.PHONY : lib\imguizmo\ImGuizmo.i
+
+# target to preprocess a source file
+lib\imguizmo\ImGuizmo.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.i
+.PHONY : lib\imguizmo\ImGuizmo.cpp.i
+
+lib\imguizmo\ImGuizmo.s: lib\imguizmo\ImGuizmo.cpp.s
+
+.PHONY : lib\imguizmo\ImGuizmo.s
+
+# target to generate assembly for a file
+lib\imguizmo\ImGuizmo.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.s
+.PHONY : lib\imguizmo\ImGuizmo.cpp.s
+
+lib\imguizmo\ImSequencer.obj: lib\imguizmo\ImSequencer.cpp.obj
+
+.PHONY : lib\imguizmo\ImSequencer.obj
+
+# target to build an object file
+lib\imguizmo\ImSequencer.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj
+.PHONY : lib\imguizmo\ImSequencer.cpp.obj
+
+lib\imguizmo\ImSequencer.i: lib\imguizmo\ImSequencer.cpp.i
+
+.PHONY : lib\imguizmo\ImSequencer.i
+
+# target to preprocess a source file
+lib\imguizmo\ImSequencer.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.i
+.PHONY : lib\imguizmo\ImSequencer.cpp.i
+
+lib\imguizmo\ImSequencer.s: lib\imguizmo\ImSequencer.cpp.s
+
+.PHONY : lib\imguizmo\ImSequencer.s
+
+# target to generate assembly for a file
+lib\imguizmo\ImSequencer.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.s
+.PHONY : lib\imguizmo\ImSequencer.cpp.s
+
 lib\opengl\gl3w.obj: lib\opengl\gl3w.c.obj
 
 .PHONY : lib\opengl\gl3w.obj
@@ -961,6 +1069,33 @@ lib\trj\trj_proc.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_proc.cpp.s
 .PHONY : lib\trj\trj_proc.cpp.s
 
+lib\trj\trj_traj.obj: lib\trj\trj_traj.cpp.obj
+
+.PHONY : lib\trj\trj_traj.obj
+
+# target to build an object file
+lib\trj\trj_traj.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj
+.PHONY : lib\trj\trj_traj.cpp.obj
+
+lib\trj\trj_traj.i: lib\trj\trj_traj.cpp.i
+
+.PHONY : lib\trj\trj_traj.i
+
+# target to preprocess a source file
+lib\trj\trj_traj.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.i
+.PHONY : lib\trj\trj_traj.cpp.i
+
+lib\trj\trj_traj.s: lib\trj\trj_traj.cpp.s
+
+.PHONY : lib\trj\trj_traj.s
+
+# target to generate assembly for a file
+lib\trj\trj_traj.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.s
+.PHONY : lib\trj\trj_traj.cpp.s
+
 lib\trj\trj_types.obj: lib\trj\trj_types.cpp.obj
 
 .PHONY : lib\trj\trj_types.obj
@@ -1177,6 +1312,33 @@ src\trj_gui_obj.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_obj.cpp.s
 .PHONY : src\trj_gui_obj.cpp.s
 
+src\trj_gui_traj.obj: src\trj_gui_traj.cpp.obj
+
+.PHONY : src\trj_gui_traj.obj
+
+# target to build an object file
+src\trj_gui_traj.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj
+.PHONY : src\trj_gui_traj.cpp.obj
+
+src\trj_gui_traj.i: src\trj_gui_traj.cpp.i
+
+.PHONY : src\trj_gui_traj.i
+
+# target to preprocess a source file
+src\trj_gui_traj.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_traj.cpp.i
+.PHONY : src\trj_gui_traj.cpp.i
+
+src\trj_gui_traj.s: src\trj_gui_traj.cpp.s
+
+.PHONY : src\trj_gui_traj.s
+
+# target to generate assembly for a file
+src\trj_gui_traj.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_traj.cpp.s
+.PHONY : src\trj_gui_traj.cpp.s
+
 src\trj_gui_w.obj: src\trj_gui_w.cpp.obj
 
 .PHONY : src\trj_gui_w.obj
@@ -1258,6 +1420,18 @@ help:
 	@echo ... lib/imgui/imgui_widgets.obj
 	@echo ... lib/imgui/imgui_widgets.i
 	@echo ... lib/imgui/imgui_widgets.s
+	@echo ... lib/imguizmo/ImCurveEdit.obj
+	@echo ... lib/imguizmo/ImCurveEdit.i
+	@echo ... lib/imguizmo/ImCurveEdit.s
+	@echo ... lib/imguizmo/ImGradient.obj
+	@echo ... lib/imguizmo/ImGradient.i
+	@echo ... lib/imguizmo/ImGradient.s
+	@echo ... lib/imguizmo/ImGuizmo.obj
+	@echo ... lib/imguizmo/ImGuizmo.i
+	@echo ... lib/imguizmo/ImGuizmo.s
+	@echo ... lib/imguizmo/ImSequencer.obj
+	@echo ... lib/imguizmo/ImSequencer.i
+	@echo ... lib/imguizmo/ImSequencer.s
 	@echo ... lib/opengl/gl3w.obj
 	@echo ... lib/opengl/gl3w.i
 	@echo ... lib/opengl/gl3w.s
@@ -1333,6 +1507,9 @@ help:
 	@echo ... lib/trj/trj_proc.obj
 	@echo ... lib/trj/trj_proc.i
 	@echo ... lib/trj/trj_proc.s
+	@echo ... lib/trj/trj_traj.obj
+	@echo ... lib/trj/trj_traj.i
+	@echo ... lib/trj/trj_traj.s
 	@echo ... lib/trj/trj_types.obj
 	@echo ... lib/trj/trj_types.i
 	@echo ... lib/trj/trj_types.s
@@ -1357,6 +1534,9 @@ help:
 	@echo ... src/trj_gui_obj.obj
 	@echo ... src/trj_gui_obj.i
 	@echo ... src/trj_gui_obj.s
+	@echo ... src/trj_gui_traj.obj
+	@echo ... src/trj_gui_traj.i
+	@echo ... src/trj_gui_traj.s
 	@echo ... src/trj_gui_w.obj
 	@echo ... src/trj_gui_w.i
 	@echo ... src/trj_gui_w.s

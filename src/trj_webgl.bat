@@ -6,6 +6,7 @@ call "C:\Users\cel\dev\git\public\emsdk\emsdk_env.bat"
 cmd /c emcc ^
     ../src/trj_gui.cpp ^
     ../src/trj_gui_eng.cpp ^
+    ../src/trj_gui_traj.cpp ^
     ../src/trj_gui_obj.cpp ^
     ../src/trj_gui_menu.cpp ^
     ../src/trj_webgl.cpp ^
@@ -21,6 +22,7 @@ cmd /c emcc ^
     ../lib/trj/trj_proc.cpp^
     ../lib/trj/trj_types.cpp^
     ../lib/trj/trj_utils.cpp^
+    ../lib/trj/trj_traj.cpp^
     ../lib/trj/vl.cpp^
     ../lib/trj/vl_svd.cpp^
     ../lib/picoc/picoc_clibrary.c^

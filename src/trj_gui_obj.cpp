@@ -34,7 +34,8 @@ uint8_t vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *ma
 
 uint8_t trj_gui_obj_edit(s_trj_obj *self)
 {
-	ImGui::Text("%s [%06d]", self->name, self->id);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -42,24 +43,44 @@ uint8_t trj_gui_obj_edit(s_trj_obj *self)
 	
 	ImGui::Columns(2);
 	
+	ImGui::Text("id");
+	ImGui::NextColumn();
+	ImGui::Text("[%06d]", self->id);
+	ImGui::NextColumn();
+	
 	ImGui::Text("ref");
 	ImGui::NextColumn();
-//	if (self->ref == NULL) { ImGui::Text("none"); }
-//	else { ImGui::Text("%s", (char*) self->ref->name); }
-	const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIIIIII", "JJJJ", "KKKKKKK" };
-	static int item_current = 0;
-	ImGui::Combo("##ref", &item_current, items, IM_ARRAYSIZE(items));
+	const char* items[*self->obj_count];
+	for (int i = 0; i < *self->obj_count; ++i)
+	{ items[i] = self->obj_list[i].name; }
+	ImGui::SetNextItemWidth(-1);
+	if (ImGui::BeginCombo("##ref",
+			items[self->ref->id],
+			ImGuiComboFlags_NoArrowButton))
+	{
+		for (int i = 0; i < IM_ARRAYSIZE(items); ++i)
+		{
+			const bool is_selected = (self->ref->id == i);
+			
+			if (ImGui::Selectable(items[i], is_selected)) { self->ref = &self->obj_list[i]; }
+			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+		}
+		
+		ImGui::EndCombo();
+	}
 	ImGui::NextColumn();
 	
 	ImGui::Text("pos_inert");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
 	ImGui::NextColumn();
+	ImGui::SetNextItemWidth(-1);
 	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1);
 	ImGui::NextColumn();
 	
 	ImGui::Text("rot_inert");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[?]"); }
 	ImGui::NextColumn();
+	ImGui::SetNextItemWidth(-1);
 	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1);
 	ImGui::NextColumn();
 	
@@ -132,36 +153,47 @@ uint8_t trj_gui_obj_edit(s_trj_obj *self)
 //	uint8_t proc_offset;
 //	uint8_t data_offset;
 //
-
-	ImGui::Text("Ctrl");
-	
-	for (int i = 0; i < self->ctrl_offset; ++i)
+	// traj list
+	if(ImGui::CollapsingHeader("traj"))
 	{
-	
+		for (int i = 0; i < self->traj_offset; ++i)
+		{
+		
+		}
 	}
 	
-	ImGui::Text("Proc");
-	
-	for (int i = 0; i < self->proc_offset; ++i)
+	if (ImGui::CollapsingHeader("ctrl"))
 	{
-	
+		for (int i = 0; i < self->ctrl_offset; ++i)
+		{
+		
+		}
 	}
 	
-	ImGui::Text("Data");
-	
-	for (int i = 0; i < self->data_offset; ++i)
+	if (ImGui::CollapsingHeader("proc"))
 	{
+		for (int i = 0; i < self->proc_offset; ++i)
+		{
+		
+		}
+	}
 	
+	if (ImGui::CollapsingHeader("data"))
+	{
+		for (int i = 0; i < self->data_offset; ++i)
+		{
+		
+		}
 	}
 	
 //	static ImGuiTextFilter filter;
 //	static void* selected_item = NULL;
 //
-//	uint8_t* filter_data[self->objects_offset];
+//	uint8_t* filter_data[self->obj_count];
 //
-//	for (int i = 0; i < self->objects_offset; ++i)
+//	for (int i = 0; i < self->obj_count; ++i)
 //	{
-//		filter_data[i] = self->objects[i].name;
+//		filter_data[i] = self->obj_list[i].name;
 //	}
 //
 //	filter.Draw("");
@@ -178,7 +210,7 @@ uint8_t trj_gui_obj_edit(s_trj_obj *self)
 //
 //		if (filter.PassFilter((char*) filter_data[i]))
 //		{
-//			s_trj_obj *obj = &self->objects[i];
+//			s_trj_obj *obj = &self->obj_list[i];
 //
 //			bool node_open = ImGui::TreeNodeEx((void*) i, 0x00, (char*) obj->name);
 //			static bool node_visible = true;

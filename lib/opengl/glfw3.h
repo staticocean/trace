@@ -4137,7 +4137,7 @@ GLFWAPI GLFWvkproc glfwGetInstanceProcAddress(VkInstance instance, const char* p
  *  GLFW_API_UNAVAILABLE and @ref GLFW_PLATFORM_ERROR.
  *
  *  @thread_safety This function may be called from any thread.  For
- *  synchronization details of Vulkan objects, see the Vulkan specification.
+ *  synchronization details of Vulkan obj_list, see the Vulkan specification.
  *
  *  @sa @ref vulkan_present
  *
@@ -4186,7 +4186,7 @@ GLFWAPI int glfwGetPhysicalDevicePresentationSupport(VkInstance instance, VkPhys
  *  eliminate almost all occurrences of these errors.
  *
  *  @thread_safety This function may be called from any thread.  For
- *  synchronization details of Vulkan objects, see the Vulkan specification.
+ *  synchronization details of Vulkan obj_list, see the Vulkan specification.
  *
  *  @sa @ref vulkan_surface
  *  @sa glfwGetRequiredInstanceExtensions

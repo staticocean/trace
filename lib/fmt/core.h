@@ -603,7 +603,7 @@ template <typename Context> class basic_format_arg;
 template <typename Context> class basic_format_args;
 template <typename Context> class dynamic_format_arg_store;
 
-// A formatter for objects of type T.
+// A formatter for obj_list of type T.
 template <typename T, typename Char = char, typename Enable = void>
 struct formatter {
   // A deleted default constructor indicates a disabled formatter.
@@ -1445,7 +1445,7 @@ inline detail::named_arg<Char, T> arg(const Char* name, const T& arg) {
 /**
   \rst
   A dynamic version of `fmt::format_arg_store`.
-  It's equipped with a storage to potentially temporary objects which lifetimes
+  It's equipped with a storage to potentially temporary obj_list which lifetimes
   could be shorter than the format arguments object.
 
   It can be implicitly converted into `~fmt::basic_format_args` for passing
@@ -1573,7 +1573,7 @@ class dynamic_format_arg_store
     static_assert(
         detail::is_named_arg<typename std::remove_cv<T>::type>::value ||
             need_copy<T>::value,
-        "objects of built-in types and string views are always copied");
+        "obj_list of built-in types and string views are always copied");
     emplace_arg(arg.get());
   }
 
@@ -1639,7 +1639,7 @@ template <typename Context> class basic_format_args {
   union {
     // If is_packed() returns true then argument values are stored in values_;
     // otherwise they are stored in args_. This is done to improve cache
-    // locality and reduce compiled code size since storing larger objects
+    // locality and reduce compiled code size since storing larger obj_list
     // may require more code (at least on x86-64) even if the same amount of
     // data is actually copied to stack. It saves ~10% on the bloat test.
     const detail::value<Context>* values_;
