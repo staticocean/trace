@@ -10,6 +10,7 @@
 
 #include "trj_types.h"
 #include "trj_obj.h"
+#include "trj_traj.h"
 #include "vl.h"
 
 //------------------------------------------------------------------------------

@@ -15,6 +15,7 @@
 
 #include "lib/trj/trj_eng.h"
 #include "lib/trj/trj_obj.h"
+#include "lib/trj/trj_bz.h"
 
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"

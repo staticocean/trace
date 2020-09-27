@@ -96,23 +96,50 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height});
 		ImGui::Begin("main_view", NULL, static_flags);
 		
-		ImVec2 values[255];
-		static int pt_count = 8;
+		static ImVec2 values[255];
+		int pt_count = 4;
 		
-		for (int i = 0; i < pt_count; ++i)
+		static s_trj_bz4 bz4 = {
+			.p0 = { 0.0, 0.0 },
+			.p1 = { 1.0, 1.0 },
+			.p2 = { 2.0, 1.0 },
+			.p3 = { 3.0, 0.0 },
+		};
+		
+		values[0] = ImVec2(bz4.p0[0], bz4.p0[1]);
+		values[1] = ImVec2(bz4.p1[0], bz4.p1[1]);
+		values[2] = ImVec2(bz4.p2[0], bz4.p2[1]);
+		values[3] = ImVec2(bz4.p3[0], bz4.p3[1]);
+		
+		for (int i = 0; i < 100; ++i)
 		{
-			values[i] = ImVec2(i, i % 4);
+			values[4+i].x = 3 * (vlf_t) i / 100;
+			vlf_t temp;
+			trj_bz4_eval(&bz4, values[4+i].x, &temp);
+
+			values[4+i].y = temp;
+
+			pt_count++;
 		}
-		
+
 		CurveEditor("##ce", (float*) values, pt_count, ImVec2(400, 400),
-					(ImU32) CurveEditorFlags::SHOW_GRID | (ImU32) CurveEditorFlags::NO_TANGENTS, &pt_count);
+			(ImU32) CurveEditorFlags::SHOW_GRID | (ImU32) CurveEditorFlags::NO_TANGENTS, &pt_count);
+		
+		bz4.p0[0] = values[0].x;
+		bz4.p0[1] = values[0].y;
+		bz4.p1[0] = values[1].x;
+		bz4.p1[1] = values[1].y;
+		bz4.p2[0] = values[2].x;
+		bz4.p2[1] = values[2].y;
+		bz4.p3[0] = values[3].x;
+		bz4.p3[1] = values[3].y;
 		
 		ImGui::End();
 	}
 	
 	{
 		// Scripting view
-		char src_data[1024];
+		static char src_data[1024];
 		
 		ImGui::Begin("script_edit", NULL, ImGuiWindowFlags_NoCollapse);
 		

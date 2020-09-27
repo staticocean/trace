@@ -16,7 +16,34 @@
 
 //------------------------------------------------------------------------------
 
+typedef struct trj_traj_bz_point
+{
+	float64_t p[2];
+	float64_t d[2];
+	/*
+	 d MUST BE
+	 to the right of p (d[0] > p[0])
+	 cannot overlap next point
+	 */
+	
+} 	s_trj_traj_bz_point;
 
+typedef struct trj_traj_bz
+{
+	s_trj_traj_bz_point *pts;
+	uint32_t pts_offset;
+
+} 	s_trj_traj_bz;
+
+typedef struct trj_traj_bz_init_attr
+{
+	s_trj_traj_bz_point *pts;
+	
+} 	s_trj_traj_bz_init_attr;
+
+
+
+uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr attr);
 
 //------------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ vlf_t vl_sin(vlf_t x) { return sin(x); }
 vlf_t vl_cos(vlf_t x) { return cos(x); }
 vlf_t vl_sqrt(vlf_t x) { return sqrt(x); }
 vlf_t vl_pow(vlf_t x, vlf_t power) { return pow(x, power); }
-
+vlf_t vl_crt(vlf_t x) { return x < 0 ? -pow(-x, 1.0f/3.0f) : pow(x, 1.0f/3.0f); }
 //------------------------------------------------------------------------------
 
 void vl_vcopy(vlf_t *res, vlf_t *vec)
@@ -414,6 +414,48 @@ void vl_vmul_v(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
     res[2] = vec_0[2] * vec_1[2];
     
     return;
+}
+
+void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat)
+{
+	vlf_t temp;
+	uint32_t i, j, k;
+	
+	for (i = 0; i < n; ++i)
+	{
+		for (j = 0; j < n; ++j)
+		{
+			if (i == j)
+			{ inv[n * i + j] = 1.0; }
+			else
+			{ inv[n * i + j] = 0.0; }
+		}
+	}
+	
+	for (k = 0; k < n; ++k)                                  //by some row operations,and the same row operations of
+	{                                                       //Unit mat. I gives the inverse of matrix A
+		temp = mat[n*k+k];                   //'temp'
+		// stores the A[k][k] value so that A[k][k]  will not change
+		for (j = 0; j < n; ++j)      //during the operation //A[i] //[j]/=A[k][k]  when i=j=k
+		{
+			mat[n*k+j] /= temp;
+			inv[n*k+j] /= temp;
+		}
+		//R1=R1-R0*A[1][0] similarly for I
+		for (i = 0; i < n; ++i)
+		{
+			temp = mat[n*i+k];
+			
+			for (j = 0; j < n; ++j)
+			{                                   //R2=R2-R1*A[2][1]
+				if(i == k) break;                      //R2=R2/A[2][2]
+				mat[n*i+j] -= mat[n*k+j] * temp;          //R0=R0-R2*A[0][2]
+				inv[n*i+j] -= inv[n*k+j] * temp;          //R1=R1-R2*A[1][2]
+			}
+		}
+	}
+	
+	return;
 }
 
 //------------------------------------------------------------------------------

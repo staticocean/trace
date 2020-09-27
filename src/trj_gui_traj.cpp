@@ -82,9 +82,25 @@ int CurveEditor(const char* label
 	view.p1.x = window->StateStorage.GetFloat((ImGuiID) st_view_p1_x, points_max.x);
 	view.p1.y = window->StateStorage.GetFloat((ImGuiID) st_view_p1_y, points_max.y);
 	
+	view.rect = window->InnerRect;
+
 	view.width  = (view.p1 - view.p0).x;
 	view.height = (view.p1 - view.p0).y;
-	view.rect = window->InnerRect;
+	
+	if (view.width < 1E-6)
+	{
+		view.p0.x -= 1.0;
+		view.p1.x += 1.0;
+	}
+	
+	if (view.height < 1E-6)
+	{
+		view.p0.y -= 1.0;
+		view.p1.y += 1.0;
+	}
+	
+	view.width  = (view.p1 - view.p0).x;
+	view.height = (view.p1 - view.p0).y;
 	
 //	ImVec2 mouse_point = inv_transform(&view, ImGui::GetMousePos());
 //	window->DrawList->AddCircle(transform(&view, mouse_point), 4, 0x55000000);
@@ -103,21 +119,11 @@ int CurveEditor(const char* label
 		view.p1 = scale_point + (view.p1 - scale_point) * (1.0f - scroll_delta);
 	}
 	
-	if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-	{
-		view.int_drag = false;
-	}
-	
-	if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && view_hovered)
-	{
-		view.int_drag = true;
-	}
-	
-	if (view_hovered)
+	if (view_hovered && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 	{
 		ImVec2 mouse_drag_delta = ImVec2(
-				ImGui::GetMouseDragDelta().x * view.width / view.rect.GetWidth(),
-				ImGui::GetMouseDragDelta().y * view.height / view.rect.GetHeight()
+				io.MouseDelta.x * view.width / view.rect.GetWidth(),
+				io.MouseDelta.y * view.height / view.rect.GetHeight()
 		);
 		
 		mouse_drag_delta.y = -mouse_drag_delta.y;
@@ -168,11 +174,47 @@ int CurveEditor(const char* label
 		}
 	}
 	
+	ImVec2 cursor_pos = ImGui::GetCursorScreenPos();
+
 	for (int i = 0; i < points_count; ++i)
 	{
-		ImVec2 center = transform(&view, ImVec2(values[2*i+0], values[2*i+1]));
-		window->DrawList->AddCircle(center, 4, col_text_u32);
+		ImGui::PushID(i);
+		
+		ImVec2 point_pos = ImVec2(values[2*i+0], values[2*i+1]);
+		ImGui::SetCursorScreenPos(transform(&view, point_pos) - ImVec2(8, 8));
+		
+		ImGui::InvisibleButton("##pt", ImVec2(16, 16));
+		
+		ImVec2 center = transform(&view, point_pos);
+		
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+		{
+			window->DrawList->AddCircle(center, 4, col_textdis_u32);
+		}
+		
+		else
+		{
+			window->DrawList->AddCircle(center, 4, col_text_u32);
+		}
+		
+		if (ImGui::IsItemActive())
+		{
+			ImVec2 mouse_drag_delta = ImVec2(
+					io.MouseDelta.x * view.width / view.rect.GetWidth(),
+					io.MouseDelta.y * view.height / view.rect.GetHeight()
+			);
+			
+			mouse_drag_delta.y = -mouse_drag_delta.y;
+			point_pos += mouse_drag_delta;
+		}
+		
+		values[2*i+0] = point_pos.x;
+		values[2*i+1] = point_pos.y;
+		
+		ImGui::PopID();
 	}
+	
+	ImGui::SetCursorScreenPos(cursor_pos);
 	
 
 //	int changed_idx = -1;
@@ -454,15 +496,13 @@ int CurveEditor(const char* label
 //			}
 //		}
 //	}
-//
-	if (!view.int_drag)
-	{
-		window->StateStorage.SetFloat((ImGuiID) st_view_p0_x, view.p0.x);
-		window->StateStorage.SetFloat((ImGuiID) st_view_p0_y, view.p0.y);
-		
-		window->StateStorage.SetFloat((ImGuiID) st_view_p1_x, view.p1.x);
-		window->StateStorage.SetFloat((ImGuiID) st_view_p1_y, view.p1.y);
-	}
+
+//	if (!view.int_drag)
+	window->StateStorage.SetFloat((ImGuiID) st_view_p0_x, view.p0.x);
+	window->StateStorage.SetFloat((ImGuiID) st_view_p0_y, view.p0.y);
+	
+	window->StateStorage.SetFloat((ImGuiID) st_view_p1_x, view.p1.x);
+	window->StateStorage.SetFloat((ImGuiID) st_view_p1_y, view.p1.y);
 	
 	window->StateStorage.SetBool((ImGuiID) st_int_drag_dx, view.int_drag_d.x);
 	window->StateStorage.SetBool((ImGuiID) st_int_drag_dy, view.int_drag_d.y);

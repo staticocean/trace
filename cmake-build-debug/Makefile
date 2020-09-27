@@ -961,6 +961,33 @@ lib\picoc\picoc_variable.c.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.s
 .PHONY : lib\picoc\picoc_variable.c.s
 
+lib\trj\trj_bz.obj: lib\trj\trj_bz.cpp.obj
+
+.PHONY : lib\trj\trj_bz.obj
+
+# target to build an object file
+lib\trj\trj_bz.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_bz.cpp.obj
+.PHONY : lib\trj\trj_bz.cpp.obj
+
+lib\trj\trj_bz.i: lib\trj\trj_bz.cpp.i
+
+.PHONY : lib\trj\trj_bz.i
+
+# target to preprocess a source file
+lib\trj\trj_bz.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_bz.cpp.i
+.PHONY : lib\trj\trj_bz.cpp.i
+
+lib\trj\trj_bz.s: lib\trj\trj_bz.cpp.s
+
+.PHONY : lib\trj\trj_bz.s
+
+# target to generate assembly for a file
+lib\trj\trj_bz.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\trj_bz.cpp.s
+.PHONY : lib\trj\trj_bz.cpp.s
+
 lib\trj\trj_ctrl.obj: lib\trj\trj_ctrl.cpp.obj
 
 .PHONY : lib\trj\trj_ctrl.obj
@@ -1495,6 +1522,9 @@ help:
 	@echo ... lib/picoc/picoc_variable.obj
 	@echo ... lib/picoc/picoc_variable.i
 	@echo ... lib/picoc/picoc_variable.s
+	@echo ... lib/trj/trj_bz.obj
+	@echo ... lib/trj/trj_bz.i
+	@echo ... lib/trj/trj_bz.s
 	@echo ... lib/trj/trj_ctrl.obj
 	@echo ... lib/trj/trj_ctrl.i
 	@echo ... lib/trj/trj_ctrl.s

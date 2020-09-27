@@ -35,6 +35,7 @@ vlf_t vl_sin(vlf_t x);
 vlf_t vl_cos(vlf_t x);
 vlf_t vl_sqrt(vlf_t x);
 vlf_t vl_pow(vlf_t x, vlf_t power);
+vlf_t vl_crt(vlf_t x);
 
 vlf_t vl_vnorm(vlf_t *vec);
 void vl_vsum(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1);
@@ -63,6 +64,7 @@ void vl_msum(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1);
 void vl_msub(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1);
 void vl_unskew(vlf_t *res, vlf_t *mat);
 void vl_mmul_v(vlf_t *res, vlf_t *mat, vlf_t *vec);
+void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat);
 
 //------------------------------------------------------------------------------
 
