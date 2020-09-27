@@ -190,6 +190,7 @@ CMakeFiles\trj.dir\lib\trj\trj_proc.cpp.obj: ..\lib\trj\trj_types.h
 CMakeFiles\trj.dir\lib\trj\trj_proc.cpp.obj: ..\lib\trj\trj_utils.h
 CMakeFiles\trj.dir\lib\trj\trj_proc.cpp.obj: ..\lib\trj\vl.h
 
+CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj: ..\lib\trj\trj_bz.h
 CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj: ..\lib\trj\trj_obj.h
 CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj: ..\lib\trj\trj_traj.cpp
 CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj: ..\lib\trj\trj_traj.h
@@ -267,6 +268,7 @@ CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imconfig.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imgui.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imgui_internal.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\trj\trj_bz.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\trj\trj_obj.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\trj\trj_traj.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\trj\trj_types.h

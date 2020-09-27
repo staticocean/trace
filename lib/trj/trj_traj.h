@@ -13,6 +13,7 @@
 #include "vl.h"
 
 #include "trj_obj.h"
+#include "trj_bz.h"
 
 //------------------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ typedef struct trj_traj_bz_init_attr
 
 
 uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr attr);
+uint8_t trj_traj_bz_compile(s_trj_traj_bz *self);
 
 //------------------------------------------------------------------------------
 

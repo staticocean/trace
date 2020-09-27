@@ -23,12 +23,7 @@ ImVec2 inv_transform(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-int CurveEditor(const char* label
-		, float* values
-		, int points_count
-		, ImVec2 size
-		, ImU32 flags
-		, int* new_count)
+uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
 {
 	s_view_data view;
 	
@@ -54,17 +49,16 @@ int CurveEditor(const char* label
 	ImVec2 points_min = ImVec2(+FLT_MAX, +FLT_MAX);
 	ImVec2 points_max = ImVec2(-FLT_MAX, -FLT_MAX);
 
-	for (int point_idx = 0; point_idx < points_count; ++point_idx)
+	for (int i = 0; i < self->pts_offset; ++i)
 	{
-		ImVec2 point;
-		if (flags & (int) CurveEditorFlags::NO_TANGENTS)
-		{
-			point = ((ImVec2*)values)[point_idx];
-		}
-		else
-		{
-			point = ((ImVec2*)values)[1 + point_idx * 3];
-		}
+		ImVec2 point = ImVec2(self->pts[i].p[0] , self->pts[i].p[1]);
+		
+		points_max = ImMax(points_max, point);
+		points_min = ImMin(points_min, point);
+		
+		point = ImVec2(
+				self->pts[i].p[0] + self->pts[i].d[0],
+				self->pts[i].p[1] + self->pts[i].d[1]);
 		
 		points_max = ImMax(points_max, point);
 		points_min = ImMin(points_min, point);
@@ -82,8 +76,17 @@ int CurveEditor(const char* label
 	view.p1.x = window->StateStorage.GetFloat((ImGuiID) st_view_p1_x, points_max.x);
 	view.p1.y = window->StateStorage.GetFloat((ImGuiID) st_view_p1_y, points_max.y);
 	
+	if (view_res == true)
+	{
+		view.p0.x = points_min.x;
+		view.p0.y = points_min.y;
+		
+		view.p1.x = points_max.x;
+		view.p1.y = points_max.y;
+	}
+	
 	view.rect = window->InnerRect;
-
+	
 	view.width  = (view.p1 - view.p0).x;
 	view.height = (view.p1 - view.p0).y;
 	
@@ -102,13 +105,8 @@ int CurveEditor(const char* label
 	view.width  = (view.p1 - view.p0).x;
 	view.height = (view.p1 - view.p0).y;
 	
-//	ImVec2 mouse_point = inv_transform(&view, ImGui::GetMousePos());
-//	window->DrawList->AddCircle(transform(&view, mouse_point), 4, 0x55000000);
-//	window->DrawList->AddCircle(ImGui::GetMousePos(), 8, 0x55000000);
-	
 	if (io.MouseWheel != 0x00 && view_hovered && !view.int_drag)
 	{
-//		ImVec2 scale_point = (view.p0 + view.p1) * 0.5;
 		ImVec2 scale_point = inv_transform(&view, ImGui::GetMousePos());
 		float32_t scroll_delta = io.MouseWheel * 0.1f;
 		
@@ -136,7 +134,7 @@ int CurveEditor(const char* label
 	view.height = (view.p1 - view.p0).y;
 	view.rect = window->InnerRect;
 	
-	if (flags & (int) CurveEditorFlags::SHOW_GRID)
+	// draw grid TODO:: replace with rectangles coz they are drawn faster on GPUs
 	{
 		char axis_label[64];
 		int32_t exp;
@@ -176,11 +174,11 @@ int CurveEditor(const char* label
 	
 	ImVec2 cursor_pos = ImGui::GetCursorScreenPos();
 
-	for (int i = 0; i < points_count; ++i)
+	for (int i = 0; i < self->pts_offset; ++i)
 	{
 		ImGui::PushID(i);
 		
-		ImVec2 point_pos = ImVec2(values[2*i+0], values[2*i+1]);
+		ImVec2 point_pos = ImVec2(self->pts[i].p[0], self->pts[i].p[1]);
 		ImGui::SetCursorScreenPos(transform(&view, point_pos) - ImVec2(8, 8));
 		
 		ImGui::InvisibleButton("##pt", ImVec2(16, 16));
@@ -197,6 +195,11 @@ int CurveEditor(const char* label
 			window->DrawList->AddCircle(center, 4, col_text_u32);
 		}
 		
+		char pt_label[255];
+		
+		ImFormatString(pt_label, sizeof(pt_label), "%d", i);
+		window->DrawList->AddText(center, col_text_u32, pt_label);
+		
 		if (ImGui::IsItemActive())
 		{
 			ImVec2 mouse_drag_delta = ImVec2(
@@ -208,13 +211,28 @@ int CurveEditor(const char* label
 			point_pos += mouse_drag_delta;
 		}
 		
-		values[2*i+0] = point_pos.x;
-		values[2*i+1] = point_pos.y;
+		self->pts[i].p[0] = point_pos.x;
+		self->pts[i].p[1] = point_pos.y;
 		
 		ImGui::PopID();
 	}
 	
 	ImGui::SetCursorScreenPos(cursor_pos);
+	
+	for (int i = 0; i < self->pts_offset; ++i)
+	{
+		ImGui::PushID(i);
+		
+		ImVec2 point_pos = ImVec2(
+				self->pts[i].p[0] + self->pts[i].d[0],
+				self->pts[i].p[1] + self->pts[i].d[1]);
+		
+		ImVec2 center = transform(&view, point_pos);
+		
+		window->DrawList->AddCircle(center, 4, col_text_u32);
+		
+		ImGui::PopID();
+	}
 	
 
 //	int changed_idx = -1;

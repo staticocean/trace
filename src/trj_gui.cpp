@@ -96,43 +96,19 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height});
 		ImGui::Begin("main_view", NULL, static_flags);
 		
-		static ImVec2 values[255];
-		int pt_count = 4;
-		
-		static s_trj_bz4 bz4 = {
-			.p0 = { 0.0, 0.0 },
-			.p1 = { 1.0, 1.0 },
-			.p2 = { 2.0, 1.0 },
-			.p3 = { 3.0, 0.0 },
+		static s_trj_traj_bz_point pts[255] = {
+				{.p = {0.0, 0.0}, .d = {0.0, 0.0}},
+				{.p = {1.0, 0.0}, .d = {0.0, 0.0}},
+				{.p = {2.0, 0.0}, .d = {0.0, 0.0}},
+				{.p = {3.0, 0.0}, .d = {0.0, 0.0}},
 		};
 		
-		values[0] = ImVec2(bz4.p0[0], bz4.p0[1]);
-		values[1] = ImVec2(bz4.p1[0], bz4.p1[1]);
-		values[2] = ImVec2(bz4.p2[0], bz4.p2[1]);
-		values[3] = ImVec2(bz4.p3[0], bz4.p3[1]);
+		static s_trj_traj_bz traj_bz = {.pts = pts, .pts_offset = 0x04};
 		
-		for (int i = 0; i < 100; ++i)
-		{
-			values[4+i].x = 3 * (vlf_t) i / 100;
-			vlf_t temp;
-			trj_bz4_eval(&bz4, values[4+i].x, &temp);
-
-			values[4+i].y = temp;
-
-			pt_count++;
-		}
-
-		CurveEditor("##ce", (float*) values, pt_count, ImVec2(400, 400),
-			(ImU32) CurveEditorFlags::SHOW_GRID | (ImU32) CurveEditorFlags::NO_TANGENTS, &pt_count);
+		bool view_res = ImGui::Button("view_res");
 		
-		bz4.p0[0] = values[0].x;
-		bz4.p0[1] = values[0].y;
-		bz4.p1[0] = values[1].x;
-		bz4.p1[1] = values[1].y;
-		bz4.p2[0] = values[2].x;
-		bz4.p2[1] = values[2].y;
-		bz4.p3[0] = values[3].x;
-		bz4.p3[1] = values[3].y;
+		trj_gui_traj_bz(&traj_bz, "##temp", ImVec2(600, 600), view_res);
+		trj_traj_bz_compile(&traj_bz);
 		
 		ImGui::End();
 	}

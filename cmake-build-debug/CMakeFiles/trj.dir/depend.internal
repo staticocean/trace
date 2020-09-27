@@ -191,6 +191,7 @@ CMakeFiles/trj.dir/lib/trj/trj_proc.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_utils.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl.h
 CMakeFiles/trj.dir/lib/trj/trj_traj.cpp.obj
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_bz.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_traj.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_traj.h
@@ -268,6 +269,7 @@ CMakeFiles/trj.dir/src/trj_gui_traj.cpp.obj
  ../lib/imgui/imgui.h
  ../lib/imgui/imgui_internal.h
  ../lib/imgui/imstb_textedit.h
+ ../lib/trj/trj_bz.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
  ../lib/trj/trj_types.h
