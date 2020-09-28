@@ -46,6 +46,7 @@ typedef struct trj_traj_bz_init_attr
 
 uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr attr);
 uint8_t trj_traj_bz_compile(s_trj_traj_bz *self);
+uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos);
 
 //------------------------------------------------------------------------------
 

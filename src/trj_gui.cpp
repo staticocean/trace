@@ -3,8 +3,19 @@
 
 //------------------------------------------------------------------------------
 
+static s_trj_traj_bz_point pts[2048];
+static s_trj_traj_bz traj_bz = {.pts = pts, .pts_offset = 0 };
+
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 {
+	traj_bz.pts_offset = 64;
+	
+	for (int i = 0; i < traj_bz.pts_offset; ++i)
+	{
+		traj_bz.pts[i].p[0] = i;
+		traj_bz.pts[i].p[1] = rand();
+	}
+	
 	self->w_height = 800;
 	self->w_width  = 800;
 	
@@ -96,19 +107,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height});
 		ImGui::Begin("main_view", NULL, static_flags);
 		
-		static s_trj_traj_bz_point pts[255] = {
-				{.p = {0.0, 0.0}, .d = {0.0, 0.0}},
-				{.p = {1.0, 0.0}, .d = {0.0, 0.0}},
-				{.p = {2.0, 0.0}, .d = {0.0, 0.0}},
-				{.p = {3.0, 0.0}, .d = {0.0, 0.0}},
-		};
-		
-		static s_trj_traj_bz traj_bz = {.pts = pts, .pts_offset = 0x04};
-		
 		bool view_res = ImGui::Button("view_res");
 		
 		trj_gui_traj_bz(&traj_bz, "##temp", ImVec2(600, 600), view_res);
-		trj_traj_bz_compile(&traj_bz);
 		
 		ImGui::End();
 	}
@@ -128,6 +129,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		
 		ImGui::End();
 	}
+	
+	bool mw = true;
+	ImGui::ShowMetricsWindow(&mw);
 	
 	return 0x00;
 }

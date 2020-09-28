@@ -23,6 +23,7 @@ cmd /c emcc ^
     ../lib/trj/trj_types.cpp^
     ../lib/trj/trj_utils.cpp^
     ../lib/trj/trj_traj.cpp^
+    ../lib/trj/trj_bz.cpp^
     ../lib/trj/vl.cpp^
     ../lib/trj/vl_svd.cpp^
     ../lib/picoc/picoc_clibrary.c^
@@ -56,4 +57,4 @@ cmd /c emcc ^
     -g4 --preload-file ../res/fonts/ --source-map-base http://127.0.0.1:8000/src/
 
 cd ../
-python -m http.server --cgi
+python -m http.server --cgi -b 10.0.0.166

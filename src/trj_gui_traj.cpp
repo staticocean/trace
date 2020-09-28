@@ -130,6 +130,11 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 		view.p1 -= mouse_drag_delta;
 	}
 	
+	if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+	{
+		trj_traj_bz_compile(self);
+	}
+	
 	view.width  = (view.p1 - view.p0).x;
 	view.height = (view.p1 - view.p0).y;
 	view.rect = window->InnerRect;
@@ -187,7 +192,7 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 		
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
 		{
-			window->DrawList->AddCircle(center, 4, col_textdis_u32);
+			window->DrawList->AddCircleFilled(center, 4, col_text_u32);
 		}
 		
 		else
@@ -223,17 +228,52 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 	{
 		ImGui::PushID(i);
 		
-		ImVec2 point_pos = ImVec2(
+		ImVec2 p = transform(&view, ImVec2(
+				self->pts[i].p[0],
+				self->pts[i].p[1]));
+		
+		ImVec2 d = transform(&view, ImVec2(
 				self->pts[i].p[0] + self->pts[i].d[0],
-				self->pts[i].p[1] + self->pts[i].d[1]);
+				self->pts[i].p[1] + self->pts[i].d[1]));
+//
+//		window->DrawList->AddTriangleFilled(
+//				d + ImVec2(-4,0),
+//				d + ImVec2(+4,0),
+//				d + ImVec2(0,-5.6), col_textdis_u32);
+
+		window->DrawList->AddLine(
+				d + ImVec2(-4,-4),
+				d + ImVec2(+4,+4),
+				col_textdis_u32);
 		
-		ImVec2 center = transform(&view, point_pos);
+		window->DrawList->AddLine(
+				d + ImVec2(+4,-4),
+				d + ImVec2(-4,+4),
+				col_textdis_u32);
 		
-		window->DrawList->AddCircle(center, 4, col_text_u32);
+		window->DrawList->AddLine(p, d, col_textdis_u32);
 		
 		ImGui::PopID();
 	}
 	
+	vlf_t time_step = (self->pts[self->pts_offset-1].p[0] - self->pts[0].p[0]) / 1000;
+	vlf_t time = self->pts[0].p[0];
+	
+	for (int i = 0; i < 1000-1; ++i)
+	{
+		vlf_t p0;
+		vlf_t p1;
+		
+		trj_traj_bz_pos(self, time, &p0);
+		trj_traj_bz_pos(self, time+time_step, &p1);
+		
+		ImVec2 p0_ = ImVec2(time, p0);
+		ImVec2 p1_ = ImVec2(time+time_step, p1);
+		
+		window->DrawList->AddLine(transform(&view, p0_), transform(&view, p1_), col_text_u32);
+		
+		time += time_step;
+	}
 
 //	int changed_idx = -1;
 //

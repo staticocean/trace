@@ -190,7 +190,7 @@ Module['FS_createPath']('/res', 'fonts', true, true);
     }
   
    }
-   loadPackage({"files": [{"filename": "/res/fonts/default.ttf", "start": 0, "end": 86908, "audio": 0}], "remote_package_size": 86908, "package_uuid": "56b98e85-aaae-4f18-ab64-b0b3e03ef699"});
+   loadPackage({"files": [{"filename": "/res/fonts/default.ttf", "start": 0, "end": 86908, "audio": 0}], "remote_package_size": 86908, "package_uuid": "6f19d041-5994-4595-8034-efbf014ef6b5"});
   
   })();
   
@@ -1413,10 +1413,10 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-var STACK_BASE = 5538720,
+var STACK_BASE = 5605312,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 295840,
-    DYNAMIC_BASE = 5538720;
+    STACK_MAX = 362432,
+    DYNAMIC_BASE = 5605312;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
