@@ -380,10 +380,24 @@ CMakeFiles\trj.dir\lib\trj\vl.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/trj/vl.cpp.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj: CMakeFiles\trj.dir\flags.make
+CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
+CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj: ..\lib\trj\vl3d.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/trj.dir/lib/trj/vl3d.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\trj\vl3d.cpp
+
+CMakeFiles\trj.dir\lib\trj\vl3d.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trj.dir/lib/trj/vl3d.cpp.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles\trj.dir\lib\trj\vl3d.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/trj/vl3d.cpp.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+
 CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj: ..\lib\trj\vl_svd.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/trj.dir/lib/trj/vl_svd.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/trj.dir/lib/trj/vl_svd.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\trj\vl_svd.cpp
 
 CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.i: cmake_force
@@ -397,7 +411,7 @@ CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj: ..\lib\picoc\cstdlib\ctype.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/ctype.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/ctype.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\ctype.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.i: cmake_force
@@ -411,7 +425,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj: ..\lib\picoc\cstdlib\errno.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/errno.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/errno.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\errno.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.i: cmake_force
@@ -425,7 +439,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.obj: ..\lib\picoc\cstdlib\math.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/math.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/math.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\math.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.i: cmake_force
@@ -439,7 +453,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.obj: ..\lib\picoc\cstdlib\stdbool.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdbool.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdbool.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\stdbool.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.i: cmake_force
@@ -453,7 +467,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.obj: ..\lib\picoc\cstdlib\stdio.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdio.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdio.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\stdio.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.i: cmake_force
@@ -467,7 +481,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.obj: ..\lib\picoc\cstdlib\stdlib.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdlib.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/stdlib.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\stdlib.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.i: cmake_force
@@ -481,7 +495,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.obj: ..\lib\picoc\cstdlib\string.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/string.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/string.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\string.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.i: cmake_force
@@ -495,7 +509,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.obj: ..\lib\picoc\cstdlib\time.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/time.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building C object CMakeFiles/trj.dir/lib/picoc/cstdlib/time.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\cstdlib\time.c
 
 CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.i: cmake_force
@@ -509,7 +523,7 @@ CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.obj: ..\lib\picoc\picoc_clibrary.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_clibrary.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_clibrary.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_clibrary.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.i: cmake_force
@@ -523,7 +537,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_config.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_config.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_config.c.obj: ..\lib\picoc\picoc_config.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_config.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_config.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_config.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_config.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_config.c.i: cmake_force
@@ -537,7 +551,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_config.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.obj: ..\lib\picoc\picoc_debug.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_debug.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_debug.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_debug.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.i: cmake_force
@@ -551,7 +565,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.obj: ..\lib\picoc\picoc_expression.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_expression.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_expression.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_expression.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.i: cmake_force
@@ -565,7 +579,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.obj: ..\lib\picoc\picoc_heap.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_heap.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_heap.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_heap.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.i: cmake_force
@@ -579,7 +593,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_include.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_include.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_include.c.obj: ..\lib\picoc\picoc_include.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_include.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_include.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_include.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_include.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_include.c.i: cmake_force
@@ -593,7 +607,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_include.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.obj: ..\lib\picoc\picoc_lex.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_lex.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_lex.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_lex.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.i: cmake_force
@@ -607,7 +621,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.obj: ..\lib\picoc\picoc_parse.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_parse.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_parse.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_parse.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.i: cmake_force
@@ -621,7 +635,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj: ..\lib\picoc\picoc_platform.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_platform.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_platform.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_platform.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.i: cmake_force
@@ -635,7 +649,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj: ..\lib\picoc\picoc_table.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_table.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_table.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_table.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_table.c.i: cmake_force
@@ -649,7 +663,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_table.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj: ..\lib\picoc\picoc_type.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_type.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_type.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_type.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_type.c.i: cmake_force
@@ -663,7 +677,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_type.c.s: cmake_force
 CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj: ..\lib\picoc\picoc_variable.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_variable.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building C object CMakeFiles/trj.dir/lib/picoc/picoc_variable.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\picoc\picoc_variable.c
 
 CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.i: cmake_force
@@ -677,7 +691,7 @@ CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.s: cmake_force
 CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj: ..\lib\imguizmo\ImCurveEdit.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImCurveEdit.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImCurveEdit.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\imguizmo\ImCurveEdit.cpp
 
 CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.i: cmake_force
@@ -691,7 +705,7 @@ CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.s: cmake_force
 CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj: ..\lib\imguizmo\ImGradient.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImGradient.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImGradient.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\imguizmo\ImGradient.cpp
 
 CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.i: cmake_force
@@ -705,7 +719,7 @@ CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.s: cmake_force
 CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj: ..\lib\imguizmo\ImGuizmo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImGuizmo.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImGuizmo.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\imguizmo\ImGuizmo.cpp
 
 CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.i: cmake_force
@@ -719,7 +733,7 @@ CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.s: cmake_force
 CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj: ..\lib\imguizmo\ImSequencer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImSequencer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/trj.dir/lib/imguizmo/ImSequencer.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\imguizmo\ImSequencer.cpp
 
 CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.i: cmake_force
@@ -755,6 +769,7 @@ trj_OBJECTS = \
 "CMakeFiles\trj.dir\lib\trj\trj_types.cpp.obj" \
 "CMakeFiles\trj.dir\lib\trj\trj_utils.cpp.obj" \
 "CMakeFiles\trj.dir\lib\trj\vl.cpp.obj" \
+"CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj" \
 "CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj" \
 "CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj" \
 "CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj" \
@@ -807,6 +822,7 @@ trj.exe: CMakeFiles\trj.dir\lib\trj\trj_traj.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\trj\trj_types.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\trj\trj_utils.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\trj\vl.cpp.obj
+trj.exe: CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj
 trj.exe: CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj
@@ -837,7 +853,7 @@ trj.exe: "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x86\OpenGL3
 trj.exe: ..\lib\opengl\static\glfw3_x86.lib
 trj.exe: CMakeFiles\trj.dir\linklibs.rsp
 trj.exe: CMakeFiles\trj.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Linking CXX executable trj.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Linking CXX executable trj.exe"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib  -std=c++17 -Wdeprecated-declarations -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   @CMakeFiles\trj.dir\objects1.rsp  -o trj.exe -Xlinker /implib:trj.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\trj.pdb -Xlinker /version:0.0  @CMakeFiles\trj.dir\linklibs.rsp
 
 # Rule to build all files generated by this target.

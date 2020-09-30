@@ -1204,6 +1204,33 @@ lib\trj\vl.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\vl.cpp.s
 .PHONY : lib\trj\vl.cpp.s
 
+lib\trj\vl3d.obj: lib\trj\vl3d.cpp.obj
+
+.PHONY : lib\trj\vl3d.obj
+
+# target to build an object file
+lib\trj\vl3d.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\vl3d.cpp.obj
+.PHONY : lib\trj\vl3d.cpp.obj
+
+lib\trj\vl3d.i: lib\trj\vl3d.cpp.i
+
+.PHONY : lib\trj\vl3d.i
+
+# target to preprocess a source file
+lib\trj\vl3d.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\vl3d.cpp.i
+.PHONY : lib\trj\vl3d.cpp.i
+
+lib\trj\vl3d.s: lib\trj\vl3d.cpp.s
+
+.PHONY : lib\trj\vl3d.s
+
+# target to generate assembly for a file
+lib\trj\vl3d.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\vl3d.cpp.s
+.PHONY : lib\trj\vl3d.cpp.s
+
 lib\trj\vl_svd.obj: lib\trj\vl_svd.cpp.obj
 
 .PHONY : lib\trj\vl_svd.obj
@@ -1549,6 +1576,9 @@ help:
 	@echo ... lib/trj/vl.obj
 	@echo ... lib/trj/vl.i
 	@echo ... lib/trj/vl.s
+	@echo ... lib/trj/vl3d.obj
+	@echo ... lib/trj/vl3d.i
+	@echo ... lib/trj/vl3d.s
 	@echo ... lib/trj/vl_svd.obj
 	@echo ... lib/trj/vl_svd.i
 	@echo ... lib/trj/vl_svd.s

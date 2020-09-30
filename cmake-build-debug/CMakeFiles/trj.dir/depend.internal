@@ -210,6 +210,16 @@ CMakeFiles/trj.dir/lib/trj/vl.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_types.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl.h
+CMakeFiles/trj.dir/lib/trj/vl3d.cpp.obj
+ ../lib/imgui/imconfig.h
+ ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_types.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl3d.cpp
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl3d.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl_svd.h
 CMakeFiles/trj.dir/lib/trj/vl_svd.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_types.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/vl.h
@@ -230,6 +240,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/trj/trj_types.h
  ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
@@ -258,9 +269,12 @@ CMakeFiles/trj.dir/src/trj_gui_menu.cpp.obj
 CMakeFiles/trj.dir/src/trj_gui_obj.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
@@ -279,9 +293,12 @@ CMakeFiles/trj.dir/src/trj_gui_traj.cpp.obj
 CMakeFiles/trj.dir/src/trj_gui_w.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.cpp
@@ -305,6 +322,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/trj/trj_types.h
  ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h

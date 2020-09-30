@@ -19,11 +19,19 @@
 
 typedef struct trj_traj_bz_point
 {
-	float64_t p[2];
-	float64_t d[2];
+	float64_t time;
+	
+	float64_t pos_p[3];
+	float64_t pos_t[3];
+	float64_t pos_d[3];
+	
+	float64_t rot_p[3];
+	float64_t rot_t[3];
+	float64_t rot_d[3];
+	
 	/*
-	 d MUST BE
-	 to the right of p (d[0] > p[0])
+	 pos_d MUST BE
+	 to the right of pos_p (pos_d[0] > pos_p[0])
 	 cannot overlap next point
 	 */
 	

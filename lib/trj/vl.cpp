@@ -221,7 +221,18 @@ void vl_mprint(vlf_t *vec)
 
 void vl_vzero (vlf_t *vec)
 {
-    vec[0] = 0; vec[1] = 0; vec[2] = 0;
+	vec[0] = 0; vec[1] = 0; vec[2] = 0;
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+void vl_vset (vlf_t *vec, vlf_t value)
+{
+	vec[0] = value;
+	vec[1] = value;
+	vec[2] = value;
 	
 	return;
 }
@@ -230,11 +241,22 @@ void vl_vzero (vlf_t *vec)
 
 void vl_mzero (vlf_t *mat)
 {
-    mat[0] = 0; mat[1] = 0; mat[2] = 0;
-    mat[3] = 0; mat[4] = 0; mat[5] = 0;
-    mat[6] = 0; mat[7] = 0; mat[8] = 0;
-    
-    return;
+	mat[0] = 0; mat[1] = 0; mat[2] = 0;
+	mat[3] = 0; mat[4] = 0; mat[5] = 0;
+	mat[6] = 0; mat[7] = 0; mat[8] = 0;
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+void vl_mid (vlf_t *mat)
+{
+	mat[0] = 1; mat[1] = 0; mat[2] = 0;
+	mat[3] = 0; mat[4] = 1; mat[5] = 0;
+	mat[6] = 0; mat[7] = 0; mat[8] = 1;
+	
+	return;
 }
 
 //------------------------------------------------------------------------------
@@ -416,56 +438,19 @@ void vl_vmul_v(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
     return;
 }
 
-void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat)
+void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat_)
 {
-//	vlf_t ratio,a;
-//
-//	int i, j, k;
-//
-//	for (i = 0; i < n; i++)
-//	{
-//		for (j = 0; j < n; j++)
-//		{
-//			if (i == j) inv[n*i+j] = 1.0;
-//			else inv[n*i+j] = 0.0;
-//		}
-//	}
-//
-//	for (i = 0; i < n; i++)
-//	{
-//		for (j = 0; j < n; j++)
-//		{
-//			if (i != j)
-//			{
-//				ratio = mat[n*j+i] / mat[n*i+i];
-//
-//				for (k = 0; k < n; ++k)
-//				{
-//					inv[n*j+k] -= ratio * inv[n*i+k];
-//				}
-//			}
-//		}
-//	}
-//
-//	for(i = 0; i < n; i++)
-//	{
-//		a = mat[n*i+i];
-//
-//		for(j = 0; j < n; j++)
-//		{
-//			inv[n*i+j] /= a;
-//		}
-//	}
-//
-//	return;
-	
 	vlf_t temp;
+	vlf_t mat[n*n];
+	
 	uint32_t i, j, k;
-
+	
 	for (i = 0; i < n; ++i)
 	{
 		for (j = 0; j < n; ++j)
 		{
+			mat[i*n+j] = mat_[i*n+j];
+			
 			if (i == j)
 			{ inv[n * i + j] = 1.0; }
 			else
@@ -495,56 +480,6 @@ void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat)
 			}
 		}
 	}
-	
-	return;
-	
-//	int i, j, k;
-//
-//	for (i = 1; i <= n; i++)
-//		for (j = 1; j <= 2 * n; j++)
-//			if (j == (i + n))
-//				a[i][j] = 1;
-//
-//	/************** partial pivoting **************/
-//	for (i = n; i > 1; i--)
-//	{
-//		if (a[i - 1][1] < a[i][1])
-//			for (j = 1; j <= n * 2; j++)
-//			{
-//				d = a[i][j];
-//				a[i][j] = a[i - 1][j];
-//				a[i - 1][j] = d;
-//			}
-//	}
-//	cout << "pivoted output: " << endl;
-//	for (i = 1; i <= n; i++)
-//	{
-//		for (j = 1; j <= n * 2; j++)
-//			cout << a[i][j] << "    ";
-//		cout << endl;
-//	}
-//	/********** reducing to diagonal  matrix ***********/
-//
-//	for (i = 1; i <= n; i++)
-//	{
-//		for (j = 1; j <= n * 2; j++)
-//			if (j != i)
-//			{
-//				d = a[j][i] / a[i][i];
-//				for (k = 1; k <= n * 2; k++)
-//					a[j][k] -= a[i][k] * d;
-//			}
-//	}
-//	/************** reducing to unit matrix *************/
-//	for (i = 1; i <= n; i++)
-//	{
-//		d = a[i][i];
-//		for (j = 1; j <= n * 2; j++)
-//			a[i][j] = a[i][j] / d;
-//	}
-//
-	
-	
 	
 	return;
 }

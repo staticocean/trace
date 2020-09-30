@@ -57,4 +57,4 @@ cmd /c emcc ^
     -g4 --preload-file ../res/fonts/ --source-map-base http://127.0.0.1:8000/src/
 
 cd ../
-python -m http.server --cgi -b 10.0.0.166
+python -m http.server --cgi -b 127.0.0.1

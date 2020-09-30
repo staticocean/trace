@@ -16,6 +16,7 @@
 #include "lib/trj/trj_eng.h"
 #include "lib/trj/trj_obj.h"
 #include "lib/trj/trj_bz.h"
+#include "lib/trj/vl3d.h"
 
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"
@@ -90,7 +91,7 @@ int tcc_test(void);
  {
  .ref = NULL,
 
- .pos =
+ .pos_p =
  {
  { 0, 0, 0 },
  { 0, 0, 0 },
@@ -143,7 +144,7 @@ int tcc_test(void);
  {
  .ref = &obj_earth,
 
- .pos =
+ .pos_p =
  {
  { 0, 0, 0 },
  { 0, 0, 0 },
@@ -202,7 +203,7 @@ int tcc_test(void);
  //        printf("earth force \n");
  //        vl_vprint(obj_earth.pos_force);
  //
- //        printf("earth pos \n");
+ //        printf("earth pos_p \n");
  //        vl_vprint(obj_earth.pos_0);
  //        vl_vprint(obj_earth.pos_1);
  //        vl_vprint(obj_earth.pos_2);
@@ -221,9 +222,9 @@ int tcc_test(void);
 
  printf("lat %f lon %f \n", vl_deg(pos_lla.lat), vl_deg(pos_lla.lon));
 
- obj_system.pos[2][0] = 0.0;
- obj_system.pos[2][1] = 0.0;
- obj_system.pos[2][2] = 0.0;
+ obj_system.pos_p[2][0] = 0.0;
+ obj_system.pos_p[2][1] = 0.0;
+ obj_system.pos_p[2][2] = 0.0;
 
  obj_system.rot[2][0] = 0.0;
  obj_system.rot[2][1] = 0.0;
@@ -232,10 +233,10 @@ int tcc_test(void);
  printf("system force \n");
  vl_vprint(obj_system.pos_force);
 
- printf("system pos \n");
- vl_vprint(obj_system.pos[0]);
- vl_vprint(obj_system.pos[1]);
- vl_vprint(obj_system.pos[2]);
+ printf("system pos_p \n");
+ vl_vprint(obj_system.pos_p[0]);
+ vl_vprint(obj_system.pos_p[1]);
+ vl_vprint(obj_system.pos_p[2]);
 
  printf("system rot \n");
  vl_mprint(obj_system.rot[0]);

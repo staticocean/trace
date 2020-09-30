@@ -14,19 +14,72 @@ uint8_t vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *ma
 
 uint8_t vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, char *format)
 {
-	bool user = false;
+	enum st
+	{
+		st_mode = 100,
+	};
+	
+	ImGui::PushID(label);
+	
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	
+	char st_mode_local[32];
+	sprintf(st_mode_local, "%s%d", label, st_mode);
+	int mode = window->StateStorage.GetInt(ImGui::GetID(st_mode_local), 0x00);
+	
+	ImGui::Text("%d", mode);
 	
 	ImGui::BeginGroup();
 	
-	for (int i = 0; i < 3; ++i)
+	switch (mode)
 	{
-		ImGui::PushID(i);
-		ImGui::SetNextItemWidth(-1);
-		user |= ImGui::DragScalarN(label, ImGuiDataType_Double, &mat[3*i], 3, v_speed, min, max, format);
-		ImGui::PopID();
+		case 0x01:
+		{
+			s_vl3d_eng vl3d_eng;
+			s_vl3d_obj vl3d_obj_list[32];
+			s_vl3d_view vl3d_view = {
+					.pos = { 0.0, 0.0, 0.0 },
+			};
+			
+			vl_mcopy(&vl3d_view.rot[0][0], mat);
+			
+			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init_attr) { .obj_list = vl3d_obj_list });
+			vl3d_eng_render(&vl3d_eng, &vl3d_view, "##mat_view", ImVec2(-1, -1));
+			
+			vl_mcopy(mat, &vl3d_view.rot[0][0]);
+			
+			break;
+		}
+		
+		default:
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				ImGui::PushID(i);
+				ImGui::SetNextItemWidth(-1);
+				ImGui::DragScalarN("##mat_view", ImGuiDataType_Double, &mat[3 * i], 3, v_speed, min, max, format);
+				ImGui::PopID();
+			}
+			
+			break;
+		}
 	}
 	
 	ImGui::EndGroup();
+	
+	float value;
+	
+	if (ImGui::BeginPopupContextItem("item context menu"))
+	{
+		if (ImGui::Selectable("mat")) mode = 0x00;
+		if (ImGui::Selectable("3d")) mode = 0x01;
+
+		ImGui::EndPopup();
+	}
+	
+	window->StateStorage.SetInt(ImGui::GetID(st_mode_local), mode);
+	
+	ImGui::PopID();
 	
 	return 0x00;
 }
@@ -94,7 +147,7 @@ uint8_t trj_gui_obj_edit(s_trj_obj *self)
 	ImGui::Text("POS");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 	ImGui::SameLine();
-	vl_gui_vec("##pos", &self->pos[0][0], 1, NULL, NULL, "%.1f");
+	vl_gui_vec("##pos_p", &self->pos[0][0], 1, NULL, NULL, "%.1f");
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::AlignTextToFramePadding();
@@ -140,7 +193,7 @@ uint8_t trj_gui_obj_edit(s_trj_obj *self)
 //	ImGui::NextColumn();
 	
 //	vlf_t time[3];
-//	vlf_t pos[3][3];
+//	vlf_t pos_p[3][3];
 //	vlf_t rot[3][9];
 //
 //	vlf_t pos_inert;

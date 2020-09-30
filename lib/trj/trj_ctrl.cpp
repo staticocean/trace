@@ -167,10 +167,10 @@ void ins_ctrl_corb_update(void *__ctrl__)
 
 //class trj_ctrl_cpos_point(object):
 //
-//    def __init__(self, time, pos):
+//    def __init__(self, time, pos_p):
 //
 //        self.time = time;
-//        self.pos = numpy.array(pos);
+//        self.pos_p = numpy.array(pos_p);
 //
 //class trj_ctrl_cpos(object):
 //
@@ -184,15 +184,15 @@ void ins_ctrl_corb_update(void *__ctrl__)
 //        self.seg_offset = 0x00;
 //
 //        ref_points = [
-//            trj_ctrl_cpos_point(0.0, ref_points[0].pos - (ref_points[1].pos - ref_points[0].pos))
+//            trj_ctrl_cpos_point(0.0, ref_points[0].pos_p - (ref_points[1].pos_p - ref_points[0].pos_p))
 //        ] + ref_points;
 //
 //        for i in range(1, len(ref_points)-1):
 //
-//            dist = scipy.linalg.norm(ref_points[i+1].pos - ref_points[i+0].pos);
+//            dist = scipy.linalg.norm(ref_points[i+1].pos_p - ref_points[i+0].pos_p);
 //
-//            e0 = ref_points[i+0].pos - ref_points[i-1].pos;
-//            e1 = ref_points[i+1].pos - ref_points[i+0].pos;
+//            e0 = ref_points[i+0].pos_p - ref_points[i-1].pos_p;
+//            e1 = ref_points[i+1].pos_p - ref_points[i+0].pos_p;
 //
 //            nodes = numpy.asfortranarray([
 //                [0.0, 0.0, 0.9, 1.0],
@@ -204,13 +204,13 @@ void ins_ctrl_corb_update(void *__ctrl__)
 //
 //        time_diff = self.ref_points[1].time - self.ref_points[0].time;
 //
-//        pos[0] = self.get_pos(0x00, 0.0);
-//        pos[1] = (self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.0 / time_diff)) / 0.1;
+//        pos_p[0] = self.get_pos(0x00, 0.0);
+//        pos_p[1] = (self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.0 / time_diff)) / 0.1;
 //        pos_2 =((self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.05 / time_diff))
 //              - (self.get_pos(0x00, 0.05 / time_diff) - self.get_pos(0x00, 0.00 / time_diff))) / 0.05;
 //
-//        parent.pos[0].append(pos[0]);
-//        parent.pos[1].append(pos[1]);
+//        parent.pos_p[0].append(pos_p[0]);
+//        parent.pos_p[1].append(pos_p[1]);
 //        parent.pos_2.append(pos_2);
 //
 //        parent.rot[0].append(numpy.mat(numpy.diag([1.0, 1.0, 1.0])));
@@ -220,9 +220,9 @@ void ins_ctrl_corb_update(void *__ctrl__)
 //    def get_pos(self, seg_offset, time):
 //
 //        interp_data  = self.ref_curves[seg_offset].evaluate(time);
-//        ref_pos         = self.ref_points[seg_offset].pos + interp_data[0] * self.ref_basis[seg_offset][1] + interp_data[1] * self.ref_basis[seg_offset][0];
-//        # print(self.parent.ref_obj.pos[0]);
-//        abs_pos      = self.parent.ref_obj.pos[0][-1] + self.parent.ref_obj.rot[0][-1].dot(ref_pos);
+//        ref_pos         = self.ref_points[seg_offset].pos_p + interp_data[0] * self.ref_basis[seg_offset][1] + interp_data[1] * self.ref_basis[seg_offset][0];
+//        # print(self.parent.ref_obj.pos_p[0]);
+//        abs_pos      = self.parent.ref_obj.pos_p[0][-1] + self.parent.ref_obj.rot[0][-1].dot(ref_pos);
 //
 //        return numpy.array(abs_pos).reshape(3);
 //
@@ -235,8 +235,8 @@ void ins_ctrl_corb_update(void *__ctrl__)
 //
 //        interp_state = (self.parent.time_0[-1] - self.ref_points[self.seg_offset].time) / (self.ref_points[self.seg_offset+1].time - self.ref_points[self.seg_offset].time);
 //        abs_pos      = self.get_pos(self.seg_offset, interp_state);
-//        ref_pos[1]      = numpy.array(self.parent.ref_obj.rot[0][-1].I.dot(abs_pos - self.parent.ref_obj.pos[0][-1])).reshape(3);
-//        ref_pos[0]      = numpy.array(self.parent.ref_obj.rot[0][-2].I.dot(self.parent.pos[0][-1] - self.parent.ref_obj.pos[0][-2])).reshape(3);
+//        ref_pos[1]      = numpy.array(self.parent.ref_obj.rot[0][-1].I.dot(abs_pos - self.parent.ref_obj.pos_p[0][-1])).reshape(3);
+//        ref_pos[0]      = numpy.array(self.parent.ref_obj.rot[0][-2].I.dot(self.parent.pos_p[0][-1] - self.parent.ref_obj.pos_p[0][-2])).reshape(3);
 //
 //        # print(ref_pos[1] - ref_pos[0]);
 //        # print()
@@ -284,7 +284,7 @@ void ins_ctrl_corb_update(void *__ctrl__)
 //
 //        # print(trj_utils.rot_norm(R.dot(parent.rot[0][-1])) - parent.rot[0][-1]);
 //
-//        parent.pos[0].append(abs_pos);
+//        parent.pos_p[0].append(abs_pos);
 //        # parent.rot[0].append(numpy.mat(parent.rot[0][-1]));
 //        # parent.rot[0].append(trj_utils.rot_norm(parent.rot[0][-1] + trj_utils.skew(v).dot(parent.rot[0][-1])));
 //        # parent.rot[0].append(trj_utils.rot_norm(R.dot(parent.rot[0][-1])));

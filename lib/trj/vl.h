@@ -66,6 +66,9 @@ void vl_unskew(vlf_t *res, vlf_t *mat);
 void vl_mmul_v(vlf_t *res, vlf_t *mat, vlf_t *vec);
 void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat);
 
+void vl_vset (vlf_t *vec, vlf_t value);
+void vl_mid (vlf_t *mat);
+
 //------------------------------------------------------------------------------
 
 #endif /* __VL__ */

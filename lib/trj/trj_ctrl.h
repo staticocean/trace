@@ -55,7 +55,7 @@ typedef struct ins_ctrl_corb
 //typedef struct ins_ctrl_cpos_point
 //{
 //    vlf_t time;
-//    vlf_t pos[3];
+//    vlf_t pos_p[3];
 //
 //}   ins_ctrl_cpos_point_t;
 
@@ -73,15 +73,15 @@ void ins_ctrl_uins_update(void *__ctrl__);
 //    self.seg_offset = 0x00;
 //
 //        ref_points = [
-//            trj_ctrl_cpos_point(0.0, ref_points[0].pos - (ref_points[1].pos - ref_points[0].pos))
+//            trj_ctrl_cpos_point(0.0, ref_points[0].pos_p - (ref_points[1].pos_p - ref_points[0].pos_p))
 //        ] + ref_points;
 //
 //        for i in range(1, len(ref_points)-1):
 //            
-//            dist = scipy.linalg.norm(ref_points[i+1].pos - ref_points[i+0].pos);
+//            dist = scipy.linalg.norm(ref_points[i+1].pos_p - ref_points[i+0].pos_p);
 //
-//            e0 = ref_points[i+0].pos - ref_points[i-1].pos;
-//            e1 = ref_points[i+1].pos - ref_points[i+0].pos;
+//            e0 = ref_points[i+0].pos_p - ref_points[i-1].pos_p;
+//            e1 = ref_points[i+1].pos_p - ref_points[i+0].pos_p;
 //
 //            nodes = numpy.asfortranarray([
 //                [0.0, 0.0, 0.9, 1.0],
@@ -109,7 +109,7 @@ void ins_ctrl_uins_update(void *__ctrl__);
 //    def get_pos(self, seg_offset, time):
 //
 //        interp_data  = self.ref_curves[seg_offset].evaluate(time);
-//        ref_pos         = self.ref_points[seg_offset].pos + interp_data[0] * self.ref_basis[seg_offset][1] + interp_data[1] * self.ref_basis[seg_offset][0];
+//        ref_pos         = self.ref_points[seg_offset].pos_p + interp_data[0] * self.ref_basis[seg_offset][1] + interp_data[1] * self.ref_basis[seg_offset][0];
 //        # print(self.parent.ref_obj.pos_0);
 //        abs_pos      = self.parent.ref_obj.pos_0[-1] + self.parent.ref_obj.rot_0[-1].dot(ref_pos);
 //

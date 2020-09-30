@@ -7,6 +7,7 @@
 #include <lib/trj/trj_types.h>
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/vl.h>
+#include <lib/trj/vl3d.h>
 #include <lib/trj/vl_svd.h>
 
 //------------------------------------------------------------------------------
