@@ -23,9 +23,9 @@ typedef float64_t vlf_t;
 
 //------------------------------------------------------------------------------
 
-#define vl_rad(deg) ((vlf_t) (((vlf_t) (deg)) * (M_PI / 180)))
-#define vl_deg(rad) ((vlf_t) (((vlf_t) (rad)) * (180 / M_PI)))
 #define vl_pi (3.14159265358979323846264338327950288)
+#define vl_rad(deg) ((vlf_t) (((vlf_t) (deg)) * (vl_pi / 180)))
+#define vl_deg(rad) ((vlf_t) (((vlf_t) (rad)) * (180 / vl_pi)))
 #define vl_2pi (vl_pi*2)
 
 //------------------------------------------------------------------------------

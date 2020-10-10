@@ -96,7 +96,7 @@ void trj_lla_to_ecef(trj_pos_ecef_t *pos_ecef, trj_pos_lla_t *pos_lla)
 //     c_tn_ = numpy.mat([x, y, z]).dot(rot);
 // }
 
-void trj_ctn_to_hpr(trj_rot_hpr_t *rot_hpr, vlf_t *c_tn)
+void trj_ctn_to_hpr(s_trj_rot_hpr *rot_hpr, vlf_t *c_tn)
 {   
     vlf_t c_tf[9] = 
     {
@@ -115,9 +115,9 @@ void trj_ctn_to_hpr(trj_rot_hpr_t *rot_hpr, vlf_t *c_tn)
     vl_mmul_m(temp_mat_0, c_tn, c_tf);
     vl_mmul_m(temp_mat_1, c_tf_tnp, temp_mat_0);
 
-    rot_hpr->heading = -vl_atan2( c_tn[1*3+0], c_tn[0*3+0]);
-    rot_hpr->pitch   = -vl_atan2(-c_tn[2*3+0], vl_sqrt(c_tn[2*3+1]*c_tn[2*3+1] + c_tn[2*3+2]*c_tn[2*3+2]));
-    rot_hpr->roll    =  vl_atan2( c_tn[2*3+1], c_tn[2*3+2]);
+    rot_hpr->heading = -vl_atan2( temp_mat_1[1*3+0], temp_mat_1[0*3+0]);
+    rot_hpr->pitch   = -vl_atan2(-temp_mat_1[2*3+0], vl_sqrt(temp_mat_1[2*3+1]*temp_mat_1[2*3+1] + temp_mat_1[2*3+2]*temp_mat_1[2*3+2]));
+    rot_hpr->roll    =  vl_atan2( temp_mat_1[2*3+1], temp_mat_1[2*3+2]);
 
     if (rot_hpr->heading < 0)
     {
@@ -149,7 +149,7 @@ void trj_pos_ecef(trj_pos_ecef_t *ecef, s_trj_obj *obj)
 
 //------------------------------------------------------------------------------
 
-void trj_hpr_to_ctn(vlf_t *c_tn, trj_rot_hpr_t *rot_hpr)
+void trj_hpr_to_ctn(vlf_t *c_tn, s_trj_rot_hpr *rot_hpr)
 {
     vlf_t a = -rot_hpr->heading;
     vlf_t b = -rot_hpr->pitch;

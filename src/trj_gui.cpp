@@ -29,23 +29,35 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 	
 	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init_attr) { .obj_list = vl3d_obj_list });
 	
-	
+
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 1.0, 0.0, 0.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 1.0 }, .p1 = { 1.0, 0.0, 1.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 0.0 }, .p1 = { 1.0, 1.0, 0.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 1.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
-	
+
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.0, 0.0, 1.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 0.0 }, .p1 = { 0.0, 1.0, 1.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 1.0, 0.0, 1.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 1.0, 0.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
-	
+
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.0, 1.0, 0.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 1.0 }, .p1 = { 0.0, 1.0, 1.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 1.0, 1.0, 0.0 }, });
 	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 1.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
 	
-	vl3d_view.scale = 400;
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.5, 1.0, 0.0 }, }); // /
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.5, 1.0, 0.0 }, .p1 = { 1.0, 0.0, 0.0 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 0.0, 0.5, 0.0 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.5, 0.0 }, .p1 = { 1.0, 0.5, 0.0 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.5, 0.0 }, .p1 = { 0.0, 0.0, 0.0 }, }); //
+//
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.1 }, .p1 = { 0.5, 1.0, 0.1 }, }); // /
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.5, 1.0, 0.1 }, .p1 = { 1.0, 0.0, 0.1 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.1 }, .p1 = { 0.0, 0.5, 0.1 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.5, 0.1 }, .p1 = { 1.0, 0.5, 0.1 }, }); //
+//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.5, 0.1 }, .p1 = { 0.0, 0.0, 0.1 }, }); //
+	
+	vl3d_view.scale = 1.0;
 	
 	vl_vzero(vl3d_view.pos);
 	vl_mid(&vl3d_view.rot[0][0]);
@@ -55,21 +67,18 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr)
 	self->w_height = 800;
 	self->w_width  = 800;
 	
-	self->gui_eng.sel_item = NULL;
-	self->gui_eng.sel_type = 0x00;
-	self->gui_eng.obj_hide = self->st_gui_eng_objhide;
-	
-	for (int i = 0; i < 255; ++i)
-	{
-		self->gui_eng.obj_hide[i] = 0x00;
-	}
-	
+	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	trj_eng_init(&self->eng, (s_trj_eng_init_attr) { .st_objects = self->st_eng_obj });
 	
 	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 00", .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 01", .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 02", .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj) { .name = "test object 03", .ref = &self->eng.obj_list[0] });
+	
+	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
+	{
+		vl_mid(&self->eng.obj_list[i].rot[0][0]);
+	}
 	
 	ImGui::StyleColorsDark();
 //	ImGui::StyleColorsLight();
@@ -128,7 +137,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			{
 				case 0x00:
 				{
-					trj_gui_obj_edit((s_trj_obj *) self->gui_eng.sel_item);
+					s_trj_obj *obj = (s_trj_obj*) self->gui_eng.sel_item;
+					trj_gui_obj_edit(&self->gui_eng.obj_list[obj->id], obj);
+					
 					break;
 				}
 				

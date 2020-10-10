@@ -3,6 +3,22 @@
 
 //------------------------------------------------------------------------------
 
+uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
+{
+	gui->sel_item = NULL;
+	gui->sel_type = 0x00;
+	gui->obj_list = attr.obj_list;
+	
+	for (int i = 0; i < 255; ++i)
+	{
+		gui->obj_list[i].hide = 0x00;
+	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
 void __sel_object__(s_trj_gui_eng *gui, s_trj_obj *obj)
 {
 	gui->sel_type = 0x00;
@@ -37,6 +53,7 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 		if (filter.PassFilter((char*) filter_data[i]))
 		{
 			s_trj_obj *obj = &self->obj_list[i];
+			s_trj_gui_obj *obj_gui = &gui->obj_list[i];
 			
 			bool node_sel = gui->sel_item == &self->obj_list[i];
 			
@@ -49,8 +66,8 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 			
 			ImGui::SameLine();
 			char *hide_label[2] = { "hide", "show" };
-			if (ImGui::SmallButton(hide_label[gui->obj_hide[i]]))
-			{ gui->obj_hide[i] = !gui->obj_hide[i]; }
+			if (ImGui::SmallButton(hide_label[gui->obj_list[i].hide]))
+			{ gui->obj_list[i].hide = !gui->obj_list[i].hide; }
 
 			if (node_open)
 			{

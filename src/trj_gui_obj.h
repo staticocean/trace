@@ -6,17 +6,32 @@
 
 #include <lib/trj/trj_types.h>
 #include <lib/trj/trj_obj.h>
+#include <lib/trj/trj_utils.h>
 #include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>
 #include <lib/trj/vl_svd.h>
 
 //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+typedef struct trj_gui_obj
+{
+	s_trj_obj *ref;
+	uint8_t hide;
+	
+	
+} 	s_trj_gui_obj;
+
+typedef struct trj_gui_obj_init
+{
+	s_trj_obj *ref;
+
+} 	s_trj_gui_obj_init;
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_gui_obj_edit(s_trj_obj *self);
+//------------------------------------------------------------------------------
+
+uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self);
 
 //------------------------------------------------------------------------------
 

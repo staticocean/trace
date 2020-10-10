@@ -32,8 +32,7 @@ typedef struct trj_gui
 	
 	s_trj_eng eng;
 	s_trj_obj st_eng_obj[255];
-	
-	uint8_t st_gui_eng_objhide[255];
+	s_trj_gui_obj st_gui_eng_obj[255];
 	
 	s_trj_gui_menu gui_menu;
 	s_trj_gui_eng  gui_eng;
@@ -80,7 +79,7 @@ int tcc_test(void);
 
  int main(int argc, const char * argv[])
  {
- trj_rot_hpr_t earth_hpr =
+ s_trj_rot_hpr earth_hpr =
  {
  .heading = 0.0,
  .pitch = 0.0,

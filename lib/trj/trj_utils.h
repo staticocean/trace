@@ -36,13 +36,13 @@ typedef struct insu_rot_hpr
     vlf_t pitch;
     vlf_t roll;
     
-}   trj_rot_hpr_t;
+}   s_trj_rot_hpr;
 
 void trj_gforce         (vlf_t *res, s_trj_obj *obj_0, s_trj_obj *obj_1);
 void trj_ecef_to_lla    (trj_pos_lla_t *pos_lla, trj_pos_ecef_t *pos_ecef);
 void trj_lla_to_ecef    (trj_pos_ecef_t *pos_ecef, trj_pos_lla_t *pos_lla);
-void trj_ctn_to_hpr     (trj_rot_hpr_t *rot_hpr, vlf_t *c_tn);
-void trj_hpr_to_ctn     (vlf_t *c_tn, trj_rot_hpr_t *rot_hpr);
+void trj_ctn_to_hpr     (s_trj_rot_hpr *rot_hpr, vlf_t *c_tn);
+void trj_hpr_to_ctn     (vlf_t *c_tn, s_trj_rot_hpr *rot_hpr);
 void trj_pos_ecef       (trj_pos_ecef_t *ecef, s_trj_obj *obj);
 
 //------------------------------------------------------------------------------

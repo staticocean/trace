@@ -961,6 +961,33 @@ lib\picoc\picoc_variable.c.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.s
 .PHONY : lib\picoc\picoc_variable.c.s
 
+lib\tinymat\tinymat.obj: lib\tinymat\tinymat.cpp.obj
+
+.PHONY : lib\tinymat\tinymat.obj
+
+# target to build an object file
+lib\tinymat\tinymat.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj
+.PHONY : lib\tinymat\tinymat.cpp.obj
+
+lib\tinymat\tinymat.i: lib\tinymat\tinymat.cpp.i
+
+.PHONY : lib\tinymat\tinymat.i
+
+# target to preprocess a source file
+lib\tinymat\tinymat.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.i
+.PHONY : lib\tinymat\tinymat.cpp.i
+
+lib\tinymat\tinymat.s: lib\tinymat\tinymat.cpp.s
+
+.PHONY : lib\tinymat\tinymat.s
+
+# target to generate assembly for a file
+lib\tinymat\tinymat.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.s
+.PHONY : lib\tinymat\tinymat.cpp.s
+
 lib\trj\trj_bz.obj: lib\trj\trj_bz.cpp.obj
 
 .PHONY : lib\trj\trj_bz.obj
@@ -1549,6 +1576,9 @@ help:
 	@echo ... lib/picoc/picoc_variable.obj
 	@echo ... lib/picoc/picoc_variable.i
 	@echo ... lib/picoc/picoc_variable.s
+	@echo ... lib/tinymat/tinymat.obj
+	@echo ... lib/tinymat/tinymat.i
+	@echo ... lib/tinymat/tinymat.s
 	@echo ... lib/trj/trj_bz.obj
 	@echo ... lib/trj/trj_bz.i
 	@echo ... lib/trj/trj_bz.s

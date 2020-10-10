@@ -31,7 +31,9 @@
 
 enum vl_obj_type
 {
-	vl_obj_type_line = 0x01,
+	vl_obj_type_line  = 0x01,
+	vl_obj_type_point = 0x02,
+	vl_obj_type_text  = 0x03,
 };
 
 
@@ -45,6 +47,27 @@ typedef struct vl3d_line
 	
 }	s_vl3d_line;
 
+typedef struct vl3d_point
+{
+	uint16_t type;
+	uint16_t id;
+	
+	vlf_t p0[3];
+	vlf_t size;
+	
+}	s_vl3d_point;
+
+typedef struct vl3d_text
+{
+	uint16_t type;
+	uint16_t id;
+	
+	vlf_t p0[3];
+	vlf_t size;
+	char data[255];
+	
+}	s_vl3d_text;
+
 typedef union vl3d_obj
 {
 	struct {
@@ -52,8 +75,10 @@ typedef union vl3d_obj
 		uint16_t id;
 	};
 	
-	s_vl3d_line line;
-
+	s_vl3d_line  line;
+	s_vl3d_point point;
+	s_vl3d_text  text;
+	
 } 	s_vl3d_obj;
 
 
@@ -84,7 +109,11 @@ typedef struct vl3d_view
 
 uint8_t vl3d_eng_init(s_vl3d_eng *self, s_vl3d_eng_init_attr attr);
 uint8_t vl3d_eng_add_line(s_vl3d_eng *self, s_vl3d_line obj);
+uint8_t vl3d_eng_add_point(s_vl3d_eng *self, s_vl3d_point obj);
+uint8_t vl3d_eng_add_text(s_vl3d_eng *self, s_vl3d_text obj);
 uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label, ImVec2 size);
+
+uint8_t vl3d_eng_draw_arrow(s_vl3d_eng *self, float64_t p0[3], float64_t p1[3]);
 
 //------------------------------------------------------------------------------
 

@@ -22,6 +22,7 @@ file(GLOB src_fmt       "lib/fmt/*.*")
 file(GLOB src_trj       "lib/trj/*.*")
 file(GLOB src_picoc     "lib/picoc/*.*" "lib/picoc/cstdlib/*.*")
 file(GLOB src_imguizmo  "lib/imguizmo/*.*")
+file(GLOB src_tinymat   "lib/tinymat/*.*")
 #file(GLOB src_tcc       "lib/tcc/*.*" "lib/tcc/lib/*.*")
 
 list(REMOVE_ITEM ${src_main}  "src/trj_webgl.*")
@@ -29,15 +30,15 @@ list(REMOVE_ITEM ${src_picoc} "lib/picoc/cstdlib/unistd.c")
 list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/library_unix.c")
 list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/platform_unix.c")
 
-add_executable(trj ${src_main} ${src_imgui} ${src_opengl} ${src_fmt} ${src_trj} ${src_picoc} ${src_imguizmo})
+add_executable(trj ${src_main} ${src_imgui} ${src_opengl} ${src_fmt} ${src_trj} ${src_picoc} ${src_imguizmo} ${src_tinymat})
 
 find_library(lib_opengl32 opengl32)
 target_link_libraries(trj LINK_PUBLIC ${lib_opengl32})
 message( ${lib_opengl32} )
 
-find_library(lib_glfw3_x86 glfw3_x86 lib/opengl/static/)
-target_link_libraries(trj LINK_PUBLIC ${lib_glfw3_x86})
-message( ${lib_glfw3_x86} )
+find_library(lib_glfw3_x64 glfw3_x64 lib/opengl/static/)
+target_link_libraries(trj LINK_PUBLIC ${lib_glfw3_x64})
+message( ${lib_glfw3_x64} )
 
 #target_link_libraries(trj LINK_PUBLIC kernel32)
 #target_link_libraries(trj LINK_PUBLIC user32)

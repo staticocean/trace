@@ -157,6 +157,9 @@ CMakeFiles/trj.dir/lib/imguizmo/ImSequencer.cpp.obj
  ../lib/imgui/imstb_textedit.h
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/imguizmo/ImSequencer.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/imguizmo/ImSequencer.h
+CMakeFiles/trj.dir/lib/tinymat/tinymat.cpp.obj
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/tinymat/tinymat.cpp
+ C:/Users/cel/dev/git/bitbucket/trajectory/lib/tinymat/tinymat.h
 CMakeFiles/trj.dir/lib/trj/trj_bz.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_bz.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/trj/trj_bz.h
@@ -251,13 +254,18 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
 CMakeFiles/trj.dir/src/trj_gui_eng.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
  ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
+ ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
 CMakeFiles/trj.dir/src/trj_gui_menu.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
@@ -273,6 +281,7 @@ CMakeFiles/trj.dir/src/trj_gui_obj.cpp.obj
  ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
@@ -297,6 +306,7 @@ CMakeFiles/trj.dir/src/trj_gui_w.cpp.obj
  ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
