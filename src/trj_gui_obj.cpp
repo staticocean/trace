@@ -169,13 +169,13 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
 			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
 			
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +1.0, +0.0, +0.0 }, .data = "x0" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +1.0, +0.0 }, .data = "y0" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +0.0, +1.0 }, .data = "z0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +1.0, +0.0, +0.0 }, .data = "X0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +1.0, +0.0 }, .data = "Y0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +0.0, +1.0 }, .data = "Z0" } );
 			
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] }, .data = "x" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] }, .data = "y" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] }, .data = "z" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] }, .data = "X" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] }, .data = "Y" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] }, .data = "Z" } );
 			
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +1.0, +0.0, +0.0 }, .p1 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] } } );
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +0.0, +1.0, +0.0 }, .p1 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] } } );
@@ -326,7 +326,7 @@ uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::Text("ROT");
 	ImGui::SameLine();
 	vl_gui_rot("##rot", &self->rot[0][0]);
-//	vl_rnorm(&self->rot[0][0]);
+	vl_rnorm(&self->rot[0][0]);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Text("SOR");
