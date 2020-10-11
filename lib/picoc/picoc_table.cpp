@@ -72,7 +72,7 @@ int TableSet(Picoc *pc, struct Table *Tbl, char *Key, struct Value *Val,
     struct TableEntry *FoundEntry = TableSearch(Tbl, Key, &AddAt);
 
     if (FoundEntry == NULL) {   /* add it to the table */
-        struct TableEntry *NewEntry = VariableAlloc(pc, NULL,
+        struct TableEntry *NewEntry = (struct TableEntry *) VariableAlloc(pc, NULL,
             sizeof(struct TableEntry), Tbl->OnHeap);
         NewEntry->DeclFileName = DeclFileName;
         NewEntry->DeclLine = DeclLine;
@@ -160,7 +160,7 @@ char *TableSetIdentifier(Picoc *pc, struct Table *Tbl, const char *Ident,
     else {
         /* add it to the table - we economise by not allocating
             the whole structure here */
-        struct TableEntry *NewEntry = HeapAllocMem(pc,
+        struct TableEntry *NewEntry = (struct TableEntry *) HeapAllocMem(pc,
             sizeof(struct TableEntry) -
             sizeof(union TableEntryPayload) + IdentLen + 1);
         if (NewEntry == NULL)

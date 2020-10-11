@@ -48,7 +48,7 @@ void LibraryAdd(Picoc *pc, struct LibraryFunction *FuncList)
             IntrinsicName, true, false);
         TypeParse(&Parser, &ReturnType, &Identifier, NULL);
         NewValue = ParseFunctionDefinition(&Parser, ReturnType, Identifier);
-        NewValue->Val->FuncDef.Intrinsic = FuncList[Count].Func;
+        NewValue->Val->FuncDef.Intrinsic = (void(*)()) FuncList[Count].Func;
         HeapFreeMem(pc, Tokens);
     }
 }

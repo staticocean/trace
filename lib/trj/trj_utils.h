@@ -4,8 +4,8 @@
 //  Copyright © 2015 Control Systems Interfaces. All rights reserved.
 //
 
-#ifndef __INS_UTILS__
-#define __INS_UTILS__
+#ifndef __TRJ_UTILS__
+#define __TRJ_UTILS__
 
 //------------------------------------------------------------------------------
 
@@ -47,4 +47,4 @@ void trj_pos_ecef       (trj_pos_ecef_t *ecef, s_trj_obj *obj);
 
 //------------------------------------------------------------------------------
 
-#endif /* __INS_UTILS__ */
+#endif /* __TRJ_UTILS__ */

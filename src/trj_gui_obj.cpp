@@ -153,18 +153,33 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 			vl3d_eng_draw_arrow(&vl3d_eng,
 								(float64_t[]) { -mat[0*3+0], -mat[1*3+0], -mat[2*3+0] },
 								(float64_t[]) { +mat[0*3+0], +mat[1*3+0], +mat[2*3+0] }
-								);
-			
+			);
+
 			vl3d_eng_draw_arrow(&vl3d_eng,
 								(float64_t[]) { -mat[0*3+1], -mat[1*3+1], -mat[2*3+1] },
 								(float64_t[]) { +mat[0*3+1], +mat[1*3+1], +mat[2*3+1] }
-								);
-			
+			);
+
 			vl3d_eng_draw_arrow(&vl3d_eng,
 								(float64_t[]) { -mat[0*3+2], -mat[1*3+2], -mat[2*3+2] },
 								(float64_t[]) { +mat[0*3+2], +mat[1*3+2], +mat[2*3+2] }
-								);
-			
+			);
+
+//			vl3d_eng_draw_arrow(&vl3d_eng,
+//								(float64_t[]) { 0, 0, 0 },
+//								(float64_t[]) { +mat[0*3+0], +mat[1*3+0], +mat[2*3+0] }
+//			);
+//
+//			vl3d_eng_draw_arrow(&vl3d_eng,
+//								(float64_t[]) { 0, 0, 0 },
+//								(float64_t[]) { +mat[0*3+1], +mat[1*3+1], +mat[2*3+1] }
+//			);
+//
+//			vl3d_eng_draw_arrow(&vl3d_eng,
+//								(float64_t[]) { 0, 0, 0 },
+//								(float64_t[]) { +mat[0*3+2], +mat[1*3+2], +mat[2*3+2] }
+//			);
+//
 			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { -1.0, +0.0, +0.0 }, (float64_t[]) { +1.0, +0.0, +0.0 } );
 			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
 			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
@@ -337,62 +352,13 @@ uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	
-	
 //	ImGui::Columns(2);
 //	ImGui::Text("time");
 //	ImGui::NextColumn();
 //	if (self->ref == NULL) { ImGui::Text("none"); }
 //	else { ImGui::Text("%s", (char*) self->ref->name); }
 //	ImGui::NextColumn();
-	
-//	vlf_t time[3];
-//	vlf_t pos_p[3][3];
-//	vlf_t rot[3][9];
-//
-//	vlf_t pos_inert;
-//	vlf_t rot_inert;
-//
-//	vlf_t pos_force[3];
-//	vlf_t rot_force[3];
-//
-//	uint8_t ctrl_offset;
-//	uint8_t proc_offset;
-//	uint8_t data_offset;
-//
-	// traj list
-	if(ImGui::CollapsingHeader("traj"))
-	{
-		for (int i = 0; i < self->traj_offset; ++i)
-		{
-		
-		}
-	}
-	
-	if (ImGui::CollapsingHeader("ctrl"))
-	{
-		for (int i = 0; i < self->ctrl_offset; ++i)
-		{
-		
-		}
-	}
-	
-	if (ImGui::CollapsingHeader("proc"))
-	{
-		for (int i = 0; i < self->proc_offset; ++i)
-		{
-		
-		}
-	}
-	
-	if (ImGui::CollapsingHeader("data"))
-	{
-		for (int i = 0; i < self->data_offset; ++i)
-		{
-		
-		}
-	}
-	
+
 //	static ImGuiTextFilter filter;
 //	static void* selected_item = NULL;
 //

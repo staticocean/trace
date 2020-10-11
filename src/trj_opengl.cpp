@@ -92,9 +92,9 @@ int main(int, char**)
 	ImFont *font_default = io.Fonts->AddFontFromFileTTF("../res/fonts/default.ttf", 16, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 	io.FontDefault = font_default;
 	
-	s_trj_gui trj_gui;
+	static s_trj_gui trj_gui;
 	
-	trj_gui_init(&trj_gui, s_trj_gui_init_attr {});
+	trj_gui_init(&trj_gui, s_trj_gui_init {});
 
     // Main loop
     while (!glfwWindowShouldClose(window))

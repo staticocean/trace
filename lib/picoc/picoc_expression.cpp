@@ -225,8 +225,8 @@ int IsTypeToken(struct ParseState *Parser, enum LexToken t,
     if (t == TokenIdentifier) {
         /* see TypeParseFront, case TokenIdentifier and ParseTypedef */
         struct Value * VarValue;
-        if (VariableDefined(Parser->pc, LexValue->Val->Pointer)) {
-            VariableGet(Parser->pc, Parser, LexValue->Val->Pointer, &VarValue);
+        if (VariableDefined(Parser->pc, (const char*) LexValue->Val->Pointer)) {
+            VariableGet(Parser->pc, Parser, (const char*) LexValue->Val->Pointer, &VarValue);
             if (VarValue->Typ == &Parser->pc->TypeType)
                 return 1;
         }
@@ -377,7 +377,7 @@ double ExpressionAssignFP(struct ParseState *Parser, struct Value *DestValue,
 void ExpressionStackPushValueNode(struct ParseState *Parser,
     struct ExpressionStack **StackTop, struct Value *ValueLoc)
 {
-    struct ExpressionStack *StackNode = VariableAlloc(Parser->pc, Parser,
+    struct ExpressionStack *StackNode = (struct ExpressionStack *) VariableAlloc(Parser->pc, Parser,
                                         sizeof(*StackNode), false);
     StackNode->Next = *StackTop;
     StackNode->Val = ValueLoc;
@@ -415,7 +415,7 @@ void ExpressionStackPushLValue(struct ParseState *Parser,
     struct ExpressionStack **StackTop, struct Value *PushValue, int Offset)
 {
     struct Value *ValueLoc = VariableAllocValueShared(Parser, PushValue);
-    ValueLoc->Val = (void *)((char *)ValueLoc->Val + Offset);
+    ValueLoc->Val = (union AnyValue *) (void *)((char *)ValueLoc->Val + Offset);
     ExpressionStackPushValueNode(Parser, StackTop, ValueLoc);
 }
 
@@ -573,7 +573,7 @@ void ExpressionAssign(struct ParseState *Parser, struct Value *DestValue,
                 SourceValue->Typ->Base == TypePointer &&
                 SourceValue->Typ->FromType->Base == TypeChar) {
             if (DestValue->Typ->ArraySize == 0) { /* char x[] = "abcd", x is unsized */
-                int Size = strlen(SourceValue->Val->Pointer) + 1;
+                int Size = strlen((char*) SourceValue->Val->Pointer) + 1;
 #ifdef DEBUG_ARRAY_INITIALIZER
                 PRINT_SOURCE_POS();
                 fprintf(stderr, "str size: %d\n", Size);
@@ -1350,7 +1350,7 @@ void ExpressionStackPushOperator(struct ParseState *Parser,
     struct ExpressionStack **StackTop, enum OperatorOrder Order,
     enum LexToken Token, int Precedence)
 {
-    struct ExpressionStack *StackNode = VariableAlloc(Parser->pc, Parser,
+    struct ExpressionStack *StackNode = (struct ExpressionStack *) VariableAlloc(Parser->pc, Parser,
         sizeof(*StackNode), false);
     StackNode->Next = *StackTop;
     StackNode->Order = Order;
@@ -1391,7 +1391,7 @@ void ExpressionGetStructElement(struct ParseState *Parser,
 
         /* if we're doing '->' dereference the struct pointer first */
         if (Token == TokenArrow)
-            DerefDataLoc = VariableDereferencePointer(ParamVal, &StructVal,
+            DerefDataLoc = (char*) VariableDereferencePointer(ParamVal, &StructVal,
                 NULL, &StructType, NULL);
 
         if (StructType->Base != TypeStruct && StructType->Base != TypeUnion)
@@ -1414,7 +1414,7 @@ void ExpressionGetStructElement(struct ParseState *Parser,
 
         /* make the result value for this member only */
         Result = VariableAllocValueFromExistingData(Parser, MemberValue->Typ,
-            (void*)(DerefDataLoc + MemberValue->Val->Integer), true,
+													(AnyValue*) (void*)(DerefDataLoc + MemberValue->Val->Integer), true,
             (StructVal != NULL) ? StructVal->LValueFrom : NULL);
         ExpressionStackPushValueNode(Parser, StackTop, Result);
     }
@@ -1723,7 +1723,7 @@ void ExpressionParseMacroCall(struct ParseState *Parser,
         ExpressionStackPushValueByType(Parser, StackTop, &Parser->pc->FPType);
         ReturnValue = (*StackTop)->Val;
         HeapPushStackFrame(Parser->pc);
-        ParamArray = HeapAllocStack(Parser->pc,
+        ParamArray = (struct Value **) HeapAllocStack(Parser->pc,
             sizeof(struct Value*)*MDef->NumParams);
         if (ParamArray == NULL)
             ProgramFail(Parser, "(ExpressionParseMacroCall) out of memory");
@@ -1815,7 +1815,7 @@ void ExpressionParseFunctionCall(struct ParseState *Parser,
             FuncValue->Val->FuncDef.ReturnType);
         ReturnValue = (*StackTop)->Val;
         HeapPushStackFrame(Parser->pc);
-        ParamArray = HeapAllocStack(Parser->pc,
+        ParamArray = (struct Value **) HeapAllocStack(Parser->pc,
             sizeof(struct Value*)*FuncValue->Val->FuncDef.NumParams);
         if (ParamArray == NULL)
             ProgramFail(Parser, "(ExpressionParseFunctionCall) out of memory");
@@ -1906,8 +1906,8 @@ void ExpressionParseFunctionCall(struct ParseState *Parser,
             VariableStackFramePop(Parser);
         } else {
             // FIXME: too many parameters?
-            FuncValue->Val->FuncDef.Intrinsic(Parser, ReturnValue, ParamArray,
-                                              ArgCount);
+//            FuncValue->Val->FuncDef.Intrinsic(Parser, ReturnValue, ParamArray,
+//                                              ArgCount);
         }
 
         HeapPopStackFrame(Parser->pc);

@@ -225,6 +225,11 @@ uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	return 0x00;
 }
 
+uint8_t trj_traj_bz_compile_api(void *self)
+{
+	return trj_traj_bz_compile((s_trj_traj_bz*) self);
+}
+
 uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 {
 	uint32_t offset = 0x00;
@@ -317,6 +322,11 @@ uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	trj_bz4_eval(&bz4, time, &pos[2]);
 	
 	return 0x00;
+}
+
+uint8_t trj_traj_bz_pos_api(void *self, vlf_t time, vlf_t *pos)
+{
+	return trj_traj_bz_pos((s_trj_traj_bz*) self, time, pos);
 }
 
 //------------------------------------------------------------------------------

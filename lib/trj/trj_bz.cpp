@@ -3,7 +3,7 @@
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_bz_init(s_trj_bz *self, s_trj_bz_init_attr attr)
+uint8_t trj_bz_init(s_trj_bz *self, s_trj_bz_init attr)
 {
 	uint32_t i;
 	

@@ -286,114 +286,6 @@ lib\imgui\imgui_widgets.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.s
 .PHONY : lib\imgui\imgui_widgets.cpp.s
 
-lib\imguizmo\ImCurveEdit.obj: lib\imguizmo\ImCurveEdit.cpp.obj
-
-.PHONY : lib\imguizmo\ImCurveEdit.obj
-
-# target to build an object file
-lib\imguizmo\ImCurveEdit.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.obj
-.PHONY : lib\imguizmo\ImCurveEdit.cpp.obj
-
-lib\imguizmo\ImCurveEdit.i: lib\imguizmo\ImCurveEdit.cpp.i
-
-.PHONY : lib\imguizmo\ImCurveEdit.i
-
-# target to preprocess a source file
-lib\imguizmo\ImCurveEdit.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.i
-.PHONY : lib\imguizmo\ImCurveEdit.cpp.i
-
-lib\imguizmo\ImCurveEdit.s: lib\imguizmo\ImCurveEdit.cpp.s
-
-.PHONY : lib\imguizmo\ImCurveEdit.s
-
-# target to generate assembly for a file
-lib\imguizmo\ImCurveEdit.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImCurveEdit.cpp.s
-.PHONY : lib\imguizmo\ImCurveEdit.cpp.s
-
-lib\imguizmo\ImGradient.obj: lib\imguizmo\ImGradient.cpp.obj
-
-.PHONY : lib\imguizmo\ImGradient.obj
-
-# target to build an object file
-lib\imguizmo\ImGradient.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.obj
-.PHONY : lib\imguizmo\ImGradient.cpp.obj
-
-lib\imguizmo\ImGradient.i: lib\imguizmo\ImGradient.cpp.i
-
-.PHONY : lib\imguizmo\ImGradient.i
-
-# target to preprocess a source file
-lib\imguizmo\ImGradient.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.i
-.PHONY : lib\imguizmo\ImGradient.cpp.i
-
-lib\imguizmo\ImGradient.s: lib\imguizmo\ImGradient.cpp.s
-
-.PHONY : lib\imguizmo\ImGradient.s
-
-# target to generate assembly for a file
-lib\imguizmo\ImGradient.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGradient.cpp.s
-.PHONY : lib\imguizmo\ImGradient.cpp.s
-
-lib\imguizmo\ImGuizmo.obj: lib\imguizmo\ImGuizmo.cpp.obj
-
-.PHONY : lib\imguizmo\ImGuizmo.obj
-
-# target to build an object file
-lib\imguizmo\ImGuizmo.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.obj
-.PHONY : lib\imguizmo\ImGuizmo.cpp.obj
-
-lib\imguizmo\ImGuizmo.i: lib\imguizmo\ImGuizmo.cpp.i
-
-.PHONY : lib\imguizmo\ImGuizmo.i
-
-# target to preprocess a source file
-lib\imguizmo\ImGuizmo.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.i
-.PHONY : lib\imguizmo\ImGuizmo.cpp.i
-
-lib\imguizmo\ImGuizmo.s: lib\imguizmo\ImGuizmo.cpp.s
-
-.PHONY : lib\imguizmo\ImGuizmo.s
-
-# target to generate assembly for a file
-lib\imguizmo\ImGuizmo.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImGuizmo.cpp.s
-.PHONY : lib\imguizmo\ImGuizmo.cpp.s
-
-lib\imguizmo\ImSequencer.obj: lib\imguizmo\ImSequencer.cpp.obj
-
-.PHONY : lib\imguizmo\ImSequencer.obj
-
-# target to build an object file
-lib\imguizmo\ImSequencer.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.obj
-.PHONY : lib\imguizmo\ImSequencer.cpp.obj
-
-lib\imguizmo\ImSequencer.i: lib\imguizmo\ImSequencer.cpp.i
-
-.PHONY : lib\imguizmo\ImSequencer.i
-
-# target to preprocess a source file
-lib\imguizmo\ImSequencer.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.i
-.PHONY : lib\imguizmo\ImSequencer.cpp.i
-
-lib\imguizmo\ImSequencer.s: lib\imguizmo\ImSequencer.cpp.s
-
-.PHONY : lib\imguizmo\ImSequencer.s
-
-# target to generate assembly for a file
-lib\imguizmo\ImSequencer.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imguizmo\ImSequencer.cpp.s
-.PHONY : lib\imguizmo\ImSequencer.cpp.s
-
 lib\opengl\gl3w.obj: lib\opengl\gl3w.c.obj
 
 .PHONY : lib\opengl\gl3w.obj
@@ -421,545 +313,518 @@ lib\opengl\gl3w.c.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\opengl\gl3w.c.s
 .PHONY : lib\opengl\gl3w.c.s
 
-lib\picoc\cstdlib\ctype.obj: lib\picoc\cstdlib\ctype.c.obj
+lib\picoc\cstdlib\picoc_ctype.obj: lib\picoc\cstdlib\picoc_ctype.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\ctype.obj
-
-# target to build an object file
-lib\picoc\cstdlib\ctype.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.obj
-.PHONY : lib\picoc\cstdlib\ctype.c.obj
-
-lib\picoc\cstdlib\ctype.i: lib\picoc\cstdlib\ctype.c.i
-
-.PHONY : lib\picoc\cstdlib\ctype.i
-
-# target to preprocess a source file
-lib\picoc\cstdlib\ctype.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.i
-.PHONY : lib\picoc\cstdlib\ctype.c.i
-
-lib\picoc\cstdlib\ctype.s: lib\picoc\cstdlib\ctype.c.s
-
-.PHONY : lib\picoc\cstdlib\ctype.s
-
-# target to generate assembly for a file
-lib\picoc\cstdlib\ctype.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\ctype.c.s
-.PHONY : lib\picoc\cstdlib\ctype.c.s
-
-lib\picoc\cstdlib\errno.obj: lib\picoc\cstdlib\errno.c.obj
-
-.PHONY : lib\picoc\cstdlib\errno.obj
+.PHONY : lib\picoc\cstdlib\picoc_ctype.obj
 
 # target to build an object file
-lib\picoc\cstdlib\errno.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.obj
-.PHONY : lib\picoc\cstdlib\errno.c.obj
+lib\picoc\cstdlib\picoc_ctype.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_ctype.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_ctype.cpp.obj
 
-lib\picoc\cstdlib\errno.i: lib\picoc\cstdlib\errno.c.i
+lib\picoc\cstdlib\picoc_ctype.i: lib\picoc\cstdlib\picoc_ctype.cpp.i
 
-.PHONY : lib\picoc\cstdlib\errno.i
+.PHONY : lib\picoc\cstdlib\picoc_ctype.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\errno.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.i
-.PHONY : lib\picoc\cstdlib\errno.c.i
+lib\picoc\cstdlib\picoc_ctype.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_ctype.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_ctype.cpp.i
 
-lib\picoc\cstdlib\errno.s: lib\picoc\cstdlib\errno.c.s
+lib\picoc\cstdlib\picoc_ctype.s: lib\picoc\cstdlib\picoc_ctype.cpp.s
 
-.PHONY : lib\picoc\cstdlib\errno.s
+.PHONY : lib\picoc\cstdlib\picoc_ctype.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\errno.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\errno.c.s
-.PHONY : lib\picoc\cstdlib\errno.c.s
+lib\picoc\cstdlib\picoc_ctype.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_ctype.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_ctype.cpp.s
 
-lib\picoc\cstdlib\math.obj: lib\picoc\cstdlib\math.c.obj
+lib\picoc\cstdlib\picoc_errno.obj: lib\picoc\cstdlib\picoc_errno.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\math.obj
+.PHONY : lib\picoc\cstdlib\picoc_errno.obj
 
 # target to build an object file
-lib\picoc\cstdlib\math.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.obj
-.PHONY : lib\picoc\cstdlib\math.c.obj
+lib\picoc\cstdlib\picoc_errno.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_errno.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_errno.cpp.obj
 
-lib\picoc\cstdlib\math.i: lib\picoc\cstdlib\math.c.i
+lib\picoc\cstdlib\picoc_errno.i: lib\picoc\cstdlib\picoc_errno.cpp.i
 
-.PHONY : lib\picoc\cstdlib\math.i
+.PHONY : lib\picoc\cstdlib\picoc_errno.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\math.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.i
-.PHONY : lib\picoc\cstdlib\math.c.i
+lib\picoc\cstdlib\picoc_errno.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_errno.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_errno.cpp.i
 
-lib\picoc\cstdlib\math.s: lib\picoc\cstdlib\math.c.s
+lib\picoc\cstdlib\picoc_errno.s: lib\picoc\cstdlib\picoc_errno.cpp.s
 
-.PHONY : lib\picoc\cstdlib\math.s
+.PHONY : lib\picoc\cstdlib\picoc_errno.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\math.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\math.c.s
-.PHONY : lib\picoc\cstdlib\math.c.s
+lib\picoc\cstdlib\picoc_errno.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_errno.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_errno.cpp.s
 
-lib\picoc\cstdlib\stdbool.obj: lib\picoc\cstdlib\stdbool.c.obj
+lib\picoc\cstdlib\picoc_math.obj: lib\picoc\cstdlib\picoc_math.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\stdbool.obj
+.PHONY : lib\picoc\cstdlib\picoc_math.obj
 
 # target to build an object file
-lib\picoc\cstdlib\stdbool.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.obj
-.PHONY : lib\picoc\cstdlib\stdbool.c.obj
+lib\picoc\cstdlib\picoc_math.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_math.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_math.cpp.obj
 
-lib\picoc\cstdlib\stdbool.i: lib\picoc\cstdlib\stdbool.c.i
+lib\picoc\cstdlib\picoc_math.i: lib\picoc\cstdlib\picoc_math.cpp.i
 
-.PHONY : lib\picoc\cstdlib\stdbool.i
+.PHONY : lib\picoc\cstdlib\picoc_math.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\stdbool.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.i
-.PHONY : lib\picoc\cstdlib\stdbool.c.i
+lib\picoc\cstdlib\picoc_math.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_math.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_math.cpp.i
 
-lib\picoc\cstdlib\stdbool.s: lib\picoc\cstdlib\stdbool.c.s
+lib\picoc\cstdlib\picoc_math.s: lib\picoc\cstdlib\picoc_math.cpp.s
 
-.PHONY : lib\picoc\cstdlib\stdbool.s
+.PHONY : lib\picoc\cstdlib\picoc_math.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\stdbool.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdbool.c.s
-.PHONY : lib\picoc\cstdlib\stdbool.c.s
+lib\picoc\cstdlib\picoc_math.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_math.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_math.cpp.s
 
-lib\picoc\cstdlib\stdio.obj: lib\picoc\cstdlib\stdio.c.obj
+lib\picoc\cstdlib\picoc_stdbool.obj: lib\picoc\cstdlib\picoc_stdbool.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\stdio.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.obj
 
 # target to build an object file
-lib\picoc\cstdlib\stdio.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.obj
-.PHONY : lib\picoc\cstdlib\stdio.c.obj
+lib\picoc\cstdlib\picoc_stdbool.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdbool.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.cpp.obj
 
-lib\picoc\cstdlib\stdio.i: lib\picoc\cstdlib\stdio.c.i
+lib\picoc\cstdlib\picoc_stdbool.i: lib\picoc\cstdlib\picoc_stdbool.cpp.i
 
-.PHONY : lib\picoc\cstdlib\stdio.i
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\stdio.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.i
-.PHONY : lib\picoc\cstdlib\stdio.c.i
+lib\picoc\cstdlib\picoc_stdbool.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdbool.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.cpp.i
 
-lib\picoc\cstdlib\stdio.s: lib\picoc\cstdlib\stdio.c.s
+lib\picoc\cstdlib\picoc_stdbool.s: lib\picoc\cstdlib\picoc_stdbool.cpp.s
 
-.PHONY : lib\picoc\cstdlib\stdio.s
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\stdio.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdio.c.s
-.PHONY : lib\picoc\cstdlib\stdio.c.s
+lib\picoc\cstdlib\picoc_stdbool.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdbool.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_stdbool.cpp.s
 
-lib\picoc\cstdlib\stdlib.obj: lib\picoc\cstdlib\stdlib.c.obj
+lib\picoc\cstdlib\picoc_stdio.obj: lib\picoc\cstdlib\picoc_stdio.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\stdlib.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdio.obj
 
 # target to build an object file
-lib\picoc\cstdlib\stdlib.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.obj
-.PHONY : lib\picoc\cstdlib\stdlib.c.obj
+lib\picoc\cstdlib\picoc_stdio.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdio.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdio.cpp.obj
 
-lib\picoc\cstdlib\stdlib.i: lib\picoc\cstdlib\stdlib.c.i
+lib\picoc\cstdlib\picoc_stdio.i: lib\picoc\cstdlib\picoc_stdio.cpp.i
 
-.PHONY : lib\picoc\cstdlib\stdlib.i
+.PHONY : lib\picoc\cstdlib\picoc_stdio.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\stdlib.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.i
-.PHONY : lib\picoc\cstdlib\stdlib.c.i
+lib\picoc\cstdlib\picoc_stdio.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdio.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_stdio.cpp.i
 
-lib\picoc\cstdlib\stdlib.s: lib\picoc\cstdlib\stdlib.c.s
+lib\picoc\cstdlib\picoc_stdio.s: lib\picoc\cstdlib\picoc_stdio.cpp.s
 
-.PHONY : lib\picoc\cstdlib\stdlib.s
+.PHONY : lib\picoc\cstdlib\picoc_stdio.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\stdlib.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\stdlib.c.s
-.PHONY : lib\picoc\cstdlib\stdlib.c.s
+lib\picoc\cstdlib\picoc_stdio.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdio.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_stdio.cpp.s
 
-lib\picoc\cstdlib\string.obj: lib\picoc\cstdlib\string.c.obj
+lib\picoc\cstdlib\picoc_stdlib.obj: lib\picoc\cstdlib\picoc_stdlib.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\string.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.obj
 
 # target to build an object file
-lib\picoc\cstdlib\string.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.obj
-.PHONY : lib\picoc\cstdlib\string.c.obj
+lib\picoc\cstdlib\picoc_stdlib.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdlib.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.cpp.obj
 
-lib\picoc\cstdlib\string.i: lib\picoc\cstdlib\string.c.i
+lib\picoc\cstdlib\picoc_stdlib.i: lib\picoc\cstdlib\picoc_stdlib.cpp.i
 
-.PHONY : lib\picoc\cstdlib\string.i
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\string.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.i
-.PHONY : lib\picoc\cstdlib\string.c.i
+lib\picoc\cstdlib\picoc_stdlib.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdlib.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.cpp.i
 
-lib\picoc\cstdlib\string.s: lib\picoc\cstdlib\string.c.s
+lib\picoc\cstdlib\picoc_stdlib.s: lib\picoc\cstdlib\picoc_stdlib.cpp.s
 
-.PHONY : lib\picoc\cstdlib\string.s
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\string.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\string.c.s
-.PHONY : lib\picoc\cstdlib\string.c.s
+lib\picoc\cstdlib\picoc_stdlib.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_stdlib.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_stdlib.cpp.s
 
-lib\picoc\cstdlib\time.obj: lib\picoc\cstdlib\time.c.obj
+lib\picoc\cstdlib\picoc_string.obj: lib\picoc\cstdlib\picoc_string.cpp.obj
 
-.PHONY : lib\picoc\cstdlib\time.obj
+.PHONY : lib\picoc\cstdlib\picoc_string.obj
 
 # target to build an object file
-lib\picoc\cstdlib\time.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.obj
-.PHONY : lib\picoc\cstdlib\time.c.obj
+lib\picoc\cstdlib\picoc_string.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_string.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_string.cpp.obj
 
-lib\picoc\cstdlib\time.i: lib\picoc\cstdlib\time.c.i
+lib\picoc\cstdlib\picoc_string.i: lib\picoc\cstdlib\picoc_string.cpp.i
 
-.PHONY : lib\picoc\cstdlib\time.i
+.PHONY : lib\picoc\cstdlib\picoc_string.i
 
 # target to preprocess a source file
-lib\picoc\cstdlib\time.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.i
-.PHONY : lib\picoc\cstdlib\time.c.i
+lib\picoc\cstdlib\picoc_string.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_string.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_string.cpp.i
 
-lib\picoc\cstdlib\time.s: lib\picoc\cstdlib\time.c.s
+lib\picoc\cstdlib\picoc_string.s: lib\picoc\cstdlib\picoc_string.cpp.s
 
-.PHONY : lib\picoc\cstdlib\time.s
+.PHONY : lib\picoc\cstdlib\picoc_string.s
 
 # target to generate assembly for a file
-lib\picoc\cstdlib\time.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\time.c.s
-.PHONY : lib\picoc\cstdlib\time.c.s
+lib\picoc\cstdlib\picoc_string.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_string.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_string.cpp.s
 
-lib\picoc\picoc_clibrary.obj: lib\picoc\picoc_clibrary.c.obj
+lib\picoc\cstdlib\picoc_time.obj: lib\picoc\cstdlib\picoc_time.cpp.obj
+
+.PHONY : lib\picoc\cstdlib\picoc_time.obj
+
+# target to build an object file
+lib\picoc\cstdlib\picoc_time.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_time.cpp.obj
+.PHONY : lib\picoc\cstdlib\picoc_time.cpp.obj
+
+lib\picoc\cstdlib\picoc_time.i: lib\picoc\cstdlib\picoc_time.cpp.i
+
+.PHONY : lib\picoc\cstdlib\picoc_time.i
+
+# target to preprocess a source file
+lib\picoc\cstdlib\picoc_time.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_time.cpp.i
+.PHONY : lib\picoc\cstdlib\picoc_time.cpp.i
+
+lib\picoc\cstdlib\picoc_time.s: lib\picoc\cstdlib\picoc_time.cpp.s
+
+.PHONY : lib\picoc\cstdlib\picoc_time.s
+
+# target to generate assembly for a file
+lib\picoc\cstdlib\picoc_time.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\cstdlib\picoc_time.cpp.s
+.PHONY : lib\picoc\cstdlib\picoc_time.cpp.s
+
+lib\picoc\picoc_clibrary.obj: lib\picoc\picoc_clibrary.cpp.obj
 
 .PHONY : lib\picoc\picoc_clibrary.obj
 
 # target to build an object file
-lib\picoc\picoc_clibrary.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.obj
-.PHONY : lib\picoc\picoc_clibrary.c.obj
+lib\picoc\picoc_clibrary.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.cpp.obj
+.PHONY : lib\picoc\picoc_clibrary.cpp.obj
 
-lib\picoc\picoc_clibrary.i: lib\picoc\picoc_clibrary.c.i
+lib\picoc\picoc_clibrary.i: lib\picoc\picoc_clibrary.cpp.i
 
 .PHONY : lib\picoc\picoc_clibrary.i
 
 # target to preprocess a source file
-lib\picoc\picoc_clibrary.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.i
-.PHONY : lib\picoc\picoc_clibrary.c.i
+lib\picoc\picoc_clibrary.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.cpp.i
+.PHONY : lib\picoc\picoc_clibrary.cpp.i
 
-lib\picoc\picoc_clibrary.s: lib\picoc\picoc_clibrary.c.s
+lib\picoc\picoc_clibrary.s: lib\picoc\picoc_clibrary.cpp.s
 
 .PHONY : lib\picoc\picoc_clibrary.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_clibrary.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.c.s
-.PHONY : lib\picoc\picoc_clibrary.c.s
+lib\picoc\picoc_clibrary.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_clibrary.cpp.s
+.PHONY : lib\picoc\picoc_clibrary.cpp.s
 
-lib\picoc\picoc_config.obj: lib\picoc\picoc_config.c.obj
-
-.PHONY : lib\picoc\picoc_config.obj
-
-# target to build an object file
-lib\picoc\picoc_config.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_config.c.obj
-.PHONY : lib\picoc\picoc_config.c.obj
-
-lib\picoc\picoc_config.i: lib\picoc\picoc_config.c.i
-
-.PHONY : lib\picoc\picoc_config.i
-
-# target to preprocess a source file
-lib\picoc\picoc_config.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_config.c.i
-.PHONY : lib\picoc\picoc_config.c.i
-
-lib\picoc\picoc_config.s: lib\picoc\picoc_config.c.s
-
-.PHONY : lib\picoc\picoc_config.s
-
-# target to generate assembly for a file
-lib\picoc\picoc_config.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_config.c.s
-.PHONY : lib\picoc\picoc_config.c.s
-
-lib\picoc\picoc_debug.obj: lib\picoc\picoc_debug.c.obj
+lib\picoc\picoc_debug.obj: lib\picoc\picoc_debug.cpp.obj
 
 .PHONY : lib\picoc\picoc_debug.obj
 
 # target to build an object file
-lib\picoc\picoc_debug.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.obj
-.PHONY : lib\picoc\picoc_debug.c.obj
+lib\picoc\picoc_debug.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.cpp.obj
+.PHONY : lib\picoc\picoc_debug.cpp.obj
 
-lib\picoc\picoc_debug.i: lib\picoc\picoc_debug.c.i
+lib\picoc\picoc_debug.i: lib\picoc\picoc_debug.cpp.i
 
 .PHONY : lib\picoc\picoc_debug.i
 
 # target to preprocess a source file
-lib\picoc\picoc_debug.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.i
-.PHONY : lib\picoc\picoc_debug.c.i
+lib\picoc\picoc_debug.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.cpp.i
+.PHONY : lib\picoc\picoc_debug.cpp.i
 
-lib\picoc\picoc_debug.s: lib\picoc\picoc_debug.c.s
+lib\picoc\picoc_debug.s: lib\picoc\picoc_debug.cpp.s
 
 .PHONY : lib\picoc\picoc_debug.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_debug.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.c.s
-.PHONY : lib\picoc\picoc_debug.c.s
+lib\picoc\picoc_debug.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_debug.cpp.s
+.PHONY : lib\picoc\picoc_debug.cpp.s
 
-lib\picoc\picoc_expression.obj: lib\picoc\picoc_expression.c.obj
+lib\picoc\picoc_expression.obj: lib\picoc\picoc_expression.cpp.obj
 
 .PHONY : lib\picoc\picoc_expression.obj
 
 # target to build an object file
-lib\picoc\picoc_expression.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.obj
-.PHONY : lib\picoc\picoc_expression.c.obj
+lib\picoc\picoc_expression.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.cpp.obj
+.PHONY : lib\picoc\picoc_expression.cpp.obj
 
-lib\picoc\picoc_expression.i: lib\picoc\picoc_expression.c.i
+lib\picoc\picoc_expression.i: lib\picoc\picoc_expression.cpp.i
 
 .PHONY : lib\picoc\picoc_expression.i
 
 # target to preprocess a source file
-lib\picoc\picoc_expression.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.i
-.PHONY : lib\picoc\picoc_expression.c.i
+lib\picoc\picoc_expression.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.cpp.i
+.PHONY : lib\picoc\picoc_expression.cpp.i
 
-lib\picoc\picoc_expression.s: lib\picoc\picoc_expression.c.s
+lib\picoc\picoc_expression.s: lib\picoc\picoc_expression.cpp.s
 
 .PHONY : lib\picoc\picoc_expression.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_expression.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.c.s
-.PHONY : lib\picoc\picoc_expression.c.s
+lib\picoc\picoc_expression.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_expression.cpp.s
+.PHONY : lib\picoc\picoc_expression.cpp.s
 
-lib\picoc\picoc_heap.obj: lib\picoc\picoc_heap.c.obj
+lib\picoc\picoc_heap.obj: lib\picoc\picoc_heap.cpp.obj
 
 .PHONY : lib\picoc\picoc_heap.obj
 
 # target to build an object file
-lib\picoc\picoc_heap.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.obj
-.PHONY : lib\picoc\picoc_heap.c.obj
+lib\picoc\picoc_heap.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.cpp.obj
+.PHONY : lib\picoc\picoc_heap.cpp.obj
 
-lib\picoc\picoc_heap.i: lib\picoc\picoc_heap.c.i
+lib\picoc\picoc_heap.i: lib\picoc\picoc_heap.cpp.i
 
 .PHONY : lib\picoc\picoc_heap.i
 
 # target to preprocess a source file
-lib\picoc\picoc_heap.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.i
-.PHONY : lib\picoc\picoc_heap.c.i
+lib\picoc\picoc_heap.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.cpp.i
+.PHONY : lib\picoc\picoc_heap.cpp.i
 
-lib\picoc\picoc_heap.s: lib\picoc\picoc_heap.c.s
+lib\picoc\picoc_heap.s: lib\picoc\picoc_heap.cpp.s
 
 .PHONY : lib\picoc\picoc_heap.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_heap.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.c.s
-.PHONY : lib\picoc\picoc_heap.c.s
+lib\picoc\picoc_heap.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_heap.cpp.s
+.PHONY : lib\picoc\picoc_heap.cpp.s
 
-lib\picoc\picoc_include.obj: lib\picoc\picoc_include.c.obj
+lib\picoc\picoc_include.obj: lib\picoc\picoc_include.cpp.obj
 
 .PHONY : lib\picoc\picoc_include.obj
 
 # target to build an object file
-lib\picoc\picoc_include.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.c.obj
-.PHONY : lib\picoc\picoc_include.c.obj
+lib\picoc\picoc_include.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.cpp.obj
+.PHONY : lib\picoc\picoc_include.cpp.obj
 
-lib\picoc\picoc_include.i: lib\picoc\picoc_include.c.i
+lib\picoc\picoc_include.i: lib\picoc\picoc_include.cpp.i
 
 .PHONY : lib\picoc\picoc_include.i
 
 # target to preprocess a source file
-lib\picoc\picoc_include.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.c.i
-.PHONY : lib\picoc\picoc_include.c.i
+lib\picoc\picoc_include.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.cpp.i
+.PHONY : lib\picoc\picoc_include.cpp.i
 
-lib\picoc\picoc_include.s: lib\picoc\picoc_include.c.s
+lib\picoc\picoc_include.s: lib\picoc\picoc_include.cpp.s
 
 .PHONY : lib\picoc\picoc_include.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_include.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.c.s
-.PHONY : lib\picoc\picoc_include.c.s
+lib\picoc\picoc_include.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_include.cpp.s
+.PHONY : lib\picoc\picoc_include.cpp.s
 
-lib\picoc\picoc_lex.obj: lib\picoc\picoc_lex.c.obj
+lib\picoc\picoc_lex.obj: lib\picoc\picoc_lex.cpp.obj
 
 .PHONY : lib\picoc\picoc_lex.obj
 
 # target to build an object file
-lib\picoc\picoc_lex.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.obj
-.PHONY : lib\picoc\picoc_lex.c.obj
+lib\picoc\picoc_lex.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.cpp.obj
+.PHONY : lib\picoc\picoc_lex.cpp.obj
 
-lib\picoc\picoc_lex.i: lib\picoc\picoc_lex.c.i
+lib\picoc\picoc_lex.i: lib\picoc\picoc_lex.cpp.i
 
 .PHONY : lib\picoc\picoc_lex.i
 
 # target to preprocess a source file
-lib\picoc\picoc_lex.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.i
-.PHONY : lib\picoc\picoc_lex.c.i
+lib\picoc\picoc_lex.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.cpp.i
+.PHONY : lib\picoc\picoc_lex.cpp.i
 
-lib\picoc\picoc_lex.s: lib\picoc\picoc_lex.c.s
+lib\picoc\picoc_lex.s: lib\picoc\picoc_lex.cpp.s
 
 .PHONY : lib\picoc\picoc_lex.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_lex.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.c.s
-.PHONY : lib\picoc\picoc_lex.c.s
+lib\picoc\picoc_lex.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_lex.cpp.s
+.PHONY : lib\picoc\picoc_lex.cpp.s
 
-lib\picoc\picoc_parse.obj: lib\picoc\picoc_parse.c.obj
+lib\picoc\picoc_parse.obj: lib\picoc\picoc_parse.cpp.obj
 
 .PHONY : lib\picoc\picoc_parse.obj
 
 # target to build an object file
-lib\picoc\picoc_parse.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.obj
-.PHONY : lib\picoc\picoc_parse.c.obj
+lib\picoc\picoc_parse.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.cpp.obj
+.PHONY : lib\picoc\picoc_parse.cpp.obj
 
-lib\picoc\picoc_parse.i: lib\picoc\picoc_parse.c.i
+lib\picoc\picoc_parse.i: lib\picoc\picoc_parse.cpp.i
 
 .PHONY : lib\picoc\picoc_parse.i
 
 # target to preprocess a source file
-lib\picoc\picoc_parse.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.i
-.PHONY : lib\picoc\picoc_parse.c.i
+lib\picoc\picoc_parse.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.cpp.i
+.PHONY : lib\picoc\picoc_parse.cpp.i
 
-lib\picoc\picoc_parse.s: lib\picoc\picoc_parse.c.s
+lib\picoc\picoc_parse.s: lib\picoc\picoc_parse.cpp.s
 
 .PHONY : lib\picoc\picoc_parse.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_parse.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.c.s
-.PHONY : lib\picoc\picoc_parse.c.s
+lib\picoc\picoc_parse.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_parse.cpp.s
+.PHONY : lib\picoc\picoc_parse.cpp.s
 
-lib\picoc\picoc_platform.obj: lib\picoc\picoc_platform.c.obj
+lib\picoc\picoc_platform.obj: lib\picoc\picoc_platform.cpp.obj
 
 .PHONY : lib\picoc\picoc_platform.obj
 
 # target to build an object file
-lib\picoc\picoc_platform.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj
-.PHONY : lib\picoc\picoc_platform.c.obj
+lib\picoc\picoc_platform.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.cpp.obj
+.PHONY : lib\picoc\picoc_platform.cpp.obj
 
-lib\picoc\picoc_platform.i: lib\picoc\picoc_platform.c.i
+lib\picoc\picoc_platform.i: lib\picoc\picoc_platform.cpp.i
 
 .PHONY : lib\picoc\picoc_platform.i
 
 # target to preprocess a source file
-lib\picoc\picoc_platform.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.i
-.PHONY : lib\picoc\picoc_platform.c.i
+lib\picoc\picoc_platform.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.cpp.i
+.PHONY : lib\picoc\picoc_platform.cpp.i
 
-lib\picoc\picoc_platform.s: lib\picoc\picoc_platform.c.s
+lib\picoc\picoc_platform.s: lib\picoc\picoc_platform.cpp.s
 
 .PHONY : lib\picoc\picoc_platform.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_platform.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.s
-.PHONY : lib\picoc\picoc_platform.c.s
+lib\picoc\picoc_platform.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_platform.cpp.s
+.PHONY : lib\picoc\picoc_platform.cpp.s
 
-lib\picoc\picoc_table.obj: lib\picoc\picoc_table.c.obj
+lib\picoc\picoc_table.obj: lib\picoc\picoc_table.cpp.obj
 
 .PHONY : lib\picoc\picoc_table.obj
 
 # target to build an object file
-lib\picoc\picoc_table.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj
-.PHONY : lib\picoc\picoc_table.c.obj
+lib\picoc\picoc_table.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.cpp.obj
+.PHONY : lib\picoc\picoc_table.cpp.obj
 
-lib\picoc\picoc_table.i: lib\picoc\picoc_table.c.i
+lib\picoc\picoc_table.i: lib\picoc\picoc_table.cpp.i
 
 .PHONY : lib\picoc\picoc_table.i
 
 # target to preprocess a source file
-lib\picoc\picoc_table.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.c.i
-.PHONY : lib\picoc\picoc_table.c.i
+lib\picoc\picoc_table.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.cpp.i
+.PHONY : lib\picoc\picoc_table.cpp.i
 
-lib\picoc\picoc_table.s: lib\picoc\picoc_table.c.s
+lib\picoc\picoc_table.s: lib\picoc\picoc_table.cpp.s
 
 .PHONY : lib\picoc\picoc_table.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_table.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.c.s
-.PHONY : lib\picoc\picoc_table.c.s
+lib\picoc\picoc_table.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_table.cpp.s
+.PHONY : lib\picoc\picoc_table.cpp.s
 
-lib\picoc\picoc_type.obj: lib\picoc\picoc_type.c.obj
+lib\picoc\picoc_type.obj: lib\picoc\picoc_type.cpp.obj
 
 .PHONY : lib\picoc\picoc_type.obj
 
 # target to build an object file
-lib\picoc\picoc_type.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj
-.PHONY : lib\picoc\picoc_type.c.obj
+lib\picoc\picoc_type.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.cpp.obj
+.PHONY : lib\picoc\picoc_type.cpp.obj
 
-lib\picoc\picoc_type.i: lib\picoc\picoc_type.c.i
+lib\picoc\picoc_type.i: lib\picoc\picoc_type.cpp.i
 
 .PHONY : lib\picoc\picoc_type.i
 
 # target to preprocess a source file
-lib\picoc\picoc_type.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.c.i
-.PHONY : lib\picoc\picoc_type.c.i
+lib\picoc\picoc_type.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.cpp.i
+.PHONY : lib\picoc\picoc_type.cpp.i
 
-lib\picoc\picoc_type.s: lib\picoc\picoc_type.c.s
+lib\picoc\picoc_type.s: lib\picoc\picoc_type.cpp.s
 
 .PHONY : lib\picoc\picoc_type.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_type.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.c.s
-.PHONY : lib\picoc\picoc_type.c.s
+lib\picoc\picoc_type.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_type.cpp.s
+.PHONY : lib\picoc\picoc_type.cpp.s
 
-lib\picoc\picoc_variable.obj: lib\picoc\picoc_variable.c.obj
+lib\picoc\picoc_variable.obj: lib\picoc\picoc_variable.cpp.obj
 
 .PHONY : lib\picoc\picoc_variable.obj
 
 # target to build an object file
-lib\picoc\picoc_variable.c.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj
-.PHONY : lib\picoc\picoc_variable.c.obj
+lib\picoc\picoc_variable.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.cpp.obj
+.PHONY : lib\picoc\picoc_variable.cpp.obj
 
-lib\picoc\picoc_variable.i: lib\picoc\picoc_variable.c.i
+lib\picoc\picoc_variable.i: lib\picoc\picoc_variable.cpp.i
 
 .PHONY : lib\picoc\picoc_variable.i
 
 # target to preprocess a source file
-lib\picoc\picoc_variable.c.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.i
-.PHONY : lib\picoc\picoc_variable.c.i
+lib\picoc\picoc_variable.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.cpp.i
+.PHONY : lib\picoc\picoc_variable.cpp.i
 
-lib\picoc\picoc_variable.s: lib\picoc\picoc_variable.c.s
+lib\picoc\picoc_variable.s: lib\picoc\picoc_variable.cpp.s
 
 .PHONY : lib\picoc\picoc_variable.s
 
 # target to generate assembly for a file
-lib\picoc\picoc_variable.c.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.s
-.PHONY : lib\picoc\picoc_variable.c.s
+lib\picoc\picoc_variable.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\picoc\picoc_variable.cpp.s
+.PHONY : lib\picoc\picoc_variable.cpp.s
 
 lib\tinymat\tinymat.obj: lib\tinymat\tinymat.cpp.obj
 
@@ -1285,6 +1150,60 @@ lib\trj\vl_svd.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\trj\vl_svd.cpp.s
 .PHONY : lib\trj\vl_svd.cpp.s
 
+src\picoc_api.obj: src\picoc_api.cpp.obj
+
+.PHONY : src\picoc_api.obj
+
+# target to build an object file
+src\picoc_api.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_api.cpp.obj
+.PHONY : src\picoc_api.cpp.obj
+
+src\picoc_api.i: src\picoc_api.cpp.i
+
+.PHONY : src\picoc_api.i
+
+# target to preprocess a source file
+src\picoc_api.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_api.cpp.i
+.PHONY : src\picoc_api.cpp.i
+
+src\picoc_api.s: src\picoc_api.cpp.s
+
+.PHONY : src\picoc_api.s
+
+# target to generate assembly for a file
+src\picoc_api.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_api.cpp.s
+.PHONY : src\picoc_api.cpp.s
+
+src\picoc_win.obj: src\picoc_win.cpp.obj
+
+.PHONY : src\picoc_win.obj
+
+# target to build an object file
+src\picoc_win.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_win.cpp.obj
+.PHONY : src\picoc_win.cpp.obj
+
+src\picoc_win.i: src\picoc_win.cpp.i
+
+.PHONY : src\picoc_win.i
+
+# target to preprocess a source file
+src\picoc_win.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_win.cpp.i
+.PHONY : src\picoc_win.cpp.i
+
+src\picoc_win.s: src\picoc_win.cpp.s
+
+.PHONY : src\picoc_win.s
+
+# target to generate assembly for a file
+src\picoc_win.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\picoc_win.cpp.s
+.PHONY : src\picoc_win.cpp.s
+
 src\trj_gui.obj: src\trj_gui.cpp.obj
 
 .PHONY : src\trj_gui.obj
@@ -1501,51 +1420,36 @@ help:
 	@echo ... lib/imgui/imgui_widgets.obj
 	@echo ... lib/imgui/imgui_widgets.i
 	@echo ... lib/imgui/imgui_widgets.s
-	@echo ... lib/imguizmo/ImCurveEdit.obj
-	@echo ... lib/imguizmo/ImCurveEdit.i
-	@echo ... lib/imguizmo/ImCurveEdit.s
-	@echo ... lib/imguizmo/ImGradient.obj
-	@echo ... lib/imguizmo/ImGradient.i
-	@echo ... lib/imguizmo/ImGradient.s
-	@echo ... lib/imguizmo/ImGuizmo.obj
-	@echo ... lib/imguizmo/ImGuizmo.i
-	@echo ... lib/imguizmo/ImGuizmo.s
-	@echo ... lib/imguizmo/ImSequencer.obj
-	@echo ... lib/imguizmo/ImSequencer.i
-	@echo ... lib/imguizmo/ImSequencer.s
 	@echo ... lib/opengl/gl3w.obj
 	@echo ... lib/opengl/gl3w.i
 	@echo ... lib/opengl/gl3w.s
-	@echo ... lib/picoc/cstdlib/ctype.obj
-	@echo ... lib/picoc/cstdlib/ctype.i
-	@echo ... lib/picoc/cstdlib/ctype.s
-	@echo ... lib/picoc/cstdlib/errno.obj
-	@echo ... lib/picoc/cstdlib/errno.i
-	@echo ... lib/picoc/cstdlib/errno.s
-	@echo ... lib/picoc/cstdlib/math.obj
-	@echo ... lib/picoc/cstdlib/math.i
-	@echo ... lib/picoc/cstdlib/math.s
-	@echo ... lib/picoc/cstdlib/stdbool.obj
-	@echo ... lib/picoc/cstdlib/stdbool.i
-	@echo ... lib/picoc/cstdlib/stdbool.s
-	@echo ... lib/picoc/cstdlib/stdio.obj
-	@echo ... lib/picoc/cstdlib/stdio.i
-	@echo ... lib/picoc/cstdlib/stdio.s
-	@echo ... lib/picoc/cstdlib/stdlib.obj
-	@echo ... lib/picoc/cstdlib/stdlib.i
-	@echo ... lib/picoc/cstdlib/stdlib.s
-	@echo ... lib/picoc/cstdlib/string.obj
-	@echo ... lib/picoc/cstdlib/string.i
-	@echo ... lib/picoc/cstdlib/string.s
-	@echo ... lib/picoc/cstdlib/time.obj
-	@echo ... lib/picoc/cstdlib/time.i
-	@echo ... lib/picoc/cstdlib/time.s
+	@echo ... lib/picoc/cstdlib/picoc_ctype.obj
+	@echo ... lib/picoc/cstdlib/picoc_ctype.i
+	@echo ... lib/picoc/cstdlib/picoc_ctype.s
+	@echo ... lib/picoc/cstdlib/picoc_errno.obj
+	@echo ... lib/picoc/cstdlib/picoc_errno.i
+	@echo ... lib/picoc/cstdlib/picoc_errno.s
+	@echo ... lib/picoc/cstdlib/picoc_math.obj
+	@echo ... lib/picoc/cstdlib/picoc_math.i
+	@echo ... lib/picoc/cstdlib/picoc_math.s
+	@echo ... lib/picoc/cstdlib/picoc_stdbool.obj
+	@echo ... lib/picoc/cstdlib/picoc_stdbool.i
+	@echo ... lib/picoc/cstdlib/picoc_stdbool.s
+	@echo ... lib/picoc/cstdlib/picoc_stdio.obj
+	@echo ... lib/picoc/cstdlib/picoc_stdio.i
+	@echo ... lib/picoc/cstdlib/picoc_stdio.s
+	@echo ... lib/picoc/cstdlib/picoc_stdlib.obj
+	@echo ... lib/picoc/cstdlib/picoc_stdlib.i
+	@echo ... lib/picoc/cstdlib/picoc_stdlib.s
+	@echo ... lib/picoc/cstdlib/picoc_string.obj
+	@echo ... lib/picoc/cstdlib/picoc_string.i
+	@echo ... lib/picoc/cstdlib/picoc_string.s
+	@echo ... lib/picoc/cstdlib/picoc_time.obj
+	@echo ... lib/picoc/cstdlib/picoc_time.i
+	@echo ... lib/picoc/cstdlib/picoc_time.s
 	@echo ... lib/picoc/picoc_clibrary.obj
 	@echo ... lib/picoc/picoc_clibrary.i
 	@echo ... lib/picoc/picoc_clibrary.s
-	@echo ... lib/picoc/picoc_config.obj
-	@echo ... lib/picoc/picoc_config.i
-	@echo ... lib/picoc/picoc_config.s
 	@echo ... lib/picoc/picoc_debug.obj
 	@echo ... lib/picoc/picoc_debug.i
 	@echo ... lib/picoc/picoc_debug.s
@@ -1612,6 +1516,12 @@ help:
 	@echo ... lib/trj/vl_svd.obj
 	@echo ... lib/trj/vl_svd.i
 	@echo ... lib/trj/vl_svd.s
+	@echo ... src/picoc_api.obj
+	@echo ... src/picoc_api.i
+	@echo ... src/picoc_api.s
+	@echo ... src/picoc_win.obj
+	@echo ... src/picoc_win.i
+	@echo ... src/picoc_win.s
 	@echo ... src/trj_gui.obj
 	@echo ... src/trj_gui.i
 	@echo ... src/trj_gui.s

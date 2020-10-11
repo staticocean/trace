@@ -1,8 +1,11 @@
 /*  */
+
 #include <math.h>
+#include <stdio.h>
 
 #include "../picoc_interpreter.h"
 
+using namespace std;
 
 static double M_EValue = 2.7182818284590452354;   /* e */
 static double M_LOG2EValue = 1.4426950408889634074;   /* log_2 e */
@@ -100,7 +103,7 @@ void MathFmod(struct ParseState *Parser, struct Value *ReturnValue,
 void MathFrexp(struct ParseState *Parser, struct Value *ReturnValue,
     struct Value **Param, int NumArgs)
 {
-    ReturnValue->Val->FP = frexp(Param[0]->Val->FP, Param[1]->Val->Pointer);
+    ReturnValue->Val->FP = frexp(Param[0]->Val->FP, (int*) Param[1]->Val->Pointer);
 }
 
 void MathLdexp(struct ParseState *Parser, struct Value *ReturnValue,
@@ -124,7 +127,7 @@ void MathLog10(struct ParseState *Parser, struct Value *ReturnValue,
 void MathModf(struct ParseState *Parser, struct Value *ReturnValue,
     struct Value **Param, int NumArgs)
 {
-    ReturnValue->Val->FP = modf(Param[0]->Val->FP, Param[0]->Val->Pointer);
+    ReturnValue->Val->FP = modf(Param[0]->Val->FP, (double*) Param[0]->Val->Pointer);
 }
 
 void MathPow(struct ParseState *Parser, struct Value *ReturnValue,

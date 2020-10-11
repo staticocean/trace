@@ -18,6 +18,13 @@
 
 //------------------------------------------------------------------------------
 
+typedef struct trj_ctrl_api
+{
+	char desc[32];
+	void (*update) (void *data);
+
+} 	s_trj_ctrl_api;
+
 typedef struct ins_ctrl_none
 {
     s_trj_obj *parent;

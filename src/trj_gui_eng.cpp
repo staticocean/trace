@@ -8,11 +8,22 @@ uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 	gui->sel_item = NULL;
 	gui->sel_type = 0x00;
 	gui->obj_list = attr.obj_list;
+	gui->traj_api_offset = 0x00;
 	
 	for (int i = 0; i < 255; ++i)
 	{
 		gui->obj_list[i].hide = 0x00;
 	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+uint8_t trj_gui_eng_add_trajapi(s_trj_gui_eng *gui, s_trj_traj_api api)
+{
+	gui->traj_api_list[gui->traj_api_offset] = api;
+	++gui->traj_api_offset;
 	
 	return 0x00;
 }
@@ -75,7 +86,7 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				{
 					if (obj->traj_offset == 0x00)
 					{
-//						ImGui::
+						ImGui::Text("[no items]");
 					}
 					
 					for (int j = 0; j < obj->traj_offset; ++j)
@@ -123,5 +134,69 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
+uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
+{
+	if (gui->sel_type != 0x00 || gui->sel_item == NULL) return 0x01;
+	
+	s_trj_obj *obj = (s_trj_obj*) gui->sel_item;
+	s_trj_gui_obj *obj_gui = &gui->obj_list[obj->id];
+	
+	ImGui::PushID(obj);
+	
+	if (ImGui::Button("add##traj_add"))
+	{
+//						self->traj_offset++;
+	}
+	
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	
+	if (ImGui::BeginCombo("##traj_type", gui->traj_api_list[obj_gui->traj_sel].desc,
+						  ImGuiComboFlags_NoArrowButton))
+	{
+		for (int i = 0; i < gui->traj_api_offset; ++i)
+		{
+			const bool is_selected = (obj_gui->traj_sel == i);
+			
+			if (ImGui::Selectable(gui->traj_api_list[obj_gui->traj_sel].desc, is_selected))
+			{ obj_gui->traj_sel = i; }
+			
+			if (is_selected)
+			{ ImGui::SetItemDefaultFocus(); }
+		}
+		
+		ImGui::EndCombo();
+	}
+	
+	
+//	if (ImGui::Button("add##ctrl_add"))
+//	{
+////						self->traj_offset++;
+//	}
+//
+//	ImGui::SameLine();
+//	ImGui::SetNextItemWidth(-1);
+//
+//	if (ImGui::BeginCombo("##ctrl_type", gui->traj_api_list[obj_gui->traj_sel].desc,
+//						  ImGuiComboFlags_NoArrowButton))
+//	{
+//		for (int i = 0; i < gui->traj_api_offset; ++i)
+//		{
+//			const bool is_selected = (obj_gui->traj_sel == i);
+//
+//			if (ImGui::Selectable(gui->traj_api_list[obj_gui->traj_sel].desc, is_selected))
+//			{ obj_gui->traj_sel = i; }
+//
+//			if (is_selected)
+//			{ ImGui::SetItemDefaultFocus(); }
+//		}
+//
+//		ImGui::EndCombo();
+//	}
+	
+	ImGui::PopID();
+	
+	return 0x00;
+}
 
 //------------------------------------------------------------------------------

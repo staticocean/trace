@@ -16,8 +16,13 @@
 typedef struct trj_gui_obj
 {
 	s_trj_obj *ref;
+	
 	uint8_t hide;
 	
+	uint8_t traj_sel;
+	uint8_t ctrl_sel;
+	uint8_t proc_sel;
+	uint8_t data_sel;
 	
 } 	s_trj_gui_obj;
 

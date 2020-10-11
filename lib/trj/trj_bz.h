@@ -12,8 +12,6 @@
 #include "trj_types.h"
 #include "vl.h"
 
-#include "trj_obj.h"
-
 //------------------------------------------------------------------------------
 
 typedef struct trj_bz
@@ -26,15 +24,15 @@ typedef struct trj_bz
 	
 } 	s_trj_bz;
 
-typedef struct trj_bz_init_attr
+typedef struct trj_bz_init
 {
 	vlf_t p0[2];
 	vlf_t p1[2];
 	vlf_t p2[2];
 	
-}	s_trj_bz_init_attr;
+}	s_trj_bz_init;
 
-uint8_t trj_bz_init(s_trj_bz *self, s_trj_bz_init_attr attr);
+uint8_t trj_bz_init(s_trj_bz *self, s_trj_bz_init attr);
 
 typedef struct trj_bz4
 {

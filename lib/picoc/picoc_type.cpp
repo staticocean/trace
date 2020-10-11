@@ -28,7 +28,7 @@ struct ValueType *TypeAdd(Picoc *pc, struct ParseState *Parser,
     struct ValueType *ParentType, enum BaseType Base, int ArraySize,
     const char *Identifier, int Sizeof, int AlignBytes)
 {
-    struct ValueType *NewType = VariableAlloc(pc, Parser,
+    struct ValueType *NewType = (struct ValueType *) VariableAlloc(pc, Parser,
         sizeof(struct ValueType), true);
     NewType->Base = Base;
     NewType->ArraySize = ArraySize;
@@ -256,7 +256,7 @@ void TypeParseStruct(struct ParseState *Parser, struct ValueType **Typ,
         ProgramFail(Parser, "struct/union definitions can only be globals");
 
     LexGetToken(Parser, NULL, true);
-    (*Typ)->Members = VariableAlloc(pc, Parser,
+    (*Typ)->Members = (struct Table *) VariableAlloc(pc, Parser,
         sizeof(struct Table)+STRUCT_TABLE_SIZE*sizeof(struct TableEntry), true);
     (*Typ)->Members->HashTable =
         (struct TableEntry**)((char*)(*Typ)->Members + sizeof(struct Table));
@@ -319,7 +319,7 @@ struct ValueType *TypeCreateOpaqueStruct(Picoc *pc, struct ParseState *Parser,
         TypeStruct, 0, StructName, false);
 
     /* create the (empty) table */
-    Typ->Members = VariableAlloc(pc,
+    Typ->Members = (struct Table *) VariableAlloc(pc,
         Parser,
         sizeof(struct Table)+STRUCT_TABLE_SIZE*sizeof(struct TableEntry), true);
     Typ->Members->HashTable = (struct TableEntry**)((char*)Typ->Members +

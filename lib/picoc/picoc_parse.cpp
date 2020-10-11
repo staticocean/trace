@@ -167,7 +167,7 @@ struct Value *ParseFunctionDefinition(struct ParseState *Parser,
             ProgramFail(Parser, "function definition expected");
 
         FuncValue->Val->FuncDef.Body = FuncBody;
-        FuncValue->Val->FuncDef.Body.Pos = LexCopyTokens(&FuncBody, Parser);
+        FuncValue->Val->FuncDef.Body.Pos = (const unsigned char *) LexCopyTokens(&FuncBody, Parser);
 
         /* is this function already in the global table? */
         if (TableGet(&pc->GlobalTable, Identifier, &OldFuncValue, NULL, NULL, NULL)) {
@@ -442,7 +442,7 @@ void ParseMacroDefinition(struct ParseState *Parser)
     MacroValue->Typ = &Parser->pc->MacroType;
     LexToEndOfMacro(Parser);
     MacroValue->Val->MacroDef.Body.Pos =
-        LexCopyTokens(&MacroValue->Val->MacroDef.Body, Parser);
+			(const unsigned char *) LexCopyTokens(&MacroValue->Val->MacroDef.Body, Parser);
 
     if (!TableSet(Parser->pc, &Parser->pc->GlobalTable, MacroNameStr, MacroValue,
                 (char *)Parser->FileName, Parser->Line, Parser->CharacterPos))
@@ -875,7 +875,7 @@ void PicocParse(Picoc *pc, const char *FileName, const char *Source,
 
     /* allocate a cleanup node so we can clean up the tokens later */
     if (!CleanupNow) {
-        NewCleanupNode = HeapAllocMem(pc, sizeof(struct CleanupTokenNode));
+        NewCleanupNode = (struct CleanupTokenNode *) HeapAllocMem(pc, sizeof(struct CleanupTokenNode));
         if (NewCleanupNode == NULL)
             ProgramFailNoParser(pc, "(PicocParse) out of memory");
 

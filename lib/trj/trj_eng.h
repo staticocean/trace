@@ -30,12 +30,12 @@ typedef struct trj_eng_init_attr
 {
 	s_trj_obj *st_objects;
 	
-}	s_trj_eng_init_attr;
+}	s_trj_eng_init;
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init_attr attr);
-uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj obj);
+uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr);
+uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr);
 uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time);
 uint8_t trj_eng_objnames(s_trj_eng *self, char **objnames);
 

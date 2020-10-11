@@ -309,7 +309,22 @@ struct Value {
     int ScopeID;                /* to know when it goes out of scope */
     char OutOfScope;
 };
-
+union TableEntryPayload {
+    struct ValueEntry {
+        char *Key;              /* points to the shared string table */
+        struct Value *Val;      /* the value we're storing */
+    } v;                        /* used for tables of values */
+    
+    char Key[1];                /* dummy size - used for the shared string table */
+    
+    /* defines a breakpoint */
+    struct BreakpointEntry {
+        const char *FileName;
+        short int Line;
+        short int CharacterPos;
+    } b;
+    
+};
 /* hash table data structure */
 struct TableEntry {
     struct TableEntry *Next;        /* next item in this hash chain */
@@ -317,22 +332,7 @@ struct TableEntry {
     unsigned short DeclLine;
     unsigned short DeclColumn;
 
-    union TableEntryPayload {
-        struct ValueEntry {
-            char *Key;              /* points to the shared string table */
-            struct Value *Val;      /* the value we're storing */
-        } v;                        /* used for tables of values */
-
-        char Key[1];                /* dummy size - used for the shared string table */
-
-        /* defines a breakpoint */
-        struct BreakpointEntry {
-            const char *FileName;
-            short int Line;
-            short int CharacterPos;
-        } b;
-
-    } p;
+    union TableEntryPayload p;
 };
 
 struct Table {

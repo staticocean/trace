@@ -3,7 +3,7 @@
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init_attr attr)
+uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 {
 	self->obj_count = 0x00;
 	self->obj_list = attr.st_objects;
@@ -11,9 +11,9 @@ uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init_attr attr)
 	return 0x00;
 }
 
-uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj obj)
+uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 {
-	self->obj_list[self->obj_count] = obj;
+	trj_obj_init(&self->obj_list[self->obj_count], attr);
 	
 	self->obj_list[self->obj_count].id = self->obj_count;
 	self->obj_list[self->obj_count].obj_list = self->obj_list;
@@ -79,10 +79,10 @@ uint8_t trj_engine_update(s_trj_eng *self, vlf_t d_time)
 
 //    for i in range(len(self.obj_list)): self.obj_list[i].update(d_time);
 
-    for (i = 0; i < self->obj_count; ++i)
-    {
-		trj_obj_update(&self->obj_list[i], d_time);
-    }
+//    for (i = 0; i < self->obj_count; ++i)
+//    {
+//		trj_obj_ctrl_update(&self->obj_list[i], d_time);
+//    }
     
     return 0x00;
 }

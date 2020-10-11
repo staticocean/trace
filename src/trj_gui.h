@@ -42,11 +42,11 @@ typedef struct trj_gui
 typedef struct trj_gui_init_attr
 {
 
-}	s_trj_gui_init_attr;
+}	s_trj_gui_init;
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init_attr attr);
+uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr);
 uint8_t trj_gui_main(s_trj_gui *self);
 
 //------------------------------------------------------------------------------

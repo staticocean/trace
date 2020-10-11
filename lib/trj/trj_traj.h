@@ -12,10 +12,19 @@
 #include "trj_types.h"
 #include "vl.h"
 
-#include "trj_obj.h"
 #include "trj_bz.h"
 
 //------------------------------------------------------------------------------
+
+typedef struct trj_traj_api
+{
+	char desc[32];
+	
+	uint8_t (*compile) 	(void *data);
+	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
+	uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+	
+} 	s_trj_traj_api;
 
 typedef struct trj_traj_bz_point
 {
@@ -39,6 +48,8 @@ typedef struct trj_traj_bz_point
 
 typedef struct trj_traj_bz
 {
+	s_trj_traj_api api;
+	
 	s_trj_traj_bz_point *pts;
 	uint32_t pts_offset;
 
@@ -54,7 +65,9 @@ typedef struct trj_traj_bz_init_attr
 
 uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr attr);
 uint8_t trj_traj_bz_compile(s_trj_traj_bz *self);
+uint8_t trj_traj_bz_compile_api(void *self);
 uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos);
+uint8_t trj_traj_bz_pos_api(void *self, vlf_t time, vlf_t *pos);
 
 //------------------------------------------------------------------------------
 

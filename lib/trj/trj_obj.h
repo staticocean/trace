@@ -4,12 +4,11 @@
 //  Copyright © 2015 Control Systems Interfaces. All rights reserved.
 //
 
-#ifndef __INS_OBJ__
-#define __INS_OBJ__
+#ifndef __TRJ_OBJ__
+#define __TRJ_OBJ__
 
 //------------------------------------------------------------------------------
 
-#include "trj_types.h"
 #include "vl.h"
 
 //------------------------------------------------------------------------------
@@ -22,7 +21,7 @@ typedef struct trj_obj
     struct trj_obj *ref;
 
     uint32_t id;
-    char name[255];
+    char name[32];
 
     vlf_t time[3];
 	vlf_t pos[3][3];
@@ -34,26 +33,37 @@ typedef struct trj_obj
 	vlf_t pos_force[3];
 	vlf_t rot_force[3];
 	
+	void *traj_data[255];
+	void *ctrl_data[255];
+	void *proc_data[255];
+	void *data_data[255];
+	
 	uint8_t traj_offset;
 	uint8_t ctrl_offset;
 	uint8_t proc_offset;
 	uint8_t data_offset;
-    
-    void *ctrl_data;
-    void (*ctrl_update) (void *ctrl_data);
-    
-    void *proc_data;
-    void (*proc_update) (void *proc_data);
-    
+	
 } 	s_trj_obj;
 
+typedef struct trj_obj_init
+{
+	uint32_t id;
+	s_trj_obj *obj_list;
+	uint32_t *obj_count;
+	char name[32];
+	struct trj_obj *ref;
+	
+} s_trj_obj_init;
+
+
 //------------------------------------------------------------------------------
 
-void trj_obj_update(s_trj_obj *obj, vlf_t d_time);
+uint8_t trj_obj_init(s_trj_obj *obj, s_trj_obj_init attr);
+void trj_obj_ctrl_update(s_trj_obj *obj, vlf_t d_time);
 
 //------------------------------------------------------------------------------
 
-#endif /* __INS_OBJ__ */
+#endif /* __TRJ_OBJ__ */
 
 
 
