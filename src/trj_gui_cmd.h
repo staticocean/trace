@@ -21,13 +21,9 @@ extern "C"
 	#include <lib/picoc/picoc.h>
 }
 
-#include "lib/trj/vl3d.h"
+#include <lib/trj/vl3d.h>
 
-#include "trj_gui_eng.h"
 #include "trj_gui_env.h"
-#include "trj_gui_obj.h"
-#include "trj_gui_menu.h"
-#include "trj_gui_traj.h"
 
 //------------------------------------------------------------------------------
 

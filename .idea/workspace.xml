@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="trj" targetName="trj" />
+    </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
@@ -18,6 +20,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="ProjectId" id="1ht3DWVDsN1RmujUymlzSvayTyT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -70,7 +73,7 @@
       <workItem from="1602530309859" duration="4622000" />
       <workItem from="1602535218449" duration="465000" />
       <workItem from="1602535699980" duration="13168000" />
-      <workItem from="1602602800565" duration="14701000" />
+      <workItem from="1602602800565" duration="16462000" />
     </task>
     <servers />
   </component>
@@ -142,11 +145,11 @@
       <screen x="0" y="0" width="2048" height="1152" />
     </state>
     <state x="601" y="158" width="862" height="1131" key="dock-window-1/0.0.2048.1152@0.0.2048.1152" timestamp="1602535691325" />
-    <state x="712" y="294" width="624" height="582" key="find.popup" timestamp="1602617788023">
+    <state x="712" y="294" width="624" height="582" key="find.popup" timestamp="1602625564644">
       <screen x="0" y="0" width="2048" height="1152" />
     </state>
     <state x="667" y="275" width="585" height="530" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1601075915644" />
-    <state x="712" y="294" width="624" height="582" key="find.popup/0.0.2048.1152@0.0.2048.1152" timestamp="1602617788023" />
+    <state x="712" y="294" width="624" height="582" key="find.popup/0.0.2048.1152@0.0.2048.1152" timestamp="1602625564644" />
     <state x="145" y="271" key="run.anything.popup" timestamp="1602618763166">
       <screen x="0" y="0" width="2048" height="1152" />
     </state>
