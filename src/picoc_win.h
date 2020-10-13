@@ -7,7 +7,7 @@
 #ifdef DEBUGGER
 static int gEnableDebugger = true;
 #else
-static int gEnableDebugger = false;
+static int gEnableDebugger = 0x00;
 #endif
 
 #endif /* __PICOC_WIN_H__ */

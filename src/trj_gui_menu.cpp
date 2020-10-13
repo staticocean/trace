@@ -19,13 +19,22 @@ uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 		{
 			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
 			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-		
+			
 			ImGui::Separator();
-		
+			
 			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
 			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
 			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			
+			ImGui::EndMenu();
+		}
 		
+		if (ImGui::BeginMenu("Env"))
+		{
+			if (ImGui::MenuItem("Reset", "")) { trj_gui_env_reset(self->env); }
+			
+//			ImGui::Separator();
+			
 			ImGui::EndMenu();
 		}
 		

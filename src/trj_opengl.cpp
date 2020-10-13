@@ -88,8 +88,8 @@ int main(int, char**)
 	font_config.OversampleV = 1;
 	font_config.PixelSnapH = 1;
 	
-	io.Fonts->AddFontFromFileTTF("../res/fonts/default.ttf", 16);
-	ImFont *font_default = io.Fonts->AddFontFromFileTTF("../res/fonts/default.ttf", 16, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+	io.Fonts->AddFontFromFileTTF("res/fonts/default.ttf", 16);
+	ImFont *font_default = io.Fonts->AddFontFromFileTTF("res/fonts/default.ttf", 16, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 	io.FontDefault = font_default;
 	
 	static s_trj_gui trj_gui;

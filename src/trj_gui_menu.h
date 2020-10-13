@@ -8,14 +8,22 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "lib/imgui/imgui.h"
+#include <lib/imgui/imgui.h>
 
-#include "lib/picoc/picoc.h"
+extern "C"
+{
+	#include <lib/trj/trj_eng.h>
+	#include <lib/trj/trj_types.h>
+}
+
+#include "trj_gui_env.h"
 
 //------------------------------------------------------------------------------
 
 typedef struct trj_gui_menu
 {
+	s_trj_gui_env *env;
+	
 	int height;
 	
 } 	s_trj_gui_menu;

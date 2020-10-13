@@ -10,18 +10,23 @@
 
 #include "lib/imgui/imgui.h"
 
-//#include "lib/tcc/libtcc.h"
-#include "lib/picoc/picoc.h"
+extern "C"
+{
+	#include <lib/trj/trj_eng.h>
+	#include <lib/trj/trj_obj.h>
+	#include <lib/trj/trj_bz.h>
 
-#include "lib/trj/trj_eng.h"
-#include "lib/trj/trj_obj.h"
-#include "lib/trj/trj_bz.h"
+	#include <lib/picoc/picoc.h>
+}
+
 #include "lib/trj/vl3d.h"
 
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"
 #include "trj_gui_menu.h"
 #include "trj_gui_traj.h"
+#include "trj_gui_cmd.h"
+#include "trj_gui_env.h"
 
 //------------------------------------------------------------------------------
 
@@ -36,6 +41,8 @@ typedef struct trj_gui
 	
 	s_trj_gui_menu gui_menu;
 	s_trj_gui_eng  gui_eng;
+	s_trj_gui_cmd  gui_cmd;
+	s_trj_gui_env  gui_env;
 	
 } 	s_trj_gui;
 

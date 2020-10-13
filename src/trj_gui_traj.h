@@ -8,10 +8,13 @@
 #include <lib/imgui/imgui_internal.h>
 #include <math.h>
 
-#include "trj_types.h"
-#include "trj_obj.h"
-#include "trj_traj.h"
-#include "vl.h"
+extern "C"
+{
+	#include <lib/trj/trj_types.h>
+	#include <lib/trj/trj_obj.h>
+	#include <lib/trj/trj_traj.h>
+	#include <lib/trj/vl.h>
+}
 
 //------------------------------------------------------------------------------
 

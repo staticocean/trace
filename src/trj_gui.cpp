@@ -3,10 +3,6 @@
 
 //------------------------------------------------------------------------------
 
-#define PICOC_STACK_SIZE (128000*4)
-
-static Picoc picoc;
-
 static s_trj_traj_bz_point pts[2048];
 static s_trj_traj_bz traj_bz = {.pts = pts, .pts_offset = 0 };
 
@@ -110,8 +106,16 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	style_ref.TabBorderSize = 0.0;
 	style_ref.WindowBorderSize = 0.0;
 	
-	PicocInitialize(&picoc, PICOC_STACK_SIZE);
-	PicocIncludeAllSystemHeaders(&picoc);
+	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) { .eng = &self->eng });
+	
+	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)
+	{
+		.env = &self->gui_env,
+		.title = "env",
+		.visible = true
+	});
+	
+	self->gui_menu.env = &self->gui_env;
 	
 	return 0x00;
 }
@@ -192,28 +196,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Scripting view
-		static char src_data[1024];
-		
-		ImGui::Begin("script_edit", NULL, ImGuiWindowFlags_NoCollapse);
-		
-		ImGui::InputTextMultiline("", src_data, 1024);
-		
-		if (PicocPlatformSetExitPoint(&picoc))
-		{
-		
-		}
-	
-		else
-		{
-			PicocParse(&picoc, "my lib", src_data, strlen(src_data), true, false, true, true);
-		}
-		
-		if (ImGui::Button("compile"))
-		{
-		
-		}
-		
-		ImGui::End();
+		trj_gui_cmd_render(&self->gui_cmd);
 	}
 	
 	bool mw = true;
