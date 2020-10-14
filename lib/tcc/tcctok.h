@@ -31,7 +31,7 @@
      DEF(TOK_AUTO, "auto")
      DEF(TOK_INLINE1, "inline")
      DEF(TOK_INLINE2, "__inline") /* gcc keyword */
-     DEF(TOK_INLINE3, "__inline__") /* gcc keyword */
+     DEF(TOK_INLINE3, "inline") /* gcc keyword */
      DEF(TOK_RESTRICT1, "restrict")
      DEF(TOK_RESTRICT2, "__restrict")
      DEF(TOK_RESTRICT3, "__restrict__")

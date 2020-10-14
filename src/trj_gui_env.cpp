@@ -1,6 +1,20 @@
 
 #include "trj_gui_env.h"
 
+//dummy lib
+
+void MsvcSetupFunc(Picoc *pc)
+{
+}
+
+/* list of all library functions and their prototypes */
+struct LibraryFunction MsvcFunctions[] =
+{
+		{NULL, NULL}
+};
+
+
+
 void __env_init__(s_trj_gui_env *self)
 {
 	PicocInitialise(&self->env, PICOC_STACK_SIZE);
@@ -14,7 +28,10 @@ void __env_init__(s_trj_gui_env *self)
 	char env_define[] = "#define __TRJ_ENV__";
 	
 	PicocParse(&self->env, "trj_env", env_define, strlen(env_define),
-			   true, true, false, true);
+			   true, false, false, true);
+	
+	
+	VariableDefinePlatformVar(&self->env, NULL, "eng_data", self->env.CharArrayType, (union AnyValue *) self->eng, 0x01);
 	
 	FILE *file_handle = fopen("plugins/config", "r");
 	
@@ -50,7 +67,7 @@ void __env_init__(s_trj_gui_env *self)
 				
 				rewind (plugin_file);
 				
-				printf("%s", plugin_path);
+				printf("%s\n", plugin_path);
 				
 				fread (plugin_data, plugin_size, 1, plugin_file);
 				fclose(plugin_file);
@@ -62,11 +79,25 @@ void __env_init__(s_trj_gui_env *self)
 				
 				plugin_data[plugin_size] = '\0';
 				
-				printf("%s", plugin_data);
-				fflush(stdout);
+				uint32_t offset = strlen(plugin_path) - 1;
+				while ((offset > 0x00) && (plugin_path[offset] != '/')) { --offset; }
 				
-				PicocParse(&self->env, plugin_path, (const char*) plugin_data, plugin_size,
-						true, true, false, true);
+				if (PicocPlatformSetExitPoint(&self->env))
+				{
+				
+				}
+				
+				else
+				{
+					printf("%s\n", &plugin_path[offset+1]);
+					fflush(stdout);
+					
+					PicocParse(&self->env, &plugin_path[offset+1], (const char*) plugin_data, plugin_size,
+							   true, false, false, true);
+					
+					IncludeRegister(&self->env, &plugin_path[offset + 1],
+									MsvcSetupFunc, MsvcFunctions, "");
+				}
 				
 				free(plugin_data);
 			}
@@ -76,8 +107,6 @@ void __env_init__(s_trj_gui_env *self)
 	}
 	
 	fflush(stdout);
-	
-	VariableDefinePlatformVar(&self->env, NULL, "eng", self->env.CharArrayType, (union AnyValue *) self->eng, 0x01);
 }
 
 void trj_gui_env_reset(s_trj_gui_env *self)

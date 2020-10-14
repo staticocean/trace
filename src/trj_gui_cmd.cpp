@@ -324,9 +324,6 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 
 void trj_gui_cmd_exec(s_trj_gui_cmd *self)
 {
-	struct ParseState Parser;
-	enum ParseResult Ok;
-	
 	Picoc *env = &self->env->env;
 	
 	if (PicocPlatformSetExitPoint(env))

@@ -72,6 +72,8 @@ static struct ReservedWord ReservedWords[] =
     { "signed", TokenSignedType },
     { "sizeof", TokenSizeof },
     { "static", TokenStaticType },
+    { "const", TokenStaticType },
+    { "inline", TokenStaticType },
     { "struct", TokenStructType },
     { "switch", TokenSwitch },
     { "typedef", TokenTypedef },

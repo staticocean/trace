@@ -30,15 +30,22 @@ typedef struct fp64  { int64_t  data; } fp64_t ;
 
 //------------------------------------------------------------------------------
 
-inline fp32_t    fp32_float32  (float32_t float32_data) { return (fp32_t ) { .data = (int32_t ) (1E+06 * (float64_t) float32_data) }; }
-inline fp32_t    fp32_float64  (float64_t float64_data) { return (fp32_t ) { .data = (int32_t ) (1E+06 * (float64_t) float64_data) }; }
-inline ufp32_t   ufp32_float32 (float32_t float32_data) { return (ufp32_t) { .data = (uint32_t) (1E+06 * (float64_t) float32_data) }; }
-inline ufp32_t   ufp32_float64 (float64_t float64_data) { return (ufp32_t) { .data = (uint32_t) (1E+06 * (float64_t) float64_data) }; }
-
-inline float32_t float32_fp32  (fp32_t  fp32_data ) { return (float32_t) (1E-06 * (float64_t) fp32_data.data ); }
-inline float64_t float64_fp32  (fp32_t  fp32_data ) { return (float64_t) (1E-06 * (float64_t) fp32_data.data ); }
-inline float32_t float32_ufp32 (ufp32_t ufp32_data) { return (float32_t) (1E-06 * (float64_t) ufp32_data.data); }
-inline float64_t float64_ufp32 (ufp32_t ufp32_data) { return (float64_t) (1E-06 * (float64_t) ufp32_data.data); }
+//inline fp32_t fp32_float32 (float32_t float32_data)
+//{
+//	fp32_t fp32; fp32.data = (int32_t ) (1E+06 * (float64_t) float32_data);
+//	return fp32;
+//}
+//
+//inline fp32_t fp32_float64 (float64_t float64_data)
+//{
+//	return (fp32_t ) { .data = (int32_t ) (1E+06 * (float64_t) float64_data) }; }
+//inline ufp32_t   ufp32_float32 (float32_t float32_data) { return (ufp32_t) { .data = (uint32_t) (1E+06 * (float64_t) float32_data) }; }
+//inline ufp32_t   ufp32_float64 (float64_t float64_data) { return (ufp32_t) { .data = (uint32_t) (1E+06 * (float64_t) float64_data) }; }
+//
+//inline float32_t float32_fp32  (fp32_t  fp32_data ) { return (float32_t) (1E-06 * (float64_t) fp32_data.data ); }
+//inline float64_t float64_fp32  (fp32_t  fp32_data ) { return (float64_t) (1E-06 * (float64_t) fp32_data.data ); }
+//inline float32_t float32_ufp32 (ufp32_t ufp32_data) { return (float32_t) (1E-06 * (float64_t) ufp32_data.data); }
+//inline float64_t float64_ufp32 (ufp32_t ufp32_data) { return (float64_t) (1E-06 * (float64_t) ufp32_data.data); }
 
 #ifndef __TRJ_ENV__
 inline fp64_t    fp64_float32  (float32_t float32_data) { return (fp64_t ) { .data = (int64_t ) (1E+12 * (float64_t) float32_data) }; }

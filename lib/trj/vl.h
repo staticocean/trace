@@ -21,13 +21,13 @@ typedef float64_t vlf_t;
 
 //------------------------------------------------------------------------------
 
-#define vl_pi (3.14159265358979323846264338327950288)
-#define vl_rad(deg) ((vlf_t) (((vlf_t) (deg)) * (vl_pi / 180)))
-#define vl_deg(rad) ((vlf_t) (((vlf_t) (rad)) * (180 / vl_pi)))
-#define vl_2pi (vl_pi*2)
+const vlf_t vl_pi = 3.14159265358979323846264338327950288;
+const vlf_t vl_2pi = vl_pi * 2;
 
 //------------------------------------------------------------------------------
 
+inline vlf_t vl_rad(vlf_t deg) { return ((vlf_t) (((vlf_t) (deg)) * (vl_pi / 180))); }
+inline vlf_t vl_deg(vlf_t rad) { return ((vlf_t) (((vlf_t) (rad)) * (180 / vl_pi))); }
 inline vlf_t vl_atan2(vlf_t x, vlf_t y) { return atan2(x, y); }
 inline vlf_t vl_sin(vlf_t x) { return sin(x); }
 inline vlf_t vl_cos(vlf_t x) { return cos(x); }
@@ -67,7 +67,7 @@ inline void vl_mcopy(vlf_t *res, vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
-static vlf_t vl_dist(vlf_t *vec_0, vlf_t *vec_1)
+inline vlf_t vl_dist(vlf_t *vec_0, vlf_t *vec_1)
 {
 	uint8_t i;
 	
@@ -83,7 +83,7 @@ static vlf_t vl_dist(vlf_t *vec_0, vlf_t *vec_1)
 	return vl_sqrt(vec_dist);
 }
 
-static vlf_t vl_dist2(vlf_t *vec_0, vlf_t *vec_1)
+inline vlf_t vl_dist2(vlf_t *vec_0, vlf_t *vec_1)
 {
 	uint8_t i;
 	
@@ -101,14 +101,14 @@ static vlf_t vl_dist2(vlf_t *vec_0, vlf_t *vec_1)
 
 //------------------------------------------------------------------------------
 
-static vlf_t vl_vnorm(vlf_t *vec)
+inline vlf_t vl_vnorm(vlf_t *vec)
 {
 	return vl_sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
 }
 
 //------------------------------------------------------------------------------
 
-static vlf_t vl_vdot(vlf_t *vec_0, vlf_t *vec_1)
+inline vlf_t vl_vdot(vlf_t *vec_0, vlf_t *vec_1)
 {
 	return (vec_0[0]*vec_1[0] + vec_0[1]*vec_1[1] + vec_0[2]*vec_1[2]);
 }
@@ -369,7 +369,7 @@ inline void vl_tnp(vlf_t *res, vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
-static vlf_t vl_det(vlf_t *mat)
+inline vlf_t vl_det(vlf_t *mat)
 {
 	vlf_t d0 = mat[1*3+1]*mat[2*3+2] - mat[1*3+2]*mat[2*3+1];
 	vlf_t d1 = mat[1*3+0]*mat[2*3+2] - mat[1*3+2]*mat[2*3+0];
@@ -447,7 +447,7 @@ inline void vl_vmul_v(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
 inline void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat_)
 {
 	vlf_t temp;
-	vlf_t mat[n*n];
+	vlf_t *mat = (vlf_t*) malloc(sizeof(vlf_t) * n * n);
 	
 	uint32_t i, j, k;
 	
@@ -486,6 +486,8 @@ inline void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat_)
 			}
 		}
 	}
+	
+	free(mat);
 	
 	return;
 }
