@@ -28,6 +28,14 @@ uint8_t trj_gui_eng_add_trajapi(s_trj_gui_eng *gui, s_trj_traj_api api)
 	return 0x00;
 }
 
+uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl_api api)
+{
+	gui->ctrl_api_list[gui->ctrl_api_offset] = api;
+	++gui->ctrl_api_offset;
+	
+	return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
 void __sel_object__(s_trj_gui_eng *gui, s_trj_obj *obj)
@@ -101,7 +109,7 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				{
 					if (obj->ctrl_offset == 0x00)
 					{
-//						ImGui::
+						ImGui::Text("[no items]");
 					}
 					
 					for (int j = 0; j < obj->ctrl_offset; ++j)
@@ -114,11 +122,21 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				
 				if (ImGui::TreeNodeEx("proc"))
 				{
+					if (obj->proc_offset == 0x00)
+					{
+						ImGui::Text("[no items]");
+					}
+					
 					ImGui::TreePop();
 				}
 				
 				if (ImGui::TreeNodeEx("data"))
 				{
+					if (obj->data_offset == 0x00)
+					{
+						ImGui::Text("[no items]");
+					}
+					
 					ImGui::TreePop();
 				}
 				
@@ -142,6 +160,8 @@ uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
 	s_trj_gui_obj *obj_gui = &gui->obj_list[obj->id];
 	
 	ImGui::PushID(obj);
+	
+	//--------------------------------------
 	
 	if (ImGui::Button("add##traj_add"))
 	{
@@ -168,6 +188,32 @@ uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
 		ImGui::EndCombo();
 	}
 	
+	//--------------------------------------
+	
+	if (ImGui::Button("add##ctrl_add"))
+	{
+//						self->ctrl_offset++;
+	}
+	
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	
+	if (ImGui::BeginCombo("##ctrl_type", gui->ctrl_api_list[obj_gui->ctrl_sel].desc,
+						  ImGuiComboFlags_NoArrowButton))
+	{
+		for (int i = 0; i < gui->ctrl_api_offset; ++i)
+		{
+			const bool is_selected = (obj_gui->traj_sel == i);
+			
+			if (ImGui::Selectable(gui->ctrl_api_list[obj_gui->ctrl_sel].desc, is_selected))
+			{ obj_gui->ctrl_sel = i; }
+			
+			if (is_selected)
+			{ ImGui::SetItemDefaultFocus(); }
+		}
+		
+		ImGui::EndCombo();
+	}
 	
 //	if (ImGui::Button("add##ctrl_add"))
 //	{

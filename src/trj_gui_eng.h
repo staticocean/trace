@@ -21,6 +21,9 @@ typedef struct trj_gui_eng
 	s_trj_traj_api traj_api_list[32];
 	uint32_t       traj_api_offset;
 	
+	s_trj_ctrl_api ctrl_api_list[32];
+	uint32_t       ctrl_api_offset;
+	
 	void* sel_item;
 	uint8_t sel_type;
 
@@ -40,6 +43,7 @@ typedef struct trj_gui_eng_init
 
 uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr);
 uint8_t trj_gui_eng_add_trajapi(s_trj_gui_eng *gui, s_trj_traj_api api);
+uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl_api api);
 uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self);
 uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self);
 

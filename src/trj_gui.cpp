@@ -19,6 +19,13 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.desc = "traj_bz",
 	});
 	
+	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl_api) {
+			.rot = NULL,
+			.pos = trj_traj_bz_pos_api,
+			.compile = trj_traj_bz_compile_api,
+			.desc = "traj_bz",
+	});
+	
 	traj_bz.pts_offset = 64;
 	
 	for (int i = 0; i < traj_bz.pts_offset; ++i)

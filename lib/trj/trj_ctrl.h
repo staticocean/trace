@@ -21,6 +21,7 @@
 typedef struct trj_ctrl_api
 {
 	char desc[32];
+	void (*reset ) (void *data);
 	void (*update) (void *data);
 
 } 	s_trj_ctrl_api;

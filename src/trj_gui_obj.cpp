@@ -93,15 +93,6 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 	enum st
 	{
 		st_mode = 100,
-		st_r00,
-		st_r01,
-		st_r02,
-		st_r10,
-		st_r11,
-		st_r12,
-		st_r20,
-		st_r21,
-		st_r22,
 		st_heading,
 		st_pitch,
 		st_roll,

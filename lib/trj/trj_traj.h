@@ -332,7 +332,6 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	
 	trj_bz4_eval(&bz4, time, &pos[0]);
 	
-	
 	trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
 			.p0 = {
 					self->pts[offset  ].time,
