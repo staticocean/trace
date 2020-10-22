@@ -16,6 +16,15 @@ extern "C"
 
 //------------------------------------------------------------------------------
 
+enum trj_gui_eng_type_t
+{
+	trj_gui_eng_type_obj,
+	trj_gui_eng_type_traj,
+	trj_gui_eng_type_ctrl,
+	trj_gui_eng_type_proc,
+	trj_gui_eng_type_data,
+};
+
 typedef struct trj_gui_eng
 {
 	s_trj_traj_api traj_api_list[32];
@@ -25,7 +34,7 @@ typedef struct trj_gui_eng
 	uint32_t       ctrl_api_offset;
 	
 	void* sel_item;
-	uint8_t sel_type;
+	trj_gui_eng_type_t sel_type;
 
 	s_trj_gui_obj *obj_list;
 	

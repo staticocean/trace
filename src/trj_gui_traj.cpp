@@ -60,8 +60,8 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 		points_min = ImMin(points_min, point);
 		
 		point = ImVec2(
-				self->pts[i].time + self->pts[i].pos_t[0],
-				self->pts[i].pos_p[0] + self->pts[i].pos_d[0]);
+				self->pts[i].pos_p[0] + self->pts[i].pos_d[0],
+				self->pts[i].pos_p[2] + self->pts[i].pos_d[2]);
 		
 		points_max = ImMax(points_max, point);
 		points_min = ImMin(points_min, point);
@@ -186,7 +186,7 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 	{
 		ImGui::PushID(i);
 		
-		ImVec2 point_pos = ImVec2(self->pts[i].time, self->pts[i].pos_p[0]);
+		ImVec2 point_pos = ImVec2(self->pts[i].pos_p[0], self->pts[i].pos_p[2]);
 		ImGui::SetCursorScreenPos(transform(&view, point_pos) - ImVec2(8, 8));
 		
 		ImGui::InvisibleButton("##pt", ImVec2(16, 16));
@@ -219,8 +219,8 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 			point_pos += mouse_drag_delta;
 		}
 		
-		self->pts[i].time = point_pos.x;
-		self->pts[i].pos_p[0] = point_pos.y;
+		self->pts[i].pos_p[0] = point_pos.x;
+		self->pts[i].pos_p[2] = point_pos.y;
 		
 		ImGui::PopID();
 	}
@@ -232,12 +232,12 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 		ImGui::PushID(i);
 		
 		ImVec2 p = transform(&view, ImVec2(
-				self->pts[i].time,
-				self->pts[i].pos_p[0]));
+				self->pts[i].pos_p[0],
+				self->pts[i].pos_p[2]));
 		
 		ImVec2 d = transform(&view, ImVec2(
-				self->pts[i].time + self->pts[i].pos_t[0],
-				self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+				self->pts[i].pos_p[0] + self->pts[i].pos_d[0],
+				self->pts[i].pos_p[2] + self->pts[i].pos_d[2]));
 		
 //		window->DrawList->AddTriangleFilled(
 //				pos_d + ImVec2(-4,0),
@@ -260,27 +260,24 @@ uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, boo
 	}
 	
 //	vlf_t time_step = (self->pts[self->pts_offset-1].pos_p[0] - self->pts[0].pos_p[0]) / 1000;
-	vlf_t time_step = (view.p1[0] - view.p0[0]) / 1000;
-//	vlf_t time = self->pts[0].pos_p[0];
-	vlf_t time = view.p0[0];
+//	vlf_t time_step = (view.p1[0] - view.p0[0]) / 1000;
+	vlf_t time_step = (self->pts[self->pts_offset-1].time - self->pts[0].time) / 1000.0;
+	vlf_t time = self->pts[0].time;
+//	vlf_t time = view.p0[0];
 	
 	for (int i = 0; i < 1000-1; ++i)
 	{
-		if (time >= self->pts[0].time
-		&& (time+time_step) <= self->pts[self->pts_offset-1].time)
-		{
-			vlf_t p0[3];
-			vlf_t p1[3];
-			
-			trj_traj_bz_pos(self, time, p0);
-			trj_traj_bz_pos(self, time + time_step, p1);
-			
-			ImVec2 p0_ = ImVec2(time, p0[0]);
-			ImVec2 p1_ = ImVec2(time + time_step, p1[0]);
-			
-			window->DrawList->AddLine(transform(&view, p0_), transform(&view, p1_), col_text_u32);
-		}
+		vlf_t p0[3];
+		vlf_t p1[3];
 		
+		trj_traj_bz_pos(self, time, p0);
+		trj_traj_bz_pos(self, time + time_step, p1);
+		
+		ImVec2 p0_ = ImVec2(time, p0[0]);
+		ImVec2 p1_ = ImVec2(time + time_step, p1[0]);
+		
+		window->DrawList->AddLine(transform(&view, p0_), transform(&view, p1_), col_text_u32);
+	
 		time += time_step;
 	}
 

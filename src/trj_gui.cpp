@@ -20,10 +20,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl_api) {
-			.rot = NULL,
-			.pos = trj_traj_bz_pos_api,
-			.compile = trj_traj_bz_compile_api,
-			.desc = "traj_bz",
+			.reset = NULL,
+			.update = NULL,
+			.desc = "ctrl_test",
 	});
 	
 	traj_bz.pts_offset = 64;
@@ -160,10 +159,18 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		{
 			switch (self->gui_eng.sel_type)
 			{
-				case 0x00:
+				case trj_gui_eng_type_obj:
 				{
 					s_trj_obj *obj = (s_trj_obj*) self->gui_eng.sel_item;
 					trj_gui_obj_edit(&self->gui_eng.obj_list[obj->id], obj);
+					
+					break;
+				}
+				
+				case trj_gui_eng_type_traj:
+				{
+					s_trj_traj_api *api = (s_trj_traj_api*) self->gui_eng.sel_item;
+					trj_gui_traj_bz((s_trj_traj_bz*) api, "##test", ImVec2(-1, 400), 0x00);
 					
 					break;
 				}

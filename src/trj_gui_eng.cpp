@@ -6,7 +6,7 @@
 uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 {
 	gui->sel_item = NULL;
-	gui->sel_type = 0x00;
+	gui->sel_type = trj_gui_eng_type_obj;
 	gui->obj_list = attr.obj_list;
 	gui->traj_api_offset = 0x00;
 	
@@ -38,10 +38,34 @@ uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl_api api)
 
 //------------------------------------------------------------------------------
 
-void __sel_object__(s_trj_gui_eng *gui, s_trj_obj *obj)
+void __sel_obj__(s_trj_gui_eng *gui, void *obj)
 {
-	gui->sel_type = 0x00;
+	gui->sel_type = trj_gui_eng_type_obj;
 	gui->sel_item = obj;
+}
+
+void __sel_traj__(s_trj_gui_eng *gui, void *traj)
+{
+	gui->sel_type = trj_gui_eng_type_traj;
+	gui->sel_item = traj;
+}
+
+void __sel_ctrl__(s_trj_gui_eng *gui, void *ctrl)
+{
+	gui->sel_type = trj_gui_eng_type_ctrl;
+	gui->sel_item = ctrl;
+}
+
+void __sel_proc__(s_trj_gui_eng *gui, void *proc)
+{
+	gui->sel_type = trj_gui_eng_type_proc;
+	gui->sel_item = proc;
+}
+
+void __sel_data__(s_trj_gui_eng *gui, void *data)
+{
+	gui->sel_type = trj_gui_eng_type_data;
+	gui->sel_item = data;
 }
 
 uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
@@ -81,7 +105,7 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 					| ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
 					(char*) obj->name);
 			
-			if(ImGui::IsItemClicked()) { __sel_object__(gui, &self->obj_list[i]); }
+			if(ImGui::IsItemClicked()) { __sel_obj__(gui, &self->obj_list[i]); }
 			
 			ImGui::SameLine();
 			char *hide_label[2] = { "hide", "show" };
@@ -92,14 +116,21 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 			{
 				if (ImGui::TreeNodeEx("traj"))
 				{
-					if (obj->traj_offset == 0x00)
-					{
-						ImGui::Text("[no items]");
-					}
+					if (obj->traj_offset == 0x00) { ImGui::Text("[no items]"); }
 					
 					for (int j = 0; j < obj->traj_offset; ++j)
 					{
-					
+						ImGui::PushID(j);
+						
+						if (gui->sel_item == obj->traj_data[j])
+						{}
+						
+						if (ImGui::TreeNode((const char*) obj->traj_data[j]))
+						{
+							__sel_traj__(gui, obj->traj_data[j]);
+						}
+						
+						ImGui::PopID();
 					}
 					
 					ImGui::TreePop();
@@ -107,14 +138,10 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				
 				if (ImGui::TreeNodeEx("ctrl"))
 				{
-					if (obj->ctrl_offset == 0x00)
-					{
-						ImGui::Text("[no items]");
-					}
+					if (obj->ctrl_offset == 0x00) { ImGui::Text("[no items]"); }
 					
 					for (int j = 0; j < obj->ctrl_offset; ++j)
 					{
-					
 					}
 					
 					ImGui::TreePop();
@@ -122,20 +149,14 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				
 				if (ImGui::TreeNodeEx("proc"))
 				{
-					if (obj->proc_offset == 0x00)
-					{
-						ImGui::Text("[no items]");
-					}
+					if (obj->proc_offset == 0x00) { ImGui::Text("[no items]"); }
 					
 					ImGui::TreePop();
 				}
 				
 				if (ImGui::TreeNodeEx("data"))
 				{
-					if (obj->data_offset == 0x00)
-					{
-						ImGui::Text("[no items]");
-					}
+					if (obj->data_offset == 0x00) { ImGui::Text("[no items]"); }
 					
 					ImGui::TreePop();
 				}
@@ -158,6 +179,10 @@ uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	s_trj_obj *obj = (s_trj_obj*) gui->sel_item;
 	s_trj_gui_obj *obj_gui = &gui->obj_list[obj->id];
+	s_trj_traj_api *traj_api = &gui->traj_api_list[obj_gui->traj_sel];
+	s_trj_traj_api *ctrl_api = &gui->traj_api_list[obj_gui->ctrl_sel];
+	s_trj_traj_api *proc_api = &gui->traj_api_list[obj_gui->proc_sel];
+	s_trj_traj_api *data_api = &gui->traj_api_list[obj_gui->data_sel];
 	
 	ImGui::PushID(obj);
 	
@@ -165,7 +190,8 @@ uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	if (ImGui::Button("add##traj_add"))
 	{
-//						self->traj_offset++;
+		obj->traj_data[obj->traj_offset] = (s_trj_obj*) malloc(sizeof(s_trj_obj));
+		obj->traj_offset++;
 	}
 	
 	ImGui::SameLine();
