@@ -91,11 +91,11 @@ typedef struct vl3d_eng
 	
 }	s_vl3d_eng;
 
-typedef struct vl3d_eng_init_attr
+typedef struct vl3d_eng_init
 {
 	s_vl3d_obj *obj_list;
 	
-}	s_vl3d_eng_init_attr;
+}	s_vl3d_eng_init;
 
 typedef struct vl3d_view
 {
@@ -109,9 +109,7 @@ typedef struct vl3d_view
 
 //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-
-inline uint8_t vl3d_eng_init(s_vl3d_eng *self, s_vl3d_eng_init_attr attr)
+inline uint8_t vl3d_eng_init(s_vl3d_eng *self, s_vl3d_eng_init attr)
 {
 	self->obj_list = attr.obj_list;
 	self->obj_offset = 0x00;
@@ -206,8 +204,8 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 	ImGuiWindow* parent_window = ImGui::GetCurrentWindow();
 	ImGuiID id = parent_window->GetID(label);
 	
-	size.x = size.x < 0 ? ImGui::GetContentRegionAvailWidth() : size.x;
-	size.y = size.y < 0 ? ImGui::GetContentRegionAvailWidth() : size.y;
+	size.x = size.x < 0 ? ImGui::GetContentRegionAvail().x : size.x;
+	size.y = size.y < 0 ? ImGui::GetContentRegionAvail().y : size.y;
 	
 	ImGui::BeginChildFrame(id, size,
 						   ImGuiWindowFlags_NoScrollbar |

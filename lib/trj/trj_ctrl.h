@@ -13,18 +13,11 @@
 #include "vl.h"
 #include "vl_svd.h"
 
+#include "trj_api.h"
 #include "trj_obj.h"
 #include "trj_utils.h"
 
 //------------------------------------------------------------------------------
-
-typedef struct trj_ctrl_api
-{
-	char desc[32];
-	void (*reset ) (void *data);
-	void (*update) (void *data);
-
-} 	s_trj_ctrl_api;
 
 typedef struct ins_ctrl_none
 {

@@ -16,16 +16,6 @@
 
 //------------------------------------------------------------------------------
 
-typedef struct trj_traj_api
-{
-	char desc[32];
-	
-	uint8_t (*compile) 	(void *data);
-	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
-	uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
-	
-} 	s_trj_traj_api;
-
 typedef struct trj_traj_bz_point
 {
 	float64_t time;
@@ -48,22 +38,20 @@ typedef struct trj_traj_bz_point
 
 typedef struct trj_traj_bz
 {
-	s_trj_traj_api api;
-	
 	s_trj_traj_bz_point *pts;
 	uint32_t pts_offset;
 
 } 	s_trj_traj_bz;
 
-typedef struct trj_traj_bz_init_attr
+typedef struct trj_traj_bz_init
 {
 	s_trj_traj_bz_point *pts;
 	
-} 	s_trj_traj_bz_init_attr;
+} 	s_trj_traj_bz_init;
 
 //------------------------------------------------------------------------------
 
-inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr attr)
+inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 {
 	self->pts = attr.pts;
 	self->pts_offset = 0x00;
@@ -71,16 +59,33 @@ inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init_attr att
 	return 0x00;
 }
 
+inline int trj_traj_bz_point_comp (const void *p0_, const void *p1_)
+{
+	s_trj_traj_bz_point *p0 = (s_trj_traj_bz_point*) p0_;
+	s_trj_traj_bz_point *p1 = (s_trj_traj_bz_point*) p1_;
+	
+	if (p0->time > p1->time) return +1;
+	if (p0->time < p1->time) return -1;
+
+	return 0;
+}
+
 inline uint8_t trj_traj_bz_add(s_trj_traj_bz *self, s_trj_traj_bz_point point)
 {
 	self->pts[self->pts_offset] = point;
 	self->pts_offset++;
+	
+	qsort (self->pts, self->pts_offset, sizeof(s_trj_traj_bz_point), trj_traj_bz_point_comp);
 	
 	return 0x00;
 }
 
 inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 {
+	if (self->pts_offset < 0x02) { return 0x00; }
+	
+	qsort (self->pts, self->pts_offset, sizeof(s_trj_traj_bz_point), trj_traj_bz_point_comp);
+	
 	uint32_t i;
 	uint32_t j;
 	
@@ -285,14 +290,11 @@ inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	return 0x00;
 }
 
-inline uint8_t trj_traj_bz_compile_api(void *self)
-{
-	return trj_traj_bz_compile((s_trj_traj_bz*) self);
-}
-
 inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 {
 	uint32_t offset = 0x00;
+	
+	if (self->pts_offset == 0x00) { return 0x01; }
 	
 	while (offset < (self->pts_offset-1)
 		   && (time < self->pts[offset].time)
@@ -304,6 +306,12 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	if (offset >= (self->pts_offset-1))
 	{
 		offset = self->pts_offset - 2;
+	}
+	
+	if (time >= self->pts[self->pts_offset-1].time)
+	{
+		vl_vcopy(pos, self->pts[self->pts_offset-1].pos_p);
+		return 0x00;
 	}
 	
 	s_trj_bz4 bz4;
@@ -383,9 +391,58 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	return 0x00;
 }
 
-inline uint8_t trj_traj_bz_pos_api(void *self, vlf_t time, vlf_t *pos)
+//------------------------------------------------------------------------------
+
+// API
+//uint8_t (*init) 		(void *data, void *config)
+//uint8_t (*free) 		(void *data);
+//uint8_t (*compile) 	(void *data);
+//uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
+//uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+
+inline uint8_t trj_traj_bz_init_ (void **data, void *config)
 {
-	return trj_traj_bz_pos((s_trj_traj_bz*) self, time, pos);
+	*data = (s_trj_traj_bz*) malloc(sizeof(s_trj_traj_bz));
+	
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) *data;
+	s_trj_traj_bz_init *traj_bz_init = (s_trj_traj_bz_init*) config;
+	
+	traj_bz_init->pts = (s_trj_traj_bz_point*) malloc(sizeof(s_trj_traj_bz_point) * 100);
+	
+	return trj_traj_bz_init(traj_bz, *traj_bz_init);
+}
+
+inline uint8_t trj_traj_bz_free_ (void **data)
+{
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) *data;
+	
+	free(traj_bz->pts);
+	
+	free(*data);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_bz_compile_(void *data)
+{
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) data;
+	
+	return trj_traj_bz_compile(traj_bz);
+}
+
+inline uint8_t trj_traj_bz_pos_(void *data, vlf_t time, vlf_t *pos)
+{
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) data;
+	
+	return trj_traj_bz_pos(traj_bz, time, pos);
+}
+
+inline uint8_t trj_traj_bz_rot_(void *data, vlf_t time, vlf_t *rot)
+{
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) data;
+
+//	return trj_traj_bz_rot(traj_bz);
+	return 0x00;
 }
 
 //------------------------------------------------------------------------------

@@ -139,7 +139,7 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 			vl3d_view.scale = 0.75;
 			vl_vzero(vl3d_view.pos);
 			
-			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init_attr) { .obj_list = vl3d_obj_list });
+			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
 			
 			vl3d_eng_draw_arrow(&vl3d_eng,
 								(float64_t[]) { -mat[0*3+0], -mat[1*3+0], -mat[2*3+0] },
@@ -187,7 +187,9 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +0.0, +1.0, +0.0 }, .p1 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] } } );
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +0.0, +0.0, +1.0 }, .p1 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] } } );
 			
-			vl3d_eng_render(&vl3d_eng, &vl3d_view, "##mat_view", ImVec2(-1, -1));
+			vl3d_eng_render(&vl3d_eng, &vl3d_view, "##mat_view",
+					ImVec2(ImGui::GetContentRegionAvailWidth(),
+						   ImGui::GetContentRegionAvailWidth()));
 			
 			trj_ctn_to_hpr(&view_hpr, &vl3d_view.rot[0][0]);
 			
@@ -238,6 +240,10 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 uint8_t trj_gui_obj_init(s_trj_gui_obj *gui, s_trj_gui_obj_init attr)
 {
 	gui->ref = attr.ref;
+	
+	gui->traj_vl3d_view.scale = 1.0;
+	vl_mid(&gui->traj_vl3d_view.rot[0][0]);
+	vl_vset(gui->traj_vl3d_view.pos, 0.0);
 	
 	return 0x00;
 }
@@ -424,5 +430,41 @@ uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
+uint8_t trj_gui_obj_traj(s_trj_gui_obj *gui, s_trj_obj *self)
+{
+	vl3d_eng_init(&gui->traj_vl3d_eng, (s_vl3d_eng_init) {
+		.obj_list = gui->traj_vl3d_eng_objlist,
+	});
+	
+	for (int i = 0; i < self->traj_offset; ++i)
+	{
+		vlf_t time = 0.0;
+		vlf_t time_step = 1.0;
+		
+		vlf_t p0[3];
+		vlf_t p1[3];
+		
+		s_trj_traj traj = self->traj_list[i];
+		
+		for (int t = 0; t < 1000; ++t)
+		{
+			traj.pos(traj.data, time, p0);
+			traj.pos(traj.data, time+time_step, p1);
+			
+			vl3d_eng_add_line(&gui->traj_vl3d_eng, (s_vl3d_line) {
+					.p0 = { p0[0], p0[1], p0[2] },
+					.p1 = { p1[0], p1[1], p1[2] }
+			});
+			
+			time = time + time_step;
+		}
+	}
+	
+	vl3d_eng_render(&gui->traj_vl3d_eng, &gui->traj_vl3d_view, "temp", ImVec2(-1, -1));
+	
+	return 0x00;
+}
 
 //------------------------------------------------------------------------------
