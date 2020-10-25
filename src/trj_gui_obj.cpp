@@ -292,14 +292,14 @@ uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
 	ImGui::NextColumn();
 	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1);
+	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1, NULL, NULL, "%.3f");
 	ImGui::NextColumn();
 	
 	ImGui::Text("rot_inert");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[?]"); }
 	ImGui::NextColumn();
 	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1);
+	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1, NULL, NULL, "%.3f");
 	ImGui::NextColumn();
 	
 	ImGui::Columns(1);
@@ -345,85 +345,9 @@ uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::SameLine();
 	vl_gui_mat("##sor", &self->rot[1][0], 0.001, &min, &max, "%.3f");
 	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
-//	ImGui::Columns(2);
-//	ImGui::Text("time");
-//	ImGui::NextColumn();
-//	if (self->ref == NULL) { ImGui::Text("none"); }
-//	else { ImGui::Text("%s", (char*) self->ref->name); }
-//	ImGui::NextColumn();
-
-//	static ImGuiTextFilter filter;
-//	static void* selected_item = NULL;
-//
-//	uint8_t* filter_data[self->obj_count];
-//
-//	for (int i = 0; i < self->obj_count; ++i)
-//	{
-//		filter_data[i] = self->obj_list[i].name;
-//	}
-//
-//	filter.Draw("");
-//
-//	ImGui::SameLine();
-//	ImGui::Button("add obj");
 //	ImGui::Dummy(ImVec2(0, 5));
-//
-//	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
-//
-//	for (int i = 0; i < IM_ARRAYSIZE(filter_data); i++)
-//	{
-//		ImGui::PushID(i);
-//
-//		if (filter.PassFilter((char*) filter_data[i]))
-//		{
-//			s_trj_obj *obj = &self->obj_list[i];
-//
-//			bool node_open = ImGui::TreeNodeEx((void*) i, 0x00, (char*) obj->name);
-//			static bool node_visible = true;
-//
-//			ImGui::SameLine();
-//			bool temp;
-//			ImGui::SmallButton("hide");
-//
-//			if (node_open)
-//			{
-//				if (ImGui::TreeNodeEx("Ctrl"))
-//				{
-//					if (obj->ctrl_offset == 0x00)
-//					{
-////						ImGui::
-//					}
-//
-//					for (int j = 0; j < obj->ctrl_offset; ++j)
-//					{
-//
-//					}
-//
-//					ImGui::TreePop();
-//				}
-//
-//				if (ImGui::TreeNodeEx("Proc"))
-//				{
-//					ImGui::TreePop();
-//				}
-//
-//				if (ImGui::TreeNodeEx("Data"))
-//				{
-//					ImGui::TreePop();
-//				}
-//
-//				ImGui::TreePop();
-//			}
-//		}
-//
-//		ImGui::PopID();
-//	}
-//
-//	ImGui::PopStyleVar();
+//	ImGui::Separator();
+//	ImGui::Dummy(ImVec2(0, 5));
 	
 	ImGui::PopID();
 	

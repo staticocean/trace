@@ -61,7 +61,8 @@ int CurveEditor(const char* label
 
 //------------------------------------------------------------------------------
 
-uint8_t trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res);
+void trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res);
+void trj_gui_traj_edit(s_trj_traj *self);
 
 //------------------------------------------------------------------------------
 

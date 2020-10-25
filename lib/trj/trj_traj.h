@@ -16,6 +16,8 @@
 
 //------------------------------------------------------------------------------
 
+#define trj_traj_bz_id (0x00000001)
+
 typedef struct trj_traj_bz_point
 {
 	float64_t time;
@@ -417,8 +419,7 @@ inline uint8_t trj_traj_bz_free_ (void **data)
 	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) *data;
 	
 	free(traj_bz->pts);
-	
-	free(*data);
+	free(traj_bz);
 	
 	return 0x00;
 }

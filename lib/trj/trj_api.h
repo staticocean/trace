@@ -15,6 +15,8 @@
 
 typedef struct trj_traj
 {
+	uint32_t id;
+	
 	char desc[32];
 	
 	void *data;
@@ -32,6 +34,8 @@ typedef struct trj_traj
 
 typedef struct trj_ctrl
 {
+	uint32_t id;
+	
 	char desc[32];
 	void (*reset ) (void *data);
 	void (*update) (void *data);
@@ -75,11 +79,33 @@ typedef struct trj_obj
 inline uint8_t trj_obj_add_traj(s_trj_obj *self, s_trj_traj traj_api)
 {
 	s_trj_traj *api = &self->traj_list[self->traj_offset];
-	++self->traj_offset;
+	self->traj_offset += 0x01;
 	
 	*api = traj_api;
 	api->init(&api->data, api->config);
 	api->compile(api->data);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_obj_del_traj(s_trj_obj *self, s_trj_traj *api)
+{
+	int32_t i;
+	int32_t offset = 0x00;
+	
+	api->free(&api->data);
+
+	if (self->traj_offset == 0x00) { return 0x00; }
+	
+	for (i = 0; i < self->traj_offset-1; ++i)
+	{
+		if (&self->traj_list[i] == api)
+		{ offset = 0x01; }
+		
+		self->traj_list[i] = self->traj_list[i+offset];
+	}
+	
+	self->traj_offset -= 0x01;
 	
 	return 0x00;
 }

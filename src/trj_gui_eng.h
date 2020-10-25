@@ -57,6 +57,11 @@ uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl api);
 uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self);
 uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self);
 
+void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, void *obj);
+void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, void *obj);
+void trj_gui_eng_sel_proc(s_trj_gui_eng *gui, void *obj);
+void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, void *obj);
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_GUI_ENG__ */
