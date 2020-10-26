@@ -28,11 +28,31 @@ typedef struct trj_gui_env
 	uint8_t out_s_data[1024*1024];
 	FILE *out_s;
 	
+	void *traj_offset;
+	void *ctrl_offset;
+	void *proc_offset;
+	void *data_offset;
+	
+	void *traj_list;
+	void *ctrl_list;
+	void *proc_list;
+	void *data_list;
+	
 } 	s_trj_gui_env;
 
 typedef struct trj_gui_env_init
 {
 	s_trj_eng *eng;
+	
+	void *traj_offset;
+	void *ctrl_offset;
+	void *proc_offset;
+	void *data_offset;
+	
+	void *traj_list;
+	void *ctrl_list;
+	void *proc_list;
+	void *data_list;
 	
 } 	s_trj_gui_env_init;
 

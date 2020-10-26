@@ -148,7 +148,18 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	style_ref.TabBorderSize = 0.0;
 	style_ref.WindowBorderSize = 1.0;
 	
-	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) { .eng = &self->eng });
+	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) {
+		.eng = &self->eng,
+		.traj_offset = &self->gui_eng.traj_offset,
+		.ctrl_offset = &self->gui_eng.ctrl_offset,
+//		.proc_offset = &self->gui_eng.proc_offset,
+//		.data_offset = &self->gui_eng.data_offset,
+		
+		.traj_list = self->gui_eng.traj_list,
+		.ctrl_list = self->gui_eng.ctrl_list,
+//		.proc_list = self->gui_eng.proc_list,
+//		.data_list = self->gui_eng.data_list,
+	});
 	
 	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)
 	{
