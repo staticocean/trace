@@ -446,6 +446,31 @@ inline uint8_t trj_traj_bz_rot_(void *data, vlf_t time, vlf_t *rot)
 	return 0x00;
 }
 
+inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
+{
+	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) data;
+
+	if (traj_bz->pts_offset == 0x00)
+	{
+		info->preview_time[0] = 0.0;
+		info->preview_time[1] = 0.0;
+	}
+	
+	if (traj_bz->pts_offset == 0x01)
+	{
+		info->preview_time[0] = traj_bz->pts[0].time;
+		info->preview_time[1] = traj_bz->pts[0].time;
+	}
+	
+	if (traj_bz->pts_offset >= 0x02)
+	{
+		info->preview_time[0] = traj_bz->pts[0].time;
+		info->preview_time[1] = traj_bz->pts[traj_bz->pts_offset-1].time;
+	}
+	
+	return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
 

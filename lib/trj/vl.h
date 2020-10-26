@@ -15,6 +15,8 @@
 
 #include "trj_types.h"
 
+#define vl_lsep "--------------------------------r\n"
+
 //------------------------------------------------------------------------------
 
 typedef float64_t vlf_t;
@@ -34,6 +36,23 @@ inline vlf_t vl_cos(vlf_t x) { return cos(x); }
 inline vlf_t vl_sqrt(vlf_t x) { return sqrt(x); }
 inline vlf_t vl_pow(vlf_t x, vlf_t power) { return pow(x, power); }
 inline vlf_t vl_crt(vlf_t x) { return x < 0 ? -pow(-x, 1.0f/3.0f) : pow(x, 1.0f/3.0f); }
+
+//------------------------------------------------------------------------------
+
+inline void vl_vprint(vlf_t *vec)
+{
+	printf("%f %f %f", vec[0], vec[1], vec[2]);
+}
+
+inline void vl_mprint(vlf_t *mat)
+{
+	vl_vprint(&mat[0]);
+	printf("\r\n");
+	vl_vprint(&mat[3]);
+	printf("\r\n");
+	vl_vprint(&mat[6]);
+	printf("\r\n");
+}
 
 //------------------------------------------------------------------------------
 
@@ -203,25 +222,25 @@ inline void vl_rm_align(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
 
 //------------------------------------------------------------------------------
 
-inline void vl_vprint(vlf_t *vec)
-{
-	printf("%lf %lf %lf \n", vec[0], vec[1], vec[2]);
-	
-	return;
-}
-
-//------------------------------------------------------------------------------
-
-inline void vl_mprint(vlf_t *vec)
-{
-	printf("%lf %lf %lf \n", vec[0 + 0], vec[0 + 1], vec[0 + 2]);
-	printf("%lf %lf %lf \n", vec[3 + 0], vec[3 + 1], vec[3 + 2]);
-	printf("%lf %lf %lf \n", vec[6 + 0], vec[6 + 1], vec[6 + 2]);
-	
-	printf("\n");
-	
-	return;
-}
+//inline void vl_vprint(vlf_t *vec)
+//{
+//	printf("%lf %lf %lf \n", vec[0], vec[1], vec[2]);
+//
+//	return;
+//}
+//
+////------------------------------------------------------------------------------
+//
+//inline void vl_mprint(vlf_t *vec)
+//{
+//	printf("%lf %lf %lf \n", vec[0 + 0], vec[0 + 1], vec[0 + 2]);
+//	printf("%lf %lf %lf \n", vec[3 + 0], vec[3 + 1], vec[3 + 2]);
+//	printf("%lf %lf %lf \n", vec[6 + 0], vec[6 + 1], vec[6 + 2]);
+//
+//	printf("\n");
+//
+//	return;
+//}
 
 //------------------------------------------------------------------------------
 

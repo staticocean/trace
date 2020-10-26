@@ -12,6 +12,7 @@ static  s_vl3d_view vl3d_view;
 
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 {
+	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
 //	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
 //
 //	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 1.0, 0.0, 0.0 }, });
@@ -66,6 +67,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.compile = trj_traj_bz_compile_,
 			.rot = trj_traj_bz_rot_,
 			.pos = trj_traj_bz_pos_,
+			.info = trj_traj_bz_info_,
 	});
 	
 	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
@@ -78,6 +80,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.compile = trj_traj_bz_compile_,
 			.rot = trj_traj_bz_rot_,
 			.pos = trj_traj_bz_pos_,
+			.info = trj_traj_bz_info_,
 	});
 	
 	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
@@ -90,12 +93,18 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.compile = trj_traj_bz_compile_,
 			.rot = trj_traj_bz_rot_,
 			.pos = trj_traj_bz_pos_,
+			.info = trj_traj_bz_info_,
 	});
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+			.id = 0x00,
+			.desc = "ctrl_test 00",
+			.init = NULL,
+			.free = NULL,
+			.data = NULL,
+			.config = NULL,
 			.reset = NULL,
 			.update = NULL,
-			.desc = "ctrl_test",
 	});
 	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 00", .ref = &self->eng.obj_list[0] });
@@ -198,6 +207,14 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					trj_gui_traj_edit(traj);
+					
+					break;
+				}
+				
+				case trj_gui_eng_type_ctrl:
+				{
+					s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
+					trj_gui_ctrl_edit(ctrl);
 					
 					break;
 				}

@@ -25,6 +25,7 @@ extern "C"
 #include "trj_gui_obj.h"
 #include "trj_gui_menu.h"
 #include "trj_gui_traj.h"
+#include "trj_gui_ctrl.h"
 #include "trj_gui_cmd.h"
 #include "trj_gui_env.h"
 

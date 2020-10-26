@@ -2,18 +2,46 @@
 #include "trj_gui_env.h"
 
 //dummy lib
+struct LibraryFunction __null_api__[] = { {NULL, NULL} };
+void __null_api_init__(Picoc *pc) {}
 
-void MsvcSetupFunc(Picoc *pc)
+void picoc_api_init(Picoc *pc) { return; }
+
+void picoc_api_speedtest  (struct ParseState *Parser, struct Value *ReturnValue,
+						   struct Value **Param, int NumArgs)
 {
+	for (volatile int i = 0; i < 10000000; ++i) { volatile int a; a = i * i; }
 }
 
-/* list of all library functions and their prototypes */
-struct LibraryFunction MsvcFunctions[] =
+void trj_traj_pos(struct ParseState *Parser, struct Value *ReturnValue,
+				  struct Value **Param, int NumArgs)
 {
-		{NULL, NULL}
-};
+	s_trj_traj *traj = (s_trj_traj*) Param[0]->Val->Pointer;
+	vlf_t time = (vlf_t) Param[1]->Val->FP;
+	vlf_t *pos = (vlf_t*) Param[2]->Val->Pointer;
+	
+	traj->pos(traj->data, time, pos);
+}
+
+void trj_traj_rot(struct ParseState *Parser, struct Value *ReturnValue,
+				  struct Value **Param, int NumArgs)
+{
+	s_trj_traj *traj = (s_trj_traj*) Param[0]->Val->Pointer;
+	vlf_t time = (vlf_t) Param[1]->Val->FP;
+	vlf_t *rot = (vlf_t*) Param[2]->Val->Pointer;
+	
+	traj->rot(traj->data, time, rot);
+}
 
 
+/* list of all library functions and their prototypes */
+struct LibraryFunction picoc_api_functions[] =
+		{
+				{picoc_api_speedtest, "void api_speedtest(void);"},
+				{trj_traj_pos, "void trj_traj_pos(s_trj_traj *traj, vlf_t time, vlf_t *pos);"},
+				{trj_traj_rot, "void trj_traj_rot(s_trj_traj *traj, vlf_t time, vlf_t *rot);"},
+				{NULL, NULL}
+		};
 
 void __env_init__(s_trj_gui_env *self)
 {
@@ -96,7 +124,7 @@ void __env_init__(s_trj_gui_env *self)
 							   true, false, false, true);
 					
 					IncludeRegister(&self->env, &plugin_path[offset + 1],
-									MsvcSetupFunc, MsvcFunctions, "");
+									__null_api_init__, __null_api__, "");
 				}
 				
 				free(plugin_data);
@@ -105,6 +133,8 @@ void __env_init__(s_trj_gui_env *self)
 		
 		fclose(file_handle);
 	}
+	
+	IncludeRegister(&self->env, "api.h", &picoc_api_init, &picoc_api_functions[0], NULL);
 	
 	fflush(stdout);
 }

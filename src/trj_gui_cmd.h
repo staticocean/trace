@@ -29,8 +29,8 @@ extern "C"
 
 typedef struct trj_gui_cmd
 {
-	char in_buff[256];
-	char out_buff[256];
+	char in_buff[2048];
+	char out_buff[2048];
 	ImVector<char *> Items;
 	ImVector<const char *> Commands;
 	ImVector<char *> History;

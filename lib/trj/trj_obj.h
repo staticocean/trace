@@ -27,6 +27,35 @@ typedef struct trj_obj_init
 
 //------------------------------------------------------------------------------
 
+inline void trj_obj_print(s_trj_obj *obj)
+{
+	printf(vl_lsep);
+	printf("name        [%s] \r\n", obj->name);
+	printf("id          [%06X] \r\n", obj->id);
+	printf("ref         [%s] \r\n", obj->ref->name);
+	printf("traj_offset [%d] \r\n", obj->traj_offset);
+	printf("ctrl_offset [%d] \r\n", obj->ctrl_offset);
+	printf("proc_offset [%d] \r\n", obj->proc_offset);
+	printf("data_offset [%d] \r\n", obj->data_offset);
+	
+	uint32_t i;
+	
+	printf(vl_lsep);
+	printf("traj_list \r\n");
+	
+	for (i = 0; i < obj->traj_offset; ++i)
+	{ printf("- [%02d] %s \r\n", i, obj->traj_list[i].desc); }
+	
+	printf(vl_lsep);
+	printf("ctrl_list \r\n");
+	
+	for (i = 0; i < obj->ctrl_offset; ++i)
+	{ printf("- [%02d] %s \r\n", i, obj->ctrl_list[i].desc); }
+	
+	
+	return;
+}
+
 //------------------------------------------------------------------------------
 //
 //void trj_obj_ctrl_update(s_trj_obj *obj, vlf_t d_time)

@@ -15,6 +15,7 @@
 
 typedef struct trj_traj
 {
+	uint32_t id;
 	char desc[32];
 	
 	void *data;
@@ -23,6 +24,7 @@ typedef struct trj_traj
 	void *init;
 	void *free;
 	void *compile;
+	void *info;
 	void *rot;
 	void *pos;
 	
@@ -32,8 +34,14 @@ typedef struct trj_traj
 
 typedef struct trj_ctrl
 {
+	uint32_t id;
 	char desc[32];
 	
+	void *data;
+	void *config;
+	
+	void *init;
+	void *free;
 	void *reset;
 	void *update;
 	
@@ -61,16 +69,16 @@ typedef struct trj_obj
 	vlf_t pos_force[3];
 	vlf_t rot_force[3];
 	
-	s_trj_traj traj_list[8];
-	s_trj_ctrl ctrl_list[8];
-	void *proc_list[8];
-	void *data_list[8];
-	
 	uint8_t traj_offset;
 	uint8_t ctrl_offset;
 	uint8_t proc_offset;
 	uint8_t data_offset;
 	
+	s_trj_traj traj_list[8];
+	s_trj_ctrl ctrl_list[8];
+//	void *proc_list[8];
+//	void *data_list[8];
+
 } 	s_trj_obj;
 
 //------------------------------------------------------------------------------

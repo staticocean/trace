@@ -988,6 +988,33 @@ src\trj_gui_cmd.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_cmd.cpp.s
 .PHONY : src\trj_gui_cmd.cpp.s
 
+src\trj_gui_ctrl.obj: src\trj_gui_ctrl.cpp.obj
+
+.PHONY : src\trj_gui_ctrl.obj
+
+# target to build an object file
+src\trj_gui_ctrl.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj
+.PHONY : src\trj_gui_ctrl.cpp.obj
+
+src\trj_gui_ctrl.i: src\trj_gui_ctrl.cpp.i
+
+.PHONY : src\trj_gui_ctrl.i
+
+# target to preprocess a source file
+src\trj_gui_ctrl.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.i
+.PHONY : src\trj_gui_ctrl.cpp.i
+
+src\trj_gui_ctrl.s: src\trj_gui_ctrl.cpp.s
+
+.PHONY : src\trj_gui_ctrl.s
+
+# target to generate assembly for a file
+src\trj_gui_ctrl.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.s
+.PHONY : src\trj_gui_ctrl.cpp.s
+
 src\trj_gui_eng.obj: src\trj_gui_eng.cpp.obj
 
 .PHONY : src\trj_gui_eng.obj
@@ -1282,6 +1309,9 @@ help:
 	@echo ... src/trj_gui_cmd.obj
 	@echo ... src/trj_gui_cmd.i
 	@echo ... src/trj_gui_cmd.s
+	@echo ... src/trj_gui_ctrl.obj
+	@echo ... src/trj_gui_ctrl.i
+	@echo ... src/trj_gui_ctrl.s
 	@echo ... src/trj_gui_eng.obj
 	@echo ... src/trj_gui_eng.i
 	@echo ... src/trj_gui_eng.s

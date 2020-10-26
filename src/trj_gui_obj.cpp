@@ -364,15 +364,18 @@ uint8_t trj_gui_obj_traj(s_trj_gui_obj *gui, s_trj_obj *self)
 	
 	for (int i = 0; i < self->traj_offset; ++i)
 	{
-		vlf_t time = 0.0;
-		vlf_t time_step = 1.0;
-		
 		vlf_t p0[3];
 		vlf_t p1[3];
 		
 		s_trj_traj traj = self->traj_list[i];
+		s_trj_traj_info traj_info;
 		
-		for (int t = 0; t < 1000; ++t)
+		traj.info(traj.data, &traj_info);
+		
+		vlf_t time = traj_info.preview_time[0];
+		vlf_t time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
+		
+		for (int t = 0; t < 1000-1; ++t)
 		{
 			traj.pos(traj.data, time, p0);
 			traj.pos(traj.data, time+time_step, p1);

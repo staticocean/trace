@@ -91,6 +91,17 @@ CMakeFiles/trj.dir/src/picoc_api.c.obj
  ../lib/picoc/picoc.h
  ../lib/picoc/picoc_interpreter.h
  ../lib/picoc/picoc_platform.h
+ ../lib/trj/trj_api.h
+ ../lib/trj/trj_bz.h
+ ../lib/trj/trj_ctrl.h
+ ../lib/trj/trj_eng.h
+ ../lib/trj/trj_obj.h
+ ../lib/trj/trj_proc.h
+ ../lib/trj/trj_traj.h
+ ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
+ ../lib/trj/vl.h
+ ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/picoc_api.c
  C:/Users/cel/dev/git/bitbucket/trajectory/src/picoc_api.h
 CMakeFiles/trj.dir/src/picoc_win.c.obj
@@ -164,6 +175,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_menu.h
@@ -189,6 +201,19 @@ CMakeFiles/trj.dir/src/trj_gui_cmd.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
+CMakeFiles/trj.dir/src/trj_gui_ctrl.cpp.obj
+ ../lib/imgui/imconfig.h
+ ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
+ ../lib/trj/trj_api.h
+ ../lib/trj/trj_bz.h
+ ../lib/trj/trj_obj.h
+ ../lib/trj/trj_traj.h
+ ../lib/trj/trj_types.h
+ ../lib/trj/vl.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.cpp
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
 CMakeFiles/trj.dir/src/trj_gui_eng.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
@@ -306,6 +331,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_menu.h

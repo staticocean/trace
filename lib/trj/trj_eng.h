@@ -33,6 +33,20 @@ typedef struct trj_eng_init_attr
 
 //------------------------------------------------------------------------------
 
+inline void trj_eng_print(s_trj_eng *eng)
+{
+	printf("obj_count %d \r\n", eng->obj_count);
+	
+	printf("obj_list \r\n");
+	
+	uint32_t i;
+	
+	for (i = 0; i < eng->obj_count; ++i)
+	{ printf("%s \r\n", eng->obj_list[i].name); }
+	
+	return;
+}
+
 inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 {
 	self->obj_count = 0x00;
