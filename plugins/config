@@ -2,7 +2,7 @@
 lib/trj/trj_types.h
 lib/trj/vl.h
 lib/trj/vl_svd.h
-plugins/trj_api.h
+lib/trj/trj_api.h
 lib/trj/trj_obj.h
 lib/trj/trj_eng.h
 #lib/trj/trj_utils.h

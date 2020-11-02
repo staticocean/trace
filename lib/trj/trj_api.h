@@ -19,6 +19,28 @@ typedef struct trj_traj_info
 	
 } 	s_trj_traj_info;
 
+#ifdef __TRJ_ENV__
+
+typedef struct trj_traj
+{
+	uint32_t id;
+	
+	char desc[32];
+	
+	void *data;
+	void *config;
+	
+	void *init;
+	void *free;
+	void *compile;
+	void *info;
+	void *rot;
+	void *pos;
+	
+} 	s_trj_traj;
+
+#else
+
 typedef struct trj_traj
 {
 	uint32_t id;
@@ -37,7 +59,29 @@ typedef struct trj_traj
 	
 } 	s_trj_traj;
 
+#endif
+
 //------------------------------------------------------------------------------
+
+#ifdef __TRJ_ENV__
+
+typedef struct trj_ctrl
+{
+	uint32_t id;
+	
+	char desc[32];
+	
+	void *data;
+	void *config;
+	
+	void *init;
+	void *free;
+	void *reset;
+	void *update;
+	
+} 	s_trj_ctrl;
+
+#else
 
 typedef struct trj_ctrl
 {
@@ -54,6 +98,46 @@ typedef struct trj_ctrl
 	uint8_t (*update) 	(void *data, void *obj);
 	
 } 	s_trj_ctrl;
+
+#endif
+
+//------------------------------------------------------------------------------
+
+#ifdef __TRJ_ENV__
+
+typedef struct trj_data
+{
+	uint32_t id;
+	
+	char desc[32];
+	
+	void *data;
+	void *config;
+	
+	void *init;
+	void *free;
+	void *render;
+	
+} 	s_trj_data;
+
+#else
+
+typedef struct trj_data
+{
+	uint32_t id;
+	
+	char desc[32];
+	
+	void *data;
+	void *config;
+	
+	uint8_t (*init) 	(void **data, void *config);
+	uint8_t (*free) 	(void **data);
+	uint8_t (*render) 	(void *data, void *obj);
+	
+} 	s_trj_data;
+
+#endif
 
 //------------------------------------------------------------------------------
 
@@ -84,10 +168,13 @@ typedef struct trj_obj
 	
 	s_trj_traj traj_list[8];
 	s_trj_ctrl ctrl_list[8];
-//	void *proc_list[8];
-//	void *data_list[8];
-
+	s_trj_data data_list[8];
+	
 } 	s_trj_obj;
+
+//------------------------------------------------------------------------------
+
+#ifndef __TRJ_ENV__
 
 inline uint8_t trj_obj_add_traj(s_trj_obj *self, s_trj_traj traj_api)
 {
@@ -125,8 +212,11 @@ inline uint8_t trj_obj_del_traj(s_trj_obj *self, s_trj_traj *api)
 
 inline uint8_t trj_obj_add_ctrl(s_trj_obj *self, s_trj_ctrl ctrl_api)
 {
-	self->ctrl_list[self->ctrl_offset] = ctrl_api;
-	++self->ctrl_offset;
+	s_trj_ctrl *api = &self->ctrl_list[self->ctrl_offset];
+	self->ctrl_offset += 0x01;
+	
+	*api = ctrl_api;
+	api->init(&api->data, api->config);
 	
 	return 0x00;
 }
@@ -153,23 +243,45 @@ inline uint8_t trj_obj_del_ctrl(s_trj_obj *self, s_trj_ctrl *api)
 	return 0x00;
 }
 
-//inline uint8_t trj_obj_traj_add(s_trj_obj *self, void *traj_data)
-//{
-//	self->traj_list[self->traj_offset] = traj_data;
-//	++self->traj_offset;
-//
-//	return 0x00;
-//}
-//
-//inline uint8_t trj_obj_traj_add(s_trj_obj *self, void *traj_data)
-//{
-//	self->traj_list[self->traj_offset] = traj_data;
-//	++self->traj_offset;
-//
-//	return 0x00;
-//}
+inline uint8_t trj_obj_add_data(s_trj_obj *self, s_trj_data data_api)
+{
+	s_trj_data *api = &self->data_list[self->data_offset];
+	self->data_offset += 0x01;
+	
+	*api = data_api;
+	api->init(&api->data, api->config);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_obj_del_data(s_trj_obj *self, s_trj_data *api)
+{
+	int32_t i;
+	int32_t offset = 0x00;
+	
+	api->free(&api->data);
+	
+	if (self->data_offset == 0x00) { return 0x00; }
+	
+	for (i = 0; i < self->data_offset-1; ++i)
+	{
+		if (&self->data_list[i] == api)
+		{ offset = 0x01; }
+		
+		self->data_list[i] = self->data_list[i+offset];
+	}
+	
+	self->data_offset -= 0x01;
+
+	return 0x00;
+}
+
+#endif
 
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_API__ */
+
+
+
 

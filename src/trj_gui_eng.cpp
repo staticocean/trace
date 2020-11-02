@@ -8,7 +8,10 @@ uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 	gui->sel_item = NULL;
 	gui->sel_type = trj_gui_eng_type_obj;
 	gui->obj_list = attr.obj_list;
+	
 	gui->traj_offset = 0x00;
+	gui->ctrl_offset = 0x00;
+	gui->data_offset = 0x00;
 	
 	for (int i = 0; i < 255; ++i)
 	{
@@ -36,33 +39,41 @@ uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl api)
 	return 0x00;
 }
 
+uint8_t trj_gui_eng_add_dataapi(s_trj_gui_eng *gui, s_trj_data api)
+{
+	gui->data_list[gui->data_offset] = api;
+	++gui->data_offset;
+	
+	return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
-void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, void *obj)
+void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_obj *obj)
 {
 	gui->sel_type = trj_gui_eng_type_obj;
 	gui->sel_item = obj;
 }
 
-void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, void *traj)
+void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, s_trj_traj *traj)
 {
 	gui->sel_type = trj_gui_eng_type_traj;
 	gui->sel_item = traj;
 }
 
-void trj_gui_eng_sel_ctrl(s_trj_gui_eng *gui, void *ctrl)
+void trj_gui_eng_sel_ctrl(s_trj_gui_eng *gui, s_trj_ctrl *ctrl)
 {
 	gui->sel_type = trj_gui_eng_type_ctrl;
 	gui->sel_item = ctrl;
 }
 
-void trj_gui_eng_sel_proc(s_trj_gui_eng *gui, void *proc)
-{
-	gui->sel_type = trj_gui_eng_type_proc;
-	gui->sel_item = proc;
-}
+//void trj_gui_eng_sel_proc(s_trj_gui_eng *gui, void *proc)
+//{
+//	gui->sel_type = trj_gui_eng_type_proc;
+//	gui->sel_item = proc;
+//}
 
-void trj_gui_eng_sel_data(s_trj_gui_eng *gui, void *data)
+void trj_gui_eng_sel_data(s_trj_gui_eng *gui, s_trj_data *data)
 {
 	gui->sel_type = trj_gui_eng_type_data;
 	gui->sel_item = data;
@@ -114,144 +125,201 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 
 			if (node_open)
 			{
-				bool traj_open = ImGui::TreeNodeEx("traj");
-				
-				if (gui->traj_offset > 0x00)
 				{
-					ImGui::SameLine();
+					bool traj_open = ImGui::TreeNodeEx("traj");
 					
-					if (ImGui::SmallButton("add"))
-					{ ImGui::OpenPopup("add_traj_popup"); }
-					
-					if (ImGui::BeginPopup("add_traj_popup"))
+					if (gui->traj_offset > 0x00)
 					{
-						for (int j = 0; j < gui->traj_offset; ++j)
-						{
-							ImGui::PushID(j);
-							ImGui::Selectable(gui->traj_list[j].desc);
-							
-							if (ImGui::IsItemClicked())
-							{
-								trj_obj_add_traj(obj, gui->traj_list[j]);
-							}
-
-							ImGui::PopID();
-						}
-
-						ImGui::EndPopup();
-					}
-				}
-				
-				if (traj_open)
-				{
-					if (obj->traj_offset == 0x00) { ImGui::Text("[no items]"); }
-					
-					for (int j = 0; j < obj->traj_offset; ++j)
-					{
-						ImGui::PushID(j);
-						
-						bool traj_sel = gui->sel_item == &obj->traj_list[j];
-						
-						ImGui::TreeNodeEx(obj->traj_list[j].desc,
-							   (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-							   | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].desc);
-						
-						if (ImGui::IsItemClicked())
-						{ trj_gui_eng_sel_traj(gui, &obj->traj_list[j]); }
-						
 						ImGui::SameLine();
 						
-						if (ImGui::SmallButton("del"))
+						if (ImGui::SmallButton("add##add_traj"))
+						{ ImGui::OpenPopup("add_traj_popup"); }
+						
+						if (ImGui::BeginPopup("add_traj_popup"))
 						{
-							if (gui->sel_item == &obj->traj_list[j])
-							{ gui->sel_item = NULL; }
+							for (int j = 0; j < gui->traj_offset; ++j)
+							{
+								ImGui::PushID(j);
+								ImGui::Selectable(gui->traj_list[j].desc);
+								
+								if (ImGui::IsItemClicked())
+								{
+									trj_obj_add_traj(obj, gui->traj_list[j]);
+								}
+								
+								ImGui::PopID();
+							}
 							
-							trj_obj_del_traj(obj, &obj->traj_list[j]);
+							ImGui::EndPopup();
 						}
-						
-						ImGui::TreePop();
-						
-						ImGui::PopID();
 					}
 					
-					ImGui::TreePop();
-				}
-				
-				bool ctrl_open = ImGui::TreeNodeEx("ctrl");
-				
-				if (gui->ctrl_offset > 0x00)
-				{
-					ImGui::SameLine();
-					
-					if (ImGui::SmallButton("add"))
-					{ ImGui::OpenPopup("add_ctrl_popup"); }
-					
-					if (ImGui::BeginPopup("add_ctrl_popup"))
+					if (traj_open)
 					{
-						for (int j = 0; j < gui->ctrl_offset; ++j)
+						if (obj->traj_offset == 0x00)
+						{ ImGui::Text("[no items]"); }
+						
+						for (int j = 0; j < obj->traj_offset; ++j)
 						{
 							ImGui::PushID(j);
-							ImGui::Selectable(gui->ctrl_list[j].desc);
+							
+							bool traj_sel = gui->sel_item == &obj->traj_list[j];
+							
+							ImGui::TreeNodeEx(obj->traj_list[j].desc,
+											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].desc);
 							
 							if (ImGui::IsItemClicked())
+							{ trj_gui_eng_sel_traj(gui, &obj->traj_list[j]); }
+							
+							ImGui::SameLine();
+							
+							if (ImGui::SmallButton("del##del_traj"))
 							{
-								trj_obj_add_ctrl(obj, gui->ctrl_list[j]);
+								if (gui->sel_item == &obj->traj_list[j])
+								{ gui->sel_item = NULL; }
+								
+								trj_obj_del_traj(obj, &obj->traj_list[j]);
 							}
+							
+							ImGui::TreePop();
 							
 							ImGui::PopID();
 						}
 						
-						ImGui::EndPopup();
+						ImGui::TreePop();
 					}
 				}
 				
-				if (ctrl_open)
 				{
-					if (obj->ctrl_offset == 0x00) { ImGui::Text("[no items]"); }
+					bool ctrl_open = ImGui::TreeNodeEx("ctrl");
 					
-					for (int j = 0; j < obj->ctrl_offset; ++j)
+					if (gui->ctrl_offset > 0x00)
 					{
-						ImGui::PushID(j);
-						
-						bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
-						
-						ImGui::TreeNodeEx(obj->ctrl_list[j].desc,
-										  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-										  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].desc);
-						
-						if (ImGui::IsItemClicked())
-						{ trj_gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
-						
 						ImGui::SameLine();
 						
-						if (ImGui::SmallButton("del"))
+						if (ImGui::SmallButton("add##add_ctrl"))
+						{ ImGui::OpenPopup("add_ctrl_popup"); }
+						
+						if (ImGui::BeginPopup("add_ctrl_popup"))
 						{
-							if (gui->sel_item == &obj->ctrl_list[j])
-							{ gui->sel_item = NULL; }
+							for (int j = 0; j < gui->ctrl_offset; ++j)
+							{
+								ImGui::PushID(j);
+								ImGui::Selectable(gui->ctrl_list[j].desc);
+								
+								if (ImGui::IsItemClicked())
+								{
+									trj_obj_add_ctrl(obj, gui->ctrl_list[j]);
+								}
+								
+								ImGui::PopID();
+							}
 							
-							trj_obj_del_ctrl(obj, &obj->ctrl_list[j]);
+							ImGui::EndPopup();
+						}
+					}
+					
+					if (ctrl_open)
+					{
+						if (obj->ctrl_offset == 0x00)
+						{ ImGui::Text("[no items]"); }
+						
+						for (int j = 0; j < obj->ctrl_offset; ++j)
+						{
+							ImGui::PushID(j);
+							
+							bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
+							
+							ImGui::TreeNodeEx(obj->ctrl_list[j].desc,
+											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].desc);
+							
+							if (ImGui::IsItemClicked())
+							{ trj_gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
+							
+							ImGui::SameLine();
+							
+							if (ImGui::SmallButton("del##del_ctrl"))
+							{
+								if (gui->sel_item == &obj->ctrl_list[j])
+								{ gui->sel_item = NULL; }
+								
+								trj_obj_del_ctrl(obj, &obj->ctrl_list[j]);
+							}
+							
+							ImGui::TreePop();
+							
+							ImGui::PopID();
 						}
 						
 						ImGui::TreePop();
+					}
+				}
+				{
+					bool data_open = ImGui::TreeNodeEx("data");
+					
+					if (gui->data_offset > 0x00)
+					{
+						ImGui::SameLine();
 						
-						ImGui::PopID();
+						if (ImGui::SmallButton("add##add_data"))
+						{ ImGui::OpenPopup("add_data_popup"); }
+						
+						if (ImGui::BeginPopup("add_data_popup"))
+						{
+							for (int j = 0; j < gui->data_offset; ++j)
+							{
+								ImGui::PushID(j);
+								ImGui::Selectable(gui->data_list[j].desc);
+								
+								if (ImGui::IsItemClicked())
+								{
+									trj_obj_add_data(obj, gui->data_list[j]);
+								}
+								
+								ImGui::PopID();
+							}
+							
+							ImGui::EndPopup();
+						}
 					}
 					
-					ImGui::TreePop();
-				}
-				
-				if (ImGui::TreeNodeEx("proc"))
-				{
-					if (obj->proc_offset == 0x00) { ImGui::Text("[no items]"); }
-					
-					ImGui::TreePop();
-				}
-				
-				if (ImGui::TreeNodeEx("data"))
-				{
-					if (obj->data_offset == 0x00) { ImGui::Text("[no items]"); }
-					
-					ImGui::TreePop();
+					if (data_open)
+					{
+						if (obj->data_offset == 0x00)
+						{ ImGui::Text("[no items]"); }
+						
+						for (int j = 0; j < obj->data_offset; ++j)
+						{
+							ImGui::PushID(j);
+							
+							bool ctrl_sel = gui->sel_item == &obj->data_list[j];
+							
+							ImGui::TreeNodeEx(obj->data_list[j].desc,
+											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].desc);
+							
+							if (ImGui::IsItemClicked())
+							{ trj_gui_eng_sel_data(gui, &obj->data_list[j]); }
+							
+							ImGui::SameLine();
+							
+							if (ImGui::SmallButton("del##del_data"))
+							{
+								if (gui->sel_item == &obj->data_list[j])
+								{ gui->sel_item = NULL; }
+								
+								trj_obj_del_data(obj, &obj->data_list[j]);
+							}
+							
+							ImGui::TreePop();
+							
+							ImGui::PopID();
+						}
+						
+						ImGui::TreePop();
+					}
 				}
 				
 				ImGui::TreePop();

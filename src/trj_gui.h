@@ -14,7 +14,9 @@ extern "C"
 {
 	#include <lib/trj/trj_eng.h>
 	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/trj_bz.h>
+	#include <lib/trj/trj_traj.h>
+	#include <lib/trj/trj_ctrl.h>
+	#include <lib/trj/trj_data.h>
 
 	#include <lib/picoc/picoc.h>
 }

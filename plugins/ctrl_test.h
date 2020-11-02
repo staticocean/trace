@@ -6,17 +6,27 @@
 
 typedef struct ctrl_test
 {
+	uint32_t id;
 	uint8_t *temp;
-
+	
 } 	s_ctrl_test;
 
 typedef struct ctrl_test_init
 {
+	uint32_t id;
 	uint8_t *temp;
 	
 } 	s_ctrl_test_init;
 
 //------------------------------------------------------------------------------
+
+inline uint8_t ctrl_test_init(s_ctrl_test *data, s_ctrl_test_init attr)
+{
+	data->id = 0x01;
+	data->temp = attr.temp;
+	
+	return 0x00;
+}
 
 inline uint8_t ctrl_test_reset(s_ctrl_test *data, s_trj_obj *obj)
 {
@@ -34,11 +44,14 @@ inline uint8_t ctrl_test_init_ (void **data, void *config)
 	*data = (s_ctrl_test*) malloc(sizeof(s_ctrl_test));
 	
 	s_ctrl_test *ctrl = (s_ctrl_test*) *data;
-	s_ctrl_test_init *attr = (s_ctrl_test_init*) config;
+//	s_ctrl_test_init *attr = (s_ctrl_test_init*) config;
 	
-	attr->temp = (uint8_t*) malloc(100);
+//	attr->temp = (uint8_t*) malloc(100);
 	
-	return ctrl_test_init(ctrl, *attr);
+	s_ctrl_test_init attr;
+	attr.temp = (uint8_t*) malloc(100);
+
+	return ctrl_test_init(ctrl, attr);
 }
 
 inline uint8_t ctrl_test_free_ (void **data)

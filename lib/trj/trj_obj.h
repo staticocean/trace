@@ -35,7 +35,6 @@ inline void trj_obj_print(s_trj_obj *obj)
 	printf("ref         [%s] \r\n", obj->ref->name);
 	printf("traj_offset [%d] \r\n", obj->traj_offset);
 	printf("ctrl_offset [%d] \r\n", obj->ctrl_offset);
-	printf("proc_offset [%d] \r\n", obj->proc_offset);
 	printf("data_offset [%d] \r\n", obj->data_offset);
 	
 	uint32_t i;
@@ -100,8 +99,6 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 }
 
 //------------------------------------------------------------------------------
-
-
 
 #endif /* __TRJ_OBJ__ */
 

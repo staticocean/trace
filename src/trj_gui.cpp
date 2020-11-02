@@ -96,15 +96,18 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.info = trj_traj_bz_info_,
 	});
 	
-	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+	static s_trj_data_text_init trj_data_text_config_ = {
+			.temp = 0x00,
+	};
+	
+	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
 			.id = 0x00,
-			.desc = "ctrl_test 00",
-			.init = NULL,
-			.free = NULL,
+			.desc = "data_test 00",
+			.init = trj_data_text_init_,
+			.free = trj_data_text_free_,
 			.data = NULL,
-			.config = NULL,
-			.reset = NULL,
-			.update = NULL,
+			.config = &trj_data_text_config_,
+			.render = trj_data_text_render_,
 	});
 	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 00", .ref = &self->eng.obj_list[0] });
@@ -129,8 +132,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 		vl_mid(&self->eng.obj_list[i].rot[0][0]);
 	}
 	
-//	ImGui::StyleColorsDark();
-	ImGui::StyleColorsLight();
+	ImGui::StyleColorsDark();
+//	ImGui::StyleColorsLight();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	

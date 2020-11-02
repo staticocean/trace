@@ -164,6 +164,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/trj/trj_api.h
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
+ ../lib/trj/trj_data.h
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
@@ -321,6 +322,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/trj/trj_api.h
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
+ ../lib/trj/trj_data.h
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h

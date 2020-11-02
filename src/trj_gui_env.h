@@ -30,13 +30,21 @@ typedef struct trj_gui_env
 	
 	void *traj_offset;
 	void *ctrl_offset;
-	void *proc_offset;
 	void *data_offset;
 	
 	void *traj_list;
 	void *ctrl_list;
-	void *proc_list;
 	void *data_list;
+	
+	void **api_ctrl_data_ref;
+	void *api_ctrl_data;
+	void *api_ctrl_config;
+	void *api_ctrl_obj;
+	
+	void **api_data_data_ref;
+	void *api_data_data;
+	void *api_data_config;
+	void *api_data_obj;
 	
 } 	s_trj_gui_env;
 
