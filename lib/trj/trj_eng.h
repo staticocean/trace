@@ -102,31 +102,57 @@ inline uint8_t trj_eng_objnames(s_trj_eng *self, char **objnames)
 //    return;
 //}
 
+inline uint8_t trj_eng_reset(s_trj_eng *self)
+{
+	uint32_t i;
+	uint32_t j;
+	
+	s_trj_obj *obj;
+	
+	for (i = 0; i < self->obj_count; ++i)
+	{
+		obj = &self->obj_list[i];
+		
+		obj->time[0] = 0.0;
+		obj->time[1] = 0.0;
+		obj->time[2] = 0.0;
+		
+		for (j = 0; j < obj->traj_offset; ++j)
+		{
+			obj->traj_list[j].compile(obj->traj_list[j].data);
+		}
+		
+		for (j = 0; j < obj->ctrl_offset; ++j)
+		{
+			obj->ctrl_list[j].reset(obj->ctrl_list[j].data, obj);
+		}
+	}
+	
+	return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
-inline uint8_t trj_engine_update(s_trj_eng *self, vlf_t d_time)
+inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 {
-	uint8_t i;
+	uint32_t i;
+	uint32_t j;
 
-//    for (i = 0; i < engine->obj_count; ++i)
-//    {
-//        self.obj_list[i].pos_force.append(numpy.array([0.0, 0.0, 0.0]));
-//        self.obj_list[i].rot_force.append(numpy.array([0.0, 0.0, 0.0]));
-//    }
-
-//    ins_engine_update_forces(engine);
-
-//    # for i in range(len(self.obj_list)):
-//
-//    #     self.obj_list[i].ref_pos[2] = numpy.transpose([0, 0, 0]);
-//    #     self.obj_list[i].ref_rot[2] = numpy.transpose([0, 0, 0]);
-
-//    for i in range(len(self.obj_list)): self.obj_list[i].update(d_time);
-
-//    for (i = 0; i < self->obj_count; ++i)
-//    {
-//		trj_obj_ctrl_update(&self->obj_list[i], d_time);
-//    }
+	s_trj_obj *obj;
+    
+	for (i = 0; i < self->obj_count; ++i)
+	{
+		obj = &self->obj_list[i];
+		
+		obj->time[0] += d_time;
+		obj->time[1] = d_time;
+		obj->time[2] = 0.0;
+		
+		for (j = 0; j < obj->ctrl_offset; ++j)
+		{
+			obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
+		}
+	}
 	
 	return 0x00;
 }

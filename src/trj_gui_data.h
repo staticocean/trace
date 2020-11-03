@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_CTRL__
-#define __TRJ_GUI_CTRL__
+#ifndef __TRJ_GUI_DATA__
+#define __TRJ_GUI_DATA__
 
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
@@ -10,14 +10,14 @@ extern "C"
 {
 	#include <lib/trj/trj_types.h>
 	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/trj_traj.h>
+	#include <lib/trj/trj_data.h>
 	#include <lib/trj/vl.h>
 }
 
 //------------------------------------------------------------------------------
 
-void trj_gui_ctrl_edit(s_trj_ctrl *self);
+void trj_gui_data_edit(s_trj_data *self);
 
 //------------------------------------------------------------------------------
 
-#endif /* __TRJ_GUI_CTRL__ */
+#endif /* __TRJ_GUI_DATA__ */

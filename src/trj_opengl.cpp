@@ -6,6 +6,7 @@
 #include <lib/imgui/imgui_impl_glfw.h>
 #include <lib/imgui/imgui_impl_opengl3.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "trj_gui.h"
 #include <lib/opengl/gl3w.h>
@@ -34,6 +35,7 @@ int main(int, char**)
     const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+//    glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 
@@ -42,7 +44,7 @@ int main(int, char**)
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(0); // Enable vsync
 
     // Initialize OpenGL loader
     bool err = gl3wInit() != 0;
@@ -93,6 +95,9 @@ int main(int, char**)
 	io.FontDefault = font_default;
 	
 	static s_trj_gui trj_gui;
+	static clock_t prev_ts = 0x00;
+	static clock_t curr_ts = 0x00;
+	static clock_t diff_ts = 0x00;
 	
 	trj_gui_init(&trj_gui, s_trj_gui_init {});
 
@@ -101,33 +106,36 @@ int main(int, char**)
     {
 		static int display_w = 800, display_h = 800;
 		
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-	
-		trj_gui.w_height = display_h;
-		trj_gui.w_width  = display_w;
-  
-		trj_gui_main(&trj_gui);
-
-        // Rendering
-        ImGui::Render();
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window);
+		curr_ts = clock();
+		diff_ts = curr_ts - prev_ts;
+		
+		if ((diff_ts / (double) CLOCKS_PER_SEC) > (1.0 / 60.0))
+		{
+			prev_ts = curr_ts;
+			
+			glfwPollEvents();
+			
+			// Start the Dear ImGui frame
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+			
+			trj_gui.w_height = display_h;
+			trj_gui.w_width = display_w;
+			
+			trj_gui_main(&trj_gui);
+			
+			// Rendering
+			ImGui::Render();
+			glfwGetFramebufferSize(window, &display_w, &display_h);
+			glViewport(0, 0, display_w, display_h);
+			static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+			glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+			glClear(GL_COLOR_BUFFER_BIT);
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			
+			glfwSwapBuffers(window);
+		}
     }
 
     // Cleanup

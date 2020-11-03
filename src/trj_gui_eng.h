@@ -28,6 +28,10 @@ enum trj_gui_eng_type_t
 
 typedef struct trj_gui_eng
 {
+	float64_t 			time_limit;
+	float64_t 			time_step;
+	uint32_t 			time_iter;
+	
 	s_trj_traj 			traj_list[32];
 	uint32_t       		traj_offset;
 	

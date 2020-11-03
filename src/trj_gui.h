@@ -26,6 +26,7 @@ extern "C"
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"
 #include "trj_gui_menu.h"
+#include "trj_gui_tbar.h"
 #include "trj_gui_traj.h"
 #include "trj_gui_ctrl.h"
 #include "trj_gui_cmd.h"
@@ -43,6 +44,7 @@ typedef struct trj_gui
 	s_trj_gui_obj st_gui_eng_obj[255];
 	
 	s_trj_gui_menu gui_menu;
+	s_trj_gui_tbar gui_tbar;
 	s_trj_gui_eng  gui_eng;
 	s_trj_gui_cmd  gui_cmd;
 	s_trj_gui_env  gui_env;

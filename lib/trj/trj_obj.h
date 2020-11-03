@@ -85,8 +85,10 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 	
 	self->traj_offset = 0x00;
 	self->ctrl_offset = 0x00;
-	self->proc_offset = 0x00;
 	self->data_offset = 0x00;
+	
+	self->log_list = NULL;
+	self->log_offset = 0x00;
 	
 	uint32_t i;
 	

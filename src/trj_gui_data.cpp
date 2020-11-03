@@ -1,9 +1,9 @@
 
-#include "trj_gui_ctrl.h"
+#include "trj_gui_data.h"
 
 //------------------------------------------------------------------------------
 
-void trj_gui_ctrl_edit(s_trj_ctrl *self)
+void trj_gui_data_edit(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
