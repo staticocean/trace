@@ -47,13 +47,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 //	vl_vzero(vl3d_view.pos);
 //	vl_mid(&vl3d_view.rot[0][0]);
 	
-	self->w_height = 800;
-	self->w_width  = 800;
+	self->w_height = 720;
+	self->w_width  = 1024;
 	
-	self->gui_tbar.time_limit = &self->gui_eng.time_limit;
-	self->gui_tbar.time_step = &self->gui_eng.time_step;
-	self->gui_tbar.time_iter = &self->gui_eng.time_iter;
-	self->gui_tbar.height = 36;
+	self->gui_tbar.eng_gui = &self->gui_eng;
+	self->gui_tbar.height = 32;
 	
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	trj_eng_init(&self->eng, (s_trj_eng_init) { .st_objects = self->st_eng_obj });

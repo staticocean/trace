@@ -5,6 +5,8 @@
 
 uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 {
+	gui->state = trj_gui_eng_state_standby;
+	
 	gui->sel_item = NULL;
 	gui->sel_type = trj_gui_eng_type_obj;
 	gui->obj_list = attr.obj_list;
@@ -426,6 +428,124 @@ uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self)
 //	}
 	
 	ImGui::PopID();
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
+{
+	switch (gui->state)
+	{
+		case trj_gui_eng_state_standby:
+		{
+			break;
+		}
+		
+		case trj_gui_eng_state_init:
+		{
+			trj_eng_reset(self);
+			
+			self->time[0] = 0.0;
+			self->time[1] = 0.0;
+			
+			break;
+		}
+		
+		case trj_gui_eng_state_update:
+		{
+			if (self->time[0] < gui->time_limit)
+			{
+				trj_eng_update(self, gui->time_step);
+			}
+			
+			break;
+		}
+		
+		case trj_gui_eng_state_deinit:
+		{
+			break;
+		}
+		
+		default:
+		{
+			break;
+		}
+	}
+	
+	return 0x00;
+}
+
+
+uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
+{
+	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	
+	if (ImGui::BeginPopupModal("RENDERING", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		if (gui->state == trj_gui_eng_state_update)
+		{
+			
+			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		}
+		
+		if (gui->state == trj_gui_eng_state_standby)
+		{
+			if (ImGui::Button("CLOSE", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		}
+		
+//		ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
+//		ImGui::Separator();
+//
+//		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+//		ImGui::PopStyleVar();
+
+		ImGui::EndPopup();
+	}
+	
+	// Always center this window when appearing
+	switch (gui->state)
+	{
+		case trj_gui_eng_state_standby:
+		{
+			break;
+		}
+		
+		case trj_gui_eng_state_init:
+		{
+			gui->state = trj_gui_eng_state_update;
+			
+			ImGui::OpenPopup("RENDERING");
+			
+			break;
+		}
+		
+		case trj_gui_eng_state_update:
+		{
+			if (self->time[0] >= gui->time_limit)
+			{
+				gui->state = trj_gui_eng_state_deinit;
+			}
+			
+			break;
+		}
+		
+		case trj_gui_eng_state_deinit:
+		{
+			gui->state = trj_gui_eng_state_standby;
+			
+			break;
+		}
+		
+		default:
+		{
+			gui->state = trj_gui_eng_state_standby;
+			
+			break;
+		}
+	}
 	
 	return 0x00;
 }

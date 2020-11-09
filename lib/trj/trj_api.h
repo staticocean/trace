@@ -163,7 +163,7 @@ typedef struct trj_obj
 	uint32_t id;
 	char name[32];
 	
-	vlf_t time[3];
+	vlf_t *time;
 	
 	vlf_t pos[3][3];
 	vlf_t rot[3][9];

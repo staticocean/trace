@@ -293,13 +293,24 @@ CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\src\trj_gui_obj.h
 
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imconfig.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imgui.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imgui_internal.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imstb_textedit.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_api.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_bz.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_ctrl.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_eng.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_obj.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_traj.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_types.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_utils.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl3d.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl_svd.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_eng.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_obj.h
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_tbar.cpp
 CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_tbar.h
+CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_traj.h
 
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imconfig.h
 CMakeFiles\trj.dir\src\trj_gui_traj.cpp.obj: ..\lib\imgui\imgui.h

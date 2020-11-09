@@ -23,6 +23,8 @@ typedef struct trj_eng
 	uint32_t obj_count;
 	s_trj_obj *obj_list;
 	
+	vlf_t time[2];
+	
 }	s_trj_eng;
 
 typedef struct trj_eng_init_attr
@@ -62,6 +64,7 @@ inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 	self->obj_list[self->obj_count].id = self->obj_count;
 	self->obj_list[self->obj_count].obj_list = self->obj_list;
 	self->obj_list[self->obj_count].obj_count = &self->obj_count;
+	self->obj_list[self->obj_count].time = self->time;
 	
 	self->obj_count++;
 	
@@ -139,14 +142,13 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 	uint32_t j;
 
 	s_trj_obj *obj;
-    
+	
+	self->time[0] += d_time;
+	self->time[1] = d_time;
+	
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		obj = &self->obj_list[i];
-		
-		obj->time[0] += d_time;
-		obj->time[1] = d_time;
-		obj->time[2] = 0.0;
 		
 		for (j = 0; j < obj->ctrl_offset; ++j)
 		{

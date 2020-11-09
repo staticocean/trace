@@ -16,15 +16,15 @@ extern "C"
 	#include <lib/trj/trj_types.h>
 }
 
+#include "trj_gui_eng.h"
+
 //------------------------------------------------------------------------------
 
 typedef struct trj_gui_tbar
 {
 	int height;
 	
-	float64_t *time_limit;
-	float64_t *time_step;
-	uint32_t  *time_iter;
+	s_trj_gui_eng *eng_gui;
 	
 } 	s_trj_gui_tbar;
 

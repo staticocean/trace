@@ -26,11 +26,21 @@ enum trj_gui_eng_type_t
 	trj_gui_eng_type_proc,
 };
 
+typedef enum trj_gui_eng_state_t
+{
+	trj_gui_eng_state_standby,
+	trj_gui_eng_state_init,
+	trj_gui_eng_state_update,
+	trj_gui_eng_state_deinit,
+};
+
 typedef struct trj_gui_eng
 {
 	float64_t 			time_limit;
 	float64_t 			time_step;
 	uint32_t 			time_iter;
+	
+	trj_gui_eng_state_t state;
 	
 	s_trj_traj 			traj_list[32];
 	uint32_t       		traj_offset;
@@ -64,6 +74,8 @@ uint8_t trj_gui_eng_add_ctrlapi(s_trj_gui_eng *gui, s_trj_ctrl api);
 uint8_t trj_gui_eng_add_dataapi(s_trj_gui_eng *gui, s_trj_data api);
 uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self);
 uint8_t trj_gui_eng_addbox(s_trj_gui_eng *gui, s_trj_eng *self);
+uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self);
+uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self);
 
 void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_obj *obj);
 void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, s_trj_traj *traj);

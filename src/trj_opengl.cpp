@@ -104,7 +104,9 @@ int main(int, char**)
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
-		static int display_w = 800, display_h = 800;
+		static int display_w = 1024, display_h = 720;
+	
+		trj_gui_eng_updateeng(&trj_gui.gui_eng, &trj_gui.eng);
 		
 		curr_ts = clock();
 		diff_ts = curr_ts - prev_ts;
@@ -123,6 +125,7 @@ int main(int, char**)
 			trj_gui.w_height = display_h;
 			trj_gui.w_width = display_w;
 			
+			trj_gui_eng_updategui(&trj_gui.gui_eng, &trj_gui.eng);
 			trj_gui_main(&trj_gui);
 			
 			// Rendering
