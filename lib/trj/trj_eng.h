@@ -105,7 +105,7 @@ inline uint8_t trj_eng_objnames(s_trj_eng *self, char **objnames)
 //    return;
 //}
 
-inline uint8_t trj_eng_reset(s_trj_eng *self)
+inline uint8_t 	trj_eng_reset(s_trj_eng *self)
 {
 	uint32_t i;
 	uint32_t j;

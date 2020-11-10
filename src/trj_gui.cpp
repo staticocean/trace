@@ -99,13 +99,73 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.info = trj_traj_bz_info_,
 	});
 	
+	static s_trj_ctrl_upos_init trj_ctrl_upos_config_ = {
+	
+	};
+	
+	static s_trj_ctrl_cpos_init trj_ctrl_cpos_config_ = {
+	
+	};
+	
+	static s_trj_ctrl_urot_init trj_ctrl_urot_config_ = {
+	
+	};
+	
+	static s_trj_ctrl_crot_init trj_ctrl_crot_config_ = {
+	
+	};
+	
+	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+			.id = 0x00,
+			.desc = "default_ctrl_upos",
+			.init = trj_ctrl_upos_init_,
+			.free = trj_ctrl_upos_free_,
+			.data = NULL,
+			.config = &trj_ctrl_upos_config_,
+			.reset = trj_ctrl_upos_reset_,
+			.update = trj_ctrl_upos_update_,
+	});
+	
+	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+			.id = 0x00,
+			.desc = "default_ctrl_cpos",
+			.init = trj_ctrl_cpos_init_,
+			.free = trj_ctrl_cpos_free_,
+			.data = NULL,
+			.config = &trj_ctrl_cpos_config_,
+			.reset = trj_ctrl_cpos_reset_,
+			.update = trj_ctrl_cpos_update_,
+	});
+	
+	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+			.id = 0x00,
+			.desc = "default_ctrl_urot",
+			.init = trj_ctrl_urot_init_,
+			.free = trj_ctrl_urot_free_,
+			.data = NULL,
+			.config = &trj_ctrl_urot_config_,
+			.reset = trj_ctrl_urot_reset_,
+			.update = trj_ctrl_urot_update_,
+	});
+	
+	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+			.id = 0x00,
+			.desc = "default_ctrl_crot",
+			.init = trj_ctrl_crot_init_,
+			.free = trj_ctrl_crot_free_,
+			.data = NULL,
+			.config = &trj_ctrl_crot_config_,
+			.reset = trj_ctrl_crot_reset_,
+			.update = trj_ctrl_crot_update_,
+	});
+	
 	static s_trj_data_text_init trj_data_text_config_ = {
 			.temp = 0x00,
 	};
 	
 	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
 			.id = 0x00,
-			.desc = "data_test 00",
+			.desc = "default_data_text",
 			.init = trj_data_text_init_,
 			.free = trj_data_text_free_,
 			.data = NULL,
@@ -113,10 +173,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.render = trj_data_text_render_,
 	});
 	
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 00", .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 01", .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 02", .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "test object 03", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "ref"   , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "sun"   , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "earth" , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "moon"  , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "object", .ref = &self->eng.obj_list[0] });
 	
 	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
 	{
@@ -126,6 +187,27 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	}
 	
 	trj_obj_add_traj(&self->eng.obj_list[0], self->gui_eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[1], self->gui_eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[2], self->gui_eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[3], self->gui_eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[4], self->gui_eng.traj_list[0]);
+	
+	trj_obj_add_ctrl(&self->eng.obj_list[0], self->gui_eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[0], self->gui_eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[1], self->gui_eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[1], self->gui_eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[2], self->gui_eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[2], self->gui_eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[3], self->gui_eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[3], self->gui_eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[4], self->gui_eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[4], self->gui_eng.ctrl_list[3]);
+	
+	trj_obj_add_data(&self->eng.obj_list[0], self->gui_eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[1], self->gui_eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[2], self->gui_eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[3], self->gui_eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[4], self->gui_eng.data_list[0]);
 	
 	trj_gui_eng_sel_traj(&self->gui_eng, &self->eng.obj_list[0].traj_list[0]);
 	
@@ -174,6 +256,10 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	self->gui_menu.env = &self->gui_env;
+	self->gui_eng.time_limit = 24*3600.0;
+	self->gui_eng.time_step = 0.001;
+	self->gui_eng.time_iter = self->gui_eng.time_limit
+						    / self->gui_eng.time_step;
 	
 	return 0x00;
 }
@@ -204,7 +290,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	{
 		// Object list
 		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {200, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height });
 		ImGui::Begin("obj_list", NULL, static_flags);
 		trj_gui_eng_objlist(&self->gui_eng, &self->eng);
 		ImGui::End();
@@ -212,8 +298,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Object edit
-		ImGui::SetNextWindowPos((ImVec2) {200, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {200, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowPos((ImVec2) {240, (float) self->gui_menu.height + (float) self->gui_tbar.height });
+		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height });
 		ImGui::Begin("item_edit", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
@@ -268,8 +354,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		
 		
 		// Main view
-		ImGui::SetNextWindowPos ((ImVec2) {400, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowPos ((ImVec2) {240*2, (float) self->gui_menu.height + (float) self->gui_tbar.height });
+		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 240*2, self->w_height - self->gui_menu.height - self->gui_tbar.height });
 		ImGui::Begin("main_view", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)

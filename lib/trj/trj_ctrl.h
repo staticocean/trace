@@ -19,104 +19,56 @@
 
 //------------------------------------------------------------------------------
 
-typedef struct ins_ctrl_none
+typedef struct trj_ctrl_upos
 {
-    s_trj_obj *parent;
-    
-}   ins_ctrl_none_t;
+	uint32_t temp;
+	
+}   s_trj_ctrl_upos;
 
-typedef struct ins_ctrl_upos
+typedef struct trj_ctrl_upos_init
 {
-    s_trj_obj *parent;
-    
-}   ins_ctrl_upos_t;
+	uint32_t temp;
+	
+}   s_trj_ctrl_upos_init;
 
-typedef struct ins_ctrl_uins
+typedef struct trj_ctrl_cpos
 {
-    s_trj_obj *parent;
-    
-}   ins_ctrl_uins_t;
+	uint32_t temp;
+	
+}   s_trj_ctrl_cpos;
 
-//typedef struct ins_ctrl_upos
-//{
-//    s_trj_obj *parent;
-//    
-//}   ins_ctrl_upos_t;
-
-typedef struct ins_ctrl_corb
+typedef struct trj_ctrl_cpos_init
 {
-    s_trj_obj   *parent;
-    s_trj_obj   *ref;
-    vlf_t       radius;
-    vlf_t       rate;
-    vlf_t       tilt;
-    
-}   ins_ctrl_corb_t;
+	uint32_t temp;
+	
+}   s_trj_ctrl_cpos_init;
 
-//typedef struct ins_ctrl_cpos_point
-//{
-//    vlf_t time;
-//    vlf_t pos_p[3];
-//
-//}   ins_ctrl_cpos_point_t;
+typedef struct trj_ctrl_urot
+{
+	uint32_t temp;
+	
+}   s_trj_ctrl_urot;
 
-void ins_ctrl_upos_update(void *__ctrl__);
-void ins_ctrl_uins_update(void *__ctrl__);
+typedef struct trj_ctrl_urot_init
+{
+	uint32_t temp;
+	
+}   s_trj_ctrl_urot_init;
 
-//typedef struct ins_ctrl_cpos
-//{
-//    s_trj_obj   *parent;
-//    s_trj_obj   *ref;
-//    uint64_t    ref_offset;
-//    ins_ctrl_cpos_point_t *ref_points;
-//    self.ref_curves = [];
-//    self.ref_basis  = [];
-//    self.seg_offset = 0x00;
-//
-//        ref_points = [
-//            trj_ctrl_cpos_point(0.0, ref_points[0].pos_p - (ref_points[1].pos_p - ref_points[0].pos_p))
-//        ] + ref_points;
-//
-//        for i in range(1, len(ref_points)-1):
-//            
-//            dist = scipy.linalg.norm(ref_points[i+1].pos_p - ref_points[i+0].pos_p);
-//
-//            e0 = ref_points[i+0].pos_p - ref_points[i-1].pos_p;
-//            e1 = ref_points[i+1].pos_p - ref_points[i+0].pos_p;
-//
-//            nodes = numpy.asfortranarray([
-//                [0.0, 0.0, 0.9, 1.0],
-//                [0.0, 0.2, 0.0, 0.0],
-//            ]);
-//
-//            self.ref_curves.append(bezier.Curve(nodes, degree=4));
-//            self.ref_basis.append ([e0, e1]);
-//
-//        time_diff = self.ref_points[1].time - self.ref_points[0].time;
-//                
-//        pos_0 = self.get_pos(0x00, 0.0);
-//        pos_1 = (self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.0 / time_diff)) / 0.1;
-//        pos_2 =((self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.05 / time_diff))
-//              - (self.get_pos(0x00, 0.05 / time_diff) - self.get_pos(0x00, 0.00 / time_diff))) / 0.05;
-//
-//        parent.pos_0.append(pos_0);
-//        parent.pos_1.append(pos_1);
-//        parent.pos_2.append(pos_2);
-//
-//        parent.rot_0.append(numpy.mat(numpy.diag([1.0, 1.0, 1.0])));
-//        parent.rot_1.append(numpy.array([0.0, 0.0, 0.0]));
-//        parent.rot_2.append(numpy.array([0.0, 0.0, 0.0]));
-//
-//    def get_pos(self, seg_offset, time):
-//
-//        interp_data  = self.ref_curves[seg_offset].evaluate(time);
-//        ref_pos         = self.ref_points[seg_offset].pos_p + interp_data[0] * self.ref_basis[seg_offset][1] + interp_data[1] * self.ref_basis[seg_offset][0];
-//        # print(self.parent.ref_obj.pos_0);
-//        abs_pos      = self.parent.ref_obj.pos_0[-1] + self.parent.ref_obj.rot_0[-1].dot(ref_pos);
-//
-//        return numpy.array(abs_pos).reshape(3);
-//
-//    def update(self):
+typedef struct trj_ctrl_crot
+{
+	uint32_t temp;
+	
+}   s_trj_ctrl_crot;
+
+typedef struct trj_ctrl_crot_init
+{
+	uint32_t temp;
+	
+}   s_trj_ctrl_crot_init;
+
+
+
 //        
 //        parent = self.parent;
 //        
@@ -193,220 +145,337 @@ void ins_ctrl_uins_update(void *__ctrl__);
 
 //------------------------------------------------------------------------------
 
-inline void ins_ctrl_none_update(ins_ctrl_none_t *ctrl)
+inline uint8_t trj_ctrl_upos_init(s_trj_ctrl_upos *self, s_trj_ctrl_upos_init attr)
 {
-	return;
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_reset(s_trj_ctrl_upos *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_update(s_trj_ctrl_upos *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_init(s_trj_ctrl_cpos *self, s_trj_ctrl_cpos_init attr)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_reset(s_trj_ctrl_cpos *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_update(s_trj_ctrl_cpos *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_init(s_trj_ctrl_urot *self, s_trj_ctrl_urot_init attr)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_reset(s_trj_ctrl_urot *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_update(s_trj_ctrl_urot *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_init(s_trj_ctrl_crot *self, s_trj_ctrl_crot_init attr)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_reset(s_trj_ctrl_crot *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_update(s_trj_ctrl_crot *self, s_trj_obj *obj)
+{
+	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-inline void ins_ctrl_upos_update(void *__ctrl__)
+inline uint8_t trj_ctrl_upos_init_(void **data, void *config)
 {
-	ins_ctrl_upos_t *ctrl = (ins_ctrl_upos_t*) __ctrl__;
+	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) *data;
+	s_trj_ctrl_upos_init *init = (s_trj_ctrl_upos_init*) config;
 	
-	vlf_t dp0_p1[3];
-	vlf_t dp0_p2[3];
+	return trj_ctrl_upos_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_upos_free_(void **data)
+{
+	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) *data;
+	free(ctrl);
 	
-	vl_vmul_s(dp0_p1, ctrl->parent->pos[1], ctrl->parent->time[1]);
-	vl_vmul_s(dp0_p2, ctrl->parent->pos[2], ctrl->parent->time[2]);
-	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
-	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vlf_t dp1_p2[3];
+	return trj_ctrl_upos_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_upos_update_(void *data, void *obj)
+{
+	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
-	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
+	return trj_ctrl_upos_update(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_cpos_init_(void **data, void *config)
+{
+	s_trj_ctrl_cpos *ctrl = (s_trj_ctrl_cpos*) *data;
+	s_trj_ctrl_cpos_init *init = (s_trj_ctrl_cpos_init*) config;
 	
-	vlf_t dp2_f[3];
+	return trj_ctrl_cpos_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_cpos_free_(void **data)
+{
+	s_trj_ctrl_cpos *ctrl = (s_trj_ctrl_cpos*) *data;
+	free(ctrl);
 	
-	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
-	vl_vcopy(ctrl->parent->pos[2], dp2_f);
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_cpos *ctrl = (s_trj_ctrl_cpos*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vlf_t dr0_r1[9];
-	vlf_t dr0_r2[9];
-	vlf_t r1_sk[9];
-	vlf_t r2_sk[9];
+	return trj_ctrl_cpos_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_cpos_update_(void *data, void *obj)
+{
+	s_trj_ctrl_cpos *ctrl = (s_trj_ctrl_cpos*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vl_skew(r1_sk, ctrl->parent->rot[1]);
-	vl_skew(r2_sk, ctrl->parent->rot[2]);
+	return trj_ctrl_cpos_update(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_urot_init_(void **data, void *config)
+{
+	s_trj_ctrl_urot *ctrl = (s_trj_ctrl_urot*) *data;
+	s_trj_ctrl_urot_init *init = (s_trj_ctrl_urot_init*) config;
 	
-	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
+	return trj_ctrl_urot_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_urot_free_(void **data)
+{
+	s_trj_ctrl_urot *ctrl = (s_trj_ctrl_urot*) *data;
+	free(ctrl);
 	
-	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_urot *ctrl = (s_trj_ctrl_urot*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
-	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
+	return trj_ctrl_urot_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_urot_update_(void *data, void *obj)
+{
+	s_trj_ctrl_urot *ctrl = (s_trj_ctrl_urot*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vlf_t dr1_r2[3];
+	return trj_ctrl_urot_update(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_crot_init_(void **data, void *config)
+{
+	s_trj_ctrl_crot *ctrl = (s_trj_ctrl_crot*) *data;
+	s_trj_ctrl_crot_init *init = (s_trj_ctrl_crot_init*) config;
 	
-	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
-	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
-	vl_msum(ctrl->parent->rot[1], ctrl->parent->rot[1], dr1_r2);
+	return trj_ctrl_crot_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_crot_free_(void **data)
+{
+	s_trj_ctrl_crot *ctrl = (s_trj_ctrl_crot*) *data;
+	free(ctrl);
 	
-	vl_mmul_s(ctrl->parent->rot[2], ctrl->parent->rot_force, 1 / ctrl->parent->rot_inert);
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_crot *ctrl = (s_trj_ctrl_crot*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	vl_rnorm(ctrl->parent->rot[0]);
+	return trj_ctrl_crot_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
+{
+	s_trj_ctrl_crot *ctrl = (s_trj_ctrl_crot*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
-	return;
+	return trj_ctrl_crot_update(ctrl, obj_);
 }
 
 //------------------------------------------------------------------------------
 
-inline void ins_ctrl_uins_update(void *__ctrl__)
-{
-	ins_ctrl_uins_t *ctrl = (ins_ctrl_uins_t*) __ctrl__;
-	
-	vlf_t dp2_f[3];
-	
-	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
-	vl_vsum(ctrl->parent->pos[2], ctrl->parent->pos[2], dp2_f);
-	
-	vlf_t dp0_p1[3];
-	vlf_t dp0_p2[3];
-	
-	vl_vmul_s(dp0_p1, ctrl->parent->pos[1], ctrl->parent->time[1]);
-	vl_vmul_s(dp0_p2, ctrl->parent->pos[2], ctrl->parent->time[2]);
-	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
-	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
-	
-	vlf_t dp1_p2[3];
-	
-	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
-	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
-	
-	vlf_t dr0_r1[9];
-	vlf_t dr0_r2[9];
-	vlf_t r1_sk[9];
-	vlf_t r2_sk[9];
-	
-	vl_skew(r1_sk, ctrl->parent->rot[1]);
-	vl_skew(r2_sk, ctrl->parent->rot[2]);
-	
-	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
-	
-	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
 
-//    vl_mprint(ctrl->parent->rot[0]);
+//	vlf_t dp0_p1[3];
+//	vlf_t dp0_p2[3];
 //
-//    vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
-//    vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
+//	vl_vmul_s(dp0_p1, self->parent->pos[1], self->parent->time[1]);
+//	vl_vmul_s(dp0_p2, self->parent->pos[2], self->parent->time[2]);
+//	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
+//	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
 //
-	vl_rnorm(ctrl->parent->rot[0]);
-
-//    vl_mprint(ctrl->parent->rot[0]);
-	
-	return;
-}
-
-//------------------------------------------------------------------------------
-
-inline void ins_ctrl_corb_get_pos(ins_ctrl_corb_t *ctrl, vlf_t *pos, vlf_t time)
-{
-	vlf_t angle = ctrl->rate * time;
-	
-	pos[0] = vl_sin(angle)*ctrl->radius;
-	pos[1] = 0.0;
-	pos[2] = vl_cos(angle)*ctrl->radius;
-	
-	vl_vsum(pos, pos, ctrl->ref->pos[0]);
-	
-	return;
-}
-
-inline void ins_ctrl_corb_update(void *__ctrl__)
-{
-	ins_ctrl_corb_t *ctrl = (ins_ctrl_corb_t*) __ctrl__;
-	
-	ins_ctrl_corb_get_pos(ctrl, ctrl->parent->pos[0], ctrl->parent->time[0]);
-	
-	vlf_t dr0_r1[9];
-	vlf_t dr0_r2[9];
-	vlf_t r1_sk[9];
-	vlf_t r2_sk[9];
-	
-	vl_skew(r1_sk, ctrl->parent->rot[1]);
-	vl_skew(r2_sk, ctrl->parent->rot[2]);
-	
-	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
-	
-	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
-	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
-	
-	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
-	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
-	
-	vlf_t dr1_r2[3];
-	
-	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
-	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
-	vl_msum(ctrl->parent->rot[1], ctrl->parent->rot[1], dr1_r2);
-	
-	vl_mmul_s(ctrl->parent->rot[2], ctrl->parent->rot_force, 1 / ctrl->parent->rot_inert);
-	
-	vl_rnorm(ctrl->parent->rot[0]);
-	
-	return;
-}
+//	vlf_t dp1_p2[3];
+//
+//	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
+//	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
+//
+//	vlf_t dp2_f[3];
+//
+//	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
+//	vl_vcopy(ctrl->parent->pos[2], dp2_f);
+//
+//	vlf_t dr0_r1[9];
+//	vlf_t dr0_r2[9];
+//	vlf_t r1_sk[9];
+//	vlf_t r2_sk[9];
+//
+//	vl_skew(r1_sk, ctrl->parent->rot[1]);
+//	vl_skew(r2_sk, ctrl->parent->rot[2]);
+//
+//	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
+//
+//	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
+//
+//	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
+//	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
+//
+//	vlf_t dr1_r2[3];
+//
+//	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
+//	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
+//	vl_msum(ctrl->parent->rot[1], ctrl->parent->rot[1], dr1_r2);
+//
+//	vl_mmul_s(ctrl->parent->rot[2], ctrl->parent->rot_force, 1 / ctrl->parent->rot_inert);
+//
+//	vl_rnorm(ctrl->parent->rot[0]);
+//
+//	return;
+//}
 
 //------------------------------------------------------------------------------
 
-//class trj_ctrl_cpos_point(object):
+//inline void ins_ctrl_uins_update(void *__ctrl__)
+//{
+//	ins_ctrl_uins_t *ctrl = (ins_ctrl_uins_t*) __ctrl__;
 //
-//    def __init__(self, time, pos_p):
+//	vlf_t dp2_f[3];
 //
-//        self.time = time;
-//        self.pos_p = numpy.array(pos_p);
+//	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
+//	vl_vsum(ctrl->parent->pos[2], ctrl->parent->pos[2], dp2_f);
 //
-//class trj_ctrl_cpos(object):
+//	vlf_t dp0_p1[3];
+//	vlf_t dp0_p2[3];
 //
-//    def __init__(self, parent, ref_obj, ref_points):
+//	vl_vmul_s(dp0_p1, ctrl->parent->pos[1], ctrl->parent->time[1]);
+//	vl_vmul_s(dp0_p2, ctrl->parent->pos[2], ctrl->parent->time[2]);
+//	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
+//	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
 //
-//        self.parent = parent;
-//        self.ref_obj = ref_obj;
-//        self.ref_points = ref_points;
-//        self.ref_curves = [];
-//        self.ref_basis  = [];
-//        self.seg_offset = 0x00;
+//	vlf_t dp1_p2[3];
 //
-//        ref_points = [
-//            trj_ctrl_cpos_point(0.0, ref_points[0].pos_p - (ref_points[1].pos_p - ref_points[0].pos_p))
-//        ] + ref_points;
+//	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
+//	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
 //
-//        for i in range(1, len(ref_points)-1):
+//	vlf_t dr0_r1[9];
+//	vlf_t dr0_r2[9];
+//	vlf_t r1_sk[9];
+//	vlf_t r2_sk[9];
 //
-//            dist = scipy.linalg.norm(ref_points[i+1].pos_p - ref_points[i+0].pos_p);
+//	vl_skew(r1_sk, ctrl->parent->rot[1]);
+//	vl_skew(r2_sk, ctrl->parent->rot[2]);
 //
-//            e0 = ref_points[i+0].pos_p - ref_points[i-1].pos_p;
-//            e1 = ref_points[i+1].pos_p - ref_points[i+0].pos_p;
+//	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
 //
-//            nodes = numpy.asfortranarray([
-//                [0.0, 0.0, 0.9, 1.0],
-//                [0.0, 0.2, 0.0, 0.0],
-//            ]);
+//	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
 //
-//            self.ref_curves.append(bezier.Curve(nodes, degree=4));
-//            self.ref_basis.append ([e0, e1]);
+////    vl_mprint(ctrl->parent->rot[0]);
+////
+////    vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
+////    vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
+////
+//	vl_rnorm(ctrl->parent->rot[0]);
 //
-//        time_diff = self.ref_points[1].time - self.ref_points[0].time;
+////    vl_mprint(ctrl->parent->rot[0]);
 //
-//        pos_p[0] = self.get_pos(0x00, 0.0);
-//        pos_p[1] = (self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.0 / time_diff)) / 0.1;
-//        pos_2 =((self.get_pos(0x00, 0.10 / time_diff) - self.get_pos(0x00, 0.05 / time_diff))
-//              - (self.get_pos(0x00, 0.05 / time_diff) - self.get_pos(0x00, 0.00 / time_diff))) / 0.05;
+//	return;
+//}
+
+//------------------------------------------------------------------------------
+
+//inline void ins_ctrl_corb_update(void *__ctrl__)
+//{
+//	ins_ctrl_corb_t *ctrl = (ins_ctrl_corb_t*) __ctrl__;
 //
-//        parent.pos_p[0].append(pos_p[0]);
-//        parent.pos_p[1].append(pos_p[1]);
-//        parent.pos_2.append(pos_2);
+//	ins_ctrl_corb_get_pos(ctrl, ctrl->parent->pos[0], ctrl->parent->time[0]);
 //
-//        parent.rot[0].append(numpy.mat(numpy.diag([1.0, 1.0, 1.0])));
-//        parent.rot[1].append(numpy.array([0.0, 0.0, 0.0]));
-//        parent.rot[2].append(numpy.array([0.0, 0.0, 0.0]));
+//	vlf_t dr0_r1[9];
+//	vlf_t dr0_r2[9];
+//	vlf_t r1_sk[9];
+//	vlf_t r2_sk[9];
 //
+//	vl_skew(r1_sk, ctrl->parent->rot[1]);
+//	vl_skew(r2_sk, ctrl->parent->rot[2]);
+//
+//	vl_mmul_m(dr0_r1, r1_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r1, dr0_r1, ctrl->parent->time[1]);
+//
+//	vl_mmul_m(dr0_r2, r2_sk, ctrl->parent->rot[0]);
+//	vl_mmul_s(dr0_r2, dr0_r2, ctrl->parent->time[2]);
+//
+//	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
+//	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
+//
+//	vlf_t dr1_r2[3];
+//
+//	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
+//	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
+//	vl_msum(ctrl->parent->rot[1], ctrl->parent->rot[1], dr1_r2);
+//
+//	vl_mmul_s(ctrl->parent->rot[2], ctrl->parent->rot_force, 1 / ctrl->parent->rot_inert);
+//
+//	vl_rnorm(ctrl->parent->rot[0]);
+//
+//	return;
+//}
+
+//------------------------------------------------------------------------------
+
 //    def get_pos(self, seg_offset, time):
 //
 //        interp_data  = self.ref_curves[seg_offset].evaluate(time);

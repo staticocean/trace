@@ -25,8 +25,9 @@ typedef struct trj_gui_obj
 	
 	uint8_t traj_sel;
 	uint8_t ctrl_sel;
-	uint8_t proc_sel;
 	uint8_t data_sel;
+	
+	
 	
 	s_vl3d_view traj_vl3d_view;
 	s_vl3d_eng traj_vl3d_eng;
@@ -39,8 +40,6 @@ typedef struct trj_gui_obj_init
 	s_trj_obj *ref;
 
 } 	s_trj_gui_obj_init;
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 
