@@ -12,6 +12,8 @@ extern "C"
 	#include <lib/trj/trj_ctrl.h>
 }
 
+#include "imgui_custom.h"
+
 #include "trj_gui_obj.h"
 #include "trj_gui_traj.h"
 

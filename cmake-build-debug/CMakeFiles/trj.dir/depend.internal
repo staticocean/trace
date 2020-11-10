@@ -152,6 +152,13 @@ CMakeFiles/trj.dir/lib/imgui/imgui_widgets.cpp.obj
 CMakeFiles/trj.dir/lib/tinymat/tinymat.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/tinymat/tinymat.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/lib/tinymat/tinymat.h
+CMakeFiles/trj.dir/src/imgui_custom.cpp.obj
+ ../lib/imgui/imconfig.h
+ ../lib/imgui/imgui.h
+ ../lib/imgui/imgui_internal.h
+ ../lib/imgui/imstb_textedit.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.cpp
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.h
 CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/fmemopen/fmemopen.h
  ../lib/imgui/imconfig.h
@@ -173,6 +180,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
@@ -244,6 +252,7 @@ CMakeFiles/trj.dir/src/trj_gui_eng.cpp.obj
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
@@ -307,6 +316,7 @@ CMakeFiles/trj.dir/src/trj_gui_tbar.cpp.obj
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_tbar.cpp
@@ -365,6 +375,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/imgui_custom.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "lib/imgui/imgui.h"
+#include <lib/imgui/imgui.h>
 
 extern "C"
 {
@@ -22,6 +22,8 @@ extern "C"
 }
 
 #include "lib/trj/vl3d.h"
+
+#include "imgui_custom.h"
 
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"

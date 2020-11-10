@@ -15,7 +15,7 @@ include_directories(lib/imguizmo/)
 #include_directories(lib/tcc/)
 #include_directories(lib/tcc/lib/)
 
-file(GLOB src_main      "src/trj_opengl.cpp" "src/picoc*.*" "src/trj_gui*.*")
+file(GLOB src_main      "src/trj_opengl.cpp" "src/picoc*.*" "src/trj_gui*.*" "src/imgui_custom.*")
 file(GLOB src_imgui     "lib/imgui/*.*")
 file(GLOB src_opengl    "lib/opengl/*.*")
 file(GLOB src_fmt       "lib/fmt/*.*")

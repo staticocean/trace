@@ -491,10 +491,14 @@ uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 	
-	if (ImGui::BeginPopupModal("RENDERING", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginPopupModal("RENDERING", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (gui->state == trj_gui_eng_state_update)
 		{
+			const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
+			const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
+			
+			ImGui::BufferingBar("##progress", self->time[0] / gui->time_limit, ImVec2(400, 6), bg, col);
 			
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 		}

@@ -880,6 +880,33 @@ lib\tinymat\tinymat.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.s
 .PHONY : lib\tinymat\tinymat.cpp.s
 
+src\imgui_custom.obj: src\imgui_custom.cpp.obj
+
+.PHONY : src\imgui_custom.obj
+
+# target to build an object file
+src\imgui_custom.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\imgui_custom.cpp.obj
+.PHONY : src\imgui_custom.cpp.obj
+
+src\imgui_custom.i: src\imgui_custom.cpp.i
+
+.PHONY : src\imgui_custom.i
+
+# target to preprocess a source file
+src\imgui_custom.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\imgui_custom.cpp.i
+.PHONY : src\imgui_custom.cpp.i
+
+src\imgui_custom.s: src\imgui_custom.cpp.s
+
+.PHONY : src\imgui_custom.s
+
+# target to generate assembly for a file
+src\imgui_custom.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\imgui_custom.cpp.s
+.PHONY : src\imgui_custom.cpp.s
+
 src\picoc_api.obj: src\picoc_api.c.obj
 
 .PHONY : src\picoc_api.obj
@@ -1351,6 +1378,9 @@ help:
 	@echo ... lib/tinymat/tinymat.obj
 	@echo ... lib/tinymat/tinymat.i
 	@echo ... lib/tinymat/tinymat.s
+	@echo ... src/imgui_custom.obj
+	@echo ... src/imgui_custom.i
+	@echo ... src/imgui_custom.s
 	@echo ... src/picoc_api.obj
 	@echo ... src/picoc_api.i
 	@echo ... src/picoc_api.s
