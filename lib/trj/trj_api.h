@@ -158,8 +158,6 @@ typedef struct trj_obj
 	struct trj_obj *obj_list;
 	uint32_t *obj_count;
 	
-	struct trj_obj *ref;
-	
 	uint32_t id;
 	char name[32];
 	

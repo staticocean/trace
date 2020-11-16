@@ -20,13 +20,6 @@ void trj_gui_traj_edit(s_trj_traj *self)
 	ImGui::NextColumn();
 	ImGui::Text("[%06d]", self->id);
 	ImGui::NextColumn();
-//
-//	ImGui::Text("pos_inert");
-//	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
-//	ImGui::NextColumn();
-//	ImGui::SetNextItemWidth(-1);
-//	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1, NULL, NULL, "%.3f");
-//	ImGui::NextColumn();
 	
 	ImGui::Columns(1);
 	
@@ -618,17 +611,111 @@ void trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool v
 	return;
 }
 
+//------------------------------------------------------------------------------
 
+void trj_gui_traj_forb_edit(s_trj_traj *self)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) self->data;
+	
+	ImGui::PushID(self);
 
+	ImGui::Text("ref   ");
+	
+//	const char* items[*self->obj_count];
+//	for (int i = 0; i < *self->obj_count; ++i)
+//	{ items[i] = self->obj_list[i].name; }
+//	ImGui::SetNextItemWidth(-1);
+//	if (ImGui::BeginCombo("##ref",
+//			items[self->ref->id],
+//			ImGuiComboFlags_NoArrowButton))
+//	{
+//		for (int i = 0; i < IM_ARRAYSIZE(items); ++i)
+//		{
+//			const bool is_selected = (self->ref->id == i);
+//
+//			if (ImGui::Selectable(items[i], is_selected)) { self->ref = &self->obj_list[i]; }
+//			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+//		}
+//
+//		ImGui::EndCombo();
+//	}
+//
+	ImGui::Text("radius");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+	ImGui::SameLine();
+	vlf_t radius_min = 0.0;
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
+	
+	ImGui::Text("rate  ");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
+	ImGui::SameLine();
+	vlf_t rate_deg = vl_deg(traj->rate);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.3f");
+	traj->rate = vl_rad(rate_deg);
+	
+	ImGui::Text("tilt  "); ImGui::SameLine();
+	vl_gui_rot("##tilt", traj->tilt);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::Text("s_rate");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
+	ImGui::SameLine();
+	vlf_t s_rate_deg = vl_deg(traj->s_rate);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.3f");
+	traj->s_rate = vl_rad(s_rate_deg);
+	
+	ImGui::Text("s_tilt"); ImGui::SameLine();
+	vl_gui_rot("##s_tilt", traj->s_tilt);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
 
+//------------------------------------------------------------------------------
 
+void trj_gui_traj_aorb_edit(s_trj_traj *self)
+{
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) self->data;
+	
 
-
-
-
-
-
-
+	
+	return;
+}
 
 
 //------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

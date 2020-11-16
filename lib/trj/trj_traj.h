@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 
 #include "trj_types.h"
+#include "trj_utils.h"
 #include "vl.h"
 
 #include "trj_bz.h"
@@ -50,36 +51,6 @@ typedef struct trj_traj_bz_init
 	s_trj_traj_bz_point *pts;
 	
 } 	s_trj_traj_bz_init;
-
-//------------------------------------------------------------------------------
-
-#define trj_traj_bz_id (0x00000001)
-
-typedef struct trj_traj_orb
-{
-	s_trj_obj 	*ref;
-	
-	vlf_t       radius;
-	vlf_t       rate;
-//	vlf_t       tilt;
-	
-	vlf_t       s_rate;
-//	vlf_t       s_tilt;
-	
-} 	s_trj_traj_orb;
-
-typedef struct trj_traj_orb_init
-{
-	s_trj_obj 	*ref;
-	
-	vlf_t       radius;
-	vlf_t       rate;
-//	vlf_t       tilt;
-	
-	vlf_t       s_rate;
-//	vlf_t       s_tilt;
-	
-} 	s_trj_traj_orb_init;
 
 //------------------------------------------------------------------------------
 
@@ -503,34 +474,91 @@ inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
 
 //------------------------------------------------------------------------------
 
-inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
+#define trj_traj_aorb_id (0x00000002)
+
+typedef struct trj_traj_aorb
+{
+	s_trj_obj 	*ref;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_aorb;
+
+typedef struct trj_traj_aorb_init
+{
+	s_trj_obj 	*ref;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_aorb_init;
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_aorb_init(s_trj_traj_aorb *self, s_trj_traj_aorb_init attr)
 {
 	self->ref    = attr.ref;
-//	self->tilt   = attr.tilt;
+	
 	self->radius = attr.radius;
 	self->rate   = attr.rate;
 	
+	vl_mcopy(self->tilt, attr.tilt);
+	
+	self->s_rate = attr.s_rate;
+	vl_mcopy(self->s_tilt, attr.s_tilt);
+	
 	return 0x00;
 }
 
-inline uint8_t trj_traj_orb_compile(s_trj_traj_orb *self)
+inline uint8_t trj_traj_aorb_compile(s_trj_traj_aorb *self)
 {
 	return 0x00;
 }
 
-inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
+inline uint8_t trj_traj_aorb_pos(s_trj_traj_aorb *self, vlf_t time, vlf_t *pos)
 {
 	vlf_t angle = self->rate * time;
+	vlf_t pos_t[3];
+	vlf_t pos_n[3];
 	
-	pos[0] = vl_sin(angle) * self->radius;
-	pos[1] = 0.0;
-	pos[2] = vl_cos(angle) * self->radius;
-
+	pos_t[0] = vl_sin(angle) * self->radius;
+	pos_t[1] = 0.0;
+	pos_t[2] = vl_cos(angle) * self->radius;
+	
+	vl_mmul_v(pos_n, self->tilt, pos_t);
+	vl_mmul_v(pos, self->ref->rot[0], pos_n);
+	
 	vl_vsum(pos, pos, self->ref->pos[0]);
-
+	
 	return 0x00;
 }
+
+inline uint8_t trj_traj_aorb_rot(s_trj_traj_aorb *self, vlf_t time, vlf_t *rot)
+{
+	vlf_t angle = self->s_rate * time;
 	
+	vlf_t rot_t[9];
+	vlf_t rot_n[9];
+	
+	trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
+			.heading = angle, .pitch = 0.0, .roll = 0.0
+	});
+	
+	vl_mmul_m(rot_n, self->s_tilt, rot_t);
+	vl_mmul_m(rot, self->ref->rot[0], rot_n);
+	
+	return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
 // API
@@ -540,50 +568,192 @@ inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
 //uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
 //uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
 
-inline uint8_t trj_traj_orb_init_ (void **data, void *config)
+inline uint8_t trj_traj_aorb_init_ (void **data, void *config)
 {
-	*data = (s_trj_traj_orb*) malloc(sizeof(s_trj_traj_orb));
+	*data = (s_trj_traj_aorb*) malloc(sizeof(s_trj_traj_aorb));
 	
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
-	s_trj_traj_orb_init *init = (s_trj_traj_orb_init*) config;
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) *data;
+	s_trj_traj_aorb_init *init = (s_trj_traj_aorb_init*) config;
 	
-	return trj_traj_orb_init(traj, *init);
+	return trj_traj_aorb_init(traj, *init);
 }
 
-inline uint8_t trj_traj_orb_free_ (void **data)
+inline uint8_t trj_traj_aorb_free_ (void **data)
 {
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) *data;
 	
 	free(traj);
 	
 	return 0x00;
 }
 
-inline uint8_t trj_traj_orb_compile_(void *data)
+inline uint8_t trj_traj_aorb_compile_(void *data)
 {
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) data;
 	
-	return trj_traj_orb_compile(traj);
+	return trj_traj_aorb_compile(traj);
 }
 
-inline uint8_t trj_traj_orb_pos_(void *data, vlf_t time, vlf_t *pos)
+inline uint8_t trj_traj_aorb_pos_(void *data, vlf_t time, vlf_t *pos)
 {
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) data;
 	
-	return trj_traj_orb_pos(traj, time, pos);
+	return trj_traj_aorb_pos(traj, time, pos);
 }
 
-inline uint8_t trj_traj_orb_rot_(void *data, vlf_t time, vlf_t *rot)
+inline uint8_t trj_traj_aorb_rot_(void *data, vlf_t time, vlf_t *rot)
 {
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) data;
 	
-//	return trj_traj_orb_rot(traj);
+	return trj_traj_aorb_rot(traj, time, rot);
+}
+
+inline uint8_t trj_traj_aorb_info_(void *data, s_trj_traj_info *info)
+{
+	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) data;
+	
+	info->preview_time[0] = 0.0;
+	info->preview_time[1] = 1.0 / traj->rate;
+	
 	return 0x00;
 }
 
-inline uint8_t trj_traj_orb_info_(void *data, s_trj_traj_info *info)
+//------------------------------------------------------------------------------
+
+#define trj_traj_forb_id (0x00000003)
+
+typedef struct trj_traj_forb
 {
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_obj 	*ref;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_forb;
+
+typedef struct trj_traj_forb_init
+{
+	s_trj_obj 	*ref;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_forb_init;
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_forb_init(s_trj_traj_forb *self, s_trj_traj_forb_init attr)
+{
+	self->ref    = attr.ref;
+	
+	self->radius = attr.radius;
+	self->rate   = attr.rate;
+	
+	vl_mcopy(self->tilt, attr.tilt);
+	
+	self->s_rate = attr.s_rate;
+	vl_mcopy(self->s_tilt, attr.s_tilt);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_forb_compile(s_trj_traj_forb *self)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_traj_forb_pos(s_trj_traj_forb *self, vlf_t time, vlf_t *pos)
+{
+	vlf_t angle = self->rate * time;
+	vlf_t pos_t[3];
+	vlf_t pos_n[3];
+	
+	pos_t[0] = vl_sin(angle) * self->radius;
+	pos_t[1] = 0.0;
+	pos_t[2] = vl_cos(angle) * self->radius;
+	
+	vl_mmul_v(pos_n, self->tilt, pos_t);
+	
+	vl_vsum(pos, pos, self->ref->pos[0]);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_forb_rot(s_trj_traj_forb *self, vlf_t time, vlf_t *rot)
+{
+	vlf_t angle = self->s_rate * time;
+	
+	vlf_t rot_t[9];
+	
+	trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
+			.heading = angle, .pitch = 0.0, .roll = 0.0
+	});
+	
+	vl_mmul_m(rot, self->s_tilt, rot_t);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+// API
+//uint8_t (*init) 		(void *data, void *config)
+//uint8_t (*free) 		(void *data);
+//uint8_t (*compile) 	(void *data);
+//uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
+//uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+
+inline uint8_t trj_traj_forb_init_ (void **data, void *config)
+{
+	*data = (s_trj_traj_forb*) malloc(sizeof(s_trj_traj_forb));
+	
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) *data;
+	s_trj_traj_forb_init *init = (s_trj_traj_forb_init*) config;
+	
+	return trj_traj_forb_init(traj, *init);
+}
+
+inline uint8_t trj_traj_forb_free_ (void **data)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) *data;
+	
+	free(traj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_forb_compile_(void *data)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) data;
+	
+	return trj_traj_forb_compile(traj);
+}
+
+inline uint8_t trj_traj_forb_pos_(void *data, vlf_t time, vlf_t *pos)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) data;
+	
+	return trj_traj_forb_pos(traj, time, pos);
+}
+
+inline uint8_t trj_traj_forb_rot_(void *data, vlf_t time, vlf_t *rot)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) data;
+	
+	return trj_traj_forb_rot(traj, time, rot);
+}
+
+inline uint8_t trj_traj_forb_info_(void *data, s_trj_traj_info *info)
+{
+	s_trj_traj_forb *traj = (s_trj_traj_forb*) data;
 	
 	info->preview_time[0] = 0.0;
 	info->preview_time[1] = 1.0 / traj->rate;

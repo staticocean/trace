@@ -16,6 +16,8 @@ extern "C"
 	#include <lib/trj/vl.h>
 }
 
+#include "trj_gui_w.h"
+
 //------------------------------------------------------------------------------
 
 enum class CurveEditorFlags
@@ -63,6 +65,8 @@ int CurveEditor(const char* label
 
 void trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res);
 void trj_gui_traj_edit(s_trj_traj *self);
+void trj_gui_traj_forb_edit(s_trj_traj *self);
+void trj_gui_traj_aorb_edit(s_trj_traj *self);
 
 //------------------------------------------------------------------------------
 

@@ -191,6 +191,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_tbar.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_gui_cmd.cpp.obj
  ../lib/fmemopen/fmemopen.h
  ../lib/imgui/imconfig.h
@@ -221,6 +222,7 @@ CMakeFiles/trj.dir/src/trj_gui_ctrl.cpp.obj
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
@@ -257,6 +259,7 @@ CMakeFiles/trj.dir/src/trj_gui_eng.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_gui_env.cpp.obj
  ../lib/fmemopen/fmemopen.h
  ../lib/picoc/picoc.h
@@ -300,6 +303,7 @@ CMakeFiles/trj.dir/src/trj_gui_obj.cpp.obj
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_gui_tbar.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
@@ -322,6 +326,7 @@ CMakeFiles/trj.dir/src/trj_gui_tbar.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_tbar.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_tbar.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_gui_traj.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
@@ -332,9 +337,13 @@ CMakeFiles/trj.dir/src/trj_gui_traj.cpp.obj
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
+ ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_gui_w.cpp.obj
  ../lib/imgui/imconfig.h
  ../lib/imgui/imgui.h
@@ -347,8 +356,8 @@ CMakeFiles/trj.dir/src/trj_gui_w.cpp.obj
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
- C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.cpp
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
 CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/fmemopen/fmemopen.h
  ../lib/imgui/imconfig.h
@@ -385,4 +394,5 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_obj.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_tbar.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_traj.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_w.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_opengl.cpp

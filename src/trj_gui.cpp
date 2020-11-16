@@ -56,39 +56,63 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	trj_eng_init(&self->eng, (s_trj_eng_init) { .st_objects = self->st_eng_obj });
 	
+	static s_trj_traj_forb_init trj_traj_forb_config_ = {
+			.ref = &self->eng.obj_list[0],
+			
+			.radius = 0.0,
+			.rate = 0.0,
+			
+			.s_rate = 0.0,
+	};
+	
+	vl_mid(trj_traj_forb_config_.tilt);
+	vl_mid(trj_traj_forb_config_.s_tilt);
+	
+	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
+			.id = trj_traj_forb_id,
+			.desc = "default_traj_forb",
+			.init = trj_traj_forb_init_,
+			.free = trj_traj_forb_free_,
+			.data = NULL,
+			.config = &trj_traj_forb_config_,
+			.compile = trj_traj_forb_compile_,
+			.rot = trj_traj_forb_rot_,
+			.pos = trj_traj_forb_pos_,
+			.info = trj_traj_forb_info_,
+	});
+	
+	static s_trj_traj_aorb_init trj_traj_aorb_config_ = {
+			.ref = &self->eng.obj_list[0],
+			
+			.radius = 0.0,
+			.rate = 0.0,
+			
+			.s_rate = 0.0,
+	};
+	
+	vl_mid(trj_traj_aorb_config_.tilt);
+	vl_mid(trj_traj_aorb_config_.s_tilt);
+	
+	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
+			.id = trj_traj_aorb_id,
+			.desc = "default_traj_aorb",
+			.init = trj_traj_aorb_init_,
+			.free = trj_traj_aorb_free_,
+			.data = NULL,
+			.config = &trj_traj_aorb_config_,
+			.compile = trj_traj_aorb_compile_,
+			.rot = trj_traj_aorb_rot_,
+			.pos = trj_traj_aorb_pos_,
+			.info = trj_traj_aorb_info_,
+	});
+	
 	static s_trj_traj_bz_init trj_traj_bz_config_ = {
 			.pts = NULL,
 	};
 	
 	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
 			.id = trj_traj_bz_id,
-			.desc = "traj_bz 00",
-			.init = trj_traj_bz_init_,
-			.free = trj_traj_bz_free_,
-			.data = NULL,
-			.config = &trj_traj_bz_config_,
-			.compile = trj_traj_bz_compile_,
-			.rot = trj_traj_bz_rot_,
-			.pos = trj_traj_bz_pos_,
-			.info = trj_traj_bz_info_,
-	});
-	
-	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
-			.id = trj_traj_bz_id,
-			.desc = "traj_bz 01",
-			.init = trj_traj_bz_init_,
-			.free = trj_traj_bz_free_,
-			.data = NULL,
-			.config = &trj_traj_bz_config_,
-			.compile = trj_traj_bz_compile_,
-			.rot = trj_traj_bz_rot_,
-			.pos = trj_traj_bz_pos_,
-			.info = trj_traj_bz_info_,
-	});
-	
-	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
-			.id = trj_traj_bz_id,
-			.desc = "traj_bz 02",
+			.desc = "default_traj_bz",
 			.init = trj_traj_bz_init_,
 			.free = trj_traj_bz_free_,
 			.data = NULL,
@@ -319,6 +343,15 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					trj_gui_traj_edit(traj);
 					
+					switch (traj->id)
+					{
+						case trj_traj_forb_id: { trj_gui_traj_forb_edit(traj); break; }
+						case trj_traj_aorb_id: { trj_gui_traj_aorb_edit(traj); break; }
+						case trj_traj_bz_id: { break; }
+						
+						default: break;
+					}
+					
 					break;
 				}
 				
@@ -375,12 +408,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				case trj_gui_eng_type_traj:
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
-					trj_gui_traj_bz((s_trj_traj_bz*) traj->data, "##test", ImVec2(-1, -1), 0x00);
 					
 					switch (traj->id)
 					{
 						case trj_traj_bz_id:
 						{
+							trj_gui_traj_bz((s_trj_traj_bz*) traj->data, "##test", ImVec2(-1, -1), 0x00);
 							break;
 						}
 						

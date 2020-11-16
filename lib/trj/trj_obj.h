@@ -32,7 +32,7 @@ inline void trj_obj_print(s_trj_obj *obj)
 	printf(vl_lsep);
 	printf("name        [%s] \r\n", obj->name);
 	printf("id          [%06X] \r\n", obj->id);
-	printf("ref         [%s] \r\n", obj->ref->name);
+//	printf("ref         [%s] \r\n", obj->ref->name);
 	printf("traj_offset [%d] \r\n", obj->traj_offset);
 	printf("ctrl_offset [%d] \r\n", obj->ctrl_offset);
 	printf("data_offset [%d] \r\n", obj->data_offset);
@@ -81,7 +81,7 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 	self->id = attr.id;
 	self->obj_list = attr.obj_list;
 	self->obj_count = attr.obj_count;
-	self->ref = attr.ref;
+//	self->ref = attr.ref;
 	
 	self->traj_offset = 0x00;
 	self->ctrl_offset = 0x00;

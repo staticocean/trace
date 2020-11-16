@@ -171,26 +171,26 @@ inline void trj_ctn_to_hpr(s_trj_rot_hpr *rot_hpr, vlf_t *c_tn)
 
 //------------------------------------------------------------------------------
 
-inline void trj_pos_ecef(trj_pos_ecef_t *ecef, s_trj_obj *obj)
-{
-	vlf_t temp_vec[3];
-	vlf_t rot_inv[9];
-	
-	vl_tnp(rot_inv, obj->ref->rot[0]);
-	
-	vl_vsub(temp_vec, obj->pos[0], obj->ref->pos[0]);
-	vl_mmul_v(ecef->vec, rot_inv, temp_vec);
-	
-	return;
-}
+//inline void trj_pos_ecef(trj_pos_ecef_t *ecef, s_trj_obj *obj)
+//{
+//	vlf_t temp_vec[3];
+//	vlf_t rot_inv[9];
+//
+//	vl_tnp(rot_inv, obj->ref->rot[0]);
+//
+//	vl_vsub(temp_vec, obj->pos[0], obj->ref->pos[0]);
+//	vl_mmul_v(ecef->vec, rot_inv, temp_vec);
+//
+//	return;
+//}
 
 //------------------------------------------------------------------------------
 
-inline void trj_hpr_to_ctn(vlf_t *c_tn, s_trj_rot_hpr *rot_hpr)
+inline void trj_hpr_to_ctn(vlf_t *c_tn, s_trj_rot_hpr rot_hpr)
 {
-	vlf_t a = -rot_hpr->heading;
-	vlf_t b = -rot_hpr->pitch;
-	vlf_t g = rot_hpr->roll;
+	vlf_t a = -rot_hpr.heading;
+	vlf_t b = -rot_hpr.pitch;
+	vlf_t g = rot_hpr.roll;
 	
 	c_tn[0] = vl_cos(a)*vl_cos(b);
 	c_tn[1] = vl_cos(a)*vl_sin(b)*vl_sin(g) - vl_sin(a)*vl_cos(g);

@@ -15,6 +15,8 @@ extern "C"
 
 #include <lib/trj/vl3d.h>
 
+#include "trj_gui_w.h"
+
 //------------------------------------------------------------------------------
 
 typedef struct trj_gui_obj
