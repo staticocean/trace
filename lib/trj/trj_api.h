@@ -143,7 +143,7 @@ typedef struct trj_data
 
 typedef struct trj_obj_data
 {
-	vlf_t time[3];
+	vlf_t time[2];
 	
 	vlf_t pos[3][3];
 	vlf_t rot[3][9];
@@ -169,11 +169,11 @@ typedef struct trj_obj
 	vlf_t pos_force[3];
 	vlf_t rot_force[3];
 	
-	s_trj_obj_data *log_list;
-	uint32_t 	    log_offset;
-	
 	vlf_t pos_inert;
 	vlf_t rot_inert;
+	
+	s_trj_obj_data *log_list;
+	uint32_t log_offset;
 	
 	uint8_t traj_offset;
 	uint8_t ctrl_offset;

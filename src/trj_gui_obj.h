@@ -29,8 +29,6 @@ typedef struct trj_gui_obj
 	uint8_t ctrl_sel;
 	uint8_t data_sel;
 	
-	
-	
 	s_vl3d_view traj_vl3d_view;
 	s_vl3d_eng traj_vl3d_eng;
 	s_vl3d_obj traj_vl3d_eng_objlist[8000];

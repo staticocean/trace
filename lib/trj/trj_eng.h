@@ -59,12 +59,17 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 
 inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 {
-	trj_obj_init(&self->obj_list[self->obj_count], attr);
+	s_trj_obj *obj = &self->obj_list[self->obj_count];
 	
-	self->obj_list[self->obj_count].id = self->obj_count;
-	self->obj_list[self->obj_count].obj_list = self->obj_list;
-	self->obj_list[self->obj_count].obj_count = &self->obj_count;
-	self->obj_list[self->obj_count].time = self->time;
+	trj_obj_init(obj, attr);
+	
+	obj->id 		= self->obj_count;
+	obj->obj_list 	= self->obj_list;
+	obj->obj_count 	= &self->obj_count;
+	obj->time 		= self->time;
+	obj->log_list   = NULL;
+	obj->log_offset = 0x00;
+	
 	
 	self->obj_count++;
 	
@@ -112,13 +117,15 @@ inline uint8_t 	trj_eng_reset(s_trj_eng *self)
 	
 	s_trj_obj *obj;
 	
+	self->time[0] = 0.0;
+	self->time[1] = 0.0;
+	
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		obj = &self->obj_list[i];
 		
-		obj->time[0] = 0.0;
-		obj->time[1] = 0.0;
-		obj->time[2] = 0.0;
+		free(obj->log_list);
+		obj->log_offset = 0x00;
 		
 		for (j = 0; j < obj->traj_offset; ++j)
 		{
@@ -154,6 +161,40 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 		{
 			obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
 		}
+	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_eng_log(s_trj_eng *self)
+{
+	uint32_t i;
+	
+	s_trj_obj *obj;
+	s_trj_obj_data *data;
+	
+	for (i = 0; i < self->obj_count; ++i)
+	{
+		obj = &self->obj_list[i];
+		data = &obj->log_list[obj->log_offset];
+		
+		data->time[0] = self->time[0];
+		data->time[1] = self->time[1];
+		
+		vl_mcopy(&data->rot[0][0], &obj->rot[0][0]);
+		vl_mcopy(&data->rot[1][0], &obj->rot[1][0]);
+		vl_mcopy(&data->rot[2][0], &obj->rot[2][0]);
+
+		vl_mcopy(&data->pos[0][0], &obj->pos[0][0]);
+		vl_mcopy(&data->pos[1][0], &obj->pos[1][0]);
+		vl_mcopy(&data->pos[2][0], &obj->pos[2][0]);
+		
+		vl_vcopy(data->rot_force, obj->rot_force);
+		vl_vcopy(data->pos_force, obj->pos_force);
+		
+		++obj->log_offset;
 	}
 	
 	return 0x00;

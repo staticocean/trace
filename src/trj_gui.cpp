@@ -257,7 +257,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	self->gui_menu.env = &self->gui_env;
-	self->gui_eng.time_limit = 24*3600.0;
+	self->gui_eng.time_limit = 3600.0;
 	self->gui_eng.time_step = 0.001;
 	self->gui_eng.time_iter = self->gui_eng.time_limit
 						    / self->gui_eng.time_step;

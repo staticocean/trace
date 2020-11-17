@@ -445,27 +445,27 @@ uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		case trj_gui_eng_state_init:
 		{
+			if (gui->time_step < 1E-9) { return 0x01; }
+			
 			trj_eng_reset(self);
 			
 			for (int i = 0; i < self->obj_count; ++i)
 			{
-				free(self->obj_list[i].log_list);
-				
-				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * gui->time_iter);
+				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * (gui->time_iter+1));
 				self->obj_list[i].log_offset = 0x00;
 			}
-			
-			self->time[0] = 0.0;
-			self->time[1] = 0.0;
 			
 			break;
 		}
 		
 		case trj_gui_eng_state_update:
 		{
+			if (gui->time_step < 1E-9) { return 0x01; }
+			
 			if (self->time[0] < gui->time_limit)
 			{
 				trj_eng_update(self, gui->time_step);
+				trj_eng_log(self);
 			}
 			
 			break;
@@ -473,6 +473,8 @@ uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		case trj_gui_eng_state_deinit:
 		{
+			if (gui->time_step < 1E-9) { return 0x01; }
+			
 			break;
 		}
 		
