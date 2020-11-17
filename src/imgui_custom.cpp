@@ -69,9 +69,10 @@ namespace ImGui {
 	}
 	
 //	/// Get custom user iu state at given position of id stack. If state does not exist then state object will be created.
-///// Using different type at the same id stack position will return new object of that type. Arguments passed to this
-///// function will be passed to constructor of type T.
+//	/// Using different type at the same id stack position will return new object of that type. Arguments passed to this
+//	/// function will be passed to constructor of type T.
 //	template<typename T, typename... Args>
+//
 //	T* GetUIState(Args... args)
 //	{
 //		ImGui::PushID(typeid(T).name());
@@ -84,7 +85,9 @@ namespace ImGui {
 //		ImGui::PopID();
 //		return state;
 //	}
-///// Expire custom ui state at given position if id stack, created with GetUIState<T>. It will be freed immediately.
+//
+//
+//	/// Expire custom ui state at given position if id stack, created with GetUIState<T>. It will be freed immediately.
 //	template<typename T>
 //	void ExpireUIState()
 //	{

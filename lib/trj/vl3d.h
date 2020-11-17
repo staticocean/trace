@@ -20,6 +20,7 @@
 extern "C"
 {
 	#include "trj_types.h"
+	#include "trj_utils.h"
 	#include "vl.h"
 	#include "vl_svd.h"
 }
@@ -105,6 +106,41 @@ typedef struct vl3d_view
 	ImRect rect;
 	
 } 	s_vl3d_view;
+
+//------------------------------------------------------------------------------
+
+inline void vl3d_view_load(void *ptr, s_vl3d_view *view, s_vl3d_view def)
+{
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	
+	s_trj_rot_hpr hpr = {
+			.heading = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), vl_rad(45)),
+			.pitch 	 = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), vl_rad(45)),
+			.roll    = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), vl_rad( 0)),
+	};
+	
+	trj_hpr_to_ctn(&view->rot[0][0], hpr);
+	
+	view->scale = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x03)), def.scale);
+	
+	return;
+}
+
+inline void vl3d_view_save(void *ptr, s_vl3d_view *view)
+{
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	
+	s_trj_rot_hpr hpr;
+	
+	trj_ctn_to_hpr(&hpr, &view->rot[0][0]);
+	
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), (float) hpr.heading);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), (float) hpr.pitch);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), (float) hpr.roll);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x03)), (float) view->scale);
+	
+	return;
+}
 
 //------------------------------------------------------------------------------
 

@@ -3,6 +3,44 @@
 
 //------------------------------------------------------------------------------
 
+void vl_gui_mat_get(void *ptr, vlf_t *mat, vlf_t *def)
+{
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	
+	s_trj_rot_hpr def_hpr;
+	
+	trj_ctn_to_hpr(&def_hpr, def);
+	
+	s_trj_rot_hpr hpr = {
+//			.heading = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), vl_rad(45)),
+//			.pitch 	 = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), vl_rad(45)),
+//			.roll    = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), vl_rad( 0)),
+			.heading = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), def_hpr.heading),
+			.pitch 	 = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), def_hpr.pitch),
+			.roll    = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), def_hpr.roll),
+	};
+	
+	trj_hpr_to_ctn(mat, hpr);
+	
+	return;
+}
+
+void vl_gui_mat_set(void *ptr, vlf_t *mat)
+{
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	
+	s_trj_rot_hpr hpr;
+	
+	trj_ctn_to_hpr(&hpr, mat);
+	
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), (float) hpr.heading);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), (float) hpr.pitch);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), (float) hpr.roll);
+	
+	return;
+}
+
+
 void vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format)
 {
 	ImGui::SetNextItemWidth(-1);

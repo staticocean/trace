@@ -23,6 +23,9 @@ void vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, 
 void vl_gui_rot(char *label, vlf_t *mat);
 void vl_gui_bool(char *label, uint8_t *data);
 
+void vl_gui_mat_get(void *ptr, vlf_t *mat, vlf_t *def);
+void vl_gui_mat_set(void *ptr, vlf_t *mat);
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_GUI_OBJ__ */

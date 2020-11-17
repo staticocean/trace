@@ -206,6 +206,7 @@ CMakeFiles/trj.dir/src/trj_gui_cmd.cpp.obj
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
  ../lib/trj/vl3d.h
  ../lib/trj/vl_svd.h
