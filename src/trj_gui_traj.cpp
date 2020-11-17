@@ -32,6 +32,24 @@ void trj_gui_traj_edit(s_trj_traj *self)
 	return;
 }
 
+void trj_gui_traj_bz_edit(s_trj_traj *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_traj_bz *traj = (s_trj_traj_bz*) self->data;
+	
+	for (int i = 0; i < traj->pts_offset; ++i)
+	{
+		ImGui::PushID(i);
+		vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
+		ImGui::PopID();
+	}
+	
+	ImGui::PopID();
+	
+	return;
+}
+
 static const float NODE_SLOT_RADIUS = 4.0f;
 
 ImVec2 transform(s_view_data *view, ImVec2 pos)
@@ -52,7 +70,7 @@ ImVec2 inv_transform(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-void trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
+void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
 {
 	s_view_data view_top;
 	s_view_data view_bot;
@@ -613,9 +631,9 @@ void trj_gui_traj_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool v
 
 //------------------------------------------------------------------------------
 
-void trj_gui_traj_forb_edit(s_trj_traj *self)
+void trj_gui_traj_orb_edit(s_trj_traj *self)
 {
-	s_trj_traj_forb *traj = (s_trj_traj_forb*) self->data;
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
 	ImGui::PushID(self);
 
@@ -639,7 +657,19 @@ void trj_gui_traj_forb_edit(s_trj_traj *self)
 //
 //		ImGui::EndCombo();
 //	}
-//
+
+	ImGui::Text("sync_en");
+	ImGui::SameLine();
+	
+	if (ImGui::Button((traj->sync_en == 0x00) ? "OFF##sync_en" : "ON##sync_en"))
+	{
+		traj->sync_en = (!traj->sync_en) & 0x01;
+	}
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
 	ImGui::Text("radius");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 	ImGui::SameLine();
@@ -684,15 +714,56 @@ void trj_gui_traj_forb_edit(s_trj_traj *self)
 
 //------------------------------------------------------------------------------
 
-void trj_gui_traj_aorb_edit(s_trj_traj *self)
+void trj_gui_traj_orb_view(s_trj_traj *self)
 {
-	s_trj_traj_aorb *traj = (s_trj_traj_aorb*) self->data;
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
-
+	s_vl3d_eng vl3d_eng;
+	s_vl3d_obj obj_list[2048];
+	s_vl3d_view view;
 	
-	return;
+	view.scale = 0.75;
+	vl_vzero(view.pos);
+	vl_mid(&view.rot[0][0]);
+	
+	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
+			.obj_list = obj_list,
+	});
+	
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { -1.0, +0.0, +0.0 }, (float64_t[]) { +1.0, +0.0, +0.0 } );
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
+	
+	if (fabs(traj->rate) > 1E-9)
+	{
+		vlf_t time = 0.0;
+		vlf_t time_limit = vl_2pi / fabs(traj->rate);
+		vlf_t time_step = time_limit / 1000;
+		int time_iter = time_limit / time_step;
+		
+		vlf_t p0[3];
+		vlf_t p1[3];
+		vlf_t rot[9];
+		
+		trj_traj_orb_pos(traj, time, p0);
+		trj_traj_orb_pos(traj, time, p1);
+		
+		for (int i = 0; i < time_iter; ++i)
+		{
+			time += time_step;
+			
+			vl_vcopy(p0, p1);
+			trj_traj_orb_pos(traj, time, p1);
+			
+			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
+					.p0 = { p0[0], p0[1], p0[2] },
+					.p1 = { p1[0], p1[1], p1[2] },
+			});
+		}
+	}
+	
+	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
 }
-
 
 //------------------------------------------------------------------------------
 

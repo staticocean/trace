@@ -67,6 +67,77 @@ namespace ImGui {
 		
 		return true;
 	}
+	
+//	/// Get custom user iu state at given position of id stack. If state does not exist then state object will be created.
+///// Using different type at the same id stack position will return new object of that type. Arguments passed to this
+///// function will be passed to constructor of type T.
+//	template<typename T, typename... Args>
+//	T* GetUIState(Args... args)
+//	{
+//		ImGui::PushID(typeid(T).name());
+//		T* state = (T*)GetUIStateP();
+//		if (state == nullptr)
+//		{
+//			state = new T(args...);
+//			SetUIStateP(state, [](void* s) { delete (T*)s; });
+//		}
+//		ImGui::PopID();
+//		return state;
+//	}
+///// Expire custom ui state at given position if id stack, created with GetUIState<T>. It will be freed immediately.
+//	template<typename T>
+//	void ExpireUIState()
+//	{
+//		ImGui::PushID(typeid(T).name());
+//		ExpireUIStateP();
+//		ImGui::PopID();
+//	}
+//
+//	static unordered_map<ImGuiID, UIStateWrapper> uiState_;
+//	static int uiStateLastGcFrame_ = 0;
+//
+//	void SetUIStateP(void* state, void(*deleter)(void*))
+//	{
+//		auto id = ImGui::GetCurrentWindow()->IDStack.back();
+//		uiState_[id].Set(state, deleter);
+//	}
+//
+//	void* GetUIStateP()
+//	{
+//		void* result = nullptr;
+//		auto id = ImGui::GetCurrentWindow()->IDStack.back();
+//		auto it = uiState_.find(id);
+//		if (it != uiState_.end())
+//			result = it->second.Get();
+//
+//		int currentFrame = ImGui::GetCurrentContext()->FrameCount;
+//		if (uiStateLastGcFrame_ != currentFrame)
+//		{
+//			uiStateLastGcFrame_ = currentFrame;
+//			for (auto jt = uiState_.begin(); jt != uiState_.end();)
+//			{
+//				if (jt->second.IsExpired())
+//				{
+//					jt->second.Unset();
+//					jt = uiState_.erase(jt);
+//				}
+//				else
+//					++jt;
+//			}
+//		}
+//
+//		return result;
+//	}
+//
+//	void ExpireUIStateP()
+//	{
+//		auto it = uiState_.find(ImGui::GetCurrentWindow()->IDStack.back());
+//		if (it != uiState_.end())
+//		{
+//			it->second.Unset();
+//			uiState_.erase(it);
+//		}
+//	}
 }
 
 //------------------------------------------------------------------------------

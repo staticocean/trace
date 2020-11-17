@@ -3,15 +3,15 @@
 
 //------------------------------------------------------------------------------
 
-uint8_t vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format)
+void vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format)
 {
 	ImGui::SetNextItemWidth(-1);
 	ImGui::DragScalarN(label, ImGuiDataType_Double, vec, 3, v_speed, min, max, format);
 	
-	return 0x00;
+	return;
 }
 
-uint8_t vl_gui_hpr(char *label, s_trj_rot_hpr *hpr, float v_speed, char *format)
+void vl_gui_hpr(char *label, s_trj_rot_hpr *hpr, float v_speed, char *format)
 {
 	static vlf_t heading_min = 0.0;
 	static vlf_t heading_max = 360.0;
@@ -62,10 +62,10 @@ uint8_t vl_gui_hpr(char *label, s_trj_rot_hpr *hpr, float v_speed, char *format)
 //	hpr->pitch   = vl_rad(hpr_deg[1]);
 //	hpr->roll    = vl_rad(hpr_deg[2]);
 //
-	return 0x00;
+	return;
 }
 
-uint8_t vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, char *format)
+void vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, char *format)
 {
 	ImGui::PushID(label);
 	
@@ -85,10 +85,10 @@ uint8_t vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *ma
 	
 	ImGui::PopID();
 	
-	return 0x00;
+	return;
 }
 
-uint8_t vl_gui_rot(char *label, vlf_t *mat)
+void vl_gui_rot(char *label, vlf_t *mat)
 {
 	enum st
 	{
@@ -234,7 +234,69 @@ uint8_t vl_gui_rot(char *label, vlf_t *mat)
 	
 	ImGui::PopID();
 	
-	return 0x00;
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+void vl_gui_bool(char *label, uint8_t *data)
+{
+//	ImGuiStyle& style = ImGui::GetStyle();
+//	ImU32 col_text_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
+//	ImU32 col_textdis_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_TextDisabled]);
+//	ImU32 col_button_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Button]);
+//
+//	ImVec2 p = ImGui::GetCursorScreenPos();
+//	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+//
+//	float height = ImGui::GetFrameHeight();
+//	float width = height * 2.0f;
+//
+//	if (ImGui::InvisibleButton(label, ImVec2(width, height)))
+//	{
+//		*data = (!*data) & 0x01;
+//	}
+//
+//	switch (*data)
+//	{
+//		case 0x00:
+//		{
+//			draw_list->AddRect(ImVec2(p.x, p.y), ImVec2(p.x+width, p.y+height), col_text_u32);
+//			draw_list->AddText(ImVec2(p.x, p.y), col_text_u32, "OFF");
+//
+//			break;
+//		}
+//
+//		default:
+//		{
+//			draw_list->AddRectFilled(ImVec2(p.x, p.y), ImVec2(p.x+width, p.y+height), col_button_u32);
+//			draw_list->AddText(ImVec2(p.x, p.y), col_text_u32, "ON");
+//
+//			break;
+//		}
+//	}
+//
+
+	ImGui::PushID(label);
+	
+	if (ImGui::Button((*data == 0x00) ? "OFF" : "ON"))
+	{
+		*data = (!*data) & 0x01;
+	}
+
+	ImGui::PopID();
+	
+//	ImU32 col_bg;
+//
+//	if (ImGui::IsItemHovered())
+//		col_bg = *data ? IM_COL32(145+20, 211, 68+20, 255) : IM_COL32(218-20, 218-20, 218-20, 255);
+//	else
+//		col_bg = *data ? IM_COL32(145, 211, 68, 255) : IM_COL32(218, 218, 218, 255);
+//
+//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg);
+//	draw_list->AddRectFilled(ImVec2(*data ? (p.x + width) : (p.x), p.y), ImVec2(*data ? (p.x + width) : (p.x), p.y), IM_COL32(255, 255, 255, 255));
+	
+	return;
 }
 
 //------------------------------------------------------------------------------

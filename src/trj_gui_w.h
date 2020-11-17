@@ -17,10 +17,11 @@ extern "C"
 
 //------------------------------------------------------------------------------
 
-uint8_t vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format);
-uint8_t vl_gui_hpr(char *label, s_trj_rot_hpr *hpr, float v_speed, char *format);
-uint8_t vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, char *format);
-uint8_t vl_gui_rot(char *label, vlf_t *mat);
+void vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format);
+void vl_gui_hpr(char *label, s_trj_rot_hpr *hpr, float v_speed, char *format);
+void vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t *max, char *format);
+void vl_gui_rot(char *label, vlf_t *mat);
+void vl_gui_bool(char *label, uint8_t *data);
 
 //------------------------------------------------------------------------------
 
