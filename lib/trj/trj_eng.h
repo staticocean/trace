@@ -124,8 +124,11 @@ inline uint8_t 	trj_eng_reset(s_trj_eng *self)
 	{
 		obj = &self->obj_list[i];
 		
-		free(obj->log_list);
+		// must retain order
+		// first reset offset then NULL the ptr
+		// some RT plotting functions may still try to draw this
 		obj->log_offset = 0x00;
+		free(obj->log_list);
 		
 		for (j = 0; j < obj->traj_offset; ++j)
 		{
@@ -135,6 +138,11 @@ inline uint8_t 	trj_eng_reset(s_trj_eng *self)
 		for (j = 0; j < obj->ctrl_offset; ++j)
 		{
 			obj->ctrl_list[j].reset(obj->ctrl_list[j].data, obj);
+		}
+		
+		for (j = 0; j < obj->data_offset; ++j)
+		{
+			obj->data_list[j].reset(obj->data_list[j].data, obj);
 		}
 	}
 	
@@ -160,6 +168,28 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 		for (j = 0; j < obj->ctrl_offset; ++j)
 		{
 			obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
+		}
+	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_eng_render(s_trj_eng *self)
+{
+	uint32_t i;
+	uint32_t j;
+	
+	s_trj_obj *obj;
+	
+	for (i = 0; i < self->obj_count; ++i)
+	{
+		obj = &self->obj_list[i];
+		
+		for (j = 0; j < obj->data_offset; ++j)
+		{
+			obj->data_list[j].render(obj->data_list[j].data, obj);
 		}
 	}
 	

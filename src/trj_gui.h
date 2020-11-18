@@ -31,6 +31,7 @@ extern "C"
 #include "trj_gui_tbar.h"
 #include "trj_gui_traj.h"
 #include "trj_gui_ctrl.h"
+#include "trj_gui_data.h"
 #include "trj_gui_cmd.h"
 #include "trj_gui_env.h"
 

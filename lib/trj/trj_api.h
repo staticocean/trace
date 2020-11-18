@@ -54,8 +54,8 @@ typedef struct trj_traj
 	uint8_t (*free) 	(void **data);
 	uint8_t (*compile) 	(void *data);
 	uint8_t (*info) 	(void *data, s_trj_traj_info *info);
-	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
-	uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *rot);
+	uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *pos);
 	
 } 	s_trj_traj;
 
@@ -133,6 +133,7 @@ typedef struct trj_data
 	
 	uint8_t (*init) 	(void **data, void *config);
 	uint8_t (*free) 	(void **data);
+	uint8_t (*reset) 	(void *data, void *obj);
 	uint8_t (*render) 	(void *data, void *obj);
 	
 } 	s_trj_data;

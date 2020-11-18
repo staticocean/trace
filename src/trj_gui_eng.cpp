@@ -475,6 +475,9 @@ uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		{
 			if (gui->time_step < 1E-9) { return 0x01; }
 			
+			// run data render routines
+			trj_eng_render(self);
+			
 			break;
 		}
 		

@@ -172,6 +172,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
  ../lib/trj/trj_data.h
+ ../lib/trj/trj_data_.h
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
@@ -185,6 +186,7 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_data.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_menu.h
@@ -234,9 +236,13 @@ CMakeFiles/trj.dir/src/trj_gui_data.cpp.obj
  ../lib/imgui/imstb_textedit.h
  ../lib/trj/trj_api.h
  ../lib/trj/trj_data.h
+ ../lib/trj/trj_data_.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_types.h
+ ../lib/trj/trj_utils.h
  ../lib/trj/vl.h
+ ../lib/trj/vl3d.h
+ ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_data.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_data.h
 CMakeFiles/trj.dir/src/trj_gui_eng.cpp.obj
@@ -377,6 +383,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
  ../lib/trj/trj_data.h
+ ../lib/trj/trj_data_.h
  ../lib/trj/trj_eng.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_traj.h
@@ -389,6 +396,7 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_cmd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_ctrl.h
+ C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_data.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_eng.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_menu.h

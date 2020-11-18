@@ -720,7 +720,7 @@ void trj_gui_traj_orb_view(s_trj_traj *self)
 	
 	s_vl3d_eng vl3d_eng;
 	s_vl3d_obj obj_list[2048];
-	s_vl3d_view view = { .scale = 0.75, .pos = { 0.0, 0.0, 0.0 } };
+	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 } };
 	
 	vl3d_view_load(self, &view, view);
 	
@@ -728,13 +728,13 @@ void trj_gui_traj_orb_view(s_trj_traj *self)
 			.obj_list = obj_list,
 	});
 	
-	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { -1.0, +0.0, +0.0 }, (float64_t[]) { +1.0, +0.0, +0.0 } );
-	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
-	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { -0.25/view.scale, +0.0, +0.0 }, (float64_t[]) { +0.25/view.scale, +0.0, +0.0 } );
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -0.25/view.scale, +0.0 }, (float64_t[]) { +0.0, +0.25/view.scale, +0.0 } );
+	vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -0.25/view.scale }, (float64_t[]) { +0.0, +0.0, +0.25/view.scale } );
 	
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 1.0, 0.0, 0.0 }, .data = "X" } );
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 1.0, 0.0 }, .data = "Y" } );
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 0.0, 1.0 }, .data = "Z" } );
+	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.25/view.scale, 0.0, 0.0 }, .data = "X" } );
+	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 0.25/view.scale, 0.0 }, .data = "Y" } );
+	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 0.0, 0.25/view.scale }, .data = "Z" } );
 	
 	if (fabs(traj->rate) > 1E-9)
 	{

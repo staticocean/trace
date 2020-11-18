@@ -117,47 +117,62 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
-			.id = 0x00,
-			.desc = "default_ctrl_upos",
-			.init = trj_ctrl_upos_init_,
-			.free = trj_ctrl_upos_free_,
-			.data = NULL,
+			.id     = 0x00,
+			.desc   = "default_ctrl_upos",
+			.init   = trj_ctrl_upos_init_,
+			.free   = trj_ctrl_upos_free_,
+			.data   = NULL,
 			.config = &trj_ctrl_upos_config_,
-			.reset = trj_ctrl_upos_reset_,
+			.reset  = trj_ctrl_upos_reset_,
 			.update = trj_ctrl_upos_update_,
 	});
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
-			.id = 0x00,
-			.desc = "default_ctrl_cpos",
-			.init = trj_ctrl_cpos_init_,
-			.free = trj_ctrl_cpos_free_,
-			.data = NULL,
+			.id     = 0x00,
+			.desc   = "default_ctrl_cpos",
+			.init   = trj_ctrl_cpos_init_,
+			.free   = trj_ctrl_cpos_free_,
+			.data   = NULL,
 			.config = &trj_ctrl_cpos_config_,
-			.reset = trj_ctrl_cpos_reset_,
+			.reset  = trj_ctrl_cpos_reset_,
 			.update = trj_ctrl_cpos_update_,
 	});
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
-			.id = 0x00,
-			.desc = "default_ctrl_urot",
-			.init = trj_ctrl_urot_init_,
-			.free = trj_ctrl_urot_free_,
-			.data = NULL,
+			.id     = 0x00,
+			.desc   = "default_ctrl_urot",
+			.init   = trj_ctrl_urot_init_,
+			.free   = trj_ctrl_urot_free_,
+			.data   = NULL,
 			.config = &trj_ctrl_urot_config_,
-			.reset = trj_ctrl_urot_reset_,
+			.reset  = trj_ctrl_urot_reset_,
 			.update = trj_ctrl_urot_update_,
 	});
 	
 	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
-			.id = 0x00,
-			.desc = "default_ctrl_crot",
-			.init = trj_ctrl_crot_init_,
-			.free = trj_ctrl_crot_free_,
-			.data = NULL,
+			.id     = 0x00,
+			.desc   = "default_ctrl_crot",
+			.init   = trj_ctrl_crot_init_,
+			.free   = trj_ctrl_crot_free_,
+			.data   = NULL,
 			.config = &trj_ctrl_crot_config_,
-			.reset = trj_ctrl_crot_reset_,
+			.reset  = trj_ctrl_crot_reset_,
 			.update = trj_ctrl_crot_update_,
+	});
+	
+	static s_trj_data_ram_init trj_data_ram_config_ = {
+			.temp = 0x00,
+	};
+	
+	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
+			.id     = trj_data_ram_id,
+			.desc   = "default_data_ram",
+			.init   = trj_data_ram_init_,
+			.free   = trj_data_ram_free_,
+			.data   = NULL,
+			.config = &trj_data_ram_config_,
+			.render = trj_data_ram_render_,
+			.reset  = trj_data_ram_reset_,
 	});
 	
 	static s_trj_data_text_init trj_data_text_config_ = {
@@ -165,13 +180,14 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
-			.id = 0x00,
-			.desc = "default_data_text",
-			.init = trj_data_text_init_,
-			.free = trj_data_text_free_,
-			.data = NULL,
+			.id     = trj_data_text_id,
+			.desc   = "default_data_text",
+			.init   = trj_data_text_init_,
+			.free   = trj_data_text_free_,
+			.data   = NULL,
 			.config = &trj_data_text_config_,
 			.render = trj_data_text_render_,
+			.reset  = trj_data_text_reset_,
 	});
 	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "ref"   , .ref = &self->eng.obj_list[0] });
@@ -217,8 +233,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 		vl_mid(&self->eng.obj_list[i].rot[0][0]);
 	}
 	
-	ImGui::StyleColorsDark();
-//	ImGui::StyleColorsLight();
+//	ImGui::StyleColorsDark();
+	ImGui::StyleColorsLight();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	
@@ -240,13 +256,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 		.eng = &self->eng,
 		.traj_offset = &self->gui_eng.traj_offset,
 		.ctrl_offset = &self->gui_eng.ctrl_offset,
-//		.proc_offset = &self->gui_eng.proc_offset,
-//		.data_offset = &self->gui_eng.data_offset,
+		.data_offset = &self->gui_eng.data_offset,
 		
 		.traj_list = self->gui_eng.traj_list,
 		.ctrl_list = self->gui_eng.ctrl_list,
-//		.proc_list = self->gui_eng.proc_list,
-//		.data_list = self->gui_eng.data_list,
+		.data_list = self->gui_eng.data_list,
 	});
 	
 	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)
@@ -258,7 +272,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	self->gui_menu.env = &self->gui_env;
 	self->gui_eng.time_limit = 3600.0;
-	self->gui_eng.time_step = 0.001;
+	self->gui_eng.time_step = 0.01;
 	self->gui_eng.time_iter = self->gui_eng.time_limit
 						    / self->gui_eng.time_step;
 	
@@ -339,29 +353,31 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					break;
 				}
 				
+				case trj_gui_eng_type_data:
+				{
+					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
+					trj_gui_data_edit(data);
+					
+					switch (data->id)
+					{
+						case trj_data_text_id : { trj_gui_data_text_edit(data); break; }
+						case trj_data_ram_id  : { trj_gui_data_ram_edit (data); break; }
+						
+						default: break;
+					}
+					
+					break;
+				}
+				
 				default:
 					break;
 			}
 		}
 		
-//		trj_gui_eng_addbox(&self->gui_eng, &self->eng);
-		
 		ImGui::End();
 	}
 	
 	{
-//		// Main view
-//		ImGui::SetNextWindowPos ((ImVec2) {400, (float) self->gui_menu.height});
-//		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 400, self->w_height - self->gui_menu.height});
-//		ImGui::Begin("main_view", NULL, static_flags);
-//
-//		bool view_res = ImGui::Button("view_res");
-//
-//		trj_gui_traj_bz(&traj_bz, "##temp", ImVec2(-1, 600), view_res);
-//
-//		ImGui::End();
-		
-		
 		// Main view
 		ImGui::SetNextWindowPos ((ImVec2) {240*2, (float) self->gui_menu.height + (float) self->gui_tbar.height });
 		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 240*2, self->w_height - self->gui_menu.height - self->gui_tbar.height });
@@ -388,12 +404,27 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					switch (traj->id)
 					{
 						case trj_traj_orb_id: { trj_gui_traj_orb_view(traj); break; }
+						case trj_traj_bz_id : { trj_gui_traj_bz_view((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); break; }
 						
-						case trj_traj_bz_id:
-						{
-							trj_gui_traj_bz_view((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00);
-							break;
-						}
+						default: break;
+					}
+					
+					break;
+				}
+				
+				case trj_gui_eng_type_ctrl:
+				{
+					break;
+				}
+				
+				case trj_gui_eng_type_data:
+				{
+					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
+					
+					switch (data->id)
+					{
+						case trj_data_text_id : { trj_gui_data_text_view(data); break; }
+						case trj_data_ram_id  : { trj_gui_data_ram_view (data); break; }
 						
 						default: break;
 					}
