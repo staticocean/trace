@@ -24,18 +24,17 @@ typedef struct trj_traj_info
 typedef struct trj_traj
 {
 	uint32_t id;
-	
 	char desc[32];
 	
-	void *data;
 	void *config;
+	void *data;
 	
 	void *init;
 	void *free;
 	void *compile;
 	void *info;
-	void *rot;
 	void *pos;
+	void *rot;
 	
 } 	s_trj_traj;
 
@@ -44,18 +43,17 @@ typedef struct trj_traj
 typedef struct trj_traj
 {
 	uint32_t id;
-	
 	char desc[32];
 	
-	void *data;
 	void *config;
+	void *data;
 	
 	uint8_t (*init) 	(void **data, void *config);
 	uint8_t (*free) 	(void **data);
 	uint8_t (*compile) 	(void *data);
 	uint8_t (*info) 	(void *data, s_trj_traj_info *info);
-	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *rot);
 	uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *pos);
+	uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *rot);
 	
 } 	s_trj_traj;
 
@@ -68,11 +66,10 @@ typedef struct trj_traj
 typedef struct trj_ctrl
 {
 	uint32_t id;
-	
 	char desc[32];
 	
-	void *data;
 	void *config;
+	void *data;
 	
 	void *init;
 	void *free;
@@ -86,11 +83,10 @@ typedef struct trj_ctrl
 typedef struct trj_ctrl
 {
 	uint32_t id;
-	
 	char desc[32];
 	
-	void *data;
 	void *config;
+	void *data;
 	
 	uint8_t (*init) 	(void **data, void *config);
 	uint8_t (*free) 	(void **data);
@@ -108,14 +104,14 @@ typedef struct trj_ctrl
 typedef struct trj_data
 {
 	uint32_t id;
-	
 	char desc[32];
 	
-	void *data;
 	void *config;
+	void *data;
 	
 	void *init;
 	void *free;
+	void *reset;
 	void *render;
 	
 } 	s_trj_data;
@@ -125,7 +121,6 @@ typedef struct trj_data
 typedef struct trj_data
 {
 	uint32_t id;
-	
 	char desc[32];
 	
 	void *data;
@@ -156,11 +151,8 @@ typedef struct trj_obj_data
 
 typedef struct trj_obj
 {
-	struct trj_obj *obj_list;
-	uint32_t *obj_count;
-	
 	uint32_t id;
-	char name[32];
+	char desc[32];
 	
 	vlf_t *time;
 	
@@ -185,6 +177,23 @@ typedef struct trj_obj
 	s_trj_data data_list[8];
 	
 } 	s_trj_obj;
+
+//------------------------------------------------------------------------------
+
+typedef struct trj_eng
+{
+	uint32_t  obj_count;
+	s_trj_obj *obj_list;
+	
+	vlf_t time[2];
+	
+}	s_trj_eng;
+
+typedef struct trj_eng_init_attr
+{
+	s_trj_obj *st_objects;
+	
+}	s_trj_eng_init;
 
 //------------------------------------------------------------------------------
 

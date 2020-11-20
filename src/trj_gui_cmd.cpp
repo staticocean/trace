@@ -195,7 +195,7 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImVec4 col_window_bg = style.Colors[ImGuiCol_WindowBg];
 	ImVec4 col_window_bg_tp = style.Colors[ImGuiCol_WindowBg];
-	col_window_bg_tp.w = 0.5;
+	col_window_bg_tp.w = 0.7;
 	
 	ImGui::SetNextWindowSize(ImVec2(500, 600), ImGuiCond_Once);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, col_window_bg_tp);

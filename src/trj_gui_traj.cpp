@@ -37,6 +37,33 @@ void trj_gui_traj_bz_edit(s_trj_traj *self)
 	ImGui::PushID(self);
 	
 	s_trj_traj_bz *traj = (s_trj_traj_bz*) self->data;
+
+	ImGui::Text("eng");
+	ImGui::SameLine();
+	ImGui::Text("%08X", traj->eng);
+	
+	
+//	ImGui::Text("ref");
+//	ImGui::NextColumn();
+//	const char* items[*self->obj_count];
+//	for (int i = 0; i < *self->obj_count; ++i)
+//	{ items[i] = self->obj_list[i].name; }
+//	ImGui::SetNextItemWidth(-1);
+//	if (ImGui::BeginCombo("##ref",
+//			items[self->ref->id],
+//			ImGuiComboFlags_NoArrowButton))
+//	{
+//		for (int i = 0; i < IM_ARRAYSIZE(items); ++i)
+//		{
+//			const bool is_selected = (self->ref->id == i);
+//
+//			if (ImGui::Selectable(items[i], is_selected)) { self->ref = &self->obj_list[i]; }
+//			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+//		}
+//
+//		ImGui::EndCombo();
+//	}
+//	ImGui::NextColumn();
 	
 	for (int i = 0; i < traj->pts_offset; ++i)
 	{

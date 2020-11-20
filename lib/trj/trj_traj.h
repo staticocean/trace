@@ -11,7 +11,7 @@
 
 #include "vl.h"
 #include "trj_utils.h"
-
+#include "trj_api.h"
 #include "trj_bz.h"
 
 //------------------------------------------------------------------------------
@@ -40,6 +40,9 @@ typedef struct trj_traj_bz_point
 
 typedef struct trj_traj_bz
 {
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
 	s_trj_traj_bz_point *pts;
 	uint32_t pts_offset;
 
@@ -47,6 +50,9 @@ typedef struct trj_traj_bz
 
 typedef struct trj_traj_bz_init
 {
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
 	s_trj_traj_bz_point *pts;
 	
 } 	s_trj_traj_bz_init;
@@ -55,6 +61,9 @@ typedef struct trj_traj_bz_init
 
 inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 {
+	self->eng = attr.eng;
+	self->ref = attr.ref;
+	
 	self->pts = attr.pts;
 	self->pts_offset = 0x00;
 	
@@ -477,7 +486,8 @@ inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
 
 typedef struct trj_traj_orb
 {
-	s_trj_obj 	*ref;
+	s_trj_eng *eng;
+	s_trj_obj *ref;
 	
 	uint8_t 	sync_en;
 	
@@ -492,7 +502,8 @@ typedef struct trj_traj_orb
 
 typedef struct trj_traj_orb_init
 {
-	s_trj_obj 	*ref;
+	s_trj_eng *eng;
+	s_trj_obj *ref;
 	
 	uint8_t 	sync_en;
 	
@@ -509,7 +520,9 @@ typedef struct trj_traj_orb_init
 
 inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
 {
+	self->eng    	= attr.eng;
 	self->ref    	= attr.ref;
+	
 	self->sync_en  = attr.sync_en;
 	
 	self->radius = attr.radius;

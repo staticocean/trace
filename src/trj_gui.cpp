@@ -57,8 +57,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_eng_init(&self->eng, (s_trj_eng_init) { .st_objects = self->st_eng_obj });
 	
 	static s_trj_traj_orb_init trj_traj_orb_config_ = {
-			
+			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
+			
 			.sync_en = 0x00,
 			
 			.radius = 0.0,
@@ -84,6 +85,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	static s_trj_traj_bz_init trj_traj_bz_config_ = {
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+			
 			.pts = NULL,
 	};
 	
@@ -190,11 +194,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.reset  = trj_data_text_reset_,
 	});
 	
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "ref"   , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "sun"   , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "earth" , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "moon"  , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .name = "object", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"   , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"   , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth" , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "moon"  , .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "object", .ref = &self->eng.obj_list[0] });
 	
 	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
 	{
@@ -202,6 +206,12 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 				(s_trj_gui_obj_init) {.ref = &self->eng.obj_list[0]}
 				);
 	}
+	
+	trj_obj_add_traj(&self->eng.obj_list[0], self->gui_eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[1], self->gui_eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[2], self->gui_eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[3], self->gui_eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[4], self->gui_eng.traj_list[1]);
 	
 	trj_obj_add_traj(&self->eng.obj_list[0], self->gui_eng.traj_list[0]);
 	trj_obj_add_traj(&self->eng.obj_list[1], self->gui_eng.traj_list[0]);
@@ -286,7 +296,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 uint8_t trj_gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
-					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
 	
 	bool show_demo_window = true;
 	

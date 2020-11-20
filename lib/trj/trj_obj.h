@@ -17,9 +17,7 @@
 typedef struct trj_obj_init
 {
 	uint32_t id;
-	s_trj_obj *obj_list;
-	uint32_t *obj_count;
-	char name[32];
+	char desc[32];
 	struct trj_obj *ref;
 	
 } s_trj_obj_init;
@@ -30,7 +28,7 @@ typedef struct trj_obj_init
 inline void trj_obj_print(s_trj_obj *obj)
 {
 	printf(vl_lsep);
-	printf("name        [%s] \r\n", obj->name);
+	printf("desc        [%s] \r\n", obj->desc);
 	printf("id          [%06X] \r\n", obj->id);
 //	printf("ref         [%s] \r\n", obj->ref->name);
 	printf("traj_offset [%d] \r\n", obj->traj_offset);
@@ -79,9 +77,6 @@ inline void trj_obj_print(s_trj_obj *obj)
 inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 {
 	self->id = attr.id;
-	self->obj_list = attr.obj_list;
-	self->obj_count = attr.obj_count;
-//	self->ref = attr.ref;
 	
 	self->traj_offset = 0x00;
 	self->ctrl_offset = 0x00;
@@ -92,9 +87,9 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 	
 	uint32_t i;
 	
-	for (i = 0; i < sizeof(attr.name); ++i)
+	for (i = 0; i < sizeof(attr.desc); ++i)
 	{
-		self->name[i] = attr.name[i];
+		self->desc[i] = attr.desc[i];
 	}
 	
 	return 0x00;

@@ -83,24 +83,24 @@ uint8_t __api_ctrl_update__(void *data, void *obj)
 void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 				  struct Value **Param, int NumArgs)
 {
-	s_trj_gui_env *env = (s_trj_gui_env*) Param[0]->Val->Pointer;
-	uint32_t 	*ctrl_offset = (uint32_t*)   Param[1]->Val->Pointer;
-	s_trj_ctrl 	*ctrl_list   = (s_trj_ctrl*) Param[2]->Val->Pointer;
+	s_trj_gui_env *env         = (s_trj_gui_env*) Param[0]->Val->Pointer;
+	uint32_t 	  *ctrl_offset = (uint32_t*)      Param[1]->Val->Pointer;
+	s_trj_ctrl    *ctrl_list   = (s_trj_ctrl*)    Param[2]->Val->Pointer;
 	
 	ctrl_list[*ctrl_offset].id = (uint32_t) Param[3]->Val->UnsignedInteger;
 	memcpy(ctrl_list[*ctrl_offset].desc, Param[4]->Val->Pointer, 32);
 	ctrl_list[*ctrl_offset].data   = (void*) st_offset;
 	ctrl_list[*ctrl_offset].config = Param[5]->Val->Pointer;
-	ctrl_list[*ctrl_offset].init = __api_ctrl_init__;
-	ctrl_list[*ctrl_offset].free = __api_ctrl_free__;
-	ctrl_list[*ctrl_offset].reset = __api_ctrl_reset__;
+	ctrl_list[*ctrl_offset].init   = __api_ctrl_init__;
+	ctrl_list[*ctrl_offset].free   = __api_ctrl_free__;
+	ctrl_list[*ctrl_offset].reset  = __api_ctrl_reset__;
 	ctrl_list[*ctrl_offset].update = __api_ctrl_update__;
 	
 	st_id[st_offset] = (uint32_t) Param[3]->Val->UnsignedInteger;
 	st_env[st_offset] = env;
-	memcpy(&st_init[st_offset][0], Param[6]->Val->Pointer, 64);
-	memcpy(&st_free[st_offset][0], Param[7]->Val->Pointer, 64);
-	memcpy(&st_reset[st_offset][0], Param[8]->Val->Pointer, 64);
+	memcpy(&st_init[st_offset][0]  , Param[6]->Val->Pointer, 64);
+	memcpy(&st_free[st_offset][0]  , Param[7]->Val->Pointer, 64);
+	memcpy(&st_reset[st_offset][0] , Param[8]->Val->Pointer, 64);
 	memcpy(&st_update[st_offset][0], Param[9]->Val->Pointer, 64);
 	
 	(*ctrl_offset)++;
@@ -133,13 +133,24 @@ void __env_init__(s_trj_gui_env *self)
 	PicocParse(&self->env, "trj_env", env_define, strlen(env_define),
 			   true, false, false, true);
 	
+//	VariableDefinePlatformVar(&self->env, NULL, "__api_traj_data_ref__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_traj_data_ref, 0x01);
+//	VariableDefinePlatformVar(&self->env, NULL, "__api_traj_data__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_traj_data    , 0x01);
+//	VariableDefinePlatformVar(&self->env, NULL, "__api_traj_config__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_traj_config  , 0x01);
+//	VariableDefinePlatformVar(&self->env, NULL, "__api_traj_obj__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_traj_obj     , 0x01);
+	
 	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_data_ref__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_data_ref, 0x01);
-	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_data__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_data, 0x01);
-	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_config__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_config, 0x01);
-	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_obj__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_obj, 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_data__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_data    , 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_config__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_config  , 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_ctrl_obj__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_ctrl_obj     , 0x01);
+	
+	VariableDefinePlatformVar(&self->env, NULL, "__api_data_data_ref__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_data_data_ref, 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_data_data__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_data_data    , 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_data_config__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_data_config  , 0x01);
+	VariableDefinePlatformVar(&self->env, NULL, "__api_data_obj__"		, self->env.VoidPtrType, (union AnyValue *) &self->api_data_obj     , 0x01);
 	
 	VariableDefinePlatformVar(&self->env, NULL, "__eng__"		, self->env.VoidPtrType, (union AnyValue *) &self->eng, 0x01);
 	VariableDefinePlatformVar(&self->env, NULL, "__env__"		, self->env.VoidPtrType, (union AnyValue *) &self, 0x00);
+	
 	VariableDefinePlatformVar(&self->env, NULL, "__traj_offset__", self->env.VoidPtrType, (union AnyValue *) &self->traj_offset, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__traj_list__"  , self->env.VoidPtrType, (union AnyValue *) &self->traj_list, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_offset__", self->env.VoidPtrType, (union AnyValue *) &self->ctrl_offset, 0x00);

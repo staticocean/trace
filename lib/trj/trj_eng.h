@@ -12,25 +12,8 @@
 #include <string.h>
 
 #include "vl.h"
-
+#include "trj_api.h"
 #include "trj_obj.h"
-
-//------------------------------------------------------------------------------
-
-typedef struct trj_eng
-{
-	uint32_t obj_count;
-	s_trj_obj *obj_list;
-	
-	vlf_t time[2];
-	
-}	s_trj_eng;
-
-typedef struct trj_eng_init_attr
-{
-	s_trj_obj *st_objects;
-	
-}	s_trj_eng_init;
 
 //------------------------------------------------------------------------------
 
@@ -43,7 +26,7 @@ inline void trj_eng_print(s_trj_eng *eng)
 	uint32_t i;
 	
 	for (i = 0; i < eng->obj_count; ++i)
-	{ printf("%s \r\n", eng->obj_list[i].name); }
+	{ printf("%s \r\n", eng->obj_list[i].desc); }
 	
 	return;
 }
@@ -63,12 +46,9 @@ inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 	trj_obj_init(obj, attr);
 	
 	obj->id 		= self->obj_count;
-	obj->obj_list 	= self->obj_list;
-	obj->obj_count 	= &self->obj_count;
 	obj->time 		= self->time;
 	obj->log_list   = NULL;
 	obj->log_offset = 0x00;
-	
 	
 	self->obj_count++;
 	
@@ -81,7 +61,7 @@ inline uint8_t trj_eng_objnames(s_trj_eng *self, char **objnames)
 	
 	for (i = 0; i < self->obj_count; ++i)
 	{
-		objnames[i] = self->obj_list[i].name;
+		objnames[i] = self->obj_list[i].desc;
 	}
 	
 	return 0x00;

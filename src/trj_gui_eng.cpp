@@ -90,14 +90,14 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	for (int i = 0; i < self->obj_count; ++i)
 	{
-		filter_data[i] = self->obj_list[i].name;
+		filter_data[i] = self->obj_list[i].desc;
 	}
 	
-	ImGui::SetNextItemWidth(-40);
+	ImGui::SetNextItemWidth(-1);
 	filter.Draw("");
 	
-	ImGui::SameLine();
-	ImGui::Button("add", ImVec2(40, 0));
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
@@ -116,7 +116,7 @@ uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 			bool node_open = ImGui::TreeNodeEx((void*) i,
 					(node_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 					| ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
-					(char*) obj->name);
+					(char*) obj->desc);
 			
 			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, &self->obj_list[i]); }
 			
