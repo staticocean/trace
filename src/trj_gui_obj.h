@@ -4,16 +4,11 @@
 
 #include <lib/imgui/imgui.h>
 
-extern "C"
-{
-	#include <lib/trj/trj_types.h>
-	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/trj_utils.h>
-	#include <lib/trj/vl.h>
-	#include <lib/trj/vl_svd.h>
-}
-
+#include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>
+#include <lib/trj/vl_svd.h>
+#include <lib/trj/trj_obj.h>
+#include <lib/trj/trj_utils.h>
 
 #include "trj_gui_w.h"
 

@@ -1123,6 +1123,33 @@ src\trj_gui_env.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_env.cpp.s
 .PHONY : src\trj_gui_env.cpp.s
 
+src\trj_gui_map.obj: src\trj_gui_map.cpp.obj
+
+.PHONY : src\trj_gui_map.obj
+
+# target to build an object file
+src\trj_gui_map.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_map.cpp.obj
+.PHONY : src\trj_gui_map.cpp.obj
+
+src\trj_gui_map.i: src\trj_gui_map.cpp.i
+
+.PHONY : src\trj_gui_map.i
+
+# target to preprocess a source file
+src\trj_gui_map.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_map.cpp.i
+.PHONY : src\trj_gui_map.cpp.i
+
+src\trj_gui_map.s: src\trj_gui_map.cpp.s
+
+.PHONY : src\trj_gui_map.s
+
+# target to generate assembly for a file
+src\trj_gui_map.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_map.cpp.s
+.PHONY : src\trj_gui_map.cpp.s
+
 src\trj_gui_menu.obj: src\trj_gui_menu.cpp.obj
 
 .PHONY : src\trj_gui_menu.obj
@@ -1405,6 +1432,9 @@ help:
 	@echo ... src/trj_gui_env.obj
 	@echo ... src/trj_gui_env.i
 	@echo ... src/trj_gui_env.s
+	@echo ... src/trj_gui_map.obj
+	@echo ... src/trj_gui_map.i
+	@echo ... src/trj_gui_map.s
 	@echo ... src/trj_gui_menu.obj
 	@echo ... src/trj_gui_menu.i
 	@echo ... src/trj_gui_menu.s

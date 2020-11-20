@@ -11,7 +11,6 @@
 
 #include <string.h>
 
-#include "trj_types.h"
 #include "vl.h"
 
 #include "trj_obj.h"

@@ -267,10 +267,12 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	{
 		.env = &self->gui_env,
 		.title = "env",
-		.visible = true
+		.visible = false
 	});
 	
 	self->gui_menu.env = &self->gui_env;
+	self->gui_menu.cmd = &self->gui_cmd;
+	
 	self->gui_eng.time_limit = 3600.0;
 	self->gui_eng.time_step = 0.01;
 	self->gui_eng.time_iter = self->gui_eng.time_limit
@@ -295,8 +297,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Toolbar
-		ImGui::SetNextWindowPos((ImVec2) { 0, (float) self->gui_menu.height });
-		ImGui::SetNextWindowSize((ImVec2) { 0, (float) self->gui_tbar.height });
+		ImGui::SetNextWindowPos((ImVec2) { 0, (float) self->gui_menu.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowSize((ImVec2) { self->w_width, (float) self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
 		trj_gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
@@ -304,8 +306,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Object list
-		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("obj_list", NULL, static_flags);
 		trj_gui_eng_objlist(&self->gui_eng, &self->eng);
 		ImGui::End();
@@ -313,8 +315,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Object edit
-		ImGui::SetNextWindowPos((ImVec2) {240, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowPos((ImVec2) {240, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("item_edit", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
@@ -379,8 +381,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Main view
-		ImGui::SetNextWindowPos ((ImVec2) {240*2, (float) self->gui_menu.height + (float) self->gui_tbar.height });
-		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 240*2, self->w_height - self->gui_menu.height - self->gui_tbar.height });
+		ImGui::SetNextWindowPos ((ImVec2) {240*2, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 240*2, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("main_view", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)

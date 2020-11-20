@@ -9,9 +9,8 @@
 
 //------------------------------------------------------------------------------
 
-#include "trj_types.h"
-#include "trj_utils.h"
 #include "vl.h"
+#include "trj_utils.h"
 
 #include "trj_bz.h"
 

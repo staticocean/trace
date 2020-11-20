@@ -8,15 +8,10 @@
 #include <lib/imgui/imgui_internal.h>
 #include <math.h>
 
-extern "C"
-{
-	#include <lib/trj/trj_types.h>
-	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/trj_traj.h>
-	#include <lib/trj/vl.h>
-}
-
+#include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>
+#include <lib/trj/trj_obj.h>
+#include <lib/trj/trj_traj.h>
 
 #include "trj_gui_w.h"
 

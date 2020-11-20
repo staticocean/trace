@@ -4,13 +4,10 @@
 
 #include <lib/imgui/imgui.h>
 
-extern "C"
-{
-	#include <lib/trj/trj_types.h>
-	#include <lib/trj/trj_eng.h>
-	#include <lib/trj/trj_traj.h>
-	#include <lib/trj/trj_ctrl.h>
-}
+#include <lib/trj/vl.h>
+#include <lib/trj/trj_eng.h>
+#include <lib/trj/trj_traj.h>
+#include <lib/trj/trj_ctrl.h>
 
 #include "imgui_custom.h"
 

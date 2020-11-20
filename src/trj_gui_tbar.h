@@ -10,11 +10,8 @@
 
 #include <lib/imgui/imgui.h>
 
-extern "C"
-{
-	#include <lib/trj/trj_eng.h>
-	#include <lib/trj/trj_types.h>
-}
+#include <lib/trj/vl.h>
+#include <lib/trj/trj_eng.h>
 
 #include "trj_gui_eng.h"
 

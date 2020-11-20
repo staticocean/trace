@@ -10,19 +10,18 @@
 
 #include <lib/imgui/imgui.h>
 
-extern "C"
-{
-	#include <lib/trj/trj_eng.h>
-	#include <lib/trj/trj_types.h>
-}
+#include <lib/trj/vl.h>
+#include <lib/trj/trj_eng.h>
 
 #include "trj_gui_env.h"
+#include "trj_gui_cmd.h"
 
 //------------------------------------------------------------------------------
 
 typedef struct trj_gui_menu
 {
 	s_trj_gui_env *env;
+	s_trj_gui_cmd *cmd;
 	
 	int height;
 	

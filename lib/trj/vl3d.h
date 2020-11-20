@@ -19,10 +19,9 @@
 
 extern "C"
 {
-	#include "trj_types.h"
-	#include "trj_utils.h"
 	#include "vl.h"
 	#include "vl_svd.h"
+	#include "trj_utils.h"
 }
 
 //------------------------------------------------------------------------------

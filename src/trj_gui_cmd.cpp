@@ -29,7 +29,17 @@ static int   Stricmp(const char* s1, const char* s2)         { int d; while ((d 
 static int   Strnicmp(const char* s1, const char* s2, int n) { int d = 0; while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; n--; } return d; }
 static char* Strdup(const char* s)                           { size_t len = strlen(s) + 1; void* buf = malloc(len); IM_ASSERT(buf); return (char*)memcpy(buf, (const void*)s, len); }
 static void  Strtrim(char* s)                                { char* str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
-	
+
+void trj_gui_cmd_copylog(s_trj_gui_cmd *self)
+{
+//	for (int i = 0; i < self->Items.Size; i++)
+//	{
+//		free(self->Items[i]);
+//	}
+//
+//	self->Items.clear();
+}
+
 void trj_gui_cmd_clearlog(s_trj_gui_cmd *self)
 {
 	for (int i = 0; i < self->Items.Size; i++)
@@ -179,27 +189,18 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	}
 
 //	ImGui::PushID(self);
-
-	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
 	
-	if (!ImGui::Begin(self->title, &self->visible, ImGuiWindowFlags_None))
-	{
-		ImGui::End();
-		return;
-	}
+	if (self->visible == false) { return; }
 	
-	// As a specific feature guaranteed by the library, after calling Begin() the last Item represent the title bar.
-	// So e.g. IsItemHovered() will return true when hovering the title bar.
-	// Here we create a context menu only available from the title bar.
-	if (ImGui::BeginPopupContextItem())
-	{
-		if (ImGui::MenuItem("Close Console"))
-		{
-			self->visible = false;
-		}
-		
-		ImGui::EndPopup();
-	}
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImVec4 col_window_bg = style.Colors[ImGuiCol_WindowBg];
+	ImVec4 col_window_bg_tp = style.Colors[ImGuiCol_WindowBg];
+	col_window_bg_tp.w = 0.5;
+	
+	ImGui::SetNextWindowSize(ImVec2(500, 600), ImGuiCond_Once);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, col_window_bg_tp);
+	
+	ImGui::Begin(self->title, &self->visible, ImGuiWindowFlags_None);
 	
 //	ImGui::TextWrapped(
 //			"This example implements a console with basic coloring, completion (TAB key) and history (Up/Down keys). A more elaborate "
@@ -221,7 +222,7 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	if (ImGui::Button("Options"))
 		ImGui::OpenPopup("Options");
 	ImGui::SameLine();
-	self->Filter.Draw("Filter (\"incl,-excl\") (\"error\")", 180);
+	self->Filter.Draw("", -1);
 	ImGui::Separator();
 	
 	// Reserve enough left-over height for 1 separator + 1 input text
@@ -229,7 +230,9 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
 	if (ImGui::BeginPopupContextWindow())
 	{
+		if (ImGui::Selectable("Copy ")) trj_gui_cmd_copylog(self);
 		if (ImGui::Selectable("Clear")) trj_gui_cmd_clearlog(self);
+		
 		ImGui::EndPopup();
 	}
 	
@@ -319,7 +322,7 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	
 	ImGui::End();
 	
-//	ImGui::PopID();
+	ImGui::PopStyleColor();
 }
 
 //------------------------------------------------------------------------------

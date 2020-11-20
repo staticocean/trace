@@ -31,6 +31,10 @@ uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 		
 		if (ImGui::BeginMenu("Env"))
 		{
+			if (ImGui::MenuItem(self->cmd->visible ? "Hide" : "Show", "CTRL+P")) { self->cmd->visible = !self->cmd->visible; }
+
+			ImGui::Separator();
+
 			if (ImGui::MenuItem("Reset", "")) { trj_gui_env_reset(self->env); }
 			
 //			ImGui::Separator();

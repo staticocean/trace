@@ -12,21 +12,22 @@
 
 extern "C"
 {
-	#include <lib/trj/trj_eng.h>
-	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/trj_traj.h>
-	#include <lib/trj/trj_ctrl.h>
-	#include <lib/trj/trj_data.h>
-
 	#include <lib/picoc/picoc.h>
 }
 
-#include "lib/trj/vl3d.h"
+#include <lib/trj/vl.h>
+#include <lib/trj/vl3d.h>
+#include <lib/trj/trj_eng.h>
+#include <lib/trj/trj_obj.h>
+#include <lib/trj/trj_traj.h>
+#include <lib/trj/trj_ctrl.h>
+#include <lib/trj/trj_data.h>
 
 #include "imgui_custom.h"
 
 #include "trj_gui_eng.h"
 #include "trj_gui_obj.h"
+#include "trj_gui_map.h"
 #include "trj_gui_menu.h"
 #include "trj_gui_tbar.h"
 #include "trj_gui_traj.h"

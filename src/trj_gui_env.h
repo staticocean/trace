@@ -6,18 +6,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <lib/trj/vl.h>
+#include <lib/trj/vl_svd.h>
+#include <lib/trj/trj_eng.h>
+#include <lib/trj/trj_obj.h>
+
 extern "C"
 {
 	#include <lib/fmemopen/fmemopen.h>
 	
 	#include <lib/picoc/picoc.h>
 	#include <lib/picoc/picoc_interpreter.h>
-	
-	#include <lib/trj/trj_types.h>
-	#include <lib/trj/trj_eng.h>
-	#include <lib/trj/trj_obj.h>
-	#include <lib/trj/vl.h>
-	#include <lib/trj/vl_svd.h>
 }
 
 typedef struct trj_gui_env
