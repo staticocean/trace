@@ -313,6 +313,33 @@ lib\imgui\imgui_widgets.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.s
 .PHONY : lib\imgui\imgui_widgets.cpp.s
 
+lib\json11\json11.obj: lib\json11\json11.cpp.obj
+
+.PHONY : lib\json11\json11.obj
+
+# target to build an object file
+lib\json11\json11.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\json11\json11.cpp.obj
+.PHONY : lib\json11\json11.cpp.obj
+
+lib\json11\json11.i: lib\json11\json11.cpp.i
+
+.PHONY : lib\json11\json11.i
+
+# target to preprocess a source file
+lib\json11\json11.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\json11\json11.cpp.i
+.PHONY : lib\json11\json11.cpp.i
+
+lib\json11\json11.s: lib\json11\json11.cpp.s
+
+.PHONY : lib\json11\json11.s
+
+# target to generate assembly for a file
+lib\json11\json11.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\json11\json11.cpp.s
+.PHONY : lib\json11\json11.cpp.s
+
 lib\opengl\gl3w.obj: lib\opengl\gl3w.c.obj
 
 .PHONY : lib\opengl\gl3w.obj
@@ -1342,6 +1369,9 @@ help:
 	@echo ... lib/imgui/imgui_widgets.obj
 	@echo ... lib/imgui/imgui_widgets.i
 	@echo ... lib/imgui/imgui_widgets.s
+	@echo ... lib/json11/json11.obj
+	@echo ... lib/json11/json11.i
+	@echo ... lib/json11/json11.s
 	@echo ... lib/opengl/gl3w.obj
 	@echo ... lib/opengl/gl3w.i
 	@echo ... lib/opengl/gl3w.s

@@ -1,4 +1,6 @@
 
+#include <sstream>
+#include <fstream>
 #include "trj_gui.h"
 
 //------------------------------------------------------------------------------
@@ -10,11 +12,60 @@ static  s_vl3d_obj vl3d_obj_list[255];
 static  s_vl3d_eng vl3d_eng;
 static  s_vl3d_view vl3d_view;
 
+void print_json(json11::Json json)
+{
+	if (json.is_array())
+	{
+		printf("[ARR][%s]\r\n", json.string_value().c_str());
+		
+		for (int i = 0; i < json.array_items().size(); ++i)
+		{
+			print_json(json.array_items()[i]);
+		}
+	}
+	
+	if (json.is_string())
+	{
+		printf("[STR][%s]\r\n", json.string_value().c_str());
+	}
+	
+	if (json.is_object())
+	{
+		printf("[OBJ]\r\n");
+		printf("%s \r\n", json["type"].string_value().c_str());
+		
+//		for (int i = 0; i < json.array_items().size(); ++i)
+//		{
+////			print_json(json.object_items().[i]);
+//		}
+	}
+	
+	return;
+}
+
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 {
-	s_gjson_layer ml0;
-	gjson_layer_load(&ml0, "res/maps/earth/geojson-world-cities.geojson");
+//	s_gjson_layer ml0;
+//	gjson_layer_load(&ml0, "res/maps/earth/geojson-world-cities.geojson");
 	
+	std::ifstream file_stream("res/maps/earth/countries.geojson");
+	std::string file_data( (std::istreambuf_iterator<char>(file_stream) ),
+						 (std::istreambuf_iterator<char>()    ) );
+	
+	std::string err;
+	json11::Json ml0 = json11::Json::parse(file_data.c_str(), err);
+	printf(err.c_str());
+	print_json(ml0);
+	
+//	printf("%d\r\n", ml0.is_object());
+//	printf("%d\r\n", ml0.is_string());
+//	printf("%d\r\n", ml0.is_array());
+//	printf("%d\r\n", ml0.is_bool());
+//	printf("%d\r\n", ml0.is_null());
+//	printf("%d\r\n", ml0.is_number());
+	
+	fflush(stdout);
+
 //	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
 //	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
 //

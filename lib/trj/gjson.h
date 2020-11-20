@@ -123,23 +123,26 @@ inline s_gjson_token* gjson_parse_arr(std::vector<s_gjson_token> *stack, char *d
 	const uint8_t type_arr = 0x02;
 	const uint8_t type_tok = 0x03;
 	
-	stack->push_back((s_gjson_token) {});
-	s_gjson_token *token = &stack->back();
+	s_gjson_token *token = new s_gjson_token();
+	stack->push_back(*token);
+	free(token);
+	token = &stack->back();
+	
+	++data; // jump off [ in the beginning
 	
 	while (data < token_data[1])
 	{
-		while (*data == ' ' || *data == ',')
-		{ ++data; }
+		while (*data == ' ' || *data == '\r' || *data == '\n') { ++data; }
 		
-		while (*data != '\"' && *data != '{' && *data != '[')
-		{ ++data; }
-		
+		// arr only has values
+		token->keys_s.push_back(data);
+		token->keys_e.push_back(data);
 		token->values_s.push_back(data);
 		
-		if (*data == '\"')
+		if (*data == '\"' || (*data != '[' && *data != '{'))
 		{
 			token->types.push_back(type_str);
-			data += gjson_find(data, '\"');
+			while (*data != ',') { ++data; }
 		}
 		
 		else if (*data == '[')
@@ -155,8 +158,8 @@ inline s_gjson_token* gjson_parse_arr(std::vector<s_gjson_token> *stack, char *d
 		}
 		
 		token->values_e.push_back(data);
-		++data;
-		*data = '\0';
+		
+		while (*data != ',') { ++data; }
 		
 		if (token->types.back() == type_tok)
 		{
@@ -178,8 +181,8 @@ inline s_gjson_token* gjson_parse_arr(std::vector<s_gjson_token> *stack, char *d
 	
 	for (int i = 0; i < token->size; ++i)
 	{
-		printf("[%d][type:%d][key:%s] \r\n",
-			   stack->size(), token->types[i], token->keys_s[i]);
+		printf("[%d][type:%d][key:] \r\n",
+			   stack->size(), token->types[i]);
 	}
 	
 	fflush(stdout);
@@ -201,21 +204,18 @@ inline s_gjson_token* gjson_parse_tok(std::vector<s_gjson_token> *stack, char *d
 	const uint8_t type_arr = 0x02;
 	const uint8_t type_tok = 0x03;
 	
-	stack->push_back((s_gjson_token) {});
-	s_gjson_token *token = &stack->back();
+	s_gjson_token *token = new s_gjson_token();
+	stack->push_back(*token);
+	free(token);
+	token = &stack->back();
 	
 	while (data < token_data[1])
 	{
-		while (*data != '\"' && data < token_data[1]) { ++data; }
-		if (*data != '\"') break;
+		while (*data != '\"') { ++data; }
 		token->keys_s.push_back(data);
-		++data;
-		
-		while (*data != '\"' && data < token_data[1]) { ++data; }
+		data += gjson_find(data, '\"');
 		token->keys_e.push_back(data);
 		++data;
-		
-		*data = '\0';
 		
 		while (*data != '\"' && *data != '{' && *data != '[')
 		{ ++data; }
@@ -241,8 +241,6 @@ inline s_gjson_token* gjson_parse_tok(std::vector<s_gjson_token> *stack, char *d
 		}
 
 		token->values_e.push_back(data);
-		++data;
-		*data = '\0';
 		
 		if (token->types.back() == type_tok)
 		{
@@ -260,12 +258,17 @@ inline s_gjson_token* gjson_parse_tok(std::vector<s_gjson_token> *stack, char *d
 		}
 		
 		++token->size;
+		
+		while (*data != ',' && data < token_data[1]) { ++data; }
+		
+		if (*data != ',') break;
+		else ++data;
 	}
 	
 	for (int i = 0; i < token->size; ++i)
 	{
-		printf("[%d][type:%d][key:%s] \r\n",
-		   stack->size(), token->types[i], token->keys_s[i]);
+		printf("[%d][type:%d][key:] \r\n",
+		   stack->size(), token->types[i]);
 	}
 	
 	fflush(stdout);

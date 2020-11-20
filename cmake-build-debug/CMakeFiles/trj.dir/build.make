@@ -646,10 +646,24 @@ CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/trj.dir/lib/picoc/picoc_variable.c.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_C_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles\trj.dir\lib\json11\json11.cpp.obj: CMakeFiles\trj.dir\flags.make
+CMakeFiles\trj.dir\lib\json11\json11.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
+CMakeFiles\trj.dir\lib\json11\json11.cpp.obj: ..\lib\json11\json11.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/trj.dir/lib/json11/json11.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\json11\json11.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\json11\json11.cpp
+
+CMakeFiles\trj.dir\lib\json11\json11.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trj.dir/lib/json11/json11.cpp.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles\trj.dir\lib\json11\json11.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/json11/json11.cpp.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+
 CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
 CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj: ..\lib\tinymat\tinymat.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/trj.dir/lib/tinymat/tinymat.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/trj.dir/lib/tinymat/tinymat.cpp.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\tinymat\tinymat.cpp
 
 CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.i: cmake_force
@@ -663,7 +677,7 @@ CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.s: cmake_force
 CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj: CMakeFiles\trj.dir\flags.make
 CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj: CMakeFiles\trj.dir\includes_C.rsp
 CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj: ..\lib\fmemopen\fmemopen.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building C object CMakeFiles/trj.dir/lib/fmemopen/fmemopen.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building C object CMakeFiles/trj.dir/lib/fmemopen/fmemopen.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\fmemopen\fmemopen.c
 
 CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.i: cmake_force
@@ -718,6 +732,7 @@ trj_OBJECTS = \
 "CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj" \
 "CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj" \
 "CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj" \
+"CMakeFiles\trj.dir\lib\json11\json11.cpp.obj" \
 "CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj" \
 "CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj"
 
@@ -766,6 +781,7 @@ trj.exe: CMakeFiles\trj.dir\lib\picoc\picoc_platform.c.obj
 trj.exe: CMakeFiles\trj.dir\lib\picoc\picoc_table.c.obj
 trj.exe: CMakeFiles\trj.dir\lib\picoc\picoc_type.c.obj
 trj.exe: CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj
+trj.exe: CMakeFiles\trj.dir\lib\json11\json11.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj
 trj.exe: CMakeFiles\trj.dir\build.make
@@ -773,7 +789,7 @@ trj.exe: "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64\OpenGL3
 trj.exe: ..\lib\opengl\static\glfw3_x64.lib
 trj.exe: CMakeFiles\trj.dir\linklibs.rsp
 trj.exe: CMakeFiles\trj.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Linking CXX executable trj.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Linking CXX executable trj.exe"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib  -std=c++17 -Wdeprecated-declarations -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   @CMakeFiles\trj.dir\objects1.rsp  -o trj.exe -Xlinker /implib:trj.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\trj.pdb -Xlinker /version:0.0  @CMakeFiles\trj.dir\linklibs.rsp
 
 # Rule to build all files generated by this target.

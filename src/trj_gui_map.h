@@ -7,6 +7,7 @@
 #include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>
 #include <lib/trj/gjson.h>
+#include <lib/json11/json11.hpp>
 
 //------------------------------------------------------------------------------
 
