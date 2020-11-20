@@ -164,10 +164,10 @@ CMakeFiles/trj.dir/src/trj_gui.cpp.obj
  ../lib/imgui/imgui.h
  ../lib/imgui/imgui_internal.h
  ../lib/imgui/imstb_textedit.h
+ ../lib/nlohmann/json.h
  ../lib/picoc/picoc.h
  ../lib/picoc/picoc_interpreter.h
  ../lib/picoc/picoc_platform.h
- ../lib/trj/gjson.h
  ../lib/trj/trj_api.h
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
@@ -280,7 +280,7 @@ CMakeFiles/trj.dir/src/trj_gui_map.cpp.obj
  ../lib/imgui/imgui.h
  ../lib/imgui/imgui_internal.h
  ../lib/imgui/imstb_textedit.h
- ../lib/trj/gjson.h
+ ../lib/nlohmann/json.h
  ../lib/trj/trj_api.h
  ../lib/trj/trj_obj.h
  ../lib/trj/trj_utils.h
@@ -383,13 +383,13 @@ CMakeFiles/trj.dir/src/trj_opengl.cpp.obj
  ../lib/imgui/imgui_impl_opengl3.h
  ../lib/imgui/imgui_internal.h
  ../lib/imgui/imstb_textedit.h
+ ../lib/nlohmann/json.h
  ../lib/opengl/gl3w.h
  ../lib/opengl/glcorearb.h
  ../lib/opengl/glfw3.h
  ../lib/picoc/picoc.h
  ../lib/picoc/picoc_interpreter.h
  ../lib/picoc/picoc_platform.h
- ../lib/trj/gjson.h
  ../lib/trj/trj_api.h
  ../lib/trj/trj_bz.h
  ../lib/trj/trj_ctrl.h
