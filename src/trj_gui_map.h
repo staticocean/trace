@@ -6,13 +6,13 @@
 
 #include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>
-#include <lib/nlohmann/json.h>
+#include <lib/trj/gjson.h>
 
 //------------------------------------------------------------------------------
 
 typedef struct trj_gui_map
 {
-	uint32_t temp;
+
 
 } 	s_trj_gui_map;
 

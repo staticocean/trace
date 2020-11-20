@@ -1,5 +1,4 @@
 
-#include <fstream>
 #include "trj_gui.h"
 
 //------------------------------------------------------------------------------
@@ -11,14 +10,10 @@ static  s_vl3d_obj vl3d_obj_list[255];
 static  s_vl3d_eng vl3d_eng;
 static  s_vl3d_view vl3d_view;
 
-using json = nlohmann::json;
-
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 {
-	// read a JSON file
-	std::ifstream ml0_file("file.json");
-	json ml0;
-	ml0_file >> ml0;
+	s_gjson_layer ml0;
+	gjson_layer_load(&ml0, "res/maps/earth/geojson-world-cities.geojson");
 	
 //	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
 //	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
