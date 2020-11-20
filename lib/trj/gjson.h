@@ -24,10 +24,16 @@ typedef enum gjson_geom_type_t
 	gjson_geom_type_poly = 0x00,
 };
 
+typedef struct gjson_pt
+{
+	vlf_t vec[3];
+	
+}	s_gjson_pt;
+
 typedef struct gjson_poly
 {
 	gjson_geom_type_t type;
-	std::vector<std::array<vlf_t, 3>> pt_list;
+//	std::vector<s_gjson_pt> pt_list;
 	
 } s_gjson_poly;
 
@@ -60,13 +66,14 @@ typedef struct gjson_layer
 
 typedef struct gjson_token
 {
-	uint8_t type;
+	uint32_t size;
 	
-	char *key[2];
-	char *value[2];
-	char *sep;
-
-	struct gjson_token *token;
+	std::vector<uint8_t> types;
+	std::vector<char*> keys_s;
+	std::vector<char*> keys_e;
+	std::vector<char*> values_s;
+	std::vector<char*> values_e;
+	std::vector<gjson_token*> tokens;
 
 } 	s_gjson_token;
 
@@ -76,15 +83,22 @@ inline uint32_t gjson_find(char *data, char cl)
 {
 	uint32_t offset = 0x01;
 	char op = data[0x00];
+	uint32_t st_count = 0x01; // statement count
 	
-	uint32_t op_count = 0x01;
-	uint32_t cl_count = 0x00;
-	
-	while (op_count != 0x00 || cl_count != 0x00)
+	if (op != cl)
 	{
-		if (data[offset] == op) ++op_count;
-		if (data[offset] == cl) ++cl_count;
-		
+		while (st_count != 0x00)
+		{
+			if (data[offset] == op) ++st_count;
+			if (data[offset] == cl) --st_count;
+			
+			++offset;
+		}
+	}
+	
+	else
+	{
+		while (data[offset] != cl) { ++offset; }
 		++offset;
 	}
 	
@@ -93,53 +107,170 @@ inline uint32_t gjson_find(char *data, char cl)
 
 //------------------------------------------------------------------------------
 
-inline void gjson_parse(std::vector<s_gjson_token> *stack, char *data)
+inline s_gjson_token* gjson_parse_tok(std::vector<s_gjson_token> *stack, char *data);
+
+inline s_gjson_token* gjson_parse_arr(std::vector<s_gjson_token> *stack, char *data)
 {
-	uint32_t offset = 0x00;
-	
 	char *token_data[2];
 	
-	while (data[offset] != '{') { ++offset; }
-	token_data[0] = &data[offset];
-	offset += gjson_find(&data[offset], '}');
-	token_data[1] = &data[offset];
-	++offset;
-	
-	stack->push_back((s_gjson_token) {});
-	s_gjson_token *token = &stack->back();
+	while (*data != '[') { ++data; }
+	token_data[0] = data;
+	data += gjson_find(data, ']');
+	token_data[1] = data;
+	data = token_data[0];
 	
 	const uint8_t type_str = 0x01;
 	const uint8_t type_arr = 0x02;
 	const uint8_t type_tok = 0x03;
 	
-	uint8_t bof  = 0x00;
-	uint8_t eof  = 0x00;
-	uint8_t type = 0x00;
+	stack->push_back((s_gjson_token) {});
+	s_gjson_token *token = &stack->back();
 	
-	while (data[offset] != '\"') { ++offset; }
-	token->key[0] = &data[offset];
-	offset += gjson_find(&data[offset], '\"');
-	token->key[1] = &data[offset];
-	++offset;
-	
-	while (data[offset] !=  ':') { ++offset; }
-	token->sep = &data[offset]; ++offset;
-	
-	while (data[offset] != '\"' && data[offset] != '{' && data[offset] != '[') { ++offset; }
-	
-	token->type = type_str;
-	token->value[0] = &data[offset];
-	if (token->type == type_str) offset += gjson_find(&data[offset], '\"');
-	if (token->type == type_arr) offset += gjson_find(&data[offset],  ']');
-	if (token->type == type_tok) offset += gjson_find(&data[offset],  '}');
-	token->value[1] = &data[offset];
-	
-	if (token->type == type_tok)
+	while (data < token_data[1])
 	{
-		gjson_parse(stack, token->value[0]);
+		while (*data == ' ' || *data == ',')
+		{ ++data; }
+		
+		while (*data != '\"' && *data != '{' && *data != '[')
+		{ ++data; }
+		
+		token->values_s.push_back(data);
+		
+		if (*data == '\"')
+		{
+			token->types.push_back(type_str);
+			data += gjson_find(data, '\"');
+		}
+		
+		else if (*data == '[')
+		{
+			token->types.push_back(type_arr);
+			data += gjson_find(data, ']');
+		}
+		
+		else if (*data == '{')
+		{
+			token->types.push_back(type_tok);
+			data += gjson_find(data, '}');
+		}
+		
+		token->values_e.push_back(data);
+		++data;
+		*data = '\0';
+		
+		if (token->types.back() == type_tok)
+		{
+			token->tokens.push_back(gjson_parse_tok(stack, token->values_s.back()));
+		}
+		
+		else if (token->types.back() == type_arr)
+		{
+			token->tokens.push_back(gjson_parse_arr(stack, token->values_s.back()));
+		}
+		
+		else
+		{
+			token->tokens.push_back(NULL);
+		}
+		
+		++token->size;
 	}
 	
-	return;
+	for (int i = 0; i < token->size; ++i)
+	{
+		printf("[%d][type:%d][key:%s] \r\n",
+			   stack->size(), token->types[i], token->keys_s[i]);
+	}
+	
+	fflush(stdout);
+	
+	return token;
+}
+
+inline s_gjson_token* gjson_parse_tok(std::vector<s_gjson_token> *stack, char *data)
+{
+	char *token_data[2];
+	
+	while (*data != '{') { ++data; }
+	token_data[0] = data;
+	data += gjson_find(data, '}');
+	token_data[1] = data;
+	data = token_data[0];
+	
+	const uint8_t type_str = 0x01;
+	const uint8_t type_arr = 0x02;
+	const uint8_t type_tok = 0x03;
+	
+	stack->push_back((s_gjson_token) {});
+	s_gjson_token *token = &stack->back();
+	
+	while (data < token_data[1])
+	{
+		while (*data != '\"' && data < token_data[1]) { ++data; }
+		if (*data != '\"') break;
+		token->keys_s.push_back(data);
+		++data;
+		
+		while (*data != '\"' && data < token_data[1]) { ++data; }
+		token->keys_e.push_back(data);
+		++data;
+		
+		*data = '\0';
+		
+		while (*data != '\"' && *data != '{' && *data != '[')
+		{ ++data; }
+
+		token->values_s.push_back(data);
+
+		if (*data == '\"')
+		{
+			token->types.push_back(type_str);
+			data += gjson_find(data, '\"');
+		}
+
+		else if (*data == '[')
+		{
+			token->types.push_back(type_arr);
+			data += gjson_find(data, ']');
+		}
+
+		else if (*data == '{')
+		{
+			token->types.push_back(type_tok);
+			data += gjson_find(data, '}');
+		}
+
+		token->values_e.push_back(data);
+		++data;
+		*data = '\0';
+		
+		if (token->types.back() == type_tok)
+		{
+			token->tokens.push_back(gjson_parse_tok(stack, token->values_s.back()));
+		}
+		
+		else if (token->types.back() == type_arr)
+		{
+			token->tokens.push_back(gjson_parse_arr(stack, token->values_s.back()));
+		}
+		
+		else
+		{
+			token->tokens.push_back(NULL);
+		}
+		
+		++token->size;
+	}
+	
+	for (int i = 0; i < token->size; ++i)
+	{
+		printf("[%d][type:%d][key:%s] \r\n",
+		   stack->size(), token->types[i], token->keys_s[i]);
+	}
+	
+	fflush(stdout);
+	
+	return token;
 }
 
 //------------------------------------------------------------------------------
@@ -159,7 +290,7 @@ inline uint8_t gjson_layer_load(s_gjson_layer *self, char *file_name)
 	
 	std::vector<s_gjson_token> stack;
 	
-	gjson_parse(&stack, file_data);
+	gjson_parse_tok(&stack, file_data);
 	
 	return 0x00;
 }

@@ -15,7 +15,6 @@
 
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
-#include <math.h>
 
 extern "C"
 {
