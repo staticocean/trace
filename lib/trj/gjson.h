@@ -33,7 +33,7 @@ typedef struct gjson_pt
 typedef struct gjson_poly
 {
 	gjson_geom_type_t type;
-//	std::vector<s_gjson_pt> pt_list;
+	std::vector<s_gjson_pt> pt_list;
 	
 } s_gjson_poly;
 
@@ -53,7 +53,7 @@ typedef struct gjson_obj
 	vlf_t p1[3];
 	vlf_t mid[3];
 	
-	std::vector<s_gjson_geom> geom_list;
+	s_gjson_geom geom;
 	
 }	s_gjson_obj;
 

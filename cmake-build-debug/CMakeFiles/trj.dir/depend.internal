@@ -279,21 +279,6 @@ CMakeFiles/trj.dir/src/trj_gui_env.cpp.obj
  ../lib/trj/vl_svd.h
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.cpp
  C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_env.h
-CMakeFiles/trj.dir/src/trj_gui_map.cpp.obj
- ../lib/imgui/imconfig.h
- ../lib/imgui/imgui.h
- ../lib/imgui/imgui_internal.h
- ../lib/imgui/imstb_textedit.h
- ../lib/json11/json11.hpp
- ../lib/trj/gjson.h
- ../lib/trj/trj_api.h
- ../lib/trj/trj_obj.h
- ../lib/trj/trj_utils.h
- ../lib/trj/vl.h
- ../lib/trj/vl3d.h
- ../lib/trj/vl_svd.h
- C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_map.cpp
- C:/Users/cel/dev/git/bitbucket/trajectory/src/trj_gui_map.h
 CMakeFiles/trj.dir/src/trj_gui_menu.cpp.obj
  ../lib/fmemopen/fmemopen.h
  ../lib/imgui/imconfig.h
