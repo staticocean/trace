@@ -10,7 +10,7 @@ include_directories(lib/opengl/)
 include_directories(lib/fmt/)
 include_directories(lib/trj/)
 include_directories(lib/picoc/)
-include_directories(lib/imguizmo/)
+include_directories(lib/nlohmann/)
 
 file(GLOB src_main      "src/trj_opengl.cpp" "src/picoc*.*" "src/trj_gui*.*" "src/imgui_custom.*")
 file(GLOB src_imgui     "lib/imgui/*.*")
