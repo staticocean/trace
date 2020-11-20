@@ -337,4 +337,27 @@ void vl_gui_bool(char *label, uint8_t *data)
 	return;
 }
 
+void trj_gui_objsel(char *label, s_trj_obj **obj, s_trj_eng *eng)
+{
+	if (ImGui::BeginCombo(label,
+	  eng->obj_list[(*obj)->id].desc,
+	  ImGuiComboFlags_NoArrowButton))
+	{
+		for (int i = 0; i < eng->obj_count; ++i)
+		{
+			const bool is_selected = ((*obj)->id == i);
+			
+			if (ImGui::Selectable(eng->obj_list[i].desc, is_selected))
+			{ *obj = &eng->obj_list[i]; }
+			
+			if (is_selected)
+			{ ImGui::SetItemDefaultFocus(); }
+		}
+		
+		ImGui::EndCombo();
+	}
+	
+	return;
+}
+
 //------------------------------------------------------------------------------

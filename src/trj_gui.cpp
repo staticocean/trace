@@ -452,7 +452,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		else
 		{
 			// default view (can be used for debug)
-//			vl3d_eng_render(&vl3d_eng, &vl3d_view, "##temp", ImVec2(-1, 600));
+			s_gjson_layer ml0;
+			gjson_layer_load(&ml0, "res/maps/earth/geojson-world-cities.geojson");
 		}
 		
 		ImGui::End();

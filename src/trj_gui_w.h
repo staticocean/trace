@@ -22,6 +22,8 @@ void vl_gui_bool(char *label, uint8_t *data);
 void vl_gui_mat_get(void *ptr, vlf_t *mat, vlf_t *def);
 void vl_gui_mat_set(void *ptr, vlf_t *mat);
 
+void trj_gui_objsel(char *label, s_trj_obj **obj, s_trj_eng *eng);
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_GUI_OBJ__ */
