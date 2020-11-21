@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define IMGUI_DEFINE_MATH_OPERATORS
+
 #include <lib/imgui/imgui.h>
 
 extern "C"

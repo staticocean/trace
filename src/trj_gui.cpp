@@ -10,10 +10,16 @@ static  s_vl3d_obj vl3d_obj_list[255];
 static  s_vl3d_eng vl3d_eng;
 static  s_vl3d_view vl3d_view;
 
+static 	s_trj_gui_map map;
+
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 {
-	s_trj_gui_map *map = new s_trj_gui_map();
-	trj_gui_map_load(map, "res/maps/earth/countries.geojson");
+	s_trj_gui_map *temp_map = new s_trj_gui_map();
+	map = *temp_map;
+	free(temp_map);
+	
+	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
+	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
 
 //	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
 //	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
@@ -455,6 +461,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		else
 		{
 			// default view (can be used for debug)
+			trj_gui_map_view(&map, "map", ImVec2(-1, -1));
 		}
 		
 		ImGui::End();
