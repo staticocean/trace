@@ -216,8 +216,6 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.reset  = trj_data_text_reset_,
 	});
 	
-	trj_eng_add_ellpapi(&self->eng, trj_ellp_wgs84);
-	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"   , .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"   , .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth" , .ref = &self->eng.obj_list[0] });
@@ -267,8 +265,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 		vl_mid(&self->eng.obj_list[i].rot[0][0]);
 	}
 	
-//	ImGui::StyleColorsDark();
-	ImGui::StyleColorsLight();
+	ImGui::StyleColorsDark();
+//	ImGui::StyleColorsLight();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	

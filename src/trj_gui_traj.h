@@ -92,13 +92,16 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-1);
-	trj_gui_objsel("#ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
-	trj_gui_ellpsel("#ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	ImGui::SetNextItemWidth(-40);
+	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
+	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	
 	for (int i = 0; i < traj->pts_offset; ++i)
 	{
@@ -106,6 +109,10 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 		vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
 		ImGui::PopID();
 	}
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
 	
 	ImGui::PopID();
 	
@@ -398,6 +405,10 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 		}
 		
 		// draw trajectory
+		// tmeporarily disable ellipsoid projection if enabled to cast to plane
+		uint8_t ellp_en_temp = self->ellp_en;
+		self->ellp_en = 0x00;
+
 		if (self->pts_offset > 0x01)
 		{
 			vlf_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
@@ -422,6 +433,10 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			// TODO draw one dot
 		}
+		
+		self->ellp_en = ellp_en_temp;
+		
+		// TODO We can calculate traj one time and then use on top and bot views
 		
 		window->StateStorage.SetFloat((ImGuiID) st_view_p0_x, view_top.p0.x);
 		window->StateStorage.SetFloat((ImGuiID) st_view_p0_y, view_top.p0.y);
@@ -649,6 +664,10 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 		ImGui::SetCursorScreenPos(cursor_pos);
 		
 		// draw trajectory
+		// tmeporarily disable ellipsoid projection if enabled to cast to plane
+		uint8_t ellp_en_temp = self->ellp_en;
+		self->ellp_en = 0x00;
+		
 		if (self->pts_offset > 0x01)
 		{
 			vlf_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
@@ -673,6 +692,8 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			// TODO draw one dot
 		}
+		
+		self->ellp_en = ellp_en_temp;
 		
 		window->StateStorage.SetFloat((ImGuiID) st_view_p0_x, view_bot.p0.x);
 		window->StateStorage.SetFloat((ImGuiID) st_view_p0_y, view_bot.p0.y);
@@ -706,16 +727,10 @@ inline void trj_gui_traj_orb_edit(s_trj_traj *self)
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
-	trj_gui_objsel("#ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
-//	trj_gui_ellpsel("#ellp", traj->eng->ellp, traj->eng->obj_list, &traj->ref);
-	
-	ImGui::Text("sync  ");
-	ImGui::SameLine();
-	
-	if (ImGui::Button((traj->sync_en == 0x00) ? "OFF##sync_en" : "ON##sync_en",
-					  ImVec2(ImGui::GetContentRegionAvailWidth(), 0.0)))
-	{ traj->sync_en = (!traj->sync_en) & 0x01; }
+	ImGui::SetNextItemWidth(-60);
+	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();

@@ -303,7 +303,7 @@ inline void vl_gui_rot(char *label, vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
-inline void vl_gui_bool(char *label, uint8_t *data)
+inline void vl_gui_bool(char *label, ImVec2 size, uint8_t *data)
 {
 //	ImGuiStyle& style = ImGui::GetStyle();
 //	ImU32 col_text_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
@@ -340,13 +340,10 @@ inline void vl_gui_bool(char *label, uint8_t *data)
 //		}
 //	}
 //
-	
 	ImGui::PushID(label);
 	
-	if (ImGui::Button((*data == 0x00) ? "OFF" : "ON"))
-	{
-		*data = (!*data) & 0x01;
-	}
+	if (ImGui::Button((*data == 0x00) ? "OFF" : "ON", size))
+	{ *data = (!*data) & 0x01; }
 	
 	ImGui::PopID();
 
@@ -365,21 +362,37 @@ inline void vl_gui_bool(char *label, uint8_t *data)
 
 //------------------------------------------------------------------------------
 
+inline void vl_gui_switch(char *label, char *label_on, char *label_off, ImVec2 size, uint8_t *data)
+{
+	ImGui::PushID(label);
+	
+	if (ImGui::Button((*data == 0x00) ? label_off : label_on, size))
+	{ *data = (!*data) & 0x01; }
+	
+	ImGui::PopID();
+
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
 {
-	if (ImGui::BeginCombo(label,
-						  obj_list[(*obj)->id].desc,
-						  ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo(label, (*obj)->desc, ImGuiComboFlags_NoArrowButton))
 	{
 		for (int i = 0; i < obj_count; ++i)
 		{
-			const bool is_selected = ((*obj)->id == i);
+			ImGui::PushID(i);
+			
+			bool is_selected = ((*obj)->id == obj_list[i].id);
 			
 			if (ImGui::Selectable(obj_list[i].desc, is_selected))
 			{ *obj = &obj_list[i]; }
 			
 			if (is_selected)
 			{ ImGui::SetItemDefaultFocus(); }
+			
+			ImGui::PopID();
 		}
 		
 		ImGui::EndCombo();
@@ -390,23 +403,35 @@ inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list,
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_ellpsel(char *label, uint32_t ellp_count, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
+inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
 {
+	bool is_none = *ellp == NULL;
+	
 	if (ImGui::BeginCombo(label,
-						  ellp_list[(*ellp)->id].desc,
+						  is_none ? "none" : (*ellp)->desc,
 						  ImGuiComboFlags_NoArrowButton))
 	{
-		if (ImGui::Selectable("none", *ellp == NULL)) { *ellp = NULL; }
-		if (*ellp == NULL) { ImGui::SetItemDefaultFocus(); }
+		if (ImGui::Selectable("none", is_none)) { *ellp = NULL; }
+		if (is_none) { ImGui::SetItemDefaultFocus(); }
 		
-		for (int i = 0; i < ellp_count; ++i)
+		// is_none can change after previous 2 lines
+		is_none = *ellp == NULL;
+		
+		for (int i = 0; i < ellp_offset; ++i)
 		{
-			const bool is_selected = ((*ellp)->id == i);
+			ImGui::PushID(i);
+			
+			bool is_selected = false;
+			
+			if (!is_none && (*ellp)->id == ellp_list[i].id)
+			{ is_selected = true; }
 			
 			if (ImGui::Selectable(ellp_list[i].desc, is_selected))
 			{ *ellp = &ellp_list[i]; }
 			
 			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+			
+			ImGui::PopID();
 		}
 		
 		ImGui::EndCombo();
@@ -418,3 +443,5 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_count, s_trj_ellp *ellp_l
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_GUI_OBJ__ */
+
+

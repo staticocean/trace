@@ -212,10 +212,10 @@ typedef struct trj_eng
 	
 	vlf_t time[2];
 	
-	uint8_t traj_offset;
-	uint8_t ctrl_offset;
-	uint8_t data_offset;
-	uint8_t ellp_offset;
+	uint32_t traj_offset;
+	uint32_t ctrl_offset;
+	uint32_t data_offset;
+	uint32_t ellp_offset;
 	
 	s_trj_traj *traj_list;
 	s_trj_ctrl *ctrl_list;

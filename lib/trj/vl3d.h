@@ -30,11 +30,11 @@ extern "C"
 
 //------------------------------------------------------------------------------
 
-enum vl_obj_type
+enum vl3d_obj_type
 {
-	vl_obj_type_line  = 0x01,
-	vl_obj_type_point = 0x02,
-	vl_obj_type_text  = 0x03,
+	vl3d_obj_type_line  = 0x01,
+	vl3d_obj_type_point = 0x02,
+	vl3d_obj_type_text  = 0x03,
 };
 
 
@@ -156,7 +156,7 @@ inline uint8_t vl3d_eng_init(s_vl3d_eng *self, s_vl3d_eng_init attr)
 inline uint8_t vl3d_eng_add_line(s_vl3d_eng *self, s_vl3d_line obj)
 {
 	self->obj_list[self->obj_offset].line = obj;
-	self->obj_list[self->obj_offset].type = vl_obj_type_line;
+	self->obj_list[self->obj_offset].type = vl3d_obj_type_line;
 	self->obj_list[self->obj_offset].id = self->obj_offset;
 	self->obj_offset++;
 	
@@ -168,7 +168,7 @@ inline uint8_t vl3d_eng_add_line(s_vl3d_eng *self, s_vl3d_line obj)
 inline uint8_t vl3d_eng_add_point(s_vl3d_eng *self, s_vl3d_point obj)
 {
 	self->obj_list[self->obj_offset].point = obj;
-	self->obj_list[self->obj_offset].type = vl_obj_type_point;
+	self->obj_list[self->obj_offset].type = vl3d_obj_type_point;
 	self->obj_list[self->obj_offset].id = self->obj_offset;
 	self->obj_offset++;
 	
@@ -180,7 +180,7 @@ inline uint8_t vl3d_eng_add_point(s_vl3d_eng *self, s_vl3d_point obj)
 inline uint8_t vl3d_eng_add_text(s_vl3d_eng *self, s_vl3d_text obj)
 {
 	self->obj_list[self->obj_offset].text = obj;
-	self->obj_list[self->obj_offset].type = vl_obj_type_text;
+	self->obj_list[self->obj_offset].type = vl3d_obj_type_text;
 	self->obj_list[self->obj_offset].id = self->obj_offset;
 	self->obj_offset++;
 	
@@ -226,6 +226,67 @@ inline ImVec2 __vl3d_view_inv__(s_vl3d_view *view, ImVec2 pos)
 
 //------------------------------------------------------------------------------
 
+inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
+{
+	vlf_t min[3] = { +INFINITY, +INFINITY, +INFINITY };
+	vlf_t max[3] = { -INFINITY, -INFINITY, -INFINITY };
+	
+	for (int i = 0; i < self->obj_offset; ++i)
+	{
+		s_vl3d_obj *obj = &self->obj_list[i];
+		
+		switch (self->obj_list[i].type)
+		{
+			case vl3d_obj_type_line:
+			{
+				if (obj->line.p0[0] < min[0]) min[0] = obj->line.p0[0];
+				if (obj->line.p0[1] < min[1]) min[1] = obj->line.p0[1];
+				if (obj->line.p0[2] < min[2]) min[2] = obj->line.p0[2];
+				
+				if (obj->line.p1[0] < min[0]) min[0] = obj->line.p1[0];
+				if (obj->line.p1[1] < min[1]) min[1] = obj->line.p1[1];
+				if (obj->line.p1[2] < min[2]) min[2] = obj->line.p1[2];
+				
+				if (obj->line.p0[0] > max[0]) max[0] = obj->line.p0[0];
+				if (obj->line.p0[1] > max[1]) max[1] = obj->line.p0[1];
+				if (obj->line.p0[2] > max[2]) max[2] = obj->line.p0[2];
+				
+				if (obj->line.p1[0] > max[0]) max[0] = obj->line.p1[0];
+				if (obj->line.p1[1] > max[1]) max[1] = obj->line.p1[1];
+				if (obj->line.p1[2] > max[2]) max[2] = obj->line.p1[2];
+				
+				break;
+			}
+			
+			case vl3d_obj_type_point:
+			{
+				if (obj->point.p0[0] < min[0]) min[0] = obj->point.p0[0];
+				if (obj->point.p0[1] < min[1]) min[1] = obj->point.p0[1];
+				if (obj->point.p0[2] < min[2]) min[2] = obj->point.p0[2];
+				
+				if (obj->point.p0[0] > max[0]) max[0] = obj->point.p0[0];
+				if (obj->point.p0[1] > max[1]) max[1] = obj->point.p0[1];
+				if (obj->point.p0[2] > max[2]) max[2] = obj->point.p0[2];
+				
+				break;
+			}
+			
+			default: { break; }
+		}
+	}
+	
+	printf(" min ");
+	vl_vprint(min);
+	printf(" max ");
+	vl_vprint(max);
+	fflush(stdout);
+	
+	vlf_t dist = vl_dist(min, max);
+	view->scale = 1 / dist;
+}
+
+//------------------------------------------------------------------------------
+
 inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label, ImVec2 size)
 {
 	ImGuiContext& context = *ImGui::GetCurrentContext();
@@ -240,6 +301,8 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 	
 	size.x = size.x < 0 ? ImGui::GetContentRegionAvail().x : size.x;
 	size.y = size.y < 0 ? ImGui::GetContentRegionAvail().y : size.y;
+	
+	if (ImGui::Button("auto")) { vl3d_view_reset(self, view); }
 	
 	ImGui::BeginChildFrame(id, size,
 						   ImGuiWindowFlags_NoScrollbar |
@@ -321,7 +384,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 		
 		switch (obj->type)
 		{
-			case vl_obj_type_line:
+			case vl3d_obj_type_line:
 			{
 				vlf_t l_p0[3] = {
 						vl_vdot(obj->line.p0, e0) - vl_vdot(view->pos, e0),
@@ -346,7 +409,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 				break;
 			}
 			
-			case vl_obj_type_point:
+			case vl3d_obj_type_point:
 			{
 				vlf_t l_p0[3] = {
 						vl_vdot(obj->point.p0, e0) - vl_vdot(view->pos, e0),
@@ -365,7 +428,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 				break;
 			}
 			
-			case vl_obj_type_text:
+			case vl3d_obj_type_text:
 			{
 				vlf_t l_p0[3] = {
 						vl_vdot(obj->text.p0, e0) - vl_vdot(view->pos, e0),

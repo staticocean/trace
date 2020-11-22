@@ -411,6 +411,12 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	
 	trj_bz4_eval(&bz4, time, &pos[2]);
 	
+	if (self->ellp_en != 0x00 && self->ellp != NULL)
+	{
+		vlf_t lla[3] = { pos[2], pos[0], pos[1] };
+		trj_ellp_ecef(self->ellp, pos, lla);
+	}
+	
 	return 0x00;
 }
 

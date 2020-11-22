@@ -67,6 +67,14 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 
 //------------------------------------------------------------------------------
 
+inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
+{
+	self->ellp_list[self->ellp_offset] = api;
+	++self->ellp_offset;
+	
+	return 0x00;
+}
+
 inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
 {
 	self->traj_list[self->traj_offset] = api;
@@ -91,14 +99,6 @@ inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 	return 0x00;
 }
 
-inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
-{
-	self->ellp_list[self->ellp_offset] = api;
-	++self->ellp_offset;
-	
-	return 0x00;
-}
-
 //------------------------------------------------------------------------------
 
 inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
@@ -117,41 +117,9 @@ inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 	return 0x00;
 }
 
-inline uint8_t trj_eng_objnames(s_trj_eng *self, char **objnames)
-{
-	uint32_t i;
-	
-	for (i = 0; i < self->obj_count; ++i)
-	{
-		objnames[i] = self->obj_list[i].desc;
-	}
-	
-	return 0x00;
-}
+//------------------------------------------------------------------------------
 
-
-//void ins_engine_update_forces(trj_eng_t *engine)
-//{
-//    uint8_t i;
-//    uint8_t j;
-//
-//    vlf_t gforce[3] = { 0, 0, 0 };
-//
-//    for (i = 0; i < engine->obj_count; ++i)
-//    {
-//        for (j = i+1; j < engine->obj_count; ++j)
-//        {
-//            trj_gforce(gforce, engine->obj_list[i], engine->obj_list[j]);
-//
-//            vl_vsub(engine->obj_list[i]->pos_force, engine->obj_list[i]->pos_force, gforce);
-//            vl_vsum(engine->obj_list[j]->pos_force, engine->obj_list[j]->pos_force, gforce);
-//        }
-//    }
-//
-//    return;
-//}
-
-inline uint8_t 	trj_eng_reset(s_trj_eng *self)
+inline uint8_t trj_eng_reset(s_trj_eng *self)
 {
 	uint32_t i;
 	uint32_t j;

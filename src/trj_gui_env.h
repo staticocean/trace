@@ -53,12 +53,10 @@ typedef struct trj_gui_env_init
 	
 	void *traj_offset;
 	void *ctrl_offset;
-	void *proc_offset;
 	void *data_offset;
 	
 	void *traj_list;
 	void *ctrl_list;
-	void *proc_list;
 	void *data_list;
 	
 } 	s_trj_gui_env_init;
