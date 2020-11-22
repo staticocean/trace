@@ -19,7 +19,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	free(temp_map);
 	
 	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
-	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
+//	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
 
 //	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
 //	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
@@ -63,7 +63,13 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_tbar.height = 32;
 	
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
-	trj_eng_init(&self->eng, (s_trj_eng_init) { .st_objects = self->st_eng_obj });
+	trj_eng_init(&self->eng, (s_trj_eng_init) {
+			.obj_list = self->st_eng_obj_list,
+			.traj_list = self->st_eng_traj_list,
+			.ctrl_list = self->st_eng_ctrl_list,
+			.data_list = self->st_eng_data_list,
+			.ellp_list = self->st_eng_ellp_list,
+	});
 	
 	static s_trj_traj_orb_init trj_traj_orb_config_ = {
 			.eng = &self->eng,
@@ -80,7 +86,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	vl_mid(trj_traj_orb_config_.tilt);
 	vl_mid(trj_traj_orb_config_.s_tilt);
 	
-	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
+	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
 			.id = trj_traj_orb_id,
 			.desc = "default_traj_orb",
 			.init = trj_traj_orb_init_,
@@ -100,7 +106,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.pts = NULL,
 	};
 	
-	trj_gui_eng_add_trajapi(&self->gui_eng, (s_trj_traj) {
+	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
 			.id = trj_traj_bz_id,
 			.desc = "default_traj_bz",
 			.init = trj_traj_bz_init_,
@@ -129,7 +135,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	};
 	
-	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			.id     = 0x00,
 			.desc   = "default_ctrl_upos",
 			.init   = trj_ctrl_upos_init_,
@@ -140,7 +146,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.update = trj_ctrl_upos_update_,
 	});
 	
-	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			.id     = 0x00,
 			.desc   = "default_ctrl_cpos",
 			.init   = trj_ctrl_cpos_init_,
@@ -151,7 +157,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.update = trj_ctrl_cpos_update_,
 	});
 	
-	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			.id     = 0x00,
 			.desc   = "default_ctrl_urot",
 			.init   = trj_ctrl_urot_init_,
@@ -162,7 +168,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.update = trj_ctrl_urot_update_,
 	});
 	
-	trj_gui_eng_add_ctrlapi(&self->gui_eng, (s_trj_ctrl) {
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			.id     = 0x00,
 			.desc   = "default_ctrl_crot",
 			.init   = trj_ctrl_crot_init_,
@@ -177,7 +183,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.temp = 0x00,
 	};
 	
-	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
 			.id     = trj_data_ram_id,
 			.desc   = "default_data_ram",
 			.init   = trj_data_ram_init_,
@@ -192,7 +198,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.temp = 0x00,
 	};
 	
-	trj_gui_eng_add_dataapi(&self->gui_eng, (s_trj_data) {
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
 			.id     = trj_data_text_id,
 			.desc   = "default_data_text",
 			.init   = trj_data_text_init_,
@@ -202,6 +208,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.render = trj_data_text_render_,
 			.reset  = trj_data_text_reset_,
 	});
+	
+	trj_eng_add_ellpapi(&self->eng, trj_ellp_wgs84);
 	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"   , .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"   , .ref = &self->eng.obj_list[0] });
@@ -216,34 +224,34 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 				);
 	}
 	
-	trj_obj_add_traj(&self->eng.obj_list[0], self->gui_eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[1], self->gui_eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[2], self->gui_eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[3], self->gui_eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[4], self->gui_eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[1]);
+	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[1]);
 	
-	trj_obj_add_traj(&self->eng.obj_list[0], self->gui_eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[1], self->gui_eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[2], self->gui_eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[3], self->gui_eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[4], self->gui_eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[0]);
+	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[0]);
 	
-	trj_obj_add_ctrl(&self->eng.obj_list[0], self->gui_eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[0], self->gui_eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[1], self->gui_eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[1], self->gui_eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[2], self->gui_eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[2], self->gui_eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[3], self->gui_eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[3], self->gui_eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[4], self->gui_eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[4], self->gui_eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[3]);
+	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
+	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
 	
-	trj_obj_add_data(&self->eng.obj_list[0], self->gui_eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[1], self->gui_eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[2], self->gui_eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[3], self->gui_eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[4], self->gui_eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
 	
 //	trj_gui_eng_sel_traj(&self->gui_eng, &self->eng.obj_list[0].traj_list[0]);
 	
@@ -273,13 +281,13 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) {
 		.eng = &self->eng,
-		.traj_offset = &self->gui_eng.traj_offset,
-		.ctrl_offset = &self->gui_eng.ctrl_offset,
-		.data_offset = &self->gui_eng.data_offset,
+		.traj_offset = &self->eng.traj_offset,
+		.ctrl_offset = &self->eng.ctrl_offset,
+		.data_offset = &self->eng.data_offset,
 		
-		.traj_list = self->gui_eng.traj_list,
-		.ctrl_list = self->gui_eng.ctrl_list,
-		.data_list = self->gui_eng.data_list,
+		.traj_list = self->eng.traj_list,
+		.ctrl_list = self->eng.ctrl_list,
+		.data_list = self->eng.data_list,
 	});
 	
 	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)

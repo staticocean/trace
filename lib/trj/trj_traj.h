@@ -13,6 +13,7 @@
 #include "trj_utils.h"
 #include "trj_api.h"
 #include "trj_bz.h"
+#include "trj_ellp.h"
 
 //------------------------------------------------------------------------------
 
@@ -45,7 +46,10 @@ typedef struct trj_traj_bz
 	
 	s_trj_traj_bz_point *pts;
 	uint32_t pts_offset;
-
+	
+	uint8_t ellp_en;
+	s_trj_ellp ellp;
+	
 } 	s_trj_traj_bz;
 
 typedef struct trj_traj_bz_init
@@ -54,6 +58,9 @@ typedef struct trj_traj_bz_init
 	s_trj_obj *ref;
 	
 	s_trj_traj_bz_point *pts;
+	
+	uint8_t ellp_en;
+	s_trj_ellp ellp;
 	
 } 	s_trj_traj_bz_init;
 
@@ -66,6 +73,9 @@ inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 	
 	self->pts = attr.pts;
 	self->pts_offset = 0x00;
+	
+	self->ellp = attr.ellp;
+	self->ellp_en = attr.ellp_en;
 	
 	return 0x00;
 }

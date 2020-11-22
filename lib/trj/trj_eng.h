@@ -17,6 +17,18 @@
 
 //------------------------------------------------------------------------------
 
+typedef struct trj_eng_init_attr
+{
+	s_trj_obj  *obj_list;
+	s_trj_traj *traj_list;
+	s_trj_ctrl *ctrl_list;
+	s_trj_data *data_list;
+	s_trj_ellp *ellp_list;
+	
+}	s_trj_eng_init;
+
+//------------------------------------------------------------------------------
+
 inline void trj_eng_print(s_trj_eng *eng)
 {
 	printf("obj_count %d \r\n", eng->obj_count);
@@ -31,13 +43,63 @@ inline void trj_eng_print(s_trj_eng *eng)
 	return;
 }
 
+//------------------------------------------------------------------------------
+
 inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 {
+	self->obj_list = attr.obj_list;
 	self->obj_count = 0x00;
-	self->obj_list = attr.st_objects;
+	
+	self->traj_list = attr.traj_list;
+	self->traj_offset = 0x00;
+	
+	self->ctrl_list = attr.ctrl_list;
+	self->ctrl_offset = 0x00;
+	
+	self->data_list = attr.data_list;
+	self->data_offset = 0x00;
+	
+	self->ellp_list = attr.ellp_list;
+	self->ellp_offset = 0x00;
 	
 	return 0x00;
 }
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
+{
+	self->traj_list[self->traj_offset] = api;
+	++self->traj_offset;
+	
+	return 0x00;
+}
+
+inline uint8_t trj_eng_add_ctrlapi(s_trj_eng *self, s_trj_ctrl api)
+{
+	self->ctrl_list[self->ctrl_offset] = api;
+	++self->ctrl_offset;
+	
+	return 0x00;
+}
+
+inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
+{
+	self->data_list[self->data_offset] = api;
+	++self->data_offset;
+	
+	return 0x00;
+}
+
+inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
+{
+	self->ellp_list[self->ellp_offset] = api;
+	++self->ellp_offset;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
 
 inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 {

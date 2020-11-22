@@ -2,6 +2,7 @@
 #ifndef __TRJ_GUI_OBJ__
 #define __TRJ_GUI_OBJ__
 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 
 #include <lib/trj/vl.h>

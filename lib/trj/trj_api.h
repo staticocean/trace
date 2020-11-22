@@ -13,6 +13,31 @@
 
 //------------------------------------------------------------------------------
 
+typedef struct trj_ellp
+{
+	char desc[64];
+	uint32_t id;
+	
+	vlf_t a;
+	vlf_t b;
+	vlf_t c;
+	vlf_t e;
+	vlf_t f;
+	
+	vlf_t ee		;
+	vlf_t invaa		;
+	vlf_t l		 	;
+	vlf_t p1mee		;
+	vlf_t p1meedaa	;
+	vlf_t Hmin		;
+	vlf_t ll4		;
+	vlf_t ll		;
+	vlf_t invcbrt2	;
+	
+} 	s_trj_ellp;
+
+//------------------------------------------------------------------------------
+
 typedef struct trj_traj_info
 {
 	vlf_t preview_time[2];
@@ -187,13 +212,17 @@ typedef struct trj_eng
 	
 	vlf_t time[2];
 	
-}	s_trj_eng;
-
-typedef struct trj_eng_init_attr
-{
-	s_trj_obj *st_objects;
+	uint8_t traj_offset;
+	uint8_t ctrl_offset;
+	uint8_t data_offset;
+	uint8_t ellp_offset;
 	
-}	s_trj_eng_init;
+	s_trj_traj *traj_list;
+	s_trj_ctrl *ctrl_list;
+	s_trj_data *data_list;
+	s_trj_ellp *ellp_list;
+	
+}	s_trj_eng;
 
 //------------------------------------------------------------------------------
 
@@ -206,7 +235,6 @@ inline uint8_t trj_obj_add_traj(s_trj_obj *self, s_trj_traj traj_api)
 	
 	*api = traj_api;
 	api->init(&api->data, api->config);
-	api->compile(api->data);
 	
 	return 0x00;
 }

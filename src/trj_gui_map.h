@@ -4,6 +4,7 @@
 
 //------------------------------------------------------------------------------
 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
 

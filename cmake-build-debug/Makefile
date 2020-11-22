@@ -1096,33 +1096,6 @@ src\trj_gui_data.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_data.cpp.s
 .PHONY : src\trj_gui_data.cpp.s
 
-src\trj_gui_eng.obj: src\trj_gui_eng.cpp.obj
-
-.PHONY : src\trj_gui_eng.obj
-
-# target to build an object file
-src\trj_gui_eng.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_eng.cpp.obj
-.PHONY : src\trj_gui_eng.cpp.obj
-
-src\trj_gui_eng.i: src\trj_gui_eng.cpp.i
-
-.PHONY : src\trj_gui_eng.i
-
-# target to preprocess a source file
-src\trj_gui_eng.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_eng.cpp.i
-.PHONY : src\trj_gui_eng.cpp.i
-
-src\trj_gui_eng.s: src\trj_gui_eng.cpp.s
-
-.PHONY : src\trj_gui_eng.s
-
-# target to generate assembly for a file
-src\trj_gui_eng.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_eng.cpp.s
-.PHONY : src\trj_gui_eng.cpp.s
-
 src\trj_gui_env.obj: src\trj_gui_env.cpp.obj
 
 .PHONY : src\trj_gui_env.obj
@@ -1257,33 +1230,6 @@ src\trj_gui_traj.s: src\trj_gui_traj.cpp.s
 src\trj_gui_traj.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_traj.cpp.s
 .PHONY : src\trj_gui_traj.cpp.s
-
-src\trj_gui_w.obj: src\trj_gui_w.cpp.obj
-
-.PHONY : src\trj_gui_w.obj
-
-# target to build an object file
-src\trj_gui_w.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_w.cpp.obj
-.PHONY : src\trj_gui_w.cpp.obj
-
-src\trj_gui_w.i: src\trj_gui_w.cpp.i
-
-.PHONY : src\trj_gui_w.i
-
-# target to preprocess a source file
-src\trj_gui_w.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_w.cpp.i
-.PHONY : src\trj_gui_w.cpp.i
-
-src\trj_gui_w.s: src\trj_gui_w.cpp.s
-
-.PHONY : src\trj_gui_w.s
-
-# target to generate assembly for a file
-src\trj_gui_w.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_w.cpp.s
-.PHONY : src\trj_gui_w.cpp.s
 
 src\trj_opengl.obj: src\trj_opengl.cpp.obj
 
@@ -1429,9 +1375,6 @@ help:
 	@echo ... src/trj_gui_data.obj
 	@echo ... src/trj_gui_data.i
 	@echo ... src/trj_gui_data.s
-	@echo ... src/trj_gui_eng.obj
-	@echo ... src/trj_gui_eng.i
-	@echo ... src/trj_gui_eng.s
 	@echo ... src/trj_gui_env.obj
 	@echo ... src/trj_gui_env.i
 	@echo ... src/trj_gui_env.s
@@ -1447,9 +1390,6 @@ help:
 	@echo ... src/trj_gui_traj.obj
 	@echo ... src/trj_gui_traj.i
 	@echo ... src/trj_gui_traj.s
-	@echo ... src/trj_gui_w.obj
-	@echo ... src/trj_gui_w.i
-	@echo ... src/trj_gui_w.s
 	@echo ... src/trj_opengl.obj
 	@echo ... src/trj_opengl.i
 	@echo ... src/trj_opengl.s

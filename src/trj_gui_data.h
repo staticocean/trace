@@ -2,9 +2,9 @@
 #ifndef __TRJ_GUI_DATA__
 #define __TRJ_GUI_DATA__
 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
-#include <math.h>
 
 #include <lib/trj/vl.h>
 #include <lib/trj/vl3d.h>

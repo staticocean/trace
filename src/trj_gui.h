@@ -9,7 +9,6 @@
 #include <string.h>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
-
 #include <lib/imgui/imgui.h>
 
 extern "C"
@@ -46,7 +45,12 @@ typedef struct trj_gui
 	float32_t w_width;
 	
 	s_trj_eng eng;
-	s_trj_obj st_eng_obj[255];
+	s_trj_obj  st_eng_obj_list [255];
+	s_trj_traj st_eng_traj_list[255];
+	s_trj_ctrl st_eng_ctrl_list[255];
+	s_trj_data st_eng_data_list[255];
+	s_trj_ellp st_eng_ellp_list[255];
+	
 	s_trj_gui_obj st_gui_eng_obj[255];
 	
 	s_trj_gui_menu gui_menu;
