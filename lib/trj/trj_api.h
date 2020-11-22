@@ -162,6 +162,40 @@ typedef struct trj_data
 
 //------------------------------------------------------------------------------
 
+#ifdef __TRJ_ENV__
+
+typedef struct trj_proc
+{
+	uint32_t id;
+	char desc[32];
+	
+	void *config;
+	void *data;
+	
+	void *init;
+	void *free;
+	
+} 	s_trj_proc;
+
+#else
+
+typedef struct trj_proc
+{
+	uint32_t id;
+	char desc[32];
+	
+	void *data;
+	void *config;
+	
+	uint8_t (*init) 	(void **data, void *config);
+	uint8_t (*free) 	(void **data);
+	
+} 	s_trj_proc;
+
+#endif
+
+//------------------------------------------------------------------------------
+
 typedef struct trj_obj_data
 {
 	vlf_t time[2];
@@ -212,15 +246,17 @@ typedef struct trj_eng
 	
 	vlf_t time[2];
 	
+	uint32_t ellp_offset;
 	uint32_t traj_offset;
 	uint32_t ctrl_offset;
 	uint32_t data_offset;
-	uint32_t ellp_offset;
+	uint32_t proc_offset;
 	
+	s_trj_ellp *ellp_list;
 	s_trj_traj *traj_list;
 	s_trj_ctrl *ctrl_list;
 	s_trj_data *data_list;
-	s_trj_ellp *ellp_list;
+	s_trj_proc *proc_list;
 	
 }	s_trj_eng;
 

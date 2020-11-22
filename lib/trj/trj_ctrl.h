@@ -166,6 +166,12 @@ inline uint8_t trj_ctrl_cpos_init(s_trj_ctrl_cpos *self, s_trj_ctrl_cpos_init at
 
 inline uint8_t trj_ctrl_cpos_reset(s_trj_ctrl_cpos *self, s_trj_obj *obj)
 {
+	if (obj->traj_offset > 0x00)
+	{
+		s_trj_traj *traj = &obj->traj_list[0];
+		traj->pos(traj->data, 0.0, &obj->pos[0][0]);
+	}
+	
 	return 0x00;
 }
 

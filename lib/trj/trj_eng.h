@@ -20,10 +20,12 @@
 typedef struct trj_eng_init_attr
 {
 	s_trj_obj  *obj_list;
+	
+	s_trj_ellp *ellp_list;
 	s_trj_traj *traj_list;
 	s_trj_ctrl *ctrl_list;
 	s_trj_data *data_list;
-	s_trj_ellp *ellp_list;
+	s_trj_proc *proc_list;
 	
 }	s_trj_eng_init;
 
@@ -47,6 +49,9 @@ inline void trj_eng_print(s_trj_eng *eng)
 
 inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 {
+	self->ellp_list = attr.ellp_list;
+	self->ellp_offset = 0x00;
+	
 	self->obj_list = attr.obj_list;
 	self->obj_count = 0x00;
 	
@@ -59,8 +64,8 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 	self->data_list = attr.data_list;
 	self->data_offset = 0x00;
 	
-	self->ellp_list = attr.ellp_list;
-	self->ellp_offset = 0x00;
+	self->proc_list = attr.proc_list;
+	self->proc_offset = 0x00;
 	
 	return 0x00;
 }
@@ -95,6 +100,14 @@ inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 {
 	self->data_list[self->data_offset] = api;
 	++self->data_offset;
+	
+	return 0x00;
+}
+
+inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
+{
+	self->proc_list[self->proc_offset] = api;
+	++self->proc_offset;
 	
 	return 0x00;
 }

@@ -65,10 +65,12 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
 			.obj_list = self->st_eng_obj_list,
+			
+			.ellp_list = self->st_eng_ellp_list,
 			.traj_list = self->st_eng_traj_list,
 			.ctrl_list = self->st_eng_ctrl_list,
 			.data_list = self->st_eng_data_list,
-			.ellp_list = self->st_eng_ellp_list,
+			.proc_list = self->st_eng_proc_list,
 	});
 	
 	trj_ellp_init(&trj_ellp_wgs84);
