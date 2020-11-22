@@ -94,6 +94,12 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-1);
 	trj_gui_objsel("#ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ellp  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	trj_gui_ellpsel("#ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	
 	for (int i = 0; i < traj->pts_offset; ++i)
 	{
 		ImGui::PushID(i);

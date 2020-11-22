@@ -396,6 +396,9 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_count, s_trj_ellp *ellp_l
 						  ellp_list[(*ellp)->id].desc,
 						  ImGuiComboFlags_NoArrowButton))
 	{
+		if (ImGui::Selectable("none", *ellp == NULL)) { *ellp = NULL; }
+		if (*ellp == NULL) { ImGui::SetItemDefaultFocus(); }
+		
 		for (int i = 0; i < ellp_count; ++i)
 		{
 			const bool is_selected = ((*ellp)->id == i);
@@ -403,8 +406,7 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_count, s_trj_ellp *ellp_l
 			if (ImGui::Selectable(ellp_list[i].desc, is_selected))
 			{ *ellp = &ellp_list[i]; }
 			
-			if (is_selected)
-			{ ImGui::SetItemDefaultFocus(); }
+			if (is_selected) { ImGui::SetItemDefaultFocus(); }
 		}
 		
 		ImGui::EndCombo();

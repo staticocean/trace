@@ -71,6 +71,10 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.ellp_list = self->st_eng_ellp_list,
 	});
 	
+	trj_ellp_init(&trj_ellp_wgs84);
+	
+	trj_eng_add_ellpapi(&self->eng, trj_ellp_wgs84);
+	
 	static s_trj_traj_orb_init trj_traj_orb_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
@@ -102,6 +106,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	static s_trj_traj_bz_init trj_traj_bz_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
+			
+			.ellp_en = 0x00,
+			.ellp = NULL,
 			
 			.pts = NULL,
 	};

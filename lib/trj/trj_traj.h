@@ -48,7 +48,7 @@ typedef struct trj_traj_bz
 	uint32_t pts_offset;
 	
 	uint8_t ellp_en;
-	s_trj_ellp ellp;
+	s_trj_ellp *ellp;
 	
 } 	s_trj_traj_bz;
 
@@ -60,7 +60,7 @@ typedef struct trj_traj_bz_init
 	s_trj_traj_bz_point *pts;
 	
 	uint8_t ellp_en;
-	s_trj_ellp ellp;
+	s_trj_ellp *ellp;
 	
 } 	s_trj_traj_bz_init;
 
@@ -74,8 +74,10 @@ inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 	self->pts = attr.pts;
 	self->pts_offset = 0x00;
 	
-	self->ellp = attr.ellp;
 	self->ellp_en = attr.ellp_en;
+	self->ellp = attr.ellp;
+	
+	if (self->ellp_en == 0x00) { self->ellp = NULL; }
 	
 	return 0x00;
 }
