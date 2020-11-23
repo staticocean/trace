@@ -328,88 +328,91 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	
 	if (offset >= (self->pts_offset-1))
 	{
-		offset = self->pts_offset - 2;
+		vl_vcopy(pos, self->pts[self->pts_offset-1].pos_p);
 	}
 	
-	if (time >= self->pts[self->pts_offset-1].time)
+	else if (time >= self->pts[self->pts_offset-1].time)
 	{
 		vl_vcopy(pos, self->pts[self->pts_offset-1].pos_p);
 		return 0x00;
 	}
 	
-	s_trj_bz4 bz4;
-	
-	trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
-			.p0 = {
-					self->pts[offset  ].time,
-					self->pts[offset  ].pos_p[0]
-			},
-			
-			.p1 = {
-					self->pts[offset  ].time + self->pts[offset].pos_t[0],
-					self->pts[offset  ].pos_p[0] + self->pts[offset].pos_d[0]
-			},
-			
-			.p2 = {
-					self->pts[offset+1].time - self->pts[offset + 1].pos_t[0],
-					self->pts[offset+1].pos_p[0] - self->pts[offset + 1].pos_d[0]
-			},
-			
-			.p3 = {
-					self->pts[offset+1].time,
-					self->pts[offset+1].pos_p[0]
-			}
-	});
-	
-	trj_bz4_eval(&bz4, time, &pos[0]);
-	
-	trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
-			.p0 = {
-					self->pts[offset  ].time,
-					self->pts[offset  ].pos_p[1]
-			},
-			
-			.p1 = {
-					self->pts[offset  ].time + self->pts[offset].pos_t[1],
-					self->pts[offset  ].pos_p[1] + self->pts[offset].pos_d[1]
-			},
-			
-			.p2 = {
-					self->pts[offset+1].time - self->pts[offset + 1].pos_t[1],
-					self->pts[offset+1].pos_p[1] - self->pts[offset + 1].pos_d[1]
-			},
-			
-			.p3 = {
-					self->pts[offset+1].time,
-					self->pts[offset+1].pos_p[1]
-			}
-	});
-	
-	trj_bz4_eval(&bz4, time, &pos[1]);
-	
-	trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
-			.p0 = {
-					self->pts[offset  ].time,
-					self->pts[offset  ].pos_p[2]
-			},
-			
-			.p1 = {
-					self->pts[offset  ].time + self->pts[offset].pos_t[2],
-					self->pts[offset  ].pos_p[2] + self->pts[offset].pos_d[2]
-			},
-			
-			.p2 = {
-					self->pts[offset+1].time - self->pts[offset + 1].pos_t[2],
-					self->pts[offset+1].pos_p[2] - self->pts[offset + 1].pos_d[2]
-			},
-			
-			.p3 = {
-					self->pts[offset+1].time,
-					self->pts[offset+1].pos_p[2]
-			}
-	});
-	
-	trj_bz4_eval(&bz4, time, &pos[2]);
+	else
+	{
+		s_trj_bz4 bz4;
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[0]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[0],
+						self->pts[offset].pos_p[0] + self->pts[offset].pos_d[0]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[0],
+						self->pts[offset + 1].pos_p[0] - self->pts[offset + 1].pos_d[0]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[0]
+				}
+		});
+		
+		trj_bz4_eval(&bz4, time, &pos[0]);
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[1]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[1],
+						self->pts[offset].pos_p[1] + self->pts[offset].pos_d[1]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[1],
+						self->pts[offset + 1].pos_p[1] - self->pts[offset + 1].pos_d[1]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[1]
+				}
+		});
+		
+		trj_bz4_eval(&bz4, time, &pos[1]);
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[2]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[2],
+						self->pts[offset].pos_p[2] + self->pts[offset].pos_d[2]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[2],
+						self->pts[offset + 1].pos_p[2] - self->pts[offset + 1].pos_d[2]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[2]
+				}
+		});
+		
+		trj_bz4_eval(&bz4, time, &pos[2]);
+	}
 	
 	if (self->ellp_en != 0x00 && self->ellp != NULL)
 	{

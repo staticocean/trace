@@ -174,6 +174,7 @@ typedef struct trj_proc
 	
 	void *init;
 	void *free;
+	void *update;
 	
 } 	s_trj_proc;
 
@@ -189,6 +190,7 @@ typedef struct trj_proc
 	
 	uint8_t (*init) 	(void **data, void *config);
 	uint8_t (*free) 	(void **data);
+	uint8_t (*update) 	(void *data, void *obj, uint32_t offset);
 	
 } 	s_trj_proc;
 
@@ -239,29 +241,6 @@ typedef struct trj_obj
 
 //------------------------------------------------------------------------------
 
-typedef struct trj_eng
-{
-	uint32_t  obj_count;
-	s_trj_obj *obj_list;
-	
-	vlf_t time[2];
-	
-	uint32_t ellp_offset;
-	uint32_t traj_offset;
-	uint32_t ctrl_offset;
-	uint32_t data_offset;
-	uint32_t proc_offset;
-	
-	s_trj_ellp *ellp_list;
-	s_trj_traj *traj_list;
-	s_trj_ctrl *ctrl_list;
-	s_trj_data *data_list;
-	s_trj_proc *proc_list;
-	
-}	s_trj_eng;
-
-//------------------------------------------------------------------------------
-
 #ifndef __TRJ_ENV__
 
 inline uint8_t trj_obj_add_traj(s_trj_obj *self, s_trj_traj traj_api)
@@ -281,7 +260,7 @@ inline uint8_t trj_obj_del_traj(s_trj_obj *self, s_trj_traj *api)
 	int32_t offset = 0x00;
 	
 	api->free(&api->data);
-
+	
 	if (self->traj_offset == 0x00) { return 0x00; }
 	
 	for (i = 0; i < self->traj_offset-1; ++i)
@@ -359,11 +338,39 @@ inline uint8_t trj_obj_del_data(s_trj_obj *self, s_trj_data *api)
 	}
 	
 	self->data_offset -= 0x01;
-
+	
 	return 0x00;
 }
 
 #endif
+
+//------------------------------------------------------------------------------
+
+typedef struct trj_eng
+{
+	uint32_t  obj_count;
+	s_trj_obj *obj_list;
+	
+	vlf_t time[2];
+	
+	s_trj_proc *proc;
+	
+	uint32_t update_count;
+	uint32_t proc_count;
+	
+	uint32_t ellp_offset;
+	uint32_t traj_offset;
+	uint32_t ctrl_offset;
+	uint32_t data_offset;
+	uint32_t proc_offset;
+	
+	s_trj_ellp *ellp_list;
+	s_trj_traj *traj_list;
+	s_trj_ctrl *ctrl_list;
+	s_trj_data *data_list;
+	s_trj_proc *proc_list;
+	
+}	s_trj_eng;
 
 //------------------------------------------------------------------------------
 

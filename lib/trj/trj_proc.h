@@ -4,96 +4,135 @@
 //  Copyright © 2015 Control Systems Interfaces. All rights reserved.
 //
 
-#ifndef __INS_PROC__
-#define __INS_PROC__
+#ifndef __TRJ_PROC__
+#define __TRJ_PROC__
 
 //------------------------------------------------------------------------------
 
 #include "vl.h"
 
-#include "trj_utils.h"
-#include "trj_obj.h"
+#include "trj_api.h"
 
 //------------------------------------------------------------------------------
 
-typedef struct ins_proc_euler
+#define trj_proc_euler_id (0x00000001)
+
+typedef struct trj_proc_euler
 {
-    s_trj_obj *parent;
-    
-    uint64_t offset;
-    vlf_t pos_0[4][3];
-    vlf_t rot_0[4][9];
-    vlf_t time_0[4];
-    
-//    vlf_t pos_0[3];
-//    vlf_t pos_1[3];
-//    vlf_t pos_2[3];
-    
-}   ins_proc_euler_t;
+	vlf_t d1p[3];
+	vlf_t d1n[3];
+	vlf_t d2 [3];
+	vlf_t drv[3];
+	
+	vlf_t rnt[9]; // rotation next transpose
+	vlf_t crm[9]; // cross multiplication
+	
+}   s_trj_proc_euler;
+
+typedef struct trj_proc_euler_init
+{
+	uint32_t temp;
+
+}   s_trj_proc_euler_init;
 
 //------------------------------------------------------------------------------
 
-inline void ins_proc_euler(ins_proc_euler_t *proc, s_trj_obj *obj)
+inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init attr)
 {
-	vl_vcopy(&proc->pos_0[proc->offset & 0x03][0], obj->pos[0]);
-	vl_mcopy(&proc->rot_0[proc->offset & 0x03][0], obj->rot[0]);
-	proc->time_0[proc->offset & 0x03] = obj->time[0];
-	proc->offset++;
-	
-	vlf_t *p0 = &proc->pos_0[(proc->offset-3) & 0x03][0];
-	vlf_t *p1 = &proc->pos_0[(proc->offset-2) & 0x03][0];
-	vlf_t *p2 = &proc->pos_0[(proc->offset-1) & 0x03][0];
+	return 0x00;
+}
 
-//    vlf_t *r0 = &proc->rot_0[(proc->offset-3) & 0x03][0];
-	vlf_t *r1 = &proc->rot_0[(proc->offset-2) & 0x03][0];
-	vlf_t *r2 = &proc->rot_0[(proc->offset-1) & 0x03][0];
-//    vlf_t *p3 = &proc->pos_0[(proc->offset-1) & 0x03][0];
+inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uint32_t offset)
+{
+	s_trj_obj_data *data = obj->log_list;
 	
-	vlf_t t0 = proc->time_0[(proc->offset-3) & 0x03];
-	vlf_t t1 = proc->time_0[(proc->offset-2) & 0x03];
-	vlf_t t2 = proc->time_0[(proc->offset-1) & 0x03];
-//    vlf_t t3 = proc->time_0[(proc->offset-1) & 0x03];
-	
-	vlf_t v0[3];
-	vlf_t v1[3];
-	
-	vlf_t a0[3];
-	
-	if (proc->offset > 2)
+	if (offset == 0x00)
 	{
-		vl_vsub(v0, p1, p0);
-		vl_vmul_s(v0, v0, 1 / (t1-t0));
+		vl_vzero (self->d1p);
+		vl_vsub (self->d1n, &data[offset+1].pos[0][0], &data[offset].pos[0][0]);
 		
-		vl_vsub(v1, p2, p1);
-		vl_vmul_s(v1, v1, 1 / (t2-t1));
+		// dont need to div 0.0 d1p
+		vl_vmul_s (self->d1n, self->d1n, 1.0 / (data[1].time[0] - data[0].time[0]));
 		
-		vl_vsub(a0, v1, v0);
-		vl_vmul_s(a0, a0, 1 / (t2-t1));
+		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vcopy(proc->parent->pos[1], v1);
-		vl_vcopy(proc->parent->pos[2], a0);
-		
-		// R1*R0.I = C
-//        vlf_t temp_w0[9];
-		vlf_t temp_w1[9];
-
-//        vlf_t r0_tnp[0];
-		vlf_t r1_tnp[9];
-
-//        vl_tnp(r0_tnp, r0);
-		vl_tnp(r1_tnp, r1);
-
-//        vl_mmul_m(temp_w0, r1, r0_tnp);
-		vl_mmul_m(temp_w1, r2, r1_tnp);
-		
-		vl_unskew(proc->parent->rot[1], temp_w1);
-		vl_vmul_s(proc->parent->rot[1], proc->parent->rot[1], 1 / (t2-t1));
-
-//        rot_1 = self.parent.rot_0[-2].dot(self.parent.rot_0[-3].I);
-//        self.parent.rot_1.append(trj_utils.unskew(rot_1) / (self.parent.time_0[-2] - self.parent.time_0[-3]));
+		vl_vmul_s (self->d2, self->d2, 1.0 / (data[1].time[0] - data[0].time[0]));
+		vl_vmul_s (self->d2, self->d2, 1.0 / (data[1].time[0] - data[0].time[0]));
 	}
 	
-	return;
+	else if (offset == (obj->log_offset-1))
+	{
+		vl_vsub (self->d1p, &data[offset].pos[0][0], &data[offset-1].pos[0][0]);
+		vl_vzero (self->d1n);
+		
+		// dont need to div 0.0 d1n
+		vl_vmul_s (self->d1p, self->d1p, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		
+		vl_vsub (self->d2, self->d1n, self->d1p);
+		
+		vl_vmul_s (self->d2, self->d2, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d2, self->d2, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+	}
+	
+	else
+	{
+		vl_vsub (self->d1p, &data[offset].pos[0][0], &data[offset-1].pos[0][0]);
+		vl_vsub (self->d1n, &data[offset+1].pos[0][0], &data[offset].pos[0][0]);
+		
+		// dont need to div 0.0 d1n
+		vl_vmul_s (self->d1p, self->d1p, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		
+		vl_vsub (self->d2, self->d1n, self->d1p);
+		
+		vl_vmul_s (self->d2, self->d2, 2.0 / (data[offset+1].time[0] - data[offset-1].time[0]));
+	}
+	
+	if (offset == (obj->log_offset-1))
+	{
+		vl_mzero(&data[offset].rot[1][0]);
+	}
+	else
+	{
+		vl_tnp(self->rnt, &data[offset].rot[0][0]);
+		vl_mmul_m(self->crm, &data[offset+1].rot[0][0], self->rnt);
+		vl_mmul_s(self->crm, self->crm, 1.0 / (data[offset+1].time[0] - data[offset].time[0]));
+		
+		vl_unskew(self->drv, self->crm);
+		vl_skew(&data[offset].rot[1][0], self->drv);
+	}
+	
+	vl_vcopy(&data[offset].pos[1][0], self->d1n);
+	vl_vcopy(&data[offset].pos[2][0], self->d2);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_proc_euler_init_ (void **data, void *config)
+{
+	*data = (s_trj_proc_euler*) malloc(sizeof(s_trj_proc_euler));
+	
+	s_trj_proc_euler *proc = (s_trj_proc_euler*) *data;
+	s_trj_proc_euler_init *proc_init = (s_trj_proc_euler_init*) config;
+	
+	return trj_proc_euler_init(proc, *proc_init);
+}
+
+inline uint8_t trj_proc_euler_free_ (void **data)
+{
+	s_trj_proc_euler *proc = (s_trj_proc_euler*) *data;
+	
+	free(proc);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_proc_euler_update_ (void *data, void *obj, uint32_t offset)
+{
+	s_trj_proc_euler *proc = (s_trj_proc_euler*) data;
+	
+	return trj_proc_euler_update(proc, (s_trj_obj*) obj, offset);
 }
 
 //------------------------------------------------------------------------------

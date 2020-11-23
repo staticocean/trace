@@ -1150,33 +1150,6 @@ src\trj_gui_obj.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_obj.cpp.s
 .PHONY : src\trj_gui_obj.cpp.s
 
-src\trj_gui_tbar.obj: src\trj_gui_tbar.cpp.obj
-
-.PHONY : src\trj_gui_tbar.obj
-
-# target to build an object file
-src\trj_gui_tbar.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj
-.PHONY : src\trj_gui_tbar.cpp.obj
-
-src\trj_gui_tbar.i: src\trj_gui_tbar.cpp.i
-
-.PHONY : src\trj_gui_tbar.i
-
-# target to preprocess a source file
-src\trj_gui_tbar.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.i
-.PHONY : src\trj_gui_tbar.cpp.i
-
-src\trj_gui_tbar.s: src\trj_gui_tbar.cpp.s
-
-.PHONY : src\trj_gui_tbar.s
-
-# target to generate assembly for a file
-src\trj_gui_tbar.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.s
-.PHONY : src\trj_gui_tbar.cpp.s
-
 src\trj_opengl.obj: src\trj_opengl.cpp.obj
 
 .PHONY : src\trj_opengl.obj
@@ -1327,9 +1300,6 @@ help:
 	@echo ... src/trj_gui_obj.obj
 	@echo ... src/trj_gui_obj.i
 	@echo ... src/trj_gui_obj.s
-	@echo ... src/trj_gui_tbar.obj
-	@echo ... src/trj_gui_tbar.i
-	@echo ... src/trj_gui_tbar.s
 	@echo ... src/trj_opengl.obj
 	@echo ... src/trj_opengl.i
 	@echo ... src/trj_opengl.s

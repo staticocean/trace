@@ -103,12 +103,12 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 	
 	if (*data->data_offset > 10000)
 	{
-		for (int di = *data->data_offset / 10000 + 1, i = 0;
-			 i < *data->data_offset / di; ++i)
+		for (int di = *data->data_offset / 10000, i = 0;
+			 i < 10000-1; ++i)
 		{
 			vl_vcopy(line.p0, &data->data_list[i*di].pos[0][0]);
 			vl_vcopy(line.p1, &data->data_list[(i+1)*di].pos[0][0]);
-			
+
 			vl3d_eng_add_line(&vl3d_eng, line);
 		}
 	} else
@@ -117,13 +117,20 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 		{
 			vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
 			vl_vcopy(line.p1, &data->data_list[i+1].pos[0][0]);
-			
+
 			vl3d_eng_add_line(&vl3d_eng, line);
 		}
 	}
+//
+//	for (int i = 0; i < *data->data_offset-1; ++i)
+//	{
+//		vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
+//		vl_vcopy(line.p1, &data->data_list[i+1].pos[0][0]);
+//
+//		vl3d_eng_add_line(&vl3d_eng, line);
+//	}
 	
 	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
-	
 	vl3d_view_save(self, &view);
 	
 	free(obj_list);

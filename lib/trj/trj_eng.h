@@ -19,6 +19,8 @@
 
 typedef struct trj_eng_init_attr
 {
+	s_trj_proc *proc;
+	
 	s_trj_obj  *obj_list;
 	
 	s_trj_ellp *ellp_list;
@@ -67,6 +69,11 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 	self->proc_list = attr.proc_list;
 	self->proc_offset = 0x00;
 	
+	self->proc = attr.proc;
+	
+	self->update_count = 0x00;
+	self->proc_count   = 0x00;
+	
 	return 0x00;
 }
 
@@ -107,7 +114,12 @@ inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 {
 	self->proc_list[self->proc_offset] = api;
+	s_trj_proc *proc = &self->proc_list[self->proc_offset];
 	++self->proc_offset;
+	
+	// !!!  IMPORTANT proc is selected by reference in eng api
+	// so it is basically initialized once
+	proc->init(&proc->data, proc->config);
 	
 	return 0x00;
 }
@@ -141,6 +153,9 @@ inline uint8_t trj_eng_reset(s_trj_eng *self)
 	
 	self->time[0] = 0.0;
 	self->time[1] = 0.0;
+	
+	self->update_count = 0x01;
+	self->proc_count   = 0x00;
 	
 	for (i = 0; i < self->obj_count; ++i)
 	{
@@ -177,7 +192,7 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 {
 	uint32_t i;
 	uint32_t j;
-
+	
 	s_trj_obj *obj;
 	
 	self->time[0] += d_time;
@@ -192,6 +207,27 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 			obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
 		}
 	}
+	
+	++self->update_count;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_eng_proc(s_trj_eng *self)
+{
+	uint32_t i;
+	
+	s_trj_obj *obj;
+	
+	for (i = 0; i < self->obj_count; ++i)
+	{
+		obj = &self->obj_list[i];
+		self->proc->update(self->proc->data, obj, self->proc_count);
+	}
+	
+	++self->proc_count;
 	
 	return 0x00;
 }

@@ -12,8 +12,8 @@
 #include <lib/trj/trj_traj.h>
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_data.h>
-#include <lib/trj/trj_data.h>
-#include <lib/trj/trj_utils.h>
+#include <lib/trj/trj_proc.h>
+#include <lib/trj/trj_eng.h>
 
 #include <lib/imgui/imgui_internal.h>
 #include <lib/trj/vl3d.h>
@@ -430,6 +430,33 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_
 			{ *ellp = &ellp_list[i]; }
 			
 			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+			
+			ImGui::PopID();
+		}
+		
+		ImGui::EndCombo();
+	}
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_procsel(char *label, s_trj_eng *eng)
+{
+	if (ImGui::BeginCombo(label, eng->proc->desc, ImGuiComboFlags_NoArrowButton))
+	{
+		for (int i = 0; i < eng->proc_offset; ++i)
+		{
+			ImGui::PushID(i);
+			
+			bool is_selected = (eng->proc->id == eng->proc_list[i].id);
+			
+			if (ImGui::Selectable(eng->proc_list[i].desc, is_selected))
+			{ eng->proc = &eng->proc_list[i]; }
+			
+			if (is_selected)
+			{ ImGui::SetItemDefaultFocus(); }
 			
 			ImGui::PopID();
 		}

@@ -36,6 +36,7 @@ typedef enum trj_gui_eng_state_t
 	trj_gui_eng_state_standby,
 	trj_gui_eng_state_init,
 	trj_gui_eng_state_update,
+	trj_gui_eng_state_proc,
 	trj_gui_eng_state_deinit,
 };
 
@@ -380,9 +381,15 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		case trj_gui_eng_state_init:
 		{
-			if (gui->time_step < 1E-9) { return 0x01; }
+			if (gui->time_step < 1E-9)
+			{
+				gui->state = trj_gui_eng_state_standby;
+				return 0x01;
+			}
 			
 			trj_eng_reset(self);
+			
+			gui->time_iter = gui->time_limit / gui->time_step;
 			
 			for (int i = 0; i < self->obj_count; ++i)
 			{
@@ -390,28 +397,49 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 				self->obj_list[i].log_offset = 0x00;
 			}
 			
+			trj_eng_log(self);
+			
+			gui->state = trj_gui_eng_state_update;
+			
 			break;
 		}
 		
 		case trj_gui_eng_state_update:
 		{
-			if (gui->time_step < 1E-9) { return 0x01; }
+			if (gui->time_step < 1E-9)
+			{
+				gui->state = trj_gui_eng_state_standby;
+				return 0x01;
+			}
 			
-			if (self->time[0] < gui->time_limit)
+			// prevent overflowing buffers and time_limit
+			if ((self->time[0]+gui->time_step) < gui->time_limit)
 			{
 				trj_eng_update(self, gui->time_step);
 				trj_eng_log(self);
 			}
+			
+			else { gui->state = trj_gui_eng_state_proc; }
+			
+			break;
+		}
+		
+		case trj_gui_eng_state_proc:
+		{
+			if (self->proc_count < self->update_count)
+			{
+				trj_eng_proc(self);
+			}
+			else { gui->state = trj_gui_eng_state_deinit; }
 			
 			break;
 		}
 		
 		case trj_gui_eng_state_deinit:
 		{
-			if (gui->time_step < 1E-9) { return 0x01; }
-			
 			// run data render routines
 			trj_eng_render(self);
+			gui->state = trj_gui_eng_state_standby;
 			
 			break;
 		}
@@ -432,20 +460,38 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 	
+	const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
+	const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
+	
 	if (ImGui::BeginPopupModal("RENDERING", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (gui->state == trj_gui_eng_state_update)
 		{
-			const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
-			const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
-			
+			ImGui::Text("ctrl pass");
 			ImGui::BufferingBar("##progress", self->time[0] / gui->time_limit, ImVec2(400, 6), bg, col);
+			
+			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		}
+		
+		if (gui->state == trj_gui_eng_state_proc)
+		{
+			ImGui::Text("proc pass");
+			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(400, 6), bg, col);
+			
+			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		}
+		
+		if (gui->state == trj_gui_eng_state_deinit)
+		{
+			ImGui::Text("data pass");
 			
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 		}
 		
 		if (gui->state == trj_gui_eng_state_standby)
 		{
+			ImGui::Text("stby mode");
+			
 			if (ImGui::Button("CLOSE", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 		}
 
@@ -461,43 +507,14 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	// Always center this window when appearing
 	switch (gui->state)
 	{
-		case trj_gui_eng_state_standby:
-		{
-			break;
-		}
-		
 		case trj_gui_eng_state_init:
 		{
-			gui->state = trj_gui_eng_state_update;
-			
 			ImGui::OpenPopup("RENDERING");
 			
 			break;
 		}
 		
-		case trj_gui_eng_state_update:
-		{
-			if (self->time[0] >= gui->time_limit)
-			{
-				gui->state = trj_gui_eng_state_deinit;
-			}
-			
-			break;
-		}
-		
-		case trj_gui_eng_state_deinit:
-		{
-			gui->state = trj_gui_eng_state_standby;
-			
-			break;
-		}
-		
-		default:
-		{
-			gui->state = trj_gui_eng_state_standby;
-			
-			break;
-		}
+		default: { break; }
 	}
 	
 	return 0x00;

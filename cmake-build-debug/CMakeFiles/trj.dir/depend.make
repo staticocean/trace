@@ -180,6 +180,7 @@ CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_data_.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_ellp.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_eng.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_obj.h
+CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_proc.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_traj.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_utils.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\vl.h
@@ -276,7 +277,9 @@ CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_bz.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_ctrl.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_data.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_ellp.h
+CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_eng.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_obj.h
+CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_proc.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_traj.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\trj_utils.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\vl.h
@@ -285,30 +288,6 @@ CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\lib\trj\vl_svd.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\src\trj_gui_obj.cpp
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\src\trj_gui_obj.h
 CMakeFiles\trj.dir\src\trj_gui_obj.cpp.obj: ..\src\trj_gui_w.h
-
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imconfig.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imgui.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imgui_internal.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\imgui\imstb_textedit.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_api.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_bz.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_ctrl.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_data.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_ellp.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_eng.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_obj.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_traj.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\trj_utils.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl3d.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\lib\trj\vl_svd.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\imgui_custom.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_eng.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_obj.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_tbar.cpp
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_tbar.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_traj.h
-CMakeFiles\trj.dir\src\trj_gui_tbar.cpp.obj: ..\src\trj_gui_w.h
 
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\fmemopen\fmemopen.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\imgui\imconfig.h
@@ -333,6 +312,7 @@ CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_data_.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_ellp.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_eng.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_obj.h
+CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_proc.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_traj.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_utils.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\vl.h

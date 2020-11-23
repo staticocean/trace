@@ -107,10 +107,10 @@ int main(int, char**)
     {
 		static int display_w = 1024, display_h = 720;
 	
-		trj_gui_eng_updateeng(&trj_gui.gui_eng, &trj_gui.eng);
-		
 		curr_ts = clock();
 		diff_ts = curr_ts - prev_ts;
+	
+		trj_gui_eng_updateeng(&trj_gui.gui_eng, &trj_gui.eng);
 		
 		if ((diff_ts / (double) CLOCKS_PER_SEC) > (1.0 / 60.0))
 		{
@@ -126,7 +126,6 @@ int main(int, char**)
 			trj_gui.w_height = display_h;
 			trj_gui.w_width = display_w;
 			
-			trj_gui_eng_updategui(&trj_gui.gui_eng, &trj_gui.eng);
 			trj_gui_main(&trj_gui);
 			
 			// Rendering
@@ -140,7 +139,7 @@ int main(int, char**)
 			
 			glfwSwapBuffers(window);
 		}
-    }
+	}
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

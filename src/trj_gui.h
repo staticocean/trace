@@ -20,9 +20,11 @@ extern "C"
 #include <lib/trj/vl3d.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
+#include <lib/trj/trj_ellp.h>
 #include <lib/trj/trj_traj.h>
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_data.h>
+#include <lib/trj/trj_proc.h>
 
 #include "imgui_custom.h"
 

@@ -59,12 +59,16 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->w_height = 720;
 	self->w_width  = 1024;
 	
+	self->gui_tbar.eng = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
 	self->gui_tbar.height = 32;
 	
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
+	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
-			.obj_list = self->st_eng_obj_list,
+			.proc      = self->st_eng_proc_list,
+			
+			.obj_list  = self->st_eng_obj_list,
 			
 			.ellp_list = self->st_eng_ellp_list,
 			.traj_list = self->st_eng_traj_list,
@@ -218,6 +222,20 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.reset  = trj_data_text_reset_,
 	});
 	
+	static s_trj_proc_euler_init trj_proc_euler_config_ = {
+			.temp = 0x00,
+	};
+	
+	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+			.id     = trj_proc_euler_id,
+			.desc   = "default_proc_euler",
+			.init   = trj_proc_euler_init_,
+			.free   = trj_proc_euler_free_,
+			.update = trj_proc_euler_update_,
+			.data   = NULL,
+			.config = &trj_proc_euler_config_,
+	});
+	
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"   , .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"   , .ref = &self->eng.obj_list[0] });
 	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth" , .ref = &self->eng.obj_list[0] });
@@ -336,6 +354,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
 		trj_gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
+	}
+	
+	{
+		// progress popup
+		// must be after toolbar
+		trj_gui_eng_updategui(&self->gui_eng, &self->eng);
 	}
 	
 	{
