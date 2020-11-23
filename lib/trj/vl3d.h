@@ -122,6 +122,7 @@ typedef struct vl3d_view
 	uint8_t tbar_en;
 	
 	uint8_t xyz_en;
+	vlf_t xyz_scale;
 	
 	uint8_t grid_mode;
 	vlf_t grid_pt_size;
@@ -344,7 +345,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 						   ImGuiWindowFlags_NoScrollWithMouse);
 	if (view->tbar_en != 0x00)
 	{
-		// Tolbar
+		// Toolbar
 		
 		ImGui::BeginGroup();
 		ImGui::AlignTextToFramePadding();
@@ -557,7 +558,9 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 
 inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 {
-	int cnt = 6;
+	if (self->grid_mode == 0x00) { return 0x00; }
+	
+	int cnt = 5;
 	vlf_t d = 1.0 / self->scale / 4.0;
 	vlf_t pt_norm = vl_gauss1(0.0, 0.0, self->grid_pt_disp) / 0.5;
 	vlf_t gain;
@@ -623,8 +626,6 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 				{
 					for (int z = 0; z < cnt; ++z)
 					{
-						if (x+y+z == 0x00) continue;
-						
 						gain = vl_sqrt(x * x + y * y + z * z);
 						// disp * 0.5 coz it just the way human see it 2.0 for dots is the same as 1.0 for lines
 						gain = vl_gauss1(gain, 0.0, self->grid_pt_disp*0.5) / pt_norm;
@@ -748,23 +749,29 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 	return 0x00;
 }
 
-inline uint8_t vl3d_view_xyz(s_vl3d_view *self, s_vl3d_eng *eng, vlf_t scale)
+inline uint8_t vl3d_view_xyz(s_vl3d_view *self, s_vl3d_eng *eng)
 {
-	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { -scale / self->scale, +0.0, +0.0 }, (float64_t[]) { +scale / self->scale, +0.0, +0.0 } );
-	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, -scale / self->scale, +0.0 }, (float64_t[]) { +0.0, +scale / self->scale, +0.0 } );
-	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -scale / self->scale }, (float64_t[]) { +0.0, +0.0, +scale / self->scale } );
+ 	if (self->xyz_en == 0x00) { return 0x00; }
 	
-	s_vl3d_text x_label = { .color = vl3d_col_l, .p0 = { scale / self->scale, 0.0, 0.0 } };
-	s_vl3d_text y_label = { .color = vl3d_col_l, .p0 = { 0.0, scale / self->scale, 0.0 } };
-	s_vl3d_text z_label = { .color = vl3d_col_l, .p0 = { 0.0, 0.0, scale / self->scale } };
+	vlf_t ratio = self->xyz_scale / self->scale;
 	
-	sprintf(x_label.data, "X [%.3f]", scale / self->scale);
-	sprintf(y_label.data, "Y [%.3f]", scale / self->scale);
-	sprintf(z_label.data, "Z [%.3f]", scale / self->scale);
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { -ratio, +0.0, +0.0 }, (float64_t[]) { +ratio, +0.0, +0.0 } );
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, -ratio, +0.0 }, (float64_t[]) { +0.0, +ratio, +0.0 } );
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -ratio }, (float64_t[]) { +0.0, +0.0, +ratio } );
+	
+	s_vl3d_text x_label = { .color = vl3d_col_l, .p0 = { ratio, 0.0, 0.0 } };
+	s_vl3d_text y_label = { .color = vl3d_col_l, .p0 = { 0.0, ratio, 0.0 } };
+	s_vl3d_text z_label = { .color = vl3d_col_l, .p0 = { 0.0, 0.0, ratio } };
+	
+	sprintf(x_label.data, "X [%.3Lf]", ratio);
+	sprintf(y_label.data, "Y [%.3Lf]", ratio);
+	sprintf(z_label.data, "Z [%.3Lf]", ratio);
 	
 	vl3d_eng_add_text(eng, x_label);
 	vl3d_eng_add_text(eng, y_label);
 	vl3d_eng_add_text(eng, z_label);
+	
+	return 0x00;
 }
 
 //------------------------------------------------------------------------------

@@ -82,15 +82,26 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 	}
 	
 	s_vl3d_eng vl3d_eng;
-	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * (*data->data_offset + 2048));
-	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_disp = 2.0, .grid_pt_size = 2.0 };
+	
+	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * (*data->data_offset + 4096));
+	
+	s_vl3d_view view = {
+			.scale = 1.0,
+			.pos = { 0.0, 0.0, 0.0 },
+			
+			.tbar_en = 0x01,
+			
+			.grid_mode = 0x01,
+			.grid_pt_size = 2.0,
+			.grid_pt_disp = 2.0,
+			
+			.xyz_en = 0x01,
+			.xyz_scale = 0.25
+	};
 	
 	vl3d_view_load(self, &view, view);
 	
-	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
-			.obj_list = obj_list,
-	});
-	
+	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = obj_list });
 	s_vl3d_line line = { .color = vl3d_col_l };
 	
 	if (*data->data_offset > 10000)
@@ -113,16 +124,9 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 			vl3d_eng_add_line(&vl3d_eng, line);
 		}
 	}
-//
-//	for (int i = 0; i < *data->data_offset-1; ++i)
-//	{
-//		vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
-//		vl_vcopy(line.p1, &data->data_list[i+1].pos[0][0]);
-//
-//		vl3d_eng_add_line(&vl3d_eng, line);
-//	}
 	
 	vl3d_view_grid(&view, &vl3d_eng);
+	vl3d_view_xyz(&view, &vl3d_eng);
 	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
 	vl3d_view_save(self, &view);
 	
