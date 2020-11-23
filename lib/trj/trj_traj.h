@@ -709,7 +709,7 @@ inline uint8_t trj_traj_orb_info_(void *data, s_trj_traj_info *info)
 	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
 	
 	info->preview_time[0] = 0.0;
-	info->preview_time[1] = 1.0 / traj->rate;
+	info->preview_time[1] = vl_2pi / traj->rate;
 	
 	return 0x00;
 }
