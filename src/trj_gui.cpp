@@ -278,7 +278,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
 	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
 	
-//	trj_gui_eng_sel_traj(&self->gui_eng, &self->eng.obj_list[0].traj_list[0]);
+	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
 	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
 	{

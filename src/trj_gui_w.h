@@ -206,17 +206,17 @@ inline void vl_gui_rot(char *label, vlf_t *mat)
 			
 			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
 			
-			vl3d_eng_draw_arrow(&vl3d_eng,
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l,
 								(float64_t[]) { -mat[0*3+0], -mat[1*3+0], -mat[2*3+0] },
 								(float64_t[]) { +mat[0*3+0], +mat[1*3+0], +mat[2*3+0] }
 			);
 			
-			vl3d_eng_draw_arrow(&vl3d_eng,
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l,
 								(float64_t[]) { -mat[0*3+1], -mat[1*3+1], -mat[2*3+1] },
 								(float64_t[]) { +mat[0*3+1], +mat[1*3+1], +mat[2*3+1] }
 			);
 			
-			vl3d_eng_draw_arrow(&vl3d_eng,
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l,
 								(float64_t[]) { -mat[0*3+2], -mat[1*3+2], -mat[2*3+2] },
 								(float64_t[]) { +mat[0*3+2], +mat[1*3+2], +mat[2*3+2] }
 			);
@@ -236,21 +236,21 @@ inline void vl_gui_rot(char *label, vlf_t *mat)
 //								(float64_t[]) { +mat[0*3+2], +mat[1*3+2], +mat[2*3+2] }
 //			);
 //
-			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { -1.0, +0.0, +0.0 }, (float64_t[]) { +1.0, +0.0, +0.0 } );
-			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
-			vl3d_eng_draw_arrow(&vl3d_eng, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { -1.0, +0.0, +0.0 }, (float64_t[]) { +1.0, +0.0, +0.0 } );
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { +0.0, -1.0, +0.0 }, (float64_t[]) { +0.0, +1.0, +0.0 } );
+			vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -1.0 }, (float64_t[]) { +0.0, +0.0, +1.0 } );
 			
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +1.0, +0.0, +0.0 }, .data = "X0" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +1.0, +0.0 }, .data = "Y0" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { +0.0, +0.0, +1.0 }, .data = "Z0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { +1.0, +0.0, +0.0 }, .data = "X0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { +0.0, +1.0, +0.0 }, .data = "Y0" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { +0.0, +0.0, +1.0 }, .data = "Z0" } );
 			
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] }, .data = "X" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] }, .data = "Y" } );
-			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] }, .data = "Z" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] }, .data = "X" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] }, .data = "Y" } );
+			vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .color = vl3d_col_l, .p0 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] }, .data = "Z" } );
 			
-			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +1.0, +0.0, +0.0 }, .p1 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] } } );
-			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +0.0, +1.0, +0.0 }, .p1 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] } } );
-			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { +0.0, +0.0, +1.0 }, .p1 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] } } );
+			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .color = vl3d_col_l, .p0 = { +1.0, +0.0, +0.0 }, .p1 = { mat[0*3+0], mat[1*3+0], mat[2*3+0] } } );
+			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .color = vl3d_col_l, .p0 = { +0.0, +1.0, +0.0 }, .p1 = { mat[0*3+1], mat[1*3+1], mat[2*3+1] } } );
+			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .color = vl3d_col_l, .p0 = { +0.0, +0.0, +1.0 }, .p1 = { mat[0*3+2], mat[1*3+2], mat[2*3+2] } } );
 			
 			vl3d_eng_render(&vl3d_eng, &vl3d_view, "##mat_view",
 							ImVec2(ImGui::GetContentRegionAvailWidth(),

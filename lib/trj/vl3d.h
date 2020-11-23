@@ -26,7 +26,20 @@ extern "C"
 
 //------------------------------------------------------------------------------
 
-#define vl3d_type_line (0x80000000)
+inline uint32_t __vl3d_col_l__(void)
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+	return ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
+}
+
+inline uint32_t __vl3d_col_d__(void)
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+	return ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_TextDisabled]);
+}
+
+#define vl3d_col_l (__vl3d_col_l__())
+#define vl3d_col_d (__vl3d_col_d__())
 
 //------------------------------------------------------------------------------
 
@@ -42,6 +55,7 @@ typedef struct vl3d_line
 {
 	uint16_t type;
 	uint16_t id;
+	uint32_t color;
 	
 	vlf_t p0[3];
 	vlf_t p1[3];
@@ -52,6 +66,7 @@ typedef struct vl3d_point
 {
 	uint16_t type;
 	uint16_t id;
+	uint32_t color;
 	
 	vlf_t p0[3];
 	vlf_t size;
@@ -62,6 +77,7 @@ typedef struct vl3d_text
 {
 	uint16_t type;
 	uint16_t id;
+	uint32_t color;
 	
 	vlf_t p0[3];
 	vlf_t size;
@@ -105,6 +121,12 @@ typedef struct vl3d_view
 	ImRect rect;
 	uint8_t tbar_en;
 	
+	uint8_t xyz_en;
+	
+	uint8_t grid_mode;
+	vlf_t grid_pt_size;
+	vlf_t grid_pt_disp;
+	
 } 	s_vl3d_view;
 
 //------------------------------------------------------------------------------
@@ -123,6 +145,11 @@ inline void vl3d_view_load(void *ptr, s_vl3d_view *view, s_vl3d_view def)
 	
 	view->scale = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x03)), def.scale);
 	
+	view->xyz_en       = window->StateStorage.GetInt  (ImGui::GetID((void*) ((uintptr_t) ptr + 0x04)), def.xyz_en);
+	view->grid_mode    = window->StateStorage.GetInt  (ImGui::GetID((void*) ((uintptr_t) ptr + 0x05)), def.grid_mode);
+	view->grid_pt_size = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x06)), def.grid_pt_size);
+	view->grid_pt_disp = window->StateStorage.GetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x07)), def.grid_pt_disp);
+	
 	return;
 }
 
@@ -137,7 +164,13 @@ inline void vl3d_view_save(void *ptr, s_vl3d_view *view)
 	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x00)), (float) hpr.heading);
 	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x01)), (float) hpr.pitch);
 	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x02)), (float) hpr.roll);
+	
 	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x03)), (float) view->scale);
+	
+	window->StateStorage.SetInt  (ImGui::GetID((void*) ((uintptr_t) ptr + 0x04)), (float) view->xyz_en);
+	window->StateStorage.SetInt  (ImGui::GetID((void*) ((uintptr_t) ptr + 0x05)), (float) view->grid_mode);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x06)), (float) view->grid_pt_size);
+	window->StateStorage.SetFloat(ImGui::GetID((void*) ((uintptr_t) ptr + 0x07)), (float) view->grid_pt_disp);
 	
 	return;
 }
@@ -190,16 +223,18 @@ inline uint8_t vl3d_eng_add_text(s_vl3d_eng *self, s_vl3d_text obj)
 
 //------------------------------------------------------------------------------
 
-inline uint8_t vl3d_eng_draw_arrow(s_vl3d_eng *self, float64_t p0[3], float64_t p1[3])
+inline uint8_t vl3d_eng_draw_arrow(s_vl3d_eng *self, uint32_t color, float64_t p0[3], float64_t p1[3])
 {
 	vl3d_eng_add_line(self, (s_vl3d_line) {
 			.p0 = { p0[0], p0[1], p0[2] },
 			.p1 = { p1[0], p1[1], p1[2] },
+			.color = color,
 	});
 	
 	vl3d_eng_add_point(self, (s_vl3d_point) {
 			.p0 = { p1[0], p1[1], p1[2] },
 			.size = 3,
+			.color = color,
 	});
 	
 	return 0x00;
@@ -298,9 +333,6 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGuiIO& io = ImGui::GetIO();
 	
-	ImU32 col_text_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
-	ImU32 col_textdis_u32 = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_TextDisabled]);
-	
 	ImGuiWindow* parent_window = ImGui::GetCurrentWindow();
 	ImGuiID id = parent_window->GetID(label);
 	
@@ -312,21 +344,64 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 						   ImGuiWindowFlags_NoScrollWithMouse);
 	if (view->tbar_en != 0x00)
 	{
-		ImGui::BeginGroup();
-		
 		// Tolbar
-		const vlf_t scale_min = 1E-9;
 		
+		ImGui::BeginGroup();
 		ImGui::AlignTextToFramePadding();
-		ImGui::Text("SCALE");
-		ImGui::SameLine();
-		ImGui::SetNextItemWidth(80);
-		ImGui::DragScalar("##scale", ImGuiDataType_Double,
-						  &view->scale, 0.001, &scale_min, NULL, "%.3f");
-		ImGui::SameLine(0.0, 0.0);
 		
-		if (ImGui::Button("auto"))
-		{ vl3d_view_reset(self, view); }
+		{
+			ImGui::Dummy(ImVec2(5, 0));
+			ImGui::SameLine();
+			ImGui::Text("XYZ");
+			
+			ImGui::SameLine();
+			ImGui::PushID("##xyz_en");
+			const char *xyz_en_label[2] = { "OFF", "ON" };
+			if (ImGui::Button(xyz_en_label[view->xyz_en], ImVec2(40, 0)))
+			{ view->xyz_en = !view->xyz_en; }
+			ImGui::PopID();
+		}
+		
+		{
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(5, 0));
+			ImGui::SameLine();
+			ImGui::Text("GRID");
+
+//			ImGui::SameLine();
+//			ImGui::SetNextItemWidth(80);
+//			ImGui::DragScalar("##grid_pt_size", ImGuiDataType_Double,
+//							  &view->grid_pt_size, 0.001, NULL, NULL, "%.3f");
+			
+			const vlf_t grid_pt_disp_min = 0.1;
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(80);
+			ImGui::DragScalar("##grid_pt_disp", ImGuiDataType_Double,
+							  &view->grid_pt_disp, 0.01, &grid_pt_disp_min, NULL, "%.2f");
+			
+			ImGui::SameLine(0.0, 0.0);
+			ImGui::PushID("##grid_en");
+			const char *grid_mode_label[3] = { "OFF", "DOT", "LINE" };
+			if (ImGui::Button(grid_mode_label[view->grid_mode], ImVec2(40, 0)))
+			{ ++view->grid_mode; view->grid_mode %= 3; }
+			ImGui::PopID();
+		}
+		
+		{
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(5, 0));
+			ImGui::SameLine();
+			const vlf_t scale_min = 1E-9;
+			ImGui::Text("SCALE");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(80);
+			ImGui::DragScalar("##scale", ImGuiDataType_Double,
+							  &view->scale, 0.001, &scale_min, NULL, "%.3f");
+			ImGui::SameLine(0.0, 0.0);
+			
+			if (ImGui::Button("AUTO"))
+			{ vl3d_view_reset(self, view); }
+		}
 		
 		ImGui::EndGroup();
 		
@@ -428,7 +503,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 					window->DrawList->AddLine(
 							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
 							__vl3d_view_tf__(view, ImVec2(l_p1[0], l_p1[1])),
-							col_text_u32);
+							obj->line.color);
 				}
 				
 				break;
@@ -447,7 +522,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 					window->DrawList->AddCircleFilled(
 							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
 							obj->point.size,
-							col_text_u32);
+							obj->point.color);
 				}
 				
 				break;
@@ -465,7 +540,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 				{
 					window->DrawList->AddText(
 							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
-							col_text_u32, obj->text.data);
+							obj->text.color, obj->text.data);
 				}
 				
 				break;
@@ -480,15 +555,216 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 
 //------------------------------------------------------------------------------
 
-typedef struct vl3d_grid
+inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 {
-	uint32_t temp;
+	int cnt = 6;
+	vlf_t d = 1.0 / self->scale / 4.0;
+	vlf_t pt_norm = vl_gauss1(0.0, 0.0, self->grid_pt_disp) / 0.5;
+	vlf_t gain;
+	ImVec4 color_v4;
 	
-} 	s_vl3d_grid;
+	s_vl3d_point point;
+	s_vl3d_line  line;
+	
+	switch (self->grid_mode)
+	{
+		case 0x01:
+		{
+			for (int x = 0; x < cnt; ++x)
+			{
+				for (int y = 0; y < cnt; ++y)
+				{
+					for (int z = 0; z < cnt; ++z)
+					{
+						gain = vl_sqrt(x * x + y * y + z * z);
+						gain = vl_gauss1(gain, 0.0, self->grid_pt_disp) / pt_norm;
+						
+						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
+						color_v4.w *= gain;
+						
+						point.color = ImGui::ColorConvertFloat4ToU32(color_v4);
+						point.size = self->grid_pt_size;
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, -z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, -z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, -z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, z * d});
+						vl3d_eng_add_point(eng, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, -z * d});
+						vl3d_eng_add_point(eng, point);
+					}
+				}
+			}
+			
+			break;
+		}
+		
+		case 0x02:
+		{
+			for (int x = 0; x < cnt; ++x)
+			{
+				for (int y = 0; y < cnt; ++y)
+				{
+					for (int z = 0; z < cnt; ++z)
+					{
+						if (x+y+z == 0x00) continue;
+						
+						gain = vl_sqrt(x * x + y * y + z * z);
+						// disp * 0.5 coz it just the way human see it 2.0 for dots is the same as 1.0 for lines
+						gain = vl_gauss1(gain, 0.0, self->grid_pt_disp*0.5) / pt_norm;
+						
+						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
+						color_v4.w *= gain;
+						
+						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
+						
+						// 1
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, d*z + d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 2
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, -d*z - d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 3
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, d*z + d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 4
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, -d*z - d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 5
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, d*z + d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 6
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, -d*z - d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 7
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, d*z + d });
+						vl3d_eng_add_line(eng, line);
+						
+						// 8
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, -d*z });
+						vl3d_eng_add_line(eng, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, -d*z - d });
+						vl3d_eng_add_line(eng, line);
+					}
+				}
+			}
+			
+			break;
+		}
+	}
+	
+	return 0x00;
+}
 
-inline uint8_t vl3d_grid(s_vl3d_grid *self, s_vl3d_eng *eng)
+inline uint8_t vl3d_view_xyz(s_vl3d_view *self, s_vl3d_eng *eng, vlf_t scale)
 {
-
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { -scale / self->scale, +0.0, +0.0 }, (float64_t[]) { +scale / self->scale, +0.0, +0.0 } );
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, -scale / self->scale, +0.0 }, (float64_t[]) { +0.0, +scale / self->scale, +0.0 } );
+	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -scale / self->scale }, (float64_t[]) { +0.0, +0.0, +scale / self->scale } );
+	
+	s_vl3d_text x_label = { .color = vl3d_col_l, .p0 = { scale / self->scale, 0.0, 0.0 } };
+	s_vl3d_text y_label = { .color = vl3d_col_l, .p0 = { 0.0, scale / self->scale, 0.0 } };
+	s_vl3d_text z_label = { .color = vl3d_col_l, .p0 = { 0.0, 0.0, scale / self->scale } };
+	
+	sprintf(x_label.data, "X [%.3f]", scale / self->scale);
+	sprintf(y_label.data, "Y [%.3f]", scale / self->scale);
+	sprintf(z_label.data, "Z [%.3f]", scale / self->scale);
+	
+	vl3d_eng_add_text(eng, x_label);
+	vl3d_eng_add_text(eng, y_label);
+	vl3d_eng_add_text(eng, z_label);
 }
 
 //------------------------------------------------------------------------------

@@ -90,6 +90,13 @@ inline void vl_mprint(vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
+inline vlf_t vl_gauss1(vlf_t x, vlf_t m, vlf_t d)
+{
+	return exp(-0.5*((x-m)/d)*((x-m)/d)) / (d*2.50662827463);
+}
+
+//------------------------------------------------------------------------------
+
 inline void vl_vcopy(vlf_t *res, vlf_t *vec)
 {
 	res[0] = vec[0];
