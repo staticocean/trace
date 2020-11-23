@@ -103,6 +103,15 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	if (traj->pts_offset == 0x00)
+	{
+		ImGui::TextWrapped("No points added. To add a point press CTRL+LM.");
+	}
+	
 	for (int i = 0; i < traj->pts_offset; ++i)
 	{
 		ImGui::PushID(i);
@@ -786,7 +795,7 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 	
 	s_vl3d_eng vl3d_eng;
 	s_vl3d_obj obj_list[2048];
-	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 } };
+	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01 };
 	
 	vl3d_view_load(self, &view, view);
 	

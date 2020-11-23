@@ -452,7 +452,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_obj *obj = (s_trj_obj*) self->gui_eng.sel_item;
 					s_trj_gui_obj *obj_gui = &self->st_gui_eng_obj[obj->id];
 					
-					trj_gui_obj_traj(obj_gui, obj);
+					trj_gui_obj_view(obj_gui, obj);
 					
 					break;
 				}

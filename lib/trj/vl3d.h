@@ -103,6 +103,7 @@ typedef struct vl3d_view
 	vlf_t scale;
 	
 	ImRect rect;
+	uint8_t tbar_en;
 	
 } 	s_vl3d_view;
 
@@ -228,6 +229,12 @@ inline ImVec2 __vl3d_view_inv__(s_vl3d_view *view, ImVec2 pos)
 
 inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 {
+	if (self->obj_offset < 2)
+	{
+		view->scale = 1.0;
+		return;
+	}
+	
 	vlf_t min[3] = { +INFINITY, +INFINITY, +INFINITY };
 	vlf_t max[3] = { -INFINITY, -INFINITY, -INFINITY };
 	
@@ -275,11 +282,9 @@ inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 		}
 	}
 	
-	printf(" min ");
-	vl_vprint(min);
-	printf(" max ");
-	vl_vprint(max);
-	fflush(stdout);
+//	printf(" min "); vl_vprint(min);
+//	printf(" max "); vl_vprint(max);
+//	fflush(stdout);
 	
 	vlf_t dist = vl_dist(min, max);
 	view->scale = 1 / dist;
@@ -302,11 +307,31 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 	size.x = size.x < 0 ? ImGui::GetContentRegionAvail().x : size.x;
 	size.y = size.y < 0 ? ImGui::GetContentRegionAvail().y : size.y;
 	
-	if (ImGui::Button("auto")) { vl3d_view_reset(self, view); }
-	
 	ImGui::BeginChildFrame(id, size,
 						   ImGuiWindowFlags_NoScrollbar |
 						   ImGuiWindowFlags_NoScrollWithMouse);
+	if (view->tbar_en != 0x00)
+	{
+		ImGui::BeginGroup();
+		
+		// Tolbar
+		const vlf_t scale_min = 1E-9;
+		
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("SCALE");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(80);
+		ImGui::DragScalar("##scale", ImGuiDataType_Double,
+						  &view->scale, 0.001, &scale_min, NULL, "%.3f");
+		ImGui::SameLine(0.0, 0.0);
+		
+		if (ImGui::Button("auto"))
+		{ vl3d_view_reset(self, view); }
+		
+		ImGui::EndGroup();
+		
+//		ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), col_text_u32);
+	}
 	
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
 	
@@ -451,6 +476,19 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 	ImGui::EndChildFrame();
 	
 	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+typedef struct vl3d_grid
+{
+	uint32_t temp;
+	
+} 	s_vl3d_grid;
+
+inline uint8_t vl3d_grid(s_vl3d_grid *self, s_vl3d_eng *eng)
+{
+
 }
 
 //------------------------------------------------------------------------------

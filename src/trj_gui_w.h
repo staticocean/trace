@@ -201,6 +201,7 @@ inline void vl_gui_rot(char *label, vlf_t *mat)
 			trj_hpr_to_ctn(&vl3d_view.rot[0][0], view_hpr);
 			
 			vl3d_view.scale = 0.75;
+			vl3d_view.tbar_en = 0x00;
 			vl_vzero(vl3d_view.pos);
 			
 			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });

@@ -83,7 +83,7 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 	
 	s_vl3d_eng vl3d_eng;
 	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * (*data->data_offset + 128));
-	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 } };
+	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01 };
 	
 	vl3d_view_load(self, &view, view);
 	
