@@ -67,7 +67,6 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
 		vl_vmul_s (self->d2, self->d2, 1.0 / (data[1].time[0] - data[0].time[0]));
-		vl_vmul_s (self->d2, self->d2, 1.0 / (data[1].time[0] - data[0].time[0]));
 	}
 	
 	else if (offset == (obj->log_offset-1))
@@ -80,7 +79,6 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
 		vl_vmul_s (self->d2, self->d2, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
 	}
 	
@@ -95,7 +93,7 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 2.0 * (data[offset+1].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d2, self->d2, 0.5 / (data[offset+1].time[0] - data[offset-1].time[0]));
 	}
 	
 	if (offset == (obj->log_offset-1))

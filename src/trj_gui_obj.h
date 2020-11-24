@@ -55,7 +55,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	
 	ImGui::Text("hash");
 	ImGui::NextColumn();
-	ImGui::Text("[%08d]", self->hash);
+	vl_gui_hash("##hash", self->hash);
 	ImGui::NextColumn();
 
 //	ImGui::Text("ref");

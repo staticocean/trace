@@ -38,11 +38,63 @@ inline void trj_gui_data_edit(s_trj_data *self)
 
 inline void trj_gui_data_text_edit(s_trj_data *self)
 {
+	s_trj_data_text *data = (s_trj_data_text*) self->data;
+	
+	ImGui::PushID(self);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Text("file  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputText("##file", data->file_name, 256);
+	
+	ImGui::Text("size  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	ImGui::Text("%.1f kb", (float) data->file_size / 1024);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
 	return;
 }
 
 inline void trj_gui_data_text_view(s_trj_data *self)
 {
+	s_trj_data_text *data = (s_trj_data_text*) self->data;
+	
+	if (data->file_data == NULL || data->file_data == 0x00)
+	{
+		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
+		return;
+	}
+	
+	ImGui::PushID(self);
+	
+	// Multiple calls to Text(), manually coarsely clipped - demonstrate how to use the ImGuiListClipper helper.
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+	ImGuiListClipper clipper;
+	
+	clipper.Begin(data->file_lcnt);
+	
+	while (clipper.Step())
+	{
+		for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+		{
+			ImGui::Text("[%6d] %s", i, &data->file_data[i*256]);
+		}
+	}
+	
+	ImGui::PopStyleVar();
+	
+	ImGui::PopID();
+	
 	return;
 }
 
@@ -50,6 +102,14 @@ inline void trj_gui_data_text_view(s_trj_data *self)
 
 inline void trj_gui_data_ram_edit(s_trj_data *self)
 {
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
 	return;
 }
 

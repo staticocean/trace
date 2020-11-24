@@ -71,6 +71,10 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	
 	s_trj_traj_bz *traj = (s_trj_traj_bz*) self->data;
 	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
 	ImGui::Text("%08X", traj->eng);
@@ -718,6 +722,10 @@ inline void trj_gui_traj_orb_edit(s_trj_traj *self)
 	
 	ImGui::PushID(self);
 	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
 	ImGui::Text("%08X", traj->eng);
@@ -730,7 +738,7 @@ inline void trj_gui_traj_orb_edit(s_trj_traj *self)
 	ImGui::SameLine(0.0, 0.0);
 	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
-
+	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
@@ -784,8 +792,8 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
 	s_vl3d_eng vl3d_eng;
-	s_vl3d_obj obj_list[2048];
-	s_vl3d_view view = { .scale = 1.0, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0 };
+	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 2);
+	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0 };
 	
 	vl3d_view_load(self, &view, view);
 	
@@ -815,6 +823,7 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 			trj_traj_orb_pos(traj, time, p1);
 			
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
+					.color = vl3d_col_l,
 					.p0 = { p0[0], p0[1], p0[2] },
 					.p1 = { p1[0], p1[1], p1[2] },
 			});
@@ -824,8 +833,9 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 	vl3d_view_grid(&view, &vl3d_eng);
 	vl3d_view_xyz(&view, &vl3d_eng);
 	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
-	
 	vl3d_view_save(self, &view);
+	
+	free(obj_list);
 }
 
 //------------------------------------------------------------------------------

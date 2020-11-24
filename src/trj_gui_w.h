@@ -304,6 +304,48 @@ inline void vl_gui_rot(char *label, vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
+inline bool vl_gui_hash(char *label, uint32_t hash)
+{
+	ImGui::PushID(label);
+	
+	ImGuiStyle style = ImGui::GetStyle();
+	bool res = false;
+
+	ImVec2 p = ImGui::GetCursorScreenPos();
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	
+	float dy = ImGui::GetTextLineHeight() / 2.0;
+	float dx = ImGui::GetContentRegionAvailWidth() / 16.0;
+	
+	float height = 2 * dy;
+	float width  = 16 * dx;
+	
+	if (ImGui::InvisibleButton(label, ImVec2(width, height)))
+	{ res = true; }
+	
+	uint32_t col_table[2] = {
+			ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_FrameBg]), vl3d_col_l
+	};
+	
+	for (int y = 0; y < 2; ++y)
+	{
+		for (int x = 0; x < 16; ++x)
+		{
+			draw_list->AddRectFilled(
+					ImVec2(p.x+x*dx, p.y+y*dy),
+					ImVec2(p.x+(x+1)*dx, p.y+(y+1)*dy),
+					col_table[(hash & (1 << (y*16+x))) > 0x00]
+					);
+		}
+	}
+	
+	ImGui::PopID();
+	
+	return res;
+}
+
+//------------------------------------------------------------------------------
+
 inline void vl_gui_bool(char *label, ImVec2 size, uint8_t *data)
 {
 //	ImGuiStyle& style = ImGui::GetStyle();

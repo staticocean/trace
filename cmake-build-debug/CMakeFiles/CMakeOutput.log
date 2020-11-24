@@ -28,44 +28,44 @@ The CXX compiler identification is Clang, found in "C:/Users/cel/dev/git/bitbuck
 Determining if the C compiler works passed with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_41859\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_41859.dir\build.make /nologo -L                  CMakeFiles\cmTC_41859.dir\build
-Building C object CMakeFiles/cmTC_41859.dir/testCCompiler.c.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_41859.dir\testCCompiler.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\testCCompiler.c
-Linking C executable cmTC_41859.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_41859.dir\objects1.rsp  -o cmTC_41859.exe -Xlinker /implib:cmTC_41859.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_41859.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_41859.dir\linklibs.rsp
+Run Build Command(s):nmake /nologo cmTC_52d89\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_52d89.dir\build.make /nologo -L                  CMakeFiles\cmTC_52d89.dir\build
+Building C object CMakeFiles/cmTC_52d89.dir/testCCompiler.c.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_52d89.dir\testCCompiler.c.obj   -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\testCCompiler.c
+Linking C executable cmTC_52d89.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_52d89.dir\objects1.rsp  -o cmTC_52d89.exe -Xlinker /implib:cmTC_52d89.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_52d89.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_52d89.dir\linklibs.rsp
 
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_a7f01\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_a7f01.dir\build.make /nologo -L                  CMakeFiles\cmTC_a7f01.dir\build
-Building C object CMakeFiles/cmTC_a7f01.dir/CMakeCCompilerABI.c.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_a7f01.dir\CMakeCCompilerABI.c.obj   -c "C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\share\cmake-3.16\Modules\CMakeCCompilerABI.c"
-Linking C executable cmTC_a7f01.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_a7f01.dir\objects1.rsp  -o cmTC_a7f01.exe -Xlinker /implib:cmTC_a7f01.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_a7f01.pdb -Xlinker /version:0.0
+Run Build Command(s):nmake /nologo cmTC_aa4fe\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_aa4fe.dir\build.make /nologo -L                  CMakeFiles\cmTC_aa4fe.dir\build
+Building C object CMakeFiles/cmTC_aa4fe.dir/CMakeCCompilerABI.c.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_aa4fe.dir\CMakeCCompilerABI.c.obj   -c "C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\share\cmake-3.16\Modules\CMakeCCompilerABI.c"
+Linking C executable cmTC_aa4fe.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_aa4fe.dir\objects1.rsp  -o cmTC_aa4fe.exe -Xlinker /implib:cmTC_aa4fe.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_aa4fe.pdb -Xlinker /version:0.0
 
 
 
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_c5382\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_c5382.dir\build.make /nologo -L                  CMakeFiles\cmTC_c5382.dir\build
-Building CXX object CMakeFiles/cmTC_c5382.dir/testCXXCompiler.cxx.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_c5382.dir\testCXXCompiler.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
-Linking CXX executable cmTC_c5382.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_c5382.dir\objects1.rsp  -o cmTC_c5382.exe -Xlinker /implib:cmTC_c5382.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_c5382.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_c5382.dir\linklibs.rsp
+Run Build Command(s):nmake /nologo cmTC_cf83c\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_cf83c.dir\build.make /nologo -L                  CMakeFiles\cmTC_cf83c.dir\build
+Building CXX object CMakeFiles/cmTC_cf83c.dir/testCXXCompiler.cxx.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_cf83c.dir\testCXXCompiler.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+Linking CXX executable cmTC_cf83c.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_cf83c.dir\objects1.rsp  -o cmTC_cf83c.exe -Xlinker /implib:cmTC_cf83c.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_cf83c.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_cf83c.dir\linklibs.rsp
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_cf801\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_cf801.dir\build.make /nologo -L                  CMakeFiles\cmTC_cf801.dir\build
-Building CXX object CMakeFiles/cmTC_cf801.dir/CMakeCXXCompilerABI.cpp.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_cf801.dir\CMakeCXXCompilerABI.cpp.obj -c "C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\share\cmake-3.16\Modules\CMakeCXXCompilerABI.cpp"
-Linking CXX executable cmTC_cf801.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_cf801.dir\objects1.rsp  -o cmTC_cf801.exe -Xlinker /implib:cmTC_cf801.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_cf801.pdb -Xlinker /version:0.0
+Run Build Command(s):nmake /nologo cmTC_3164f\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_3164f.dir\build.make /nologo -L                  CMakeFiles\cmTC_3164f.dir\build
+Building CXX object CMakeFiles/cmTC_3164f.dir/CMakeCXXCompilerABI.cpp.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles\cmTC_3164f.dir\CMakeCXXCompilerABI.cpp.obj -c "C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\share\cmake-3.16\Modules\CMakeCXXCompilerABI.cpp"
+Linking CXX executable cmTC_3164f.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_3164f.dir\objects1.rsp  -o cmTC_3164f.exe -Xlinker /implib:cmTC_3164f.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_3164f.pdb -Xlinker /version:0.0
 
 
 
@@ -74,11 +74,11 @@ Linking CXX executable cmTC_cf801.exe
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_00af0\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_00af0.dir\build.make /nologo -L                  CMakeFiles\cmTC_00af0.dir\build
-Building CXX object CMakeFiles/cmTC_00af0.dir/feature_tests.cxx.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -o CMakeFiles\cmTC_00af0.dir\feature_tests.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\feature_tests.cxx
-Linking CXX executable cmTC_00af0.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_00af0.dir\objects1.rsp  -o cmTC_00af0.exe -Xlinker /implib:cmTC_00af0.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_00af0.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_00af0.dir\linklibs.rsp
+Run Build Command(s):nmake /nologo cmTC_d263c\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_d263c.dir\build.make /nologo -L                  CMakeFiles\cmTC_d263c.dir\build
+Building CXX object CMakeFiles/cmTC_d263c.dir/feature_tests.cxx.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -o CMakeFiles\cmTC_d263c.dir\feature_tests.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\feature_tests.cxx
+Linking CXX executable cmTC_d263c.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_d263c.dir\objects1.rsp  -o cmTC_d263c.exe -Xlinker /implib:cmTC_d263c.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_d263c.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_d263c.dir\linklibs.rsp
 
 
 
@@ -143,11 +143,11 @@ Linking CXX executable cmTC_00af0.exe
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake /nologo cmTC_2fa2e\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_2fa2e.dir\build.make /nologo -L                  CMakeFiles\cmTC_2fa2e.dir\build
-Building CXX object CMakeFiles/cmTC_2fa2e.dir/feature_tests.cxx.obj
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -o CMakeFiles\cmTC_2fa2e.dir\feature_tests.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\feature_tests.cxx
-Linking CXX executable cmTC_2fa2e.exe
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_2fa2e.dir\objects1.rsp  -o cmTC_2fa2e.exe -Xlinker /implib:cmTC_2fa2e.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_2fa2e.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_2fa2e.dir\linklibs.rsp
+Run Build Command(s):nmake /nologo cmTC_f6869\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_f6869.dir\build.make /nologo -L                  CMakeFiles\cmTC_f6869.dir\build
+Building CXX object CMakeFiles/cmTC_f6869.dir/feature_tests.cxx.obj
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe    -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -o CMakeFiles\cmTC_f6869.dir\feature_tests.cxx.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\feature_tests.cxx
+Linking CXX executable cmTC_f6869.exe
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib   -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd    @CMakeFiles\cmTC_f6869.dir\objects1.rsp  -o cmTC_f6869.exe -Xlinker /implib:cmTC_f6869.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_f6869.pdb -Xlinker /version:0.0  @CMakeFiles\cmTC_f6869.dir\linklibs.rsp
 
 
 

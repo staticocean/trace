@@ -196,6 +196,7 @@ CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\json11\json11.hpp
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\picoc\picoc.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\picoc\picoc_interpreter.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\picoc\picoc_platform.h
+CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\tinymat\tinymat.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\gjson.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_api.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\trj\trj_bz.h
@@ -246,20 +247,6 @@ CMakeFiles\trj.dir\src\trj_gui_cmd.cpp.obj: ..\src\trj_gui_cmd.cpp
 CMakeFiles\trj.dir\src\trj_gui_cmd.cpp.obj: ..\src\trj_gui_cmd.h
 CMakeFiles\trj.dir\src\trj_gui_cmd.cpp.obj: ..\src\trj_gui_env.h
 
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\imgui\imconfig.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\imgui\imgui.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\imgui\imgui_internal.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\imgui\imstb_textedit.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_api.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_bz.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_ellp.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_obj.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_traj.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\trj_utils.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\lib\trj\vl.h
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\src\trj_gui_ctrl.cpp
-CMakeFiles\trj.dir\src\trj_gui_ctrl.cpp.obj: ..\src\trj_gui_ctrl.h
-
 CMakeFiles\trj.dir\src\trj_gui_env.cpp.obj: ..\lib\fmemopen\fmemopen.h
 CMakeFiles\trj.dir\src\trj_gui_env.cpp.obj: ..\lib\picoc\picoc.h
 CMakeFiles\trj.dir\src\trj_gui_env.cpp.obj: ..\lib\picoc\picoc_interpreter.h
@@ -287,6 +274,7 @@ CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\opengl\glfw3.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\picoc\picoc.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\picoc\picoc_interpreter.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\picoc\picoc_platform.h
+CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\tinymat\tinymat.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\gjson.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_api.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\trj\trj_bz.h

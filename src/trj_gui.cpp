@@ -26,7 +26,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	self->gui_tbar.eng = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
-	self->gui_tbar.height = 32;
+	self->gui_tbar.height = 38;
 	
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	
@@ -176,7 +176,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	static s_trj_data_text_init trj_data_text_config_ = {
-			.temp = 0x00,
+			.file_name = "default_data_text.txt",
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
@@ -209,6 +209,24 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.config = &trj_data_ram_config_,
 			.render = trj_data_ram_render_,
 			.reset  = trj_data_ram_reset_,
+	});
+	
+	static s_trj_data_mat_init trj_data_mat_config_ = {
+			.file_name = "default_data_mat.mat",
+	};
+	
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.desc   = "default_data_mat",
+			.init   = trj_data_mat_init_,
+			.free   = trj_data_mat_free_,
+			.save   = trj_data_mat_save_,
+			.load   = trj_data_mat_load_,
+			.data_size = sizeof(s_trj_data_mat),
+			.data   = NULL,
+			.config_size = sizeof(s_trj_data_mat_init),
+			.config = &trj_data_mat_config_,
+			.render = trj_data_mat_render_,
+			.reset  = trj_data_mat_reset_,
 	});
 	
 	static s_trj_proc_euler_init trj_proc_euler_config_ = {
@@ -264,13 +282,23 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
 	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
 	
+	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
+	
 	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[1]);
 	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[1]);
 	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[1]);
 	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[1]);
 	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[1]);
 	
-	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[2]);
+	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[2]);
+	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[2]);
+	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[2]);
+	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[2]);
 	
 	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
 	{
@@ -292,9 +320,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	style_ref.ChildBorderSize = 0.0;
 	style_ref.FrameBorderSize = 0.0;
-	style_ref.PopupBorderSize = 0.0;
+	style_ref.PopupBorderSize = 1.0;
 	style_ref.TabBorderSize = 0.0;
-	style_ref.WindowBorderSize = 1.0;
+	style_ref.WindowBorderSize = 0.0;
 	
 	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) {
 		.eng = &self->eng,
@@ -322,6 +350,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_eng.time_step = 0.01;
 	self->gui_eng.time_iter = self->gui_eng.time_limit
 						    / self->gui_eng.time_step;
+	
+//	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
 	return 0x00;
 }
@@ -480,7 +510,223 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		else
 		{
 			// default view (can be used for debug)
-			trj_gui_map_view(&map, "map", ImVec2(-1, -1));
+//			trj_gui_map_view(&map, "map", ImVec2(-1, -1));
+			
+			static s_vl3d_obj  obj_list[30000];
+			static s_vl3d_eng  vl3d;
+			
+			s_vl3d_view view = {
+					.scale = 1.0,
+					.pos = { 0.0, 0.0, 0.0 },
+					
+					.tbar_en = 0x01,
+					
+					.grid_mode = 0x01,
+					.grid_pt_size = 2.0,
+					.grid_pt_disp = 2.0,
+					
+					.xyz_en = 0x01,
+					.xyz_scale = 0.25
+			};
+			
+			vl3d_view_load(self, &view, view);
+			view.scale = 1.0;
+			view.grid_pt_disp = 1.0;
+			view.tbar_en = 0x01;
+			view.grid_mode = 0x02;
+			view.xyz_en = 0x01;
+			
+			vl3d_eng_init(&vl3d, (s_vl3d_eng_init) { .obj_list = obj_list, });
+			
+			ImGuiIO io = ImGui::GetIO();
+			ImGuiStyle style = ImGui::GetStyle();
+			
+			int cnt = 8;
+			static vlf_t a_time = 0.0;
+			a_time += 0.5 * io.DeltaTime;
+			vlf_t a_state = 0.5 * (1.0 + vl_sin(a_time));
+			
+			static vlf_t d_ = 1.5 * vl_pi;
+			d_ += io.DeltaTime;
+			if (d_ > 2.5*vl_pi) { d_ = 2.5*vl_pi; }
+			
+			vlf_t d = 0.5 * (1.0 + vl_sin(d_)) * (1.0 / view.scale / 4.0);
+			
+			vlf_t pt_norm = vl_gauss1(0.0, 0.0, view.grid_pt_disp);
+			vlf_t gain;
+			ImVec4 color_v4;
+			
+			s_vl3d_point point;
+			s_vl3d_line  line;
+			
+			s_trj_rot_hpr view_hpr;
+			trj_ctn_to_hpr(&view_hpr, &view.rot[0][0]);
+			view_hpr.heading += io.DeltaTime * 0.01;
+			view_hpr.pitch   += io.DeltaTime * 0.02;
+			view_hpr.roll    += io.DeltaTime * 0.03;
+			trj_hpr_to_ctn(&view.rot[0][0], view_hpr);
+			
+			for (int x = 0; x < cnt; ++x)
+			{
+				for (int y = 0; y < cnt; ++y)
+				{
+					for (int z = 0; z < cnt; ++z)
+					{
+						gain = vl_sqrt(x * x + y * y + z * z);
+						gain = 0.4 * vl_gauss1(gain * a_state, 0.0, view.grid_pt_disp) / pt_norm;
+						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
+						color_v4.w *= gain;
+						
+						point.color = ImGui::ColorConvertFloat4ToU32(color_v4);
+						point.size = view.grid_pt_size;
+						
+						gain = vl_sqrt(x * x + y * y + z * z);
+						gain = 0.2 * vl_gauss1(gain * a_state, 0.0, view.grid_pt_disp) / pt_norm;
+						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
+						color_v4.w *= gain;
+						
+						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, -z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, -z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, -z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, -z * d});
+						vl3d_eng_add_point(&vl3d, point);
+						
+						// 1
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, d*z + d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 2
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, -d*z - d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 3
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, d*z + d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 4
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, -d*z - d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 5
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, d*z + d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 6
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, -d*z - d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 7
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, d*z + d });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						// 8
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, -d*z });
+						vl3d_eng_add_line(&vl3d, line);
+						
+						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
+						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, -d*z - d });
+						vl3d_eng_add_line(&vl3d, line);
+					}
+				}
+			}
+			
+//			static vl3d_text text = (s_vl3d_text) { .p0 = { 0, 0, 0 }, .data = "hello", .color = vl3d_col_l };
+//			vl3d_eng_add_text(&vl3d, text);
+
+//			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImGui::ColorConvertU32ToFloat4(0x00));
+
+			vl3d_eng_render(&vl3d, &view, "temp", ImVec2(-1, -1));
+			vl3d_view_save(self, &view);
+			
+//			ImGui::PopStyleColor();
 		}
 		
 		ImGui::End();

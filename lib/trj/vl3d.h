@@ -570,7 +570,7 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 	
 	int cnt = 5;
 	vlf_t d = 1.0 / self->scale / 4.0;
-	vlf_t pt_norm = vl_gauss1(0.0, 0.0, self->grid_pt_disp) / 0.5;
+	vlf_t pt_norm = vl_gauss1(0.0, 0.0, self->grid_pt_disp);
 	vlf_t gain;
 	ImVec4 color_v4;
 	
@@ -588,7 +588,7 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 					for (int z = 0; z < cnt; ++z)
 					{
 						gain = vl_sqrt(x * x + y * y + z * z);
-						gain = vl_gauss1(gain, 0.0, self->grid_pt_disp) / pt_norm;
+						gain = 0.4 * vl_gauss1(gain, 0.0, self->grid_pt_disp) / pt_norm;
 						
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
@@ -635,8 +635,8 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 					for (int z = 0; z < cnt; ++z)
 					{
 						gain = vl_sqrt(x * x + y * y + z * z);
-						// disp * 0.5 coz it just the way human see it 2.0 for dots is the same as 1.0 for lines
-						gain = vl_gauss1(gain, 0.0, self->grid_pt_disp*0.5) / pt_norm;
+						// 0.2 coz its too bright in (0,0)
+						gain = 0.2 * vl_gauss1(gain, 0.0, self->grid_pt_disp) / pt_norm;
 						
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
