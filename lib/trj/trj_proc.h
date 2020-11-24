@@ -91,10 +91,11 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		
 		// dont need to div 0.0 d1n
 		vl_vmul_s (self->d1p, self->d1p, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d1n, self->d1n, 1.0 / (data[offset+1].time[0] - data[offset].time[0]));
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 2.0 / (data[offset+1].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d2, self->d2, 2.0 * (data[offset+1].time[0] - data[offset-1].time[0]));
 	}
 	
 	if (offset == (obj->log_offset-1))

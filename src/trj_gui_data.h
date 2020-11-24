@@ -66,6 +66,8 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 		return;
 	}
 	
+	ImGui::BeginGroup();
+	
 	if (mode == 0x00)
 	{
 		s_vl3d_eng vl3d_eng;
@@ -206,6 +208,8 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 		
 		free(time);
 	}
+	
+	ImGui::EndGroup();
 	
 	if (ImGui::BeginPopupContextItem("view"))
 	{
