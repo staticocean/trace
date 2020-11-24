@@ -576,6 +576,48 @@ CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/trj.dir/lib/fmemopen/fmemopen.c.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_C_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: CMakeFiles\trj.dir\flags.make
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\implot\implot.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/trj.dir/lib/implot/implot.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\implot\implot.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\implot\implot.cpp
+
+CMakeFiles\trj.dir\lib\implot\implot.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trj.dir/lib/implot/implot.cpp.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles\trj.dir\lib\implot\implot.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/implot/implot.cpp.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: CMakeFiles\trj.dir\flags.make
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\implot\implot_demo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/trj.dir/lib/implot/implot_demo.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\implot\implot_demo.cpp
+
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trj.dir/lib/implot/implot_demo.cpp.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/implot/implot_demo.cpp.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: CMakeFiles\trj.dir\flags.make
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: CMakeFiles\trj.dir\includes_CXX.rsp
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\implot\implot_items.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/trj.dir/lib/implot/implot_items.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj -c C:\Users\cel\dev\git\bitbucket\trajectory\lib\implot\implot_items.cpp
+
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trj.dir/lib/implot/implot_items.cpp.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trj.dir/lib/implot/implot_items.cpp.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+
 # Object files for target trj
 trj_OBJECTS = \
 "CMakeFiles\trj.dir\src\imgui_custom.cpp.obj" \
@@ -614,7 +656,10 @@ trj_OBJECTS = \
 "CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj" \
 "CMakeFiles\trj.dir\lib\json11\json11.cpp.obj" \
 "CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj" \
-"CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj"
+"CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj" \
+"CMakeFiles\trj.dir\lib\implot\implot.cpp.obj" \
+"CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj" \
+"CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj"
 
 # External object files for target trj
 trj_EXTERNAL_OBJECTS =
@@ -656,12 +701,15 @@ trj.exe: CMakeFiles\trj.dir\lib\picoc\picoc_variable.c.obj
 trj.exe: CMakeFiles\trj.dir\lib\json11\json11.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\tinymat\tinymat.cpp.obj
 trj.exe: CMakeFiles\trj.dir\lib\fmemopen\fmemopen.c.obj
+trj.exe: CMakeFiles\trj.dir\lib\implot\implot.cpp.obj
+trj.exe: CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj
+trj.exe: CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj
 trj.exe: CMakeFiles\trj.dir\build.make
 trj.exe: "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64\OpenGL32.Lib"
 trj.exe: ..\lib\opengl\static\glfw3_x64.lib
 trj.exe: CMakeFiles\trj.dir\linklibs.rsp
 trj.exe: CMakeFiles\trj.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Linking CXX executable trj.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Linking CXX executable trj.exe"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\Llvm\x64\bin\clang.exe -fuse-ld=lld-link -nostartfiles -nostdlib  -std=c++17 -Wdeprecated-declarations -static-libstdc++ -static-libgcc -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   @CMakeFiles\trj.dir\objects1.rsp  -o trj.exe -Xlinker /implib:trj.lib -Xlinker /pdb:C:\Users\cel\dev\git\bitbucket\trajectory\cmake-build-debug\trj.pdb -Xlinker /version:0.0  @CMakeFiles\trj.dir\linklibs.rsp
 
 # Rule to build all files generated by this target.

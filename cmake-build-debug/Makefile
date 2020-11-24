@@ -313,6 +313,87 @@ lib\imgui\imgui_widgets.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.s
 .PHONY : lib\imgui\imgui_widgets.cpp.s
 
+lib\implot\implot.obj: lib\implot\implot.cpp.obj
+
+.PHONY : lib\implot\implot.obj
+
+# target to build an object file
+lib\implot\implot.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot.cpp.obj
+.PHONY : lib\implot\implot.cpp.obj
+
+lib\implot\implot.i: lib\implot\implot.cpp.i
+
+.PHONY : lib\implot\implot.i
+
+# target to preprocess a source file
+lib\implot\implot.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot.cpp.i
+.PHONY : lib\implot\implot.cpp.i
+
+lib\implot\implot.s: lib\implot\implot.cpp.s
+
+.PHONY : lib\implot\implot.s
+
+# target to generate assembly for a file
+lib\implot\implot.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot.cpp.s
+.PHONY : lib\implot\implot.cpp.s
+
+lib\implot\implot_demo.obj: lib\implot\implot_demo.cpp.obj
+
+.PHONY : lib\implot\implot_demo.obj
+
+# target to build an object file
+lib\implot\implot_demo.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj
+.PHONY : lib\implot\implot_demo.cpp.obj
+
+lib\implot\implot_demo.i: lib\implot\implot_demo.cpp.i
+
+.PHONY : lib\implot\implot_demo.i
+
+# target to preprocess a source file
+lib\implot\implot_demo.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.i
+.PHONY : lib\implot\implot_demo.cpp.i
+
+lib\implot\implot_demo.s: lib\implot\implot_demo.cpp.s
+
+.PHONY : lib\implot\implot_demo.s
+
+# target to generate assembly for a file
+lib\implot\implot_demo.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.s
+.PHONY : lib\implot\implot_demo.cpp.s
+
+lib\implot\implot_items.obj: lib\implot\implot_items.cpp.obj
+
+.PHONY : lib\implot\implot_items.obj
+
+# target to build an object file
+lib\implot\implot_items.cpp.obj:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj
+.PHONY : lib\implot\implot_items.cpp.obj
+
+lib\implot\implot_items.i: lib\implot\implot_items.cpp.i
+
+.PHONY : lib\implot\implot_items.i
+
+# target to preprocess a source file
+lib\implot\implot_items.cpp.i:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_items.cpp.i
+.PHONY : lib\implot\implot_items.cpp.i
+
+lib\implot\implot_items.s: lib\implot\implot_items.cpp.s
+
+.PHONY : lib\implot\implot_items.s
+
+# target to generate assembly for a file
+lib\implot\implot_items.cpp.s:
+	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\lib\implot\implot_items.cpp.s
+.PHONY : lib\implot\implot_items.cpp.s
+
 lib\json11\json11.obj: lib\json11\json11.cpp.obj
 
 .PHONY : lib\json11\json11.obj
@@ -1153,6 +1234,15 @@ help:
 	@echo ... lib/imgui/imgui_widgets.obj
 	@echo ... lib/imgui/imgui_widgets.i
 	@echo ... lib/imgui/imgui_widgets.s
+	@echo ... lib/implot/implot.obj
+	@echo ... lib/implot/implot.i
+	@echo ... lib/implot/implot.s
+	@echo ... lib/implot/implot_demo.obj
+	@echo ... lib/implot/implot_demo.i
+	@echo ... lib/implot/implot_demo.s
+	@echo ... lib/implot/implot_items.obj
+	@echo ... lib/implot/implot_items.i
+	@echo ... lib/implot/implot_items.s
 	@echo ... lib/json11/json11.obj
 	@echo ... lib/json11/json11.i
 	@echo ... lib/json11/json11.s

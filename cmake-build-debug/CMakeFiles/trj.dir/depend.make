@@ -149,6 +149,30 @@ CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.obj: ..\lib\imgui\imgui_internal.
 CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.obj: ..\lib\imgui\imgui_widgets.cpp
 CMakeFiles\trj.dir\lib\imgui\imgui_widgets.cpp.obj: ..\lib\imgui\imstb_textedit.h
 
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\imgui\imconfig.h
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\imgui\imgui.h
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\imgui\imgui_internal.h
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\implot\implot.cpp
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\implot\implot.h
+CMakeFiles\trj.dir\lib\implot\implot.cpp.obj: ..\lib\implot\implot_internal.h
+
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\imgui\imconfig.h
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\imgui\imgui.h
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\imgui\imgui_internal.h
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\implot\implot.h
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\implot\implot_demo.cpp
+CMakeFiles\trj.dir\lib\implot\implot_demo.cpp.obj: ..\lib\implot\implot_internal.h
+
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\imgui\imconfig.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\imgui\imgui.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\imgui\imgui_internal.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\implot\implot.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\implot\implot_internal.h
+CMakeFiles\trj.dir\lib\implot\implot_items.cpp.obj: ..\lib\implot\implot_items.cpp
+
 CMakeFiles\trj.dir\lib\json11\json11.cpp.obj: ..\lib\json11\json11.cpp
 CMakeFiles\trj.dir\lib\json11\json11.cpp.obj: ..\lib\json11\json11.hpp
 
@@ -167,6 +191,7 @@ CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\imgui\imconfig.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\imgui\imgui.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\imgui\imgui_internal.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\implot\implot.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\json11\json11.hpp
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\picoc\picoc.h
 CMakeFiles\trj.dir\src\trj_gui.cpp.obj: ..\lib\picoc\picoc_interpreter.h
@@ -254,6 +279,7 @@ CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\imgui\imgui_impl_glfw.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\imgui\imgui_impl_opengl3.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\imgui\imgui_internal.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\imgui\imstb_textedit.h
+CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\implot\implot.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\json11\json11.hpp
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\opengl\gl3w.h
 CMakeFiles\trj.dir\src\trj_opengl.cpp.obj: ..\lib\opengl\glcorearb.h
