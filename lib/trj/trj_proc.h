@@ -42,6 +42,16 @@ inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init
 	return 0x00;
 }
 
+inline uint8_t trj_proc_euler_save(s_trj_proc_euler *self, s_trj_proc_euler_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_proc_euler_load(s_trj_proc_euler *self, s_trj_proc_euler_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
 inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uint32_t offset)
 {
 	s_trj_obj_data *data = obj->log_list;
@@ -117,6 +127,16 @@ inline uint8_t trj_proc_euler_init_ (void **data, void *config)
 	s_trj_proc_euler_init *proc_init = (s_trj_proc_euler_init*) config;
 	
 	return trj_proc_euler_init(proc, *proc_init);
+}
+
+inline uint8_t trj_proc_euler_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_proc_euler_load_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
 }
 
 inline uint8_t trj_proc_euler_free_ (void **data)

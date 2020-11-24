@@ -149,6 +149,16 @@ inline uint8_t trj_ctrl_upos_init(s_trj_ctrl_upos *self, s_trj_ctrl_upos_init at
 	return 0x00;
 }
 
+inline uint8_t trj_ctrl_upos_save(s_trj_ctrl_upos *self, s_trj_ctrl_upos_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_load(s_trj_ctrl_upos *self, s_trj_ctrl_upos_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
 inline uint8_t trj_ctrl_upos_reset(s_trj_ctrl_upos *self, s_trj_obj *obj)
 {
 	return 0x00;
@@ -160,6 +170,16 @@ inline uint8_t trj_ctrl_upos_update(s_trj_ctrl_upos *self, s_trj_obj *obj)
 }
 
 inline uint8_t trj_ctrl_cpos_init(s_trj_ctrl_cpos *self, s_trj_ctrl_cpos_init attr)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_save(s_trj_ctrl_cpos *self, s_trj_ctrl_cpos_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_load(s_trj_ctrl_cpos *self, s_trj_ctrl_cpos_init *attr, uint8_t **v_file)
 {
 	return 0x00;
 }
@@ -191,6 +211,16 @@ inline uint8_t trj_ctrl_urot_init(s_trj_ctrl_urot *self, s_trj_ctrl_urot_init at
 	return 0x00;
 }
 
+inline uint8_t trj_ctrl_urot_save(s_trj_ctrl_urot *self, s_trj_ctrl_urot_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_load(s_trj_ctrl_urot *self, s_trj_ctrl_urot_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
 inline uint8_t trj_ctrl_urot_reset(s_trj_ctrl_urot *self, s_trj_obj *obj)
 {
 	return 0x00;
@@ -202,6 +232,16 @@ inline uint8_t trj_ctrl_urot_update(s_trj_ctrl_urot *self, s_trj_obj *obj)
 }
 
 inline uint8_t trj_ctrl_crot_init(s_trj_ctrl_crot *self, s_trj_ctrl_crot_init attr)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_save(s_trj_ctrl_crot *self, s_trj_ctrl_crot_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_load(s_trj_ctrl_crot *self, s_trj_ctrl_crot_init *attr, uint8_t **v_file)
 {
 	return 0x00;
 }
@@ -220,6 +260,8 @@ inline uint8_t trj_ctrl_crot_update(s_trj_ctrl_crot *self, s_trj_obj *obj)
 
 inline uint8_t trj_ctrl_upos_init_(void **data, void *config)
 {
+	*data = (s_trj_ctrl_upos*) malloc(sizeof(s_trj_ctrl_upos));
+	
 	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) *data;
 	s_trj_ctrl_upos_init *init = (s_trj_ctrl_upos_init*) config;
 	
@@ -231,6 +273,16 @@ inline uint8_t trj_ctrl_upos_free_(void **data)
 	s_trj_ctrl_upos *ctrl = (s_trj_ctrl_upos*) *data;
 	free(ctrl);
 	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_upos_load_(void *data, void *config, uint8_t **v_file)
+{
 	return 0x00;
 }
 
@@ -252,10 +304,22 @@ inline uint8_t trj_ctrl_upos_update_(void *data, void *obj)
 
 inline uint8_t trj_ctrl_cpos_init_(void **data, void *config)
 {
+	*data = (s_trj_ctrl_cpos*) malloc(sizeof(s_trj_ctrl_cpos));
+	
 	s_trj_ctrl_cpos *ctrl = (s_trj_ctrl_cpos*) *data;
 	s_trj_ctrl_cpos_init *init = (s_trj_ctrl_cpos_init*) config;
 	
 	return trj_ctrl_cpos_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_cpos_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_cpos_load_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
 }
 
 inline uint8_t trj_ctrl_cpos_free_(void **data)
@@ -284,10 +348,22 @@ inline uint8_t trj_ctrl_cpos_update_(void *data, void *obj)
 
 inline uint8_t trj_ctrl_urot_init_(void **data, void *config)
 {
+	*data = (s_trj_ctrl_urot*) malloc(sizeof(s_trj_ctrl_urot));
+	
 	s_trj_ctrl_urot *ctrl = (s_trj_ctrl_urot*) *data;
 	s_trj_ctrl_urot_init *init = (s_trj_ctrl_urot_init*) config;
 	
 	return trj_ctrl_urot_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_urot_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_urot_load_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
 }
 
 inline uint8_t trj_ctrl_urot_free_(void **data)
@@ -316,10 +392,22 @@ inline uint8_t trj_ctrl_urot_update_(void *data, void *obj)
 
 inline uint8_t trj_ctrl_crot_init_(void **data, void *config)
 {
+	*data = (s_trj_ctrl_crot*) malloc(sizeof(s_trj_ctrl_crot));
+	
 	s_trj_ctrl_crot *ctrl = (s_trj_ctrl_crot*) *data;
 	s_trj_ctrl_crot_init *init = (s_trj_ctrl_crot_init*) config;
 	
 	return trj_ctrl_crot_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_crot_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_crot_load_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
 }
 
 inline uint8_t trj_ctrl_crot_free_(void **data)

@@ -41,14 +41,17 @@ typedef struct trj_traj_bz_point
 
 typedef struct trj_traj_bz
 {
-	s_trj_eng *eng;
-	s_trj_obj *ref;
+	s_trj_eng 	*eng;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
 	
 	s_trj_traj_bz_point *pts;
-	uint32_t pts_offset;
+	uint32_t 	pts_size;
+	uint32_t 	pts_offset;
 	
 	uint8_t ellp_en;
 	s_trj_ellp *ellp;
+	uint32_t ellp_hash;
 	
 } 	s_trj_traj_bz;
 
@@ -58,6 +61,7 @@ typedef struct trj_traj_bz_init
 	s_trj_obj *ref;
 	
 	s_trj_traj_bz_point *pts;
+	uint32_t pts_size;
 	
 	uint8_t ellp_en;
 	s_trj_ellp *ellp;
@@ -69,15 +73,53 @@ typedef struct trj_traj_bz_init
 inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 {
 	self->eng = attr.eng;
+	
 	self->ref = attr.ref;
+	if (self->ref != NULL)
+	{ self->ref_hash = self->ref->hash; }
 	
 	self->pts = attr.pts;
+	self->pts_size = attr.pts_size;
 	self->pts_offset = 0x00;
 	
 	self->ellp_en = attr.ellp_en;
 	self->ellp = attr.ellp;
+	if (self->ellp != NULL)
+	{ self->ellp_hash = vl_crc32(self->ellp->desc); }
+
+return 0x00;
+}
+
+inline uint8_t trj_traj_bz_save(s_trj_traj_bz *self, s_trj_traj_bz_init *attr, uint8_t **v_file)
+{
+	memcpy(*v_file, self->pts, self->pts_size * sizeof(s_trj_traj_bz_point));
+	*v_file += self->pts_size * sizeof(s_trj_traj_bz_point);
 	
-	if (self->ellp_en == 0x00) { self->ellp = NULL; }
+	return 0x00;
+}
+
+inline uint8_t trj_traj_bz_load(s_trj_traj_bz *self, s_trj_traj_bz_init *attr, uint8_t **v_file)
+{
+	self->pts = (s_trj_traj_bz_point*) malloc(self->pts_size * sizeof(s_trj_traj_bz_point));
+	memcpy(self->pts, *v_file, self->pts_size * sizeof(s_trj_traj_bz_point));
+
+	*v_file += self->pts_size * sizeof(s_trj_traj_bz_point);
+	
+	self->eng = attr->eng;
+	
+	self->ref  = trj_eng_find_obj (self->eng, self->ref_hash);
+	self->ellp = trj_eng_find_ellp(self->eng, self->ellp_hash);
+	
+	if (self->ref  == NULL)
+	{
+		self->ref_hash = 0x00;
+	}
+	
+	if (self->ellp == NULL)
+	{
+		self->ellp_hash = 0x00;
+		self->ellp_en = 0x00;
+	}
 	
 	return 0x00;
 }
@@ -440,6 +482,7 @@ inline uint8_t trj_traj_bz_init_ (void **data, void *config)
 	s_trj_traj_bz_init *traj_bz_init = (s_trj_traj_bz_init*) config;
 	
 	traj_bz_init->pts = (s_trj_traj_bz_point*) malloc(sizeof(s_trj_traj_bz_point) * 100);
+	traj_bz_init->pts_size = 100;
 	
 	return trj_traj_bz_init(traj_bz, *traj_bz_init);
 }
@@ -452,6 +495,20 @@ inline uint8_t trj_traj_bz_free_ (void **data)
 	free(traj_bz);
 	
 	return 0x00;
+}
+
+inline uint8_t trj_traj_bz_save_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_bz *traj = (s_trj_traj_bz*) data;
+	s_trj_traj_bz_init *attr = (s_trj_traj_bz_init*) config;
+	return trj_traj_bz_save(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_bz_load_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_bz *traj = (s_trj_traj_bz*) data;
+	s_trj_traj_bz_init *attr = (s_trj_traj_bz_init*) config;
+	return trj_traj_bz_load(traj, attr, v_file);
 }
 
 inline uint8_t trj_traj_bz_compile_(void *data)
@@ -507,8 +564,9 @@ inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
 
 typedef struct trj_traj_orb
 {
-	s_trj_eng *eng;
-	s_trj_obj *ref;
+	s_trj_eng 	*eng;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
 	
 	uint8_t 	sync_en;
 	
@@ -524,7 +582,8 @@ typedef struct trj_traj_orb
 typedef struct trj_traj_orb_init
 {
 	s_trj_eng *eng;
-	s_trj_obj *ref;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
 	
 	uint8_t 	sync_en;
 	
@@ -542,7 +601,9 @@ typedef struct trj_traj_orb_init
 inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
 {
 	self->eng    	= attr.eng;
-	self->ref    	= attr.ref;
+	
+	self->ref = attr.ref;
+	self->ref_hash = self->ref->hash;
 	
 	self->sync_en  = attr.sync_en;
 	
@@ -553,6 +614,19 @@ inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
 	
 	self->s_rate = attr.s_rate;
 	vl_mcopy(self->s_tilt, attr.s_tilt);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_save(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_load(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	self->ref = trj_eng_find_obj(self->eng, self->ref_hash);
 	
 	return 0x00;
 }
@@ -582,8 +656,6 @@ inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
 			vl_vsum(pos, pos_n, self->ref->pos[0]);
 			
 			return 0x00;
-			
-			break;
 		}
 		
 		case 0x01:
@@ -602,8 +674,6 @@ inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
 			vl_vsum(pos, pos, self->ref->pos[0]);
 			
 			return 0x00;
-			
-			break;
 		}
 	}
 	
@@ -681,6 +751,21 @@ inline uint8_t trj_traj_orb_free_ (void **data)
 	free(traj);
 	
 	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_save_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
+	
+	return trj_traj_orb_save(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_orb_load_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
+	return trj_traj_orb_load(traj, attr, v_file);
 }
 
 inline uint8_t trj_traj_orb_compile_(void *data)

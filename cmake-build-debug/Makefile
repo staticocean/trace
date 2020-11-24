@@ -1096,33 +1096,6 @@ src\trj_gui_env.cpp.s:
 	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_env.cpp.s
 .PHONY : src\trj_gui_env.cpp.s
 
-src\trj_gui_menu.obj: src\trj_gui_menu.cpp.obj
-
-.PHONY : src\trj_gui_menu.obj
-
-# target to build an object file
-src\trj_gui_menu.cpp.obj:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_menu.cpp.obj
-.PHONY : src\trj_gui_menu.cpp.obj
-
-src\trj_gui_menu.i: src\trj_gui_menu.cpp.i
-
-.PHONY : src\trj_gui_menu.i
-
-# target to preprocess a source file
-src\trj_gui_menu.cpp.i:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_menu.cpp.i
-.PHONY : src\trj_gui_menu.cpp.i
-
-src\trj_gui_menu.s: src\trj_gui_menu.cpp.s
-
-.PHONY : src\trj_gui_menu.s
-
-# target to generate assembly for a file
-src\trj_gui_menu.cpp.s:
-	$(MAKE) -f CMakeFiles\trj.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\trj.dir\src\trj_gui_menu.cpp.s
-.PHONY : src\trj_gui_menu.cpp.s
-
 src\trj_opengl.obj: src\trj_opengl.cpp.obj
 
 .PHONY : src\trj_opengl.obj
@@ -1267,9 +1240,6 @@ help:
 	@echo ... src/trj_gui_env.obj
 	@echo ... src/trj_gui_env.i
 	@echo ... src/trj_gui_env.s
-	@echo ... src/trj_gui_menu.obj
-	@echo ... src/trj_gui_menu.i
-	@echo ... src/trj_gui_menu.s
 	@echo ... src/trj_opengl.obj
 	@echo ... src/trj_opengl.i
 	@echo ... src/trj_opengl.s

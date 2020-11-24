@@ -27,26 +27,6 @@ inline void trj_gui_data_edit(s_trj_data *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::Columns(2);
-	
-	ImGui::Text("id");
-	ImGui::NextColumn();
-	ImGui::Text("[%06d]", self->id);
-	ImGui::NextColumn();
-//
-//	ImGui::Text("pos_inert");
-//	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
-//	ImGui::NextColumn();
-//	ImGui::SetNextItemWidth(-1);
-//	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1, NULL, NULL, "%.3f");
-//	ImGui::NextColumn();
-	
-	ImGui::Columns(1);
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
 	ImGui::PopID();
 	
 	return;
@@ -100,8 +80,8 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 	};
 	
 	vl3d_view_load(self, &view, view);
-	
 	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = obj_list });
+	
 	s_vl3d_line line = { .color = vl3d_col_l };
 	
 	if (*data->data_offset > 10000)

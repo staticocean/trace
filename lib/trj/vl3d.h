@@ -53,7 +53,8 @@ enum vl3d_obj_type
 
 typedef struct vl3d_line
 {
-	uint16_t type;
+	uint8_t  type;
+	uint8_t  spec;
 	uint16_t id;
 	uint32_t color;
 	
@@ -64,7 +65,8 @@ typedef struct vl3d_line
 
 typedef struct vl3d_point
 {
-	uint16_t type;
+	uint8_t  type;
+	uint8_t  spec;
 	uint16_t id;
 	uint32_t color;
 	
@@ -75,7 +77,8 @@ typedef struct vl3d_point
 
 typedef struct vl3d_text
 {
-	uint16_t type;
+	uint8_t  type;
+	uint8_t  spec;
 	uint16_t id;
 	uint32_t color;
 	
@@ -88,7 +91,8 @@ typedef struct vl3d_text
 typedef union vl3d_obj
 {
 	struct {
-		uint16_t type;
+		uint8_t  type;
+		uint8_t  spec;
 		uint16_t id;
 	};
 	
@@ -277,6 +281,8 @@ inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 	for (int i = 0; i < self->obj_offset; ++i)
 	{
 		s_vl3d_obj *obj = &self->obj_list[i];
+		
+		if (obj->spec != 0x00) { continue; }
 		
 		switch (self->obj_list[i].type)
 		{
@@ -560,6 +566,8 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 {
 	if (self->grid_mode == 0x00) { return 0x00; }
 	
+	uint32_t spec_start = eng->obj_offset;
+	
 	int cnt = 5;
 	vlf_t d = 1.0 / self->scale / 4.0;
 	vlf_t pt_norm = vl_gauss1(0.0, 0.0, self->grid_pt_disp) / 0.5;
@@ -746,6 +754,11 @@ inline uint8_t vl3d_view_grid(s_vl3d_view *self, s_vl3d_eng *eng)
 		}
 	}
 	
+	for (int i = spec_start; i < eng->obj_offset; ++i)
+	{
+		eng->obj_list[i].spec = 0x01;
+	}
+	
 	return 0x00;
 }
 
@@ -755,6 +768,8 @@ inline uint8_t vl3d_view_xyz(s_vl3d_view *self, s_vl3d_eng *eng)
 	
 	vlf_t ratio = self->xyz_scale / self->scale;
 	
+ 	uint32_t spec_start = eng->obj_offset;
+ 
 	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { -ratio, +0.0, +0.0 }, (float64_t[]) { +ratio, +0.0, +0.0 } );
 	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, -ratio, +0.0 }, (float64_t[]) { +0.0, +ratio, +0.0 } );
 	vl3d_eng_draw_arrow(eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -ratio }, (float64_t[]) { +0.0, +0.0, +ratio } );
@@ -770,6 +785,11 @@ inline uint8_t vl3d_view_xyz(s_vl3d_view *self, s_vl3d_eng *eng)
 	vl3d_eng_add_text(eng, x_label);
 	vl3d_eng_add_text(eng, y_label);
 	vl3d_eng_add_text(eng, z_label);
+	
+	for (int i = spec_start; i < eng->obj_offset; ++i)
+	{
+		eng->obj_list[i].spec = 0x01;
+	}
 	
 	return 0x00;
 }

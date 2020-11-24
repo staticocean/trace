@@ -90,6 +90,27 @@ inline void vl_mprint(vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
+inline uint32_t vl_crc32(char *str)
+{
+	uint32_t i;
+	uint32_t j;
+	uint32_t crc = 0xFFFFFFFF;
+	
+	for(i=0;i<strlen(str);i++) {
+		char ch=str[i];
+		for(j=0;j<8;j++) {
+			uint32_t b=(ch^crc)&1;
+			crc>>=1;
+			if(b) crc=crc^0xEDB88320;
+			ch>>=1;
+		}
+	}
+	
+	return ~crc;
+}
+
+//------------------------------------------------------------------------------
+
 inline vlf_t vl_gauss1(vlf_t x, vlf_t m, vlf_t d)
 {
 	return exp(-0.5*((x-m)/d)*((x-m)/d)) / (d*2.50662827463);

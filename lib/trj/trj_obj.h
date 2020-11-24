@@ -16,9 +16,7 @@
 
 typedef struct trj_obj_init
 {
-	uint32_t id;
 	char desc[32];
-	struct trj_obj *ref;
 	
 } s_trj_obj_init;
 
@@ -29,7 +27,7 @@ inline void trj_obj_print(s_trj_obj *obj)
 {
 	printf(vl_lsep);
 	printf("desc        [%s] \r\n", obj->desc);
-	printf("id          [%06X] \r\n", obj->id);
+	printf("hash        [%08X] \r\n", obj->hash);
 //	printf("ref         [%s] \r\n", obj->ref->name);
 	printf("traj_offset [%d] \r\n", obj->traj_offset);
 	printf("ctrl_offset [%d] \r\n", obj->ctrl_offset);
@@ -76,8 +74,6 @@ inline void trj_obj_print(s_trj_obj *obj)
 
 inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 {
-	self->id = attr.id;
-	
 	self->traj_offset = 0x00;
 	self->ctrl_offset = 0x00;
 	self->data_offset = 0x00;
@@ -87,10 +83,8 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 	
 	uint32_t i;
 	
-	for (i = 0; i < sizeof(attr.desc); ++i)
-	{
-		self->desc[i] = attr.desc[i];
-	}
+	strcpy(self->desc, attr.desc);
+	self->hash = vl_crc32(self->desc);
 	
 	return 0x00;
 }

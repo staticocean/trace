@@ -81,7 +81,7 @@ inline uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_obj *obj)
+inline void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_gui_obj *obj)
 {
 	gui->sel_type = trj_gui_eng_type_obj;
 	gui->sel_item = obj;
@@ -140,22 +140,22 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		if (filter.PassFilter((char*) filter_data[i]))
 		{
-			s_trj_obj *obj = &self->obj_list[i];
 			s_trj_gui_obj *obj_gui = &gui->obj_list[i];
+			s_trj_obj *obj = obj_gui->ref;
 			
-			bool node_sel = gui->sel_item == &self->obj_list[i];
+			bool node_sel = gui->sel_item == &gui->obj_list[i];
 			
 			bool node_open = ImGui::TreeNodeEx((void*) i,
 											   (node_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											   | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
 											   (char*) obj->desc);
 			
-			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, &self->obj_list[i]); }
+			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, obj_gui); }
 			
 			ImGui::SameLine();
 			char *hide_label[2] = { "hide", "show" };
-			if (ImGui::SmallButton(hide_label[gui->obj_list[i].hide]))
-			{ gui->obj_list[i].hide = !gui->obj_list[i].hide; }
+			if (ImGui::SmallButton(hide_label[obj_gui->hide]))
+			{ obj_gui->hide = !obj_gui->hide; }
 			
 			if (node_open)
 			{
@@ -393,6 +393,9 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 			
 			for (int i = 0; i < self->obj_count; ++i)
 			{
+				if (self->obj_list[i].log_list != NULL)
+				{ free(self->obj_list[i].log_list); }
+				
 				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * (gui->time_iter+1));
 				self->obj_list[i].log_offset = 0x00;
 			}

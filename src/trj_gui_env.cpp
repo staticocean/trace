@@ -87,21 +87,20 @@ void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 	uint32_t 	  *ctrl_offset = (uint32_t*)      Param[1]->Val->Pointer;
 	s_trj_ctrl    *ctrl_list   = (s_trj_ctrl*)    Param[2]->Val->Pointer;
 	
-	ctrl_list[*ctrl_offset].id = (uint32_t) Param[3]->Val->UnsignedInteger;
-	memcpy(ctrl_list[*ctrl_offset].desc, Param[4]->Val->Pointer, 32);
+	memcpy(ctrl_list[*ctrl_offset].desc, Param[3]->Val->Pointer, 32);
+	ctrl_list[*ctrl_offset].hash = vl_crc32(ctrl_list[*ctrl_offset].desc);
 	ctrl_list[*ctrl_offset].data   = (void*) st_offset;
-	ctrl_list[*ctrl_offset].config = Param[5]->Val->Pointer;
+	ctrl_list[*ctrl_offset].config = Param[4]->Val->Pointer;
 	ctrl_list[*ctrl_offset].init   = __api_ctrl_init__;
 	ctrl_list[*ctrl_offset].free   = __api_ctrl_free__;
 	ctrl_list[*ctrl_offset].reset  = __api_ctrl_reset__;
 	ctrl_list[*ctrl_offset].update = __api_ctrl_update__;
 	
-	st_id[st_offset] = (uint32_t) Param[3]->Val->UnsignedInteger;
 	st_env[st_offset] = env;
-	memcpy(&st_init[st_offset][0]  , Param[6]->Val->Pointer, 64);
-	memcpy(&st_free[st_offset][0]  , Param[7]->Val->Pointer, 64);
-	memcpy(&st_reset[st_offset][0] , Param[8]->Val->Pointer, 64);
-	memcpy(&st_update[st_offset][0], Param[9]->Val->Pointer, 64);
+	memcpy(&st_init[st_offset][0]  , Param[5]->Val->Pointer, 64);
+	memcpy(&st_free[st_offset][0]  , Param[6]->Val->Pointer, 64);
+	memcpy(&st_reset[st_offset][0] , Param[7]->Val->Pointer, 64);
+	memcpy(&st_update[st_offset][0], Param[8]->Val->Pointer, 64);
 	
 	(*ctrl_offset)++;
 	st_offset++;
@@ -114,7 +113,7 @@ struct LibraryFunction picoc_api_functions[] =
 				{ picoc_api_speedtest, "void api_speedtest(void);" },
 				{ trj_traj_pos, "void trj_traj_pos(s_trj_traj *traj, vlf_t time, vlf_t *pos);" },
 				{ trj_traj_rot, "void trj_traj_rot(s_trj_traj *traj, vlf_t time, vlf_t *rot);" },
-				{ trj_eng_add_ctrlapi, "void trj_eng_add_ctrlapi(void *env, void *ctrl_offset, void *ctrl_list, uint32_t id, char *desc, void *config, char *init, char *free, char *reset, char *update);" },
+				{ trj_eng_add_ctrlapi, "void trj_eng_add_ctrlapi(void *env, void *ctrl_offset, void *ctrl_list, char *desc, void *config, char *init, char *free, char *reset, char *update);" },
 				{ NULL, NULL }
 		};
 

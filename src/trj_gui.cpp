@@ -20,41 +20,6 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
 //	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
-
-//	printf("s_trj_obj %d \r\n", sizeof(s_trj_obj));
-//	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) { .obj_list = vl3d_obj_list });
-//
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 1.0, 0.0, 0.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 1.0 }, .p1 = { 1.0, 0.0, 1.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 0.0 }, .p1 = { 1.0, 1.0, 0.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 1.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
-//
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.0, 0.0, 1.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 1.0, 0.0 }, .p1 = { 0.0, 1.0, 1.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 1.0, 0.0, 1.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 1.0, 0.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
-//
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.0, 1.0, 0.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 1.0 }, .p1 = { 0.0, 1.0, 1.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 1.0, 1.0, 0.0 }, });
-//	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 1.0 }, .p1 = { 1.0, 1.0, 1.0 }, });
-//
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.0 }, .p1 = { 0.5, 1.0, 0.0 }, }); // /
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.5, 1.0, 0.0 }, .p1 = { 1.0, 0.0, 0.0 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.0 }, .p1 = { 0.0, 0.5, 0.0 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.5, 0.0 }, .p1 = { 1.0, 0.5, 0.0 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.5, 0.0 }, .p1 = { 0.0, 0.0, 0.0 }, }); //
-////
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.0, 0.1 }, .p1 = { 0.5, 1.0, 0.1 }, }); // /
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.5, 1.0, 0.1 }, .p1 = { 1.0, 0.0, 0.1 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.0, 0.1 }, .p1 = { 0.0, 0.5, 0.1 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 0.0, 0.5, 0.1 }, .p1 = { 1.0, 0.5, 0.1 }, }); //
-////	vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) { .p0 = { 1.0, 0.5, 0.1 }, .p1 = { 0.0, 0.0, 0.1 }, }); //
-//
-//	vl3d_view.scale = 1.0;
-//
-//	vl_vzero(vl3d_view.pos);
-//	vl_mid(&vl3d_view.rot[0][0]);
 	
 	self->w_height = 720;
 	self->w_width  = 1024;
@@ -97,11 +62,14 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	vl_mid(trj_traj_orb_config_.s_tilt);
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.id = trj_traj_orb_id,
 			.desc = "default_traj_orb",
 			.init = trj_traj_orb_init_,
 			.free = trj_traj_orb_free_,
+			.save = trj_traj_orb_save_,
+			.load = trj_traj_orb_load_,
+			.data_size = sizeof(s_trj_traj_orb),
 			.data = NULL,
+			.config_size = sizeof(s_trj_traj_orb_init),
 			.config = &trj_traj_orb_config_,
 			.compile = trj_traj_orb_compile_,
 			.rot = trj_traj_orb_rot_,
@@ -120,11 +88,14 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.id = trj_traj_bz_id,
 			.desc = "default_traj_bz",
 			.init = trj_traj_bz_init_,
 			.free = trj_traj_bz_free_,
+			.save = trj_traj_bz_save_,
+			.load = trj_traj_bz_load_,
+			.data_size = sizeof(s_trj_traj_bz),
 			.data = NULL,
+			.config_size = sizeof(s_trj_traj_bz_init),
 			.config = &trj_traj_bz_config_,
 			.compile = trj_traj_bz_compile_,
 			.rot = trj_traj_bz_rot_,
@@ -149,62 +120,59 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.id     = 0x00,
 			.desc   = "default_ctrl_upos",
 			.init   = trj_ctrl_upos_init_,
 			.free   = trj_ctrl_upos_free_,
+			.save   = trj_ctrl_upos_save_,
+			.load   = trj_ctrl_upos_load_,
+			.data_size = sizeof(s_trj_ctrl_upos),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_ctrl_upos_init),
 			.config = &trj_ctrl_upos_config_,
 			.reset  = trj_ctrl_upos_reset_,
 			.update = trj_ctrl_upos_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.id     = 0x00,
 			.desc   = "default_ctrl_cpos",
 			.init   = trj_ctrl_cpos_init_,
 			.free   = trj_ctrl_cpos_free_,
+			.save   = trj_ctrl_cpos_save_,
+			.load   = trj_ctrl_cpos_load_,
+			.data_size = sizeof(s_trj_ctrl_cpos),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_ctrl_cpos_init),
 			.config = &trj_ctrl_cpos_config_,
 			.reset  = trj_ctrl_cpos_reset_,
 			.update = trj_ctrl_cpos_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.id     = 0x00,
 			.desc   = "default_ctrl_urot",
 			.init   = trj_ctrl_urot_init_,
 			.free   = trj_ctrl_urot_free_,
+			.save   = trj_ctrl_urot_save_,
+			.load   = trj_ctrl_urot_load_,
+			.data_size = sizeof(s_trj_ctrl_urot),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_ctrl_urot_init),
 			.config = &trj_ctrl_urot_config_,
 			.reset  = trj_ctrl_urot_reset_,
 			.update = trj_ctrl_urot_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.id     = 0x00,
 			.desc   = "default_ctrl_crot",
 			.init   = trj_ctrl_crot_init_,
 			.free   = trj_ctrl_crot_free_,
+			.save   = trj_ctrl_crot_save_,
+			.load   = trj_ctrl_crot_load_,
+			.data_size = sizeof(s_trj_ctrl_crot),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_ctrl_crot_init),
 			.config = &trj_ctrl_crot_config_,
 			.reset  = trj_ctrl_crot_reset_,
 			.update = trj_ctrl_crot_update_,
-	});
-	
-	static s_trj_data_ram_init trj_data_ram_config_ = {
-			.temp = 0x00,
-	};
-	
-	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.id     = trj_data_ram_id,
-			.desc   = "default_data_ram",
-			.init   = trj_data_ram_init_,
-			.free   = trj_data_ram_free_,
-			.data   = NULL,
-			.config = &trj_data_ram_config_,
-			.render = trj_data_ram_render_,
-			.reset  = trj_data_ram_reset_,
 	});
 	
 	static s_trj_data_text_init trj_data_text_config_ = {
@@ -212,14 +180,35 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.id     = trj_data_text_id,
 			.desc   = "default_data_text",
 			.init   = trj_data_text_init_,
 			.free   = trj_data_text_free_,
+			.save   = trj_data_text_save_,
+			.load   = trj_data_text_load_,
+			.data_size = sizeof(s_trj_data_text),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_data_text_init),
 			.config = &trj_data_text_config_,
 			.render = trj_data_text_render_,
 			.reset  = trj_data_text_reset_,
+	});
+	
+	static s_trj_data_ram_init trj_data_ram_config_ = {
+			.temp = 0x00,
+	};
+	
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.desc   = "default_data_ram",
+			.init   = trj_data_ram_init_,
+			.free   = trj_data_ram_free_,
+			.save   = trj_data_ram_save_,
+			.load   = trj_data_ram_load_,
+			.data_size = sizeof(s_trj_data_ram),
+			.data   = NULL,
+			.config_size = sizeof(s_trj_data_ram_init),
+			.config = &trj_data_ram_config_,
+			.render = trj_data_ram_render_,
+			.reset  = trj_data_ram_reset_,
 	});
 	
 	static s_trj_proc_euler_init trj_proc_euler_config_ = {
@@ -227,25 +216,28 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
-			.id     = trj_proc_euler_id,
 			.desc   = "default_proc_euler",
 			.init   = trj_proc_euler_init_,
 			.free   = trj_proc_euler_free_,
+			.save   = trj_proc_euler_save_,
+			.load   = trj_proc_euler_load_,
 			.update = trj_proc_euler_update_,
+			.data_size = sizeof(s_trj_proc_euler),
 			.data   = NULL,
+			.config_size = sizeof(s_trj_proc_euler_init),
 			.config = &trj_proc_euler_config_,
 	});
 	
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"   , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"   , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth" , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "moon"  , .ref = &self->eng.obj_list[0] });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "object", .ref = &self->eng.obj_list[0] });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"    });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"    });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth"  });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "moon"   });
+	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "object" });
 	
 	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
 	{
-		trj_gui_obj_init(&self->st_gui_eng_obj[0],
-				(s_trj_gui_obj_init) {.ref = &self->eng.obj_list[0]}
+		trj_gui_obj_init(&self->st_gui_eng_obj[i],
+				(s_trj_gui_obj_init) {.ref = &self->eng.obj_list[i]}
 				);
 	}
 	
@@ -272,11 +264,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
 	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
 	
-	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
+	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[1]);
+	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[1]);
+	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[1]);
+	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[1]);
+	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[1]);
 	
 	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
@@ -324,6 +316,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	self->gui_menu.env = &self->gui_env;
 	self->gui_menu.cmd = &self->gui_cmd;
+	self->gui_menu.eng = &self->eng;
 	
 	self->gui_eng.time_limit = 3600.0;
 	self->gui_eng.time_step = 0.01;
@@ -344,6 +337,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+	
+	const uint32_t traj_orb_hash = vl_crc32("default_traj_orb");
+	const uint32_t traj_bz_hash  = vl_crc32("default_traj_bz");
+	
+	const uint32_t data_text_hash = vl_crc32("default_data_text");
+	const uint32_t data_ram_hash  = vl_crc32("default_data_ram");
 	
 	trj_gui_menu_main(&self->gui_menu);
 	
@@ -383,8 +382,10 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			{
 				case trj_gui_eng_type_obj:
 				{
-					s_trj_obj *obj = (s_trj_obj*) self->gui_eng.sel_item;
-					trj_gui_obj_edit(&self->gui_eng.obj_list[obj->id], obj);
+					s_trj_gui_obj *obj_gui = (s_trj_gui_obj*) self->gui_eng.sel_item;
+					s_trj_obj *obj = obj_gui->ref;
+					
+					trj_gui_obj_edit(obj_gui, obj);
 					
 					break;
 				}
@@ -394,13 +395,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					trj_gui_traj_edit(traj);
 					
-					switch (traj->id)
-					{
-						case trj_traj_orb_id : { trj_gui_traj_orb_edit(traj); break; }
-						case trj_traj_bz_id  : { trj_gui_traj_bz_edit  (traj); break; }
-						
-						default: break;
-					}
+					if      (traj->hash == traj_orb_hash) { trj_gui_traj_orb_edit (traj); }
+					else if (traj->hash == traj_bz_hash ) { trj_gui_traj_bz_edit  (traj); }
 					
 					break;
 				}
@@ -418,13 +414,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					trj_gui_data_edit(data);
 					
-					switch (data->id)
-					{
-						case trj_data_text_id : { trj_gui_data_text_edit(data); break; }
-						case trj_data_ram_id  : { trj_gui_data_ram_edit (data); break; }
-						
-						default: break;
-					}
+					if      (data->hash == data_text_hash) { trj_gui_data_text_edit (data); }
+					else if (data->hash == data_ram_hash ) { trj_gui_data_ram_edit  (data); }
 					
 					break;
 				}
@@ -449,8 +440,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			{
 				case trj_gui_eng_type_obj:
 				{
-					s_trj_obj *obj = (s_trj_obj*) self->gui_eng.sel_item;
-					s_trj_gui_obj *obj_gui = &self->st_gui_eng_obj[obj->id];
+					s_trj_gui_obj *obj_gui = (s_trj_gui_obj*) self->gui_eng.sel_item;
+					s_trj_obj *obj = obj_gui->ref;
 					
 					trj_gui_obj_view(obj_gui, obj);
 					
@@ -461,13 +452,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					
-					switch (traj->id)
-					{
-						case trj_traj_orb_id: { trj_gui_traj_orb_view(traj); break; }
-						case trj_traj_bz_id : { trj_gui_traj_bz_view((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); break; }
-						
-						default: break;
-					}
+					if      (traj->hash == traj_orb_hash) { trj_gui_traj_orb_view (traj); }
+					else if (traj->hash == traj_bz_hash ) { trj_gui_traj_bz_view  ((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
 					
 					break;
 				}
@@ -481,19 +467,13 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					
-					switch (data->id)
-					{
-						case trj_data_text_id : { trj_gui_data_text_view(data); break; }
-						case trj_data_ram_id  : { trj_gui_data_ram_view (data); break; }
-						
-						default: break;
-					}
+					if      (data->hash == data_text_hash) { trj_gui_data_text_view (data); }
+					else if (data->hash == data_ram_hash ) { trj_gui_data_ram_view  (data); }
 					
 					break;
 				}
 				
-				default:
-					break;
+				default: break;
 			}
 		}
 		

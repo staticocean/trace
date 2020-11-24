@@ -19,15 +19,17 @@
 
 typedef struct trj_eng_init_attr
 {
-	s_trj_proc *proc;
+	uint8_t 	*stack;
 	
-	s_trj_obj  *obj_list;
+	s_trj_proc 	*proc;
 	
-	s_trj_ellp *ellp_list;
-	s_trj_traj *traj_list;
-	s_trj_ctrl *ctrl_list;
-	s_trj_data *data_list;
-	s_trj_proc *proc_list;
+	s_trj_obj  	*obj_list;
+	
+	s_trj_ellp 	*ellp_list;
+	s_trj_traj 	*traj_list;
+	s_trj_ctrl 	*ctrl_list;
+	s_trj_data 	*data_list;
+	s_trj_proc 	*proc_list;
 	
 }	s_trj_eng_init;
 
@@ -81,6 +83,8 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 
 inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
 {
+	api.hash = vl_crc32(api.desc);
+	
 	self->ellp_list[self->ellp_offset] = api;
 	++self->ellp_offset;
 	
@@ -89,6 +93,8 @@ inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
 
 inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
 {
+	api.hash = vl_crc32(api.desc);
+	
 	self->traj_list[self->traj_offset] = api;
 	++self->traj_offset;
 	
@@ -97,6 +103,8 @@ inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
 
 inline uint8_t trj_eng_add_ctrlapi(s_trj_eng *self, s_trj_ctrl api)
 {
+	api.hash = vl_crc32(api.desc);
+	
 	self->ctrl_list[self->ctrl_offset] = api;
 	++self->ctrl_offset;
 	
@@ -105,6 +113,8 @@ inline uint8_t trj_eng_add_ctrlapi(s_trj_eng *self, s_trj_ctrl api)
 
 inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 {
+	api.hash = vl_crc32(api.desc);
+	
 	self->data_list[self->data_offset] = api;
 	++self->data_offset;
 	
@@ -113,6 +123,8 @@ inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 
 inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 {
+	api.hash = vl_crc32(api.desc);
+	
 	self->proc_list[self->proc_offset] = api;
 	s_trj_proc *proc = &self->proc_list[self->proc_offset];
 	++self->proc_offset;
@@ -132,7 +144,7 @@ inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 	
 	trj_obj_init(obj, attr);
 	
-	obj->id 		= self->obj_count;
+	obj->hash 		= vl_crc32(obj->desc);
 	obj->time 		= self->time;
 	obj->log_list   = NULL;
 	obj->log_offset = 0x00;
@@ -165,7 +177,12 @@ inline uint8_t trj_eng_reset(s_trj_eng *self)
 		// first reset offset then NULL the ptr
 		// some RT plotting functions may still try to draw this
 		obj->log_offset = 0x00;
-		free(obj->log_list);
+		
+		if (obj->log_list != NULL)
+		{
+			free(obj->log_list);
+			obj->log_list = NULL;
+		}
 		
 		for (j = 0; j < obj->traj_offset; ++j)
 		{

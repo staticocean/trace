@@ -10,7 +10,6 @@
 //------------------------------------------------------------------------------
 
 #include "vl.h"
-
 #include "trj_api.h"
 
 //------------------------------------------------------------------------------
@@ -29,17 +28,27 @@ typedef struct trj_data_text_init
 
 } 	s_trj_data_text_init;
 
-inline uint8_t trj_data_text_init(s_trj_data_text *data, s_trj_data_text_init attr)
+inline uint8_t trj_data_text_init(s_trj_data_text *self, s_trj_data_text_init attr)
 {
 	return 0x00;
 }
 
-inline uint8_t trj_data_text_render(s_trj_data_text *data, s_trj_obj *obj)
+inline uint8_t trj_data_text_save(s_trj_data_text *self, s_trj_data_text_init *attr, uint8_t **v_file)
 {
 	return 0x00;
 }
 
-inline uint8_t trj_data_text_reset(s_trj_data_text *data, s_trj_obj *obj)
+inline uint8_t trj_data_text_load(s_trj_data_text *self, s_trj_data_text_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_text_render(s_trj_data_text *self, s_trj_obj *obj)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_text_reset(s_trj_data_text *self, s_trj_obj *obj)
 {
 	return 0x00;
 }
@@ -60,6 +69,16 @@ inline uint8_t trj_data_text_free_ (void **data)
 	
 	free(data_);
 	
+	return 0x00;
+}
+
+inline uint8_t trj_data_text_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_text_load_(void *data, void *config, uint8_t **v_file)
+{
 	return 0x00;
 }
 
@@ -104,6 +123,19 @@ inline uint8_t trj_data_ram_init(s_trj_data_ram *data, s_trj_data_ram_init attr)
 	return 0x00;
 }
 
+inline uint8_t trj_data_ram_save(s_trj_data_ram *self, s_trj_data_ram_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_ram_load(s_trj_data_ram *self, s_trj_data_ram_init *attr, uint8_t **v_file)
+{
+	self->data_list = NULL;
+	self->data_offset = NULL;
+	
+	return 0x00;
+}
+
 inline uint8_t trj_data_ram_render(s_trj_data_ram *data, s_trj_obj *obj)
 {
 	data->data_list = obj->log_list;
@@ -128,6 +160,19 @@ inline uint8_t trj_data_ram_init_ (void **data, void *config)
 	s_trj_data_ram_init *data_init = (s_trj_data_ram_init*) config;
 	
 	return trj_data_ram_init(data_, *data_init);
+}
+
+inline uint8_t trj_data_ram_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_ram_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_data_ram_init *attr = (s_trj_data_ram_init*) config;
+	s_trj_data_ram *data_ = (s_trj_data_ram*) data;
+	
+	return trj_data_ram_load(data_, attr, v_file);
 }
 
 inline uint8_t trj_data_ram_free_ (void **data)

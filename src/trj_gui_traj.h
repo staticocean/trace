@@ -58,19 +58,6 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::Columns(2);
-	
-	ImGui::Text("id");
-	ImGui::NextColumn();
-	ImGui::Text("[%06d]", self->id);
-	ImGui::NextColumn();
-	
-	ImGui::Columns(1);
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
 	ImGui::PopID();
 	
 	return;
@@ -93,6 +80,7 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-1);
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
@@ -102,6 +90,7 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	ImGui::SameLine(0.0, 0.0);
 	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
+	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -740,7 +729,8 @@ inline void trj_gui_traj_orb_edit(s_trj_traj *self)
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	ImGui::SameLine(0.0, 0.0);
 	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
-	
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
@@ -803,14 +793,6 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 			.obj_list = obj_list,
 	});
 	
-	vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { -0.25/view.scale, +0.0, +0.0 }, (float64_t[]) { +0.25/view.scale, +0.0, +0.0 } );
-	vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { +0.0, -0.25/view.scale, +0.0 }, (float64_t[]) { +0.0, +0.25/view.scale, +0.0 } );
-	vl3d_eng_draw_arrow(&vl3d_eng, vl3d_col_l, (float64_t[]) { +0.0, +0.0, -0.25/view.scale }, (float64_t[]) { +0.0, +0.0, +0.25/view.scale } );
-	
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.25/view.scale, 0.0, 0.0 }, .data = "X" } );
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 0.25/view.scale, 0.0 }, .data = "Y" } );
-	vl3d_eng_add_text(&vl3d_eng, (s_vl3d_text) { .p0 = { 0.0, 0.0, 0.25/view.scale }, .data = "Z" } );
-	
 	if (fabs(traj->rate) > 1E-9)
 	{
 		vlf_t time = 0.0;
@@ -840,6 +822,7 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 	}
 	
 	vl3d_view_grid(&view, &vl3d_eng);
+	vl3d_view_xyz(&view, &vl3d_eng);
 	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
 	
 	vl3d_view_save(self, &view);

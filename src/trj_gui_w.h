@@ -385,7 +385,7 @@ inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list,
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = ((*obj)->id == obj_list[i].id);
+			bool is_selected = ((*obj)->hash == obj_list[i].hash);
 			
 			if (ImGui::Selectable(obj_list[i].desc, is_selected))
 			{ *obj = &obj_list[i]; }
@@ -424,7 +424,7 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_
 			
 			bool is_selected = false;
 			
-			if (!is_none && (*ellp)->id == ellp_list[i].id)
+			if (!is_none && ((*ellp)->hash, ellp_list[i].hash))
 			{ is_selected = true; }
 			
 			if (ImGui::Selectable(ellp_list[i].desc, is_selected))
@@ -451,7 +451,7 @@ inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = (eng->proc->id == eng->proc_list[i].id);
+			bool is_selected = (eng->proc->hash == eng->proc_list[i].hash);
 			
 			if (ImGui::Selectable(eng->proc_list[i].desc, is_selected))
 			{ eng->proc = &eng->proc_list[i]; }

@@ -17,7 +17,6 @@
 
 static s_trj_ellp trj_ellp_wgs84 = {
 		
-		.id     = 0x01,
 		.desc   = "wgs84",
 		
 		.a 		=  6.37813700000000000000e+0006,
@@ -40,6 +39,8 @@ inline void trj_ellp_init(s_trj_ellp *ellp)
 	ellp->ll4		= 4.0 * (ellp->l * ellp->l);
 	ellp->ll		= ellp->l * ellp->l;
 	ellp->invcbrt2	= 1.0 / (vl_pow(2.0, 1.0 / 3.0));
+	
+	ellp->hash = vl_crc32(ellp->desc);
 	
 	return;
 }
