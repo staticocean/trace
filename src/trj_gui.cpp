@@ -3,13 +3,6 @@
 
 //------------------------------------------------------------------------------
 
-static s_trj_traj_bz_point pts[2048];
-static s_trj_traj_bz traj_bz = {.pts = pts, .pts_offset = 0 };
-
-static  s_vl3d_obj vl3d_obj_list[255];
-static  s_vl3d_eng vl3d_eng;
-static  s_vl3d_view vl3d_view;
-
 static 	s_trj_gui_map map;
 
 uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
@@ -62,6 +55,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	vl_mid(trj_traj_orb_config_.s_tilt);
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
+			.name = "default_traj_orb",
 			.desc = "default_traj_orb",
 			.init = trj_traj_orb_init_,
 			.free = trj_traj_orb_free_,
@@ -88,6 +82,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
+			.name = "default_traj_bz",
 			.desc = "default_traj_bz",
 			.init = trj_traj_bz_init_,
 			.free = trj_traj_bz_free_,
@@ -120,6 +115,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			.name   = "default_ctrl_upos",
 			.desc   = "default_ctrl_upos",
 			.init   = trj_ctrl_upos_init_,
 			.free   = trj_ctrl_upos_free_,
@@ -134,6 +130,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			.name   = "default_ctrl_cpos",
 			.desc   = "default_ctrl_cpos",
 			.init   = trj_ctrl_cpos_init_,
 			.free   = trj_ctrl_cpos_free_,
@@ -148,6 +145,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			.name   = "default_ctrl_urot",
 			.desc   = "default_ctrl_urot",
 			.init   = trj_ctrl_urot_init_,
 			.free   = trj_ctrl_urot_free_,
@@ -162,6 +160,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			.name   = "default_ctrl_crot",
 			.desc   = "default_ctrl_crot",
 			.init   = trj_ctrl_crot_init_,
 			.free   = trj_ctrl_crot_free_,
@@ -180,6 +179,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.name   = "default_data_text",
 			.desc   = "default_data_text",
 			.init   = trj_data_text_init_,
 			.free   = trj_data_text_free_,
@@ -198,6 +198,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.name   = "default_data_ram",
 			.desc   = "default_data_ram",
 			.init   = trj_data_ram_init_,
 			.free   = trj_data_ram_free_,
@@ -216,6 +217,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.name   = "default_data_mat",
 			.desc   = "default_data_mat",
 			.init   = trj_data_mat_init_,
 			.free   = trj_data_mat_free_,
@@ -234,6 +236,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+			.name   = "default_proc_euler",
 			.desc   = "default_proc_euler",
 			.init   = trj_proc_euler_init_,
 			.free   = trj_proc_euler_free_,

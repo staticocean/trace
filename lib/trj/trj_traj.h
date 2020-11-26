@@ -145,6 +145,20 @@ inline uint8_t trj_traj_bz_add(s_trj_traj_bz *self, s_trj_traj_bz_point point)
 	return 0x00;
 }
 
+inline uint8_t trj_traj_bz_rem(s_trj_traj_bz *self, uint32_t index)
+{
+	uint32_t i;
+	
+	for (i = index; i < self->pts_offset-1; ++i)
+	{
+		self->pts[i] = self->pts[i+1];
+	}
+	
+	--self->pts_offset;
+	
+	return 0x00;
+}
+
 inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 {
 	if (self->pts_offset < 0x02) { return 0x00; }

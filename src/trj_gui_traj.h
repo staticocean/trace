@@ -52,7 +52,7 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 	ImGui::PushID(self);
 	
 	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##name", self->desc, 255);
+	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -108,7 +108,13 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	for (int i = 0; i < traj->pts_offset; ++i)
 	{
 		ImGui::PushID(i);
-		vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
+
+		if (traj->ellp_en == 0x00)
+		{ vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f"); }
+		
+		else
+		{ vl_gui_vec("point", traj->pts[i].pos_p, 0.001, NULL, NULL, "%.3f"); }
+		
 		ImGui::PopID();
 	}
 	
@@ -143,6 +149,9 @@ inline ImVec2 inv_transform(s_view_data *view, ImVec2 pos)
 
 inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
 {
+	uint32_t del_index = 0x00;
+	uint8_t del_req = 0x00;
+	
 	s_view_data view_top;
 	s_view_data view_bot;
 	
@@ -292,7 +301,7 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 			char axis_label[64];
 			int32_t exp;
 			
-			frexp(view_top.width / 5, &exp);
+			frexp(view_top.width / 10, &exp);
 			float step_x = (float) ldexp(1.0, exp);
 			
 			for (int i = 0; i < int(view_top.width / step_x) + 2; ++i)
@@ -302,11 +311,17 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 				
 				window->DrawList->AddLine(a, b, col_textdis_u32);
 				
-				if (exp > 0)
-				{ ImFormatString(axis_label, sizeof(axis_label), " %d", int(view_top.p0.x + i * step_x)); }
-				else
-				{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.x + i * step_x); }
-				
+				if (self->ellp_en == 0x00)
+				{
+					if (exp > 0)
+					{ ImFormatString(axis_label, sizeof(axis_label), " %d", int(view_top.p0.x + i * step_x)); }
+					else
+					{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.x + i * step_x); }
+				} else
+				{
+					ImFormatString(axis_label, sizeof(axis_label), " %f", vl_deg(view_top.p0.x + i * step_x));
+				}
+			
 				window->DrawList->AddText(b, col_text_u32, axis_label);
 			}
 			
@@ -320,15 +335,22 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 				
 				window->DrawList->AddLine(a, b, col_textdis_u32);
 				
-				if (exp > 0)
-				{ ImFormatString(axis_label, sizeof(axis_label), " %d", int(view_top.p0.y + i * step_y)); }
-				else
-				{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.y + i * step_y); }
+				if (self->ellp_en == 0x00)
+				{
+					if (exp > 0)
+					{ ImFormatString(axis_label, sizeof(axis_label), " %d", int(view_top.p0.y + i * step_y)); }
+					else
+					{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.y + i * step_y); }
+				} else
+				{
+					ImFormatString(axis_label, sizeof(axis_label), " %f", vl_deg(view_top.p0.y + i * step_y));
+				}
 				
 				window->DrawList->AddText(a, col_text_u32, axis_label);
 			}
 		}
 		
+		// draw points
 		ImVec2 cursor_pos = ImGui::GetCursorScreenPos();
 		
 		for (int i = 0; i < self->pts_offset; ++i)
@@ -362,6 +384,19 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 				
 				mouse_drag_delta.y = -mouse_drag_delta.y;
 				point_pos += mouse_drag_delta;
+			}
+			
+			if (ImGui::BeginPopupContextItem("view"))
+			{
+				ImGui::Text("%d", i);
+				
+				if (ImGui::Selectable("delete"))
+				{
+					del_req = 0x01;
+					del_index = i;
+				}
+				
+				ImGui::EndPopup();
 			}
 			
 			self->pts[i].pos_p[0] = point_pos.x;
@@ -584,7 +619,7 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 			char axis_label[64];
 			int32_t exp;
 			
-			frexp(view_bot.width / 5, &exp);
+			frexp(view_bot.width / 10, &exp);
 			float step_x = (float) ldexp(1.0, exp);
 			
 			for (int i = 0; i < int(view_bot.width / step_x) + 2; ++i)
@@ -711,6 +746,13 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 		ImGui::PopID();
 	}
 	
+	if (del_req != 0x00)
+	{
+		trj_traj_bz_rem(self, del_index);
+		// MUS RECOMPILE coz we lost 1 point
+		trj_traj_bz_compile(self);
+	}
+	
 	return;
 }
 
@@ -793,7 +835,7 @@ inline void trj_gui_traj_orb_view(s_trj_traj *self)
 	
 	s_vl3d_eng vl3d_eng;
 	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 2);
-	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0 };
+	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
 	
 	vl3d_view_load(self, &view, view);
 	

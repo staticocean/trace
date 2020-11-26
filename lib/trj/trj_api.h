@@ -18,6 +18,8 @@ typedef struct trj_ellp
 	char desc[32];
 	uint32_t hash;
 	
+	char name[32];
+	
 	vlf_t a;
 	vlf_t b;
 	vlf_t c;
@@ -75,6 +77,8 @@ typedef struct trj_traj
 	char desc[32];
 	uint64_t hash;
 	
+	char name[32];
+	
 	uint32_t config_size;
 	void *config;
 	
@@ -125,6 +129,8 @@ typedef struct trj_ctrl
 	char desc[32];
 	uint64_t hash;
 	
+	char name[32];
+	
 	uint32_t config_size;
 	void *config;
 	
@@ -173,6 +179,8 @@ typedef struct trj_data
 	char desc[32];
 	uint64_t hash;
 	
+	char name[32];
+	
 	uint32_t config_size;
 	void *config;
 	
@@ -220,6 +228,8 @@ typedef struct trj_proc
 	char desc[32];
 	uint64_t hash;
 	
+	char name[32];
+	
 	uint32_t config_size;
 	void *config;
 	
@@ -254,6 +264,8 @@ typedef struct trj_obj
 {
 	char desc[32];
 	uint32_t hash;
+	
+	char name[32];
 	
 	vlf_t *time;
 	

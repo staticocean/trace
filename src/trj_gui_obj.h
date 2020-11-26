@@ -45,8 +45,8 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::PushID(self);
 	
 	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##name", self->desc, 255);
-	
+	ImGui::InputText("##name", self->name, 255);
+
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
