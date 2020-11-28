@@ -17,7 +17,178 @@
 
 //------------------------------------------------------------------------------
 
-#define trj_traj_bz_id (0x00000001)
+typedef struct trj_traj_static
+{
+	s_trj_eng 	*eng;
+	
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
+	
+	uint8_t 	ellp_en;
+	s_trj_ellp 	*ellp;
+	uint32_t 	ellp_hash;
+	
+	vlf_t 		pos[3];
+	vlf_t 		pos_cache[3];
+	vlf_t 		rot[9];
+	
+} 	s_trj_traj_static;
+
+typedef struct trj_traj_static_init
+{
+	s_trj_eng 	*eng;
+	
+	s_trj_obj 	*ref;
+	
+	uint8_t 	ellp_en;
+	s_trj_ellp  *ellp;
+	
+	vlf_t 		pos[3];
+	vlf_t 		rot[9];
+	
+} 	s_trj_traj_static_init;
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_static_init(s_trj_traj_static *self, s_trj_traj_static_init attr)
+{
+	self->eng = attr.eng;
+	
+	self->ref = attr.ref;
+	self->ref_hash = self->ref->hash;
+	
+	self->ellp_en = attr.ellp_en;
+	self->ellp = attr.ellp;
+	if (self->ellp != NULL)
+	{ self->ellp_hash = self->ellp->hash; }
+	
+	vl_vcopy(self->pos, attr.pos);
+	vl_mcopy(self->rot, attr.rot);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_save(s_trj_traj_static *self, s_trj_traj_static_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_load(s_trj_traj_static *self, s_trj_traj_static_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	self->ref = trj_eng_find_obj(self->eng, self->ref_hash);
+	self->ellp = trj_eng_find_ellp(self->eng, self->ellp_hash);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_compile(s_trj_traj_static *self)
+{
+	if (self->ellp_en != 0x00)
+	{
+		vlf_t lla[3] = { self->pos[2], self->pos[0], self->pos[1] };
+		trj_ellp_ecef(self->ellp, self->pos_cache, lla);
+	}
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_pos(s_trj_traj_static *self, vlf_t time, vlf_t *pos)
+{
+	if (self->ellp_en == 0x00)
+	{ vl_vcopy(pos, self->pos); }
+	
+	else
+	{ vl_vcopy(pos, self->pos_cache); }
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_rot(s_trj_traj_static *self, vlf_t time, vlf_t *rot)
+{
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+// API
+//uint8_t (*init) 		(void *data, void *config)
+//uint8_t (*free) 		(void *data);
+//uint8_t (*compile) 	(void *data);
+//uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
+//uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+
+inline uint8_t trj_traj_static_init_ (void **data, void *config)
+{
+	*data = (s_trj_traj_static*) malloc(sizeof(s_trj_traj_static));
+	
+	s_trj_traj_static *traj = (s_trj_traj_static*) *data;
+	s_trj_traj_static_init *attr = (s_trj_traj_static_init*) config;
+	
+	return trj_traj_static_init(traj, *attr);
+}
+
+inline uint8_t trj_traj_static_free_ (void **data)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) *data;
+	
+	free(traj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_static_save_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	s_trj_traj_static_init *attr = (s_trj_traj_static_init*) config;
+	
+	return trj_traj_static_save(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_static_load_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	s_trj_traj_static_init *attr = (s_trj_traj_static_init*) config;
+	
+	return trj_traj_static_load(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_static_compile_(void *data)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	
+	return trj_traj_static_compile(traj);
+}
+
+inline uint8_t trj_traj_static_pos_(void *data, vlf_t time, vlf_t *pos)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	
+	return trj_traj_static_pos(traj, time, pos);
+}
+
+inline uint8_t trj_traj_static_rot_(void *data, vlf_t time, vlf_t *rot)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	
+	return trj_traj_static_rot(traj, time, rot);
+}
+
+inline uint8_t trj_traj_static_info_(void *data, s_trj_traj_info *info)
+{
+	s_trj_traj_static *traj = (s_trj_traj_static*) data;
+	
+	info->preview_time[0] = 0.0;
+	info->preview_time[1] = 1.0;
+	
+	return 0x00;
+}
+//------------------------------------------------------------------------------
+
+
+
+//------------------------------------------------------------------------------
 
 typedef struct trj_traj_bz_point
 {
@@ -419,7 +590,7 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 				}
 		});
 		
-		trj_bz4_eval(&bz4, time, &pos[0]);
+		trj_bz4_d0t(&bz4, time, &pos[0]);
 		
 		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
 				.p0 = {
@@ -443,7 +614,7 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 				}
 		});
 		
-		trj_bz4_eval(&bz4, time, &pos[1]);
+		trj_bz4_d0t(&bz4, time, &pos[1]);
 		
 		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
 				.p0 = {
@@ -467,13 +638,177 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 				}
 		});
 		
-		trj_bz4_eval(&bz4, time, &pos[2]);
+		trj_bz4_d0t(&bz4, time, &pos[2]);
 	}
 	
 	if (self->ellp_en != 0x00 && self->ellp != NULL)
 	{
 		vlf_t lla[3] = { pos[2], pos[0], pos[1] };
 		trj_ellp_ecef(self->ellp, pos, lla);
+	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
+{
+	uint32_t offset = 0x00;
+	
+	if (self->pts_offset == 0x00) { return 0x01; }
+	
+	while (offset < (self->pts_offset-1)
+		   && (time < self->pts[offset].time)
+		   || (time > self->pts[offset+1].time))
+	{
+		++offset;
+	}
+	
+	if (offset >= (self->pts_offset-1))
+	{
+		vl_vzero(vel);
+	}
+	
+	else if (time >= self->pts[self->pts_offset-1].time)
+	{
+		vl_vzero(vel);
+		
+		return 0x00;
+	}
+	
+	else
+	{
+		s_trj_bz4 bz4;
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[0]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[0],
+						self->pts[offset].pos_p[0] + self->pts[offset].pos_d[0]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[0],
+						self->pts[offset + 1].pos_p[0] - self->pts[offset + 1].pos_d[0]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[0]
+				}
+		});
+		
+		trj_bz4_d1t(&bz4, time, &vel[0]);
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[1]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[1],
+						self->pts[offset].pos_p[1] + self->pts[offset].pos_d[1]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[1],
+						self->pts[offset + 1].pos_p[1] - self->pts[offset + 1].pos_d[1]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[1]
+				}
+		});
+		
+		trj_bz4_d1t(&bz4, time, &vel[1]);
+		
+		trj_bz4_init(&bz4, (s_trj_bz4_init_attr) {
+				.p0 = {
+						self->pts[offset].time,
+						self->pts[offset].pos_p[2]
+				},
+				
+				.p1 = {
+						self->pts[offset].time + self->pts[offset].pos_t[2],
+						self->pts[offset].pos_p[2] + self->pts[offset].pos_d[2]
+				},
+				
+				.p2 = {
+						self->pts[offset + 1].time - self->pts[offset + 1].pos_t[2],
+						self->pts[offset + 1].pos_p[2] - self->pts[offset + 1].pos_d[2]
+				},
+				
+				.p3 = {
+						self->pts[offset + 1].time,
+						self->pts[offset + 1].pos_p[2]
+				}
+		});
+		
+		trj_bz4_d1t(&bz4, time, &vel[2]);
+	}
+	
+	if (self->ellp_en != 0x00 && self->ellp != NULL)
+	{
+		vlf_t lla[3] = { vel[2], vel[0], vel[1] };
+		vl_vcopy(vel, lla);
+	}
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
+{
+	vlf_t vel[3];
+	vlf_t pos[3];
+	
+	trj_traj_bz_vel(self, time, vel);
+	trj_traj_bz_pos(self, time, pos);
+	
+	if (self->ellp_en != 0x00)
+	{
+		vlf_t nwh[3];
+		trj_ellp_nwhvel(self->ellp, vel, nwh);
+		
+		vlf_t rot_nwh_tnp[9] = {
+			nwh[0], nwh[2], nwh[1],
+			0.0, 1.0, 0.0,
+			0.0, 0.0, 0.0,
+		};
+		
+		vlf_t *x = &rot_nwh_tnp[0];
+		vlf_t *y = &rot_nwh_tnp[3];
+		vlf_t *z = &rot_nwh_tnp[6];
+		
+		vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+		
+		vlf_t xy[3];
+		vl_vmul_s(xy, x, vl_vdot(x,y));
+		vl_vsub(y, y, xy);
+		vl_vmul_s(y, y, 1.0 / vl_vnorm(y));
+		
+		vl_cross(z, x, y);
+		vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
+		
+		vlf_t ecef_ctn[9];
+		trj_ellp_ecefrot(self->ellp, pos, ecef_ctn);
+		
+		vlf_t r_ref[9];
+		vlf_t *r_inr = rot;
+
+		vlf_t rot_nwh[9];
+		vl_tnp(rot_nwh, rot_nwh_tnp);
+		
+		vl_mmul_v(r_ref, ecef_ctn, rot_nwh);
+		vl_mmul_v(r_inr, &self->ref->rot[0][0], r_ref);
 	}
 	
 	return 0x00;
@@ -543,8 +878,7 @@ inline uint8_t trj_traj_bz_rot_(void *data, vlf_t time, vlf_t *rot)
 {
 	s_trj_traj_bz *traj_bz = (s_trj_traj_bz*) data;
 
-//	return trj_traj_bz_rot(traj_bz);
-	return 0x00;
+	return trj_traj_bz_rot(traj_bz, time, rot);
 }
 
 inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)

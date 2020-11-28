@@ -65,7 +65,210 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_traj_bz_edit(s_trj_traj *self)
+inline void trj_gui_traj_edit_static(s_trj_traj *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_traj_static *traj = (s_trj_traj_static*) self->data;
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", traj->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ellp  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-40);
+	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
+	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
+	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::Text("pos   "); ImGui::SameLine();
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+	vl_gui_vec("##pos", traj->pos, 1.0, NULL, NULL, "%.3f");
+	
+	ImGui::Text("rot   "); ImGui::SameLine();
+	vl_gui_rot("##rot", traj->rot);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_traj_view_static(s_trj_traj *self)
+{
+	ImGui::PushID(self);
+	
+	ImGui::Text("[Plugin does not support view]");
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_traj_edit_orb(s_trj_traj *self)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
+	
+	ImGui::PushID(self);
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", traj->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-60);
+	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::Text("radius");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+	ImGui::SameLine();
+	vlf_t radius_min = 0.0;
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
+	
+	ImGui::Text("rate  ");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
+	ImGui::SameLine();
+	vlf_t rate_deg = vl_deg(traj->rate);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.3f");
+	traj->rate = vl_rad(rate_deg);
+	
+	ImGui::Text("tilt  "); ImGui::SameLine();
+	vl_gui_rot("##tilt", traj->tilt);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::Text("s_rate");
+	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
+	ImGui::SameLine();
+	vlf_t s_rate_deg = vl_deg(traj->s_rate);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.3f");
+	traj->s_rate = vl_rad(s_rate_deg);
+	
+	ImGui::Text("s_tilt"); ImGui::SameLine();
+	vl_gui_rot("##s_tilt", traj->s_tilt);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_traj_view_orb(s_trj_traj *self)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
+	
+	s_vl3d_eng vl3d_eng;
+	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 2);
+	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
+	
+	vl3d_view_load(self, &view, view);
+	
+	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
+			.obj_list = obj_list,
+	});
+	
+	if (fabs(traj->rate) > 1E-9)
+	{
+		vlf_t time = 0.0;
+		vlf_t time_limit = vl_2pi / fabs(traj->rate);
+		vlf_t time_step = time_limit / 1000;
+		int time_iter = time_limit / time_step;
+		
+		vlf_t p0[3];
+		vlf_t p1[3];
+		vlf_t rot[9];
+		
+		trj_traj_orb_pos(traj, time, p0);
+		trj_traj_orb_pos(traj, time, p1);
+		
+		for (int i = 0; i < time_iter; ++i)
+		{
+			time += time_step;
+			
+			vl_vcopy(p0, p1);
+			trj_traj_orb_pos(traj, time, p1);
+			
+			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
+					.color = vl3d_col_l,
+					.p0 = { p0[0], p0[1], p0[2] },
+					.p1 = { p1[0], p1[1], p1[2] },
+			});
+		}
+	}
+	
+	vl3d_view_grid(&view, &vl3d_eng);
+	vl3d_view_xyz(&view, &vl3d_eng);
+	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
+	vl3d_view_save(self, &view);
+	
+	free(obj_list);
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
@@ -157,7 +360,7 @@ inline ImVec2 inv_transform(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
+inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
 {
 	uint32_t del_index = 0x00;
 	uint8_t del_req = 0x00;
@@ -481,6 +684,63 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 			// TODO draw one dot
 		}
 		
+//		// heading
+//		if (self->pts_offset > 0x01)
+//		{
+//			vlf_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
+//			vlf_t time = self->pts[0].time;
+//
+//			vlf_t p0[3];
+//			vlf_t r0[9];
+//
+//			for (int i = 0; i < 100; ++i)
+//			{
+//				self->ellp_en = 0x00;
+//				trj_traj_bz_pos(self, time, p0);
+//				self->ellp_en = 0x01;
+//				trj_traj_bz_rot(self, time, r0);
+//				self->ellp_en = 0x00;
+//
+//				s_trj_rot_hpr hpr;
+//				trj_ctn_to_hpr(&hpr, r0);
+//
+//				ImVec2 p0_ = transform(&view_top, ImVec2(p0[0], p0[2]));
+//				ImVec2 p1_ = transform(&view_top, ImVec2(p0[0] + 100000*cos(hpr.heading), p0[2] + 100000*sin(hpr.heading)));
+//
+//				window->DrawList->AddLine(p0_, p1_, col_text_u32);
+//
+//				time += time_step;
+//			}
+//		}
+		
+//		// velocity
+//		if (self->pts_offset > 0x01)
+//		{
+//			vlf_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
+//			vlf_t time = self->pts[0].time;
+//
+//			vlf_t p0[3];
+//			vlf_t v0[3];
+//
+//			for (int i = 0; i < 100; ++i)
+//			{
+//				self->ellp_en = 0x00;
+//				trj_traj_bz_pos(self, time, p0);
+//				self->ellp_en = 0x01;
+//				trj_traj_bz_vel(self, time, v0);
+//				self->ellp_en = 0x00;
+//
+//				ImVec2 p0_ = transform(&view_top, ImVec2(p0[0], p0[2]));
+//				ImVec2 p1_ = transform(&view_top, ImVec2(p0[0] + v0[1], p0[2] + v0[0]));
+//
+//				vl_vmul_s(v0, v0, 100);
+//
+//				window->DrawList->AddLine(p0_, p1_, col_text_u32);
+//
+//				time += time_step;
+//			}
+//		}
+		
 		self->ellp_en = ellp_en_temp;
 		
 		// TODO We can calculate traj one time and then use on top and bot views
@@ -764,139 +1024,6 @@ inline void trj_gui_traj_bz_view(s_trj_traj_bz *self, const char* label, ImVec2 
 	}
 	
 	return;
-}
-
-//------------------------------------------------------------------------------
-
-inline void trj_gui_traj_orb_edit(s_trj_traj *self)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
-	
-	ImGui::PushID(self);
-	
-	// !!! UPDATE HASHES !!!
-	// if ref name was changed we must recalc hash
-	// to retain save/load and gui objsel functionality
-	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
-	
-	ImGui::Text("desc  ");
-	ImGui::SameLine();
-	ImGui::Text(self->desc);
-	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", traj->eng);
-	
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("ref   ");
-	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-60);
-	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
-	ImGui::SameLine(0.0, 0.0);
-	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
-	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
-	ImGui::Text("radius");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
-	ImGui::SameLine();
-	vlf_t radius_min = 0.0;
-	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
-	
-	ImGui::Text("rate  ");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
-	ImGui::SameLine();
-	vlf_t rate_deg = vl_deg(traj->rate);
-	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.3f");
-	traj->rate = vl_rad(rate_deg);
-	
-	ImGui::Text("tilt  "); ImGui::SameLine();
-	vl_gui_rot("##tilt", traj->tilt);
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
-	ImGui::Text("s_rate");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
-	ImGui::SameLine();
-	vlf_t s_rate_deg = vl_deg(traj->s_rate);
-	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.3f");
-	traj->s_rate = vl_rad(s_rate_deg);
-	
-	ImGui::Text("s_tilt"); ImGui::SameLine();
-	vl_gui_rot("##s_tilt", traj->s_tilt);
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
-	ImGui::PopID();
-	
-	return;
-}
-
-//------------------------------------------------------------------------------
-
-inline void trj_gui_traj_orb_view(s_trj_traj *self)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
-	
-	s_vl3d_eng vl3d_eng;
-	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 2);
-	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
-	
-	vl3d_view_load(self, &view, view);
-	
-	vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
-			.obj_list = obj_list,
-	});
-	
-	if (fabs(traj->rate) > 1E-9)
-	{
-		vlf_t time = 0.0;
-		vlf_t time_limit = vl_2pi / fabs(traj->rate);
-		vlf_t time_step = time_limit / 1000;
-		int time_iter = time_limit / time_step;
-		
-		vlf_t p0[3];
-		vlf_t p1[3];
-		vlf_t rot[9];
-		
-		trj_traj_orb_pos(traj, time, p0);
-		trj_traj_orb_pos(traj, time, p1);
-		
-		for (int i = 0; i < time_iter; ++i)
-		{
-			time += time_step;
-			
-			vl_vcopy(p0, p1);
-			trj_traj_orb_pos(traj, time, p1);
-			
-			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
-					.color = vl3d_col_l,
-					.p0 = { p0[0], p0[1], p0[2] },
-					.p1 = { p1[0], p1[1], p1[2] },
-			});
-		}
-	}
-	
-	vl3d_view_grid(&view, &vl3d_eng);
-	vl3d_view_xyz(&view, &vl3d_eng);
-	vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
-	vl3d_view_save(self, &view);
-	
-	free(obj_list);
 }
 
 //------------------------------------------------------------------------------
