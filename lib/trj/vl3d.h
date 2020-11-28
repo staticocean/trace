@@ -621,7 +621,7 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 				
 				if (l_p0[2] > 0 || l_p1[2] > 0 || 0x01)
 				{
-					window->DrawList->AddTriangle(
+					window->DrawList->AddTriangleFilled(
 							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
 							__vl3d_view_tf__(view, ImVec2(l_p1[0], l_p1[1])),
 							__vl3d_view_tf__(view, ImVec2(l_p2[0], l_p2[1])),

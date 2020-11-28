@@ -188,7 +188,7 @@ inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
 //	y = lla_to_ecef(lla_ref).vec - lla_to_ecef(lla_bot).vec;
 //	y = y / scipy.linalg.norm(y);
 //
-	vl_vsub(y, lla, lla_d);
+	vl_vsub(y, ecef, ecef_d);
 	vl_vmul_s(y, y, 1.0 / vl_vnorm(y));
 
 //	x = numpy.array([0.0, 6.3781E+6, 0.0]) -pos_ecef.vec;
@@ -208,7 +208,7 @@ inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
 //	z = z / scipy.linalg.norm(z);
 	
 	vl_cross(z, x, y);
-	vl_vmul_s(z, z, vl_vnorm(z));
+	vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
 	
 	vl_tnp(c_tn, ctn_tnp);
 	
@@ -225,8 +225,10 @@ inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *nwh)
 	vlf_t M = self->a * self->p1mee / vl_pow(temp, 1.5);
 	vlf_t N = self->a / vl_pow(temp, 0.5);
 	
-	nwh[0] = lla[0] * M;
+	// DO NOT CHANGE ORDER
+	// if lla == nwh then lla[0] must be used first and written last
 	nwh[1] = lla[1] * (N * vl_cos(lla[0]));
+	nwh[0] = lla[0] * M;
 	
 	return;
 }
