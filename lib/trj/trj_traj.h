@@ -31,6 +31,7 @@ typedef struct trj_traj_static
 	vlf_t 		pos[3];
 	vlf_t 		pos_cache[3];
 	vlf_t 		rot[9];
+	vlf_t 		rot_cache[9];
 	
 } 	s_trj_traj_static;
 
@@ -88,6 +89,11 @@ inline uint8_t trj_traj_static_compile(s_trj_traj_static *self)
 	{
 		vlf_t lla[3] = { self->pos[2], self->pos[0], self->pos[1] };
 		trj_ellp_ecef(self->ellp, self->pos_cache, lla);
+		
+		vlf_t ecef_ctn[9];
+		trj_ellp_ecefrot(self->ellp, self->pos_cache, ecef_ctn);
+		
+		vl_mmul_m(self->rot_cache, ecef_ctn, self->rot);
 	}
 	
 	return 0x00;
@@ -101,11 +107,24 @@ inline uint8_t trj_traj_static_pos(s_trj_traj_static *self, vlf_t time, vlf_t *p
 	else
 	{ vl_vcopy(pos, self->pos_cache); }
 	
+	vlf_t pos_[3];
+	vl_mmul_v(pos_, &self->ref->rot[0][0], pos);
+	vl_vsum(pos_, pos_, &self->ref->pos[0][0]);
+	
 	return 0x00;
 }
 
 inline uint8_t trj_traj_static_rot(s_trj_traj_static *self, vlf_t time, vlf_t *rot)
 {
+	if (self->ellp_en == 0x00)
+	{ vl_mcopy(rot, self->rot); }
+	
+	else
+	{ vl_mcopy(rot, self->rot_cache); }
+	
+	vlf_t rot_[9];
+	vl_mmul_m(rot_, &self->ref->rot[0][0], rot);
+	vl_mcopy(rot, rot_);
 	
 	return 0x00;
 }
@@ -187,6 +206,244 @@ inline uint8_t trj_traj_static_info_(void *data, s_trj_traj_info *info)
 //------------------------------------------------------------------------------
 
 
+#define trj_traj_orb_id (0x00000002)
+
+typedef struct trj_traj_orb
+{
+	s_trj_eng 	*eng;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
+	
+	uint8_t 	sync_en;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_orb;
+
+typedef struct trj_traj_orb_init
+{
+	s_trj_eng *eng;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
+	
+	uint8_t 	sync_en;
+	
+	vlf_t       radius;
+	vlf_t       rate;
+	vlf_t       tilt[9];
+	
+	vlf_t       s_rate;
+	vlf_t       s_tilt[9];
+	
+} 	s_trj_traj_orb_init;
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
+{
+	self->eng    	= attr.eng;
+	
+	self->ref = attr.ref;
+	self->ref_hash = self->ref->hash;
+	
+	self->sync_en  = attr.sync_en;
+	
+	self->radius = attr.radius;
+	self->rate   = attr.rate;
+	
+	vl_mcopy(self->tilt, attr.tilt);
+	
+	self->s_rate = attr.s_rate;
+	vl_mcopy(self->s_tilt, attr.s_tilt);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_save(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_load(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	self->ref = trj_eng_find_obj(self->eng, self->ref_hash);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_compile(s_trj_traj_orb *self)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
+{
+	switch (self->sync_en)
+	{
+		default:
+		case 0x00:
+		{
+			vlf_t angle = self->rate * time;
+			vlf_t pos_t[3];
+			vlf_t pos_n[3];
+			
+			pos_t[0] = vl_sin(angle) * self->radius;
+			pos_t[1] = 0.0;
+			pos_t[2] = vl_cos(angle) * self->radius;
+			
+			vl_mmul_v(pos_n, self->tilt, pos_t);
+			
+			vl_vsum(pos, pos_n, self->ref->pos[0]);
+			
+			return 0x00;
+		}
+		
+		case 0x01:
+		{
+			vlf_t angle = self->rate * time;
+			vlf_t pos_t[3];
+			vlf_t pos_n[3];
+			
+			pos_t[0] = vl_sin(angle) * self->radius;
+			pos_t[1] = 0.0;
+			pos_t[2] = vl_cos(angle) * self->radius;
+			
+			vl_mmul_v(pos_n, self->tilt, pos_t);
+			vl_mmul_v(pos, self->ref->rot[0], pos_n);
+			
+			vl_vsum(pos, pos, self->ref->pos[0]);
+			
+			return 0x00;
+		}
+	}
+	
+	return 0x01;
+}
+
+inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
+{
+	switch (self->sync_en)
+	{
+		default:
+		case 0x00:
+		{
+			vlf_t angle = self->s_rate * time;
+			
+			vlf_t rot_t[9];
+			
+			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
+					.heading = angle, .pitch = 0.0, .roll = 0.0
+			});
+			
+			vl_mmul_m(rot, self->s_tilt, rot_t);
+			
+			return 0x00;
+			
+			break;
+		}
+		
+		case 0x01:
+		{
+			vlf_t angle = self->s_rate * time;
+			
+			vlf_t rot_t[9];
+			vlf_t rot_n[9];
+			
+			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
+					.heading = angle, .pitch = 0.0, .roll = 0.0
+			});
+			
+			vl_mmul_m(rot_n, self->s_tilt, rot_t);
+			vl_mmul_m(rot, self->ref->rot[0], rot_n);
+			
+			return 0x00;
+			
+			break;
+		}
+	}
+	
+	return 0x01;
+}
+
+//------------------------------------------------------------------------------
+
+// API
+//uint8_t (*init) 		(void *data, void *config)
+//uint8_t (*free) 		(void *data);
+//uint8_t (*compile) 	(void *data);
+//uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
+//uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
+
+inline uint8_t trj_traj_orb_init_ (void **data, void *config)
+{
+	*data = (s_trj_traj_orb*) malloc(sizeof(s_trj_traj_orb));
+	
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
+	s_trj_traj_orb_init *init = (s_trj_traj_orb_init*) config;
+	
+	return trj_traj_orb_init(traj, *init);
+}
+
+inline uint8_t trj_traj_orb_free_ (void **data)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
+	
+	free(traj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_orb_save_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
+	
+	return trj_traj_orb_save(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_orb_load_ (void *data, void *config, uint8_t **v_file)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
+	return trj_traj_orb_load(traj, attr, v_file);
+}
+
+inline uint8_t trj_traj_orb_compile_(void *data)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	
+	return trj_traj_orb_compile(traj);
+}
+
+inline uint8_t trj_traj_orb_pos_(void *data, vlf_t time, vlf_t *pos)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	
+	return trj_traj_orb_pos(traj, time, pos);
+}
+
+inline uint8_t trj_traj_orb_rot_(void *data, vlf_t time, vlf_t *rot)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	
+	return trj_traj_orb_rot(traj, time, rot);
+}
+
+inline uint8_t trj_traj_orb_info_(void *data, s_trj_traj_info *info)
+{
+	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
+	
+	info->preview_time[0] = 0.0;
+	info->preview_time[1] = vl_2pi / traj->rate;
+	
+	return 0x00;
+}
 
 //------------------------------------------------------------------------------
 
@@ -540,8 +797,9 @@ inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	return 0x00;
 }
 
-inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
+inline uint8_t trj_traj_bz_pos_local(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 {
+	
 	uint32_t offset = 0x00;
 	
 	if (self->pts_offset == 0x00) { return 0x01; }
@@ -646,6 +904,17 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 		vlf_t lla[3] = { pos[2], pos[0], pos[1] };
 		trj_ellp_ecef(self->ellp, pos, lla);
 	}
+	
+	return 0x00;
+}
+
+inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
+{
+	trj_traj_bz_pos_local(self, time, pos);
+	
+	vlf_t pos_[3];
+	vl_mmul_v(pos_, &self->ref->rot[0][0], pos);
+	vl_vsum(pos, pos_, &self->ref->pos[0][0]);
 	
 	return 0x00;
 }
@@ -807,17 +1076,28 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		vl_cross(z, x, y);
 		vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
 		
-		vlf_t ecef_ctn[9];
-		trj_ellp_ecefrot(self->ellp, pos, ecef_ctn);
-		
-		vlf_t r_ref[9];
-		vlf_t *r_inr = rot;
-
 		vlf_t rot_nwh[9];
 		vl_tnp(rot_nwh, rot_nwh_tnp);
 		
-		vl_mmul_v(r_ref, ecef_ctn, rot_nwh);
-		vl_mmul_v(r_inr, &self->ref->rot[0][0], r_ref);
+		s_trj_rot_hpr rot_nwh_hpr;
+		trj_ctn_to_hpr(&rot_nwh_hpr, rot_nwh);
+		rot_nwh_hpr.roll = 0.0;
+		trj_hpr_to_ctn(rot_nwh, rot_nwh_hpr);
+		
+//		vl_mprint(rot_nwh);
+//		fflush(stdout);
+		
+		vlf_t pos_ecef[3];
+		trj_traj_bz_pos_local(self, time, pos_ecef);
+		
+		vlf_t ecef_ctn[9];
+		trj_ellp_ecefrot(self->ellp, pos_ecef, ecef_ctn);
+		
+		vlf_t r_ref[9];
+		vlf_t *r_inr = rot;
+		
+		vl_mmul_m(r_ref, ecef_ctn, rot_nwh);
+		vl_mmul_m(r_inr, &self->ref->rot[0][0], r_ref);
 	}
 	
 	return 0x00;
@@ -916,247 +1196,5 @@ inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
 }
 
 //------------------------------------------------------------------------------
-
-#define trj_traj_orb_id (0x00000002)
-
-typedef struct trj_traj_orb
-{
-	s_trj_eng 	*eng;
-	s_trj_obj 	*ref;
-	uint32_t 	ref_hash;
-	
-	uint8_t 	sync_en;
-	
-	vlf_t       radius;
-	vlf_t       rate;
-	vlf_t       tilt[9];
-	
-	vlf_t       s_rate;
-	vlf_t       s_tilt[9];
-	
-} 	s_trj_traj_orb;
-
-typedef struct trj_traj_orb_init
-{
-	s_trj_eng *eng;
-	s_trj_obj 	*ref;
-	uint32_t 	ref_hash;
-	
-	uint8_t 	sync_en;
-	
-	vlf_t       radius;
-	vlf_t       rate;
-	vlf_t       tilt[9];
-	
-	vlf_t       s_rate;
-	vlf_t       s_tilt[9];
-	
-} 	s_trj_traj_orb_init;
-
-//------------------------------------------------------------------------------
-
-inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
-{
-	self->eng    	= attr.eng;
-	
-	self->ref = attr.ref;
-	self->ref_hash = self->ref->hash;
-	
-	self->sync_en  = attr.sync_en;
-	
-	self->radius = attr.radius;
-	self->rate   = attr.rate;
-	
-	vl_mcopy(self->tilt, attr.tilt);
-	
-	self->s_rate = attr.s_rate;
-	vl_mcopy(self->s_tilt, attr.s_tilt);
-	
-	return 0x00;
-}
-
-inline uint8_t trj_traj_orb_save(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
-{
-	return 0x00;
-}
-
-inline uint8_t trj_traj_orb_load(s_trj_traj_orb *self, s_trj_traj_orb_init *attr, uint8_t **v_file)
-{
-	self->eng = attr->eng;
-	self->ref = trj_eng_find_obj(self->eng, self->ref_hash);
-	
-	return 0x00;
-}
-
-inline uint8_t trj_traj_orb_compile(s_trj_traj_orb *self)
-{
-	return 0x00;
-}
-
-inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
-{
-	switch (self->sync_en)
-	{
-		default:
-		case 0x00:
-		{
-			vlf_t angle = self->rate * time;
-			vlf_t pos_t[3];
-			vlf_t pos_n[3];
-			
-			pos_t[0] = vl_sin(angle) * self->radius;
-			pos_t[1] = 0.0;
-			pos_t[2] = vl_cos(angle) * self->radius;
-			
-			vl_mmul_v(pos_n, self->tilt, pos_t);
-			
-			vl_vsum(pos, pos_n, self->ref->pos[0]);
-			
-			return 0x00;
-		}
-		
-		case 0x01:
-		{
-			vlf_t angle = self->rate * time;
-			vlf_t pos_t[3];
-			vlf_t pos_n[3];
-			
-			pos_t[0] = vl_sin(angle) * self->radius;
-			pos_t[1] = 0.0;
-			pos_t[2] = vl_cos(angle) * self->radius;
-			
-			vl_mmul_v(pos_n, self->tilt, pos_t);
-			vl_mmul_v(pos, self->ref->rot[0], pos_n);
-			
-			vl_vsum(pos, pos, self->ref->pos[0]);
-			
-			return 0x00;
-		}
-	}
-	
-	return 0x01;
-}
-
-inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
-{
-	switch (self->sync_en)
-	{
-		default:
-		case 0x00:
-		{
-			vlf_t angle = self->s_rate * time;
-			
-			vlf_t rot_t[9];
-			
-			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
-					.heading = angle, .pitch = 0.0, .roll = 0.0
-			});
-			
-			vl_mmul_m(rot, self->s_tilt, rot_t);
-			
-			return 0x00;
-			
-			break;
-		}
-		
-		case 0x01:
-		{
-			vlf_t angle = self->s_rate * time;
-			
-			vlf_t rot_t[9];
-			vlf_t rot_n[9];
-			
-			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
-					.heading = angle, .pitch = 0.0, .roll = 0.0
-			});
-			
-			vl_mmul_m(rot_n, self->s_tilt, rot_t);
-			vl_mmul_m(rot, self->ref->rot[0], rot_n);
-			
-			return 0x00;
-			
-			break;
-		}
-	}
-	
-	return 0x01;
-}
-
-//------------------------------------------------------------------------------
-
-// API
-//uint8_t (*init) 		(void *data, void *config)
-//uint8_t (*free) 		(void *data);
-//uint8_t (*compile) 	(void *data);
-//uint8_t (*rot) 		(void *data, vlf_t time, vlf_t *pos);
-//uint8_t (*pos) 		(void *data, vlf_t time, vlf_t *rot);
-
-inline uint8_t trj_traj_orb_init_ (void **data, void *config)
-{
-	*data = (s_trj_traj_orb*) malloc(sizeof(s_trj_traj_orb));
-	
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
-	s_trj_traj_orb_init *init = (s_trj_traj_orb_init*) config;
-	
-	return trj_traj_orb_init(traj, *init);
-}
-
-inline uint8_t trj_traj_orb_free_ (void **data)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) *data;
-	
-	free(traj);
-	
-	return 0x00;
-}
-
-inline uint8_t trj_traj_orb_save_ (void *data, void *config, uint8_t **v_file)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
-	
-	return trj_traj_orb_save(traj, attr, v_file);
-}
-
-inline uint8_t trj_traj_orb_load_ (void *data, void *config, uint8_t **v_file)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	s_trj_traj_orb_init *attr = (s_trj_traj_orb_init*) config;
-	return trj_traj_orb_load(traj, attr, v_file);
-}
-
-inline uint8_t trj_traj_orb_compile_(void *data)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	
-	return trj_traj_orb_compile(traj);
-}
-
-inline uint8_t trj_traj_orb_pos_(void *data, vlf_t time, vlf_t *pos)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	
-	return trj_traj_orb_pos(traj, time, pos);
-}
-
-inline uint8_t trj_traj_orb_rot_(void *data, vlf_t time, vlf_t *rot)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	
-	return trj_traj_orb_rot(traj, time, rot);
-}
-
-inline uint8_t trj_traj_orb_info_(void *data, s_trj_traj_info *info)
-{
-	s_trj_traj_orb *traj = (s_trj_traj_orb*) data;
-	
-	info->preview_time[0] = 0.0;
-	info->preview_time[1] = vl_2pi / traj->rate;
-	
-	return 0x00;
-}
-
-//------------------------------------------------------------------------------
-
 
 #endif /* __TRJ_TRAJ__ */
