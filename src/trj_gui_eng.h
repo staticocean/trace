@@ -372,17 +372,9 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	}
 	
 	ImGui::PopStyleVar();
-	
+
 	ImGui::EndChild();
 	
-//	if (ImGui::BeginPopupContextItem("view"))
-//	{
-//		if (ImGui::Selectable("new object"))
-//		{ trj_eng_add_obj(self, (s_trj_obj_init) {.desc = "new object"}); }
-//
-//		ImGui::EndPopup();
-//	}
-//
 	return 0x00;
 }
 
