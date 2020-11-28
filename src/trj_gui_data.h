@@ -36,7 +36,7 @@ inline void trj_gui_data_edit(s_trj_data *self)
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_data_text_edit(s_trj_data *self)
+inline void trj_gui_data_edit_text(s_trj_data *self)
 {
 	s_trj_data_text *data = (s_trj_data_text*) self->data;
 	
@@ -104,7 +104,7 @@ inline void trj_gui_data_text_view(s_trj_data *self)
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_data_ram_edit(s_trj_data *self)
+inline void trj_gui_data_edit_ram(s_trj_data *self)
 {
 	ImGui::Text("desc  ");
 	ImGui::SameLine();
@@ -140,7 +140,7 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 	{
 		s_vl3d_eng vl3d_eng;
 		
-		s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (*data->data_offset + 4096));
+		s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (*data->data_offset*2 + 4096));
 		
 		s_vl3d_view view = {
 				.scale = 1.0,
@@ -161,6 +161,7 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 		
 		s_vl3d_line line = {.color = vl3d_col_l};
 		
+		// pos
 		if (*data->data_offset > 10000)
 		{
 			for (int di = *data->data_offset / 10000, i = 0;
@@ -179,6 +180,65 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 				vl_vcopy(line.p1, &data->data_list[i + 1].pos[0][0]);
 				
 				vl3d_eng_add_line(&vl3d_eng, line);
+			}
+		}
+		
+		s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
+	
+//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
+//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
+//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
+//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
+		
+		// hpr
+		if (*data->data_offset > 100)
+		{
+			for (int di = *data->data_offset / 100, i = 0;
+				 i < 100 - 1; ++i)
+			{
+				vl_vcopy(trngl.p0, &data->data_list[i * di].pos[0][0]);
+				vl_vcopy(trngl.p1, &data->data_list[i * di].pos[0][0]);
+				vl_vcopy(trngl.p2, &data->data_list[i * di].pos[0][0]);
+				
+				vlf_t rot[9];
+				vl_tnp(rot, &data->data_list[i * di].rot[0][0]);
+				vl_mmul_s(rot, rot, 0.025 / view.scale);
+				
+				// top middle
+				
+				vl_vmul_s(&rot[0], &rot[0], 2.0);
+				vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+				
+				// left
+				vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+				
+				// right
+				vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+				
+				vl3d_eng_add_trngl(&vl3d_eng, trngl);
+			}
+		} else
+		{
+			for (int i = 0; i < *data->data_offset - 1; ++i)
+			{
+				vl_vcopy(trngl.p0, &data->data_list[i].pos[0][0]);
+				vl_vcopy(trngl.p1, &data->data_list[i].pos[0][0]);
+				vl_vcopy(trngl.p2, &data->data_list[i].pos[0][0]);
+				
+				vlf_t rot[9];
+				vl_tnp(rot, &data->data_list[i].rot[0][0]);
+				vl_mmul_s(rot, rot, 10.0 / view.scale);
+				
+				// top middle
+				vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+				
+				// left
+				vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+				
+				// right
+				vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+				
+				vl3d_eng_add_trngl(&vl3d_eng, trngl);
 			}
 		}
 		
@@ -216,27 +276,18 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 		{
 			time[i] = data->data_list[i].time[0];
 			
+			vlf_t acc_tied[3];
+			
+			vl_mmul_v(acc_tied, &data->data_list[i].rot[0][0], &data->data_list[i].pos[2][0]);
+			
 			for (int j = 0; j < 3; ++j)
 			{
 				pos[j][i] = data->data_list[i].pos[0][j];
 				vel[j][i] = data->data_list[i].pos[1][j];
-				acc[j][i] = data->data_list[i].pos[2][j];
+				acc[j][i] = acc_tied[j];
 			}
 		}
-		
-//		ImGui::PushStyleVar(ImGuiStyleVar_)
-		
-//		ImGui::PlotLines("pos_0", pos[0], *data->data_offset);
-//		ImGui::PlotLines("pos_1", pos[1], *data->data_offset);
-//		ImGui::PlotLines("pos_2", pos[2], *data->data_offset);
-//
-//		ImGui::PlotLines("vec_0", vec[0], *data->data_offset);
-//		ImGui::PlotLines("vec_1", vec[1], *data->data_offset);
-//		ImGui::PlotLines("vec_2", vec[2], *data->data_offset);
-//
-//		ImGui::PlotLines("acc_0", acc[0], *data->data_offset);
-//		ImGui::PlotLines("acc_1", acc[1], *data->data_offset);
-//		ImGui::PlotLines("acc_2", acc[2], *data->data_offset);
+
 		if (ImPlot::BeginPlot("acc"))
 		{
 			// hide first and last

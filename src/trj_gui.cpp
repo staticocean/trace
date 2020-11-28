@@ -41,6 +41,34 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	trj_eng_add_ellpapi(&self->eng, trj_ellp_wgs84);
 	
+	static s_trj_traj_static_init trj_traj_static_config_ = {
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+			
+			.ellp_en = 0x00,
+			.ellp = NULL,
+			
+			.pos = { 0, 0, 0 },
+			.rot = { 1, 0, 0, 0, 1, 0, 0, 0, 1 },
+	};
+	
+	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
+			.name = "default_traj_static",
+			.desc = "default_traj_static",
+			.init = trj_traj_static_init_,
+			.free = trj_traj_static_free_,
+			.save = trj_traj_static_save_,
+			.load = trj_traj_static_load_,
+			.data_size = sizeof(s_trj_traj_static),
+			.data = NULL,
+			.config_size = sizeof(s_trj_traj_static_init),
+			.config = &trj_traj_static_config_,
+			.compile = trj_traj_static_compile_,
+			.rot  = trj_traj_static_rot_,
+			.pos  = trj_traj_static_pos_,
+			.info = trj_traj_static_info_,
+	});
+	
 	static s_trj_traj_orb_init trj_traj_orb_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
@@ -369,11 +397,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
 	
-	const uint32_t traj_orb_hash = vl_crc32("default_traj_orb");
-	const uint32_t traj_bz_hash  = vl_crc32("default_traj_bz");
+	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
+	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
+	const uint32_t traj_hash_bz     = vl_crc32("default_traj_bz");
 	
-	const uint32_t data_text_hash = vl_crc32("default_data_text");
-	const uint32_t data_ram_hash  = vl_crc32("default_data_ram");
+	const uint32_t data_hash_text = vl_crc32("default_data_text");
+	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
 	
 	trj_gui_menu_main(&self->gui_menu);
 	
@@ -426,8 +455,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					trj_gui_traj_edit(traj);
 					
-					if      (traj->hash == traj_orb_hash) { trj_gui_traj_orb_edit (traj); }
-					else if (traj->hash == traj_bz_hash ) { trj_gui_traj_bz_edit  (traj); }
+					if      (traj->hash == traj_hash_static) { trj_gui_traj_edit_static (traj); }
+					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_edit_orb    (traj); }
+					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
 					
 					break;
 				}
@@ -445,8 +475,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					trj_gui_data_edit(data);
 					
-					if      (data->hash == data_text_hash) { trj_gui_data_text_edit (data); }
-					else if (data->hash == data_ram_hash ) { trj_gui_data_ram_edit  (data); }
+					if      (data->hash == data_hash_text) { trj_gui_data_edit_text (data); }
+					else if (data->hash == data_hash_ram ) { trj_gui_data_edit_ram  (data); }
 					
 					break;
 				}
@@ -483,8 +513,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					
-					if      (traj->hash == traj_orb_hash) { trj_gui_traj_orb_view (traj); }
-					else if (traj->hash == traj_bz_hash ) { trj_gui_traj_bz_view  ((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
+					if      (traj->hash == traj_hash_static) { trj_gui_traj_view_static (traj); }
+					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_view_orb    (traj); }
+					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_view_bz((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
 					
 					break;
 				}
@@ -498,8 +529,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					
-					if      (data->hash == data_text_hash) { trj_gui_data_text_view (data); }
-					else if (data->hash == data_ram_hash ) { trj_gui_data_ram_view  (data); }
+					if      (data->hash == data_hash_text) { trj_gui_data_text_view (data); }
+					else if (data->hash == data_hash_ram ) { trj_gui_data_ram_view  (data); }
 					
 					break;
 				}
