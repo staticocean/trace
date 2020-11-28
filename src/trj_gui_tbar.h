@@ -42,19 +42,19 @@ inline uint8_t trj_gui_tbar_main(s_trj_gui_tbar *gui)
 
 //	ImGui::Text("time_limit"); ImGui::SameLine();
 	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &gui->eng_gui->time_limit, 1.0, &time_limit_min, NULL, "T:%.0f");
+	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &gui->eng->time_limit, 1.0, &time_limit_min, NULL, "T:%.0f");
 	ImGui::SameLine();
 
 //	ImGui::Text("time_step"); ImGui::SameLine();
 	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &gui->eng_gui->time_step, 0.001, &time_step_min, &time_step_max, "S:%.3f");
+	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &gui->eng->time_step, 0.001, &time_step_min, &time_step_max, "S:%.3f");
 	ImGui::SameLine();
 	
-	gui->eng_gui->time_iter = gui->eng_gui->time_limit / gui->eng_gui->time_step;
+	gui->eng->time_iter = gui->eng->time_limit / gui->eng->time_step;
 
 //	ImGui::Text("time_step"); ImGui::SameLine();
 	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_iter", ImGuiDataType_U32, &gui->eng_gui->time_iter, 1.0, &time_iter_min, NULL, "I:%d");
+	ImGui::DragScalar("##time_iter", ImGuiDataType_U32, &gui->eng->time_iter, 1.0, &time_iter_min, NULL, "I:%d");
 	ImGui::SameLine();
 
 //	*self->time_limit = *self->time_iter * *self->time_step;

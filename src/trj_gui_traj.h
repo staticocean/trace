@@ -71,6 +71,16 @@ inline void trj_gui_traj_bz_edit(s_trj_traj *self)
 	
 	s_trj_traj_bz *traj = (s_trj_traj_bz*) self->data;
 	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (traj->ref  != NULL) { traj->ref_hash  = traj->ref->hash ; }
+	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
 	vl_gui_hash("##hash", self->hash);
@@ -763,6 +773,15 @@ inline void trj_gui_traj_orb_edit(s_trj_traj *self)
 	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
 	ImGui::PushID(self);
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
