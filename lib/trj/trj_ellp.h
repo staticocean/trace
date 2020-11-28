@@ -225,8 +225,8 @@ inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *nwh)
 	vlf_t M = self->a * self->p1mee / vl_pow(temp, 1.5);
 	vlf_t N = self->a / vl_pow(temp, 0.5);
 	
-	nwh[0] = lla[0] / M;
-	nwh[1] = lla[1] / N;
+	nwh[0] = lla[0] * M;
+	nwh[1] = lla[1] * (N * vl_cos(lla[0]));
 	
 	return;
 }
