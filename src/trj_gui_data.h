@@ -191,10 +191,10 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 //		vl3d_eng_add_trngl(&vl3d_eng, trngl);
 		
 		// hpr
-		if (*data->data_offset > 100)
+		if (*data->data_offset > 20)
 		{
-			for (int di = *data->data_offset / 100, i = 0;
-				 i < 100 - 1; ++i)
+			for (int di = *data->data_offset / 20, i = 0;
+				 i < 20 - 1; ++i)
 			{
 				vl_vcopy(trngl.p0, &data->data_list[i * di].pos[0][0]);
 				vl_vcopy(trngl.p1, &data->data_list[i * di].pos[0][0]);

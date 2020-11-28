@@ -326,8 +326,34 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 		{ vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f"); }
 		
 		else
-		{ vl_gui_vec("point", traj->pts[i].pos_p, 0.001, NULL, NULL, "%.3f"); }
+		{
+			ImGui::BeginGroup();
+			
+			vlf_t time_min = 0.0;
+			ImGui::SetNextItemWidth(50);
+			ImGui::DragScalar("##time", ImGuiDataType_Double, &traj->pts[i].time, 1.0, &time_min, NULL, "%.0f");
+			ImGui::SameLine();
+			
+			vlf_t lla_deg[3] = { vl_deg(traj->pts[i].pos_p[2]), vl_deg(traj->pts[i].pos_p[0]), traj->pts[i].pos_p[1] };
+			vl_gui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 		
+			traj->pts[i].pos_p[0] = vl_rad(lla_deg[1]);
+			traj->pts[i].pos_p[1] = vl_rad(lla_deg[2]);
+			traj->pts[i].pos_p[2] = vl_rad(lla_deg[0]);
+			
+			ImGui::EndGroup();
+			
+			if (ImGui::BeginPopupContextItem("edit"))
+			{
+				if (ImGui::Selectable("delete")) {
+					trj_traj_bz_rem(traj, i);
+					trj_traj_bz_compile(traj);
+				}
+				
+				ImGui::EndPopup();
+			}
+		}
+	
 		ImGui::PopID();
 	}
 	
