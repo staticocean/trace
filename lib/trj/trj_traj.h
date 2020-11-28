@@ -773,7 +773,12 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 	trj_traj_bz_vel(self, time, vel);
 	trj_traj_bz_pos(self, time, pos);
 	
-	if (self->ellp_en != 0x00)
+	if (self->ellp_en == 0x00)
+	{
+	
+	}
+	
+	else
 	{
 		vlf_t nwh[3];
 		trj_ellp_nwhvel(self->ellp, vel, nwh);
@@ -788,8 +793,12 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		vlf_t *y = &rot_nwh_tnp[3];
 		vlf_t *z = &rot_nwh_tnp[6];
 		
+//		vl_mprint(rot_nwh_tnp);
+
 		vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
 		
+//		vl_mprint(rot_nwh_tnp);
+
 		vlf_t xy[3];
 		vl_vmul_s(xy, x, vl_vdot(x,y));
 		vl_vsub(y, y, xy);
