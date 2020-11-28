@@ -49,9 +49,9 @@ typedef struct trj_traj_bz
 	uint32_t 	pts_size;
 	uint32_t 	pts_offset;
 	
-	uint8_t ellp_en;
-	s_trj_ellp *ellp;
-	uint32_t ellp_hash;
+	uint8_t 	ellp_en;
+	s_trj_ellp 	*ellp;
+	uint32_t 	ellp_hash;
 	
 } 	s_trj_traj_bz;
 

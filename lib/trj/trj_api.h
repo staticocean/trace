@@ -18,8 +18,6 @@ typedef struct trj_ellp
 	char desc[32];
 	uint32_t hash;
 	
-	char name[32];
-	
 	vlf_t a;
 	vlf_t b;
 	vlf_t c;
@@ -228,8 +226,6 @@ typedef struct trj_proc
 	char desc[32];
 	uint64_t hash;
 	
-	char name[32];
-	
 	uint32_t config_size;
 	void *config;
 	
@@ -264,8 +260,6 @@ typedef struct trj_obj
 {
 	char desc[32];
 	uint32_t hash;
-	
-	char name[32];
 	
 	vlf_t *time;
 	
@@ -410,6 +404,10 @@ typedef struct trj_eng
 	s_trj_obj 	*obj_list;
 	
 	vlf_t 		time[2];
+	
+	vlf_t 		time_limit;
+	vlf_t 		time_step;
+	uint32_t 	time_iter;
 	
 	s_trj_proc 	*proc;
 	
@@ -771,6 +769,10 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 	v_file += sizeof(s_trj_eng);
 	
 	self->obj_count = v_self->obj_count;
+	self->time_limit = v_self->time_limit;
+	self->time_step = v_self->time_step;
+	if (self->time_step < 1E-6) { self->time_step = 1E-6; }
+	self->time_iter = self->time_limit / self->time_step;
 	
 	for (i = 0; i < self->obj_count; ++i)
 	{
