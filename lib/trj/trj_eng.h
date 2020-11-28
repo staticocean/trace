@@ -31,6 +31,9 @@ typedef struct trj_eng_init_attr
 	s_trj_data 	*data_list;
 	s_trj_proc 	*proc_list;
 	
+	float64_t 	time_limit;
+	float64_t 	time_step;
+	
 }	s_trj_eng_init;
 
 //------------------------------------------------------------------------------
@@ -53,6 +56,11 @@ inline void trj_eng_print(s_trj_eng *eng)
 
 inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 {
+	self->time_limit = attr.time_limit;
+	self->time_step  = attr.time_step;
+	if (self->time_step < 1E-6) { self->time_step = 1E-6; }
+	self->time_iter = self->time_limit / self->time_step;
+	
 	self->ellp_list = attr.ellp_list;
 	self->ellp_offset = 0x00;
 	
@@ -138,7 +146,7 @@ inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 
 //------------------------------------------------------------------------------
 
-inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
+inline uint8_t trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
 {
 	s_trj_obj *obj = &self->obj_list[self->obj_count];
 	
@@ -150,6 +158,37 @@ inline uint8_t trj_eng_add(s_trj_eng *self, s_trj_obj_init attr)
 	obj->log_offset = 0x00;
 	
 	self->obj_count++;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_eng_del_obj(s_trj_eng *self, uint32_t index)
+{
+	s_trj_obj *obj = &self->obj_list[index];
+	
+	uint32_t i;
+	
+	if (obj->log_list != NULL)
+	{
+		free(obj->log_list);
+		obj->log_list = NULL;
+	}
+	
+	for (i = 0; i < obj->traj_offset; ++i)
+	{ obj->traj_list[i].free(&obj->traj_list[i].data); }
+	
+	for (i = 0; i < obj->ctrl_offset; ++i)
+	{ obj->ctrl_list[i].free(&obj->ctrl_list[i].data); }
+	
+	for (i = 0; i < obj->data_offset; ++i)
+	{ obj->data_list[i].free(&obj->data_list[i].data); }
+	
+	for (i = index; i < self->obj_count; ++i)
+	{ self->obj_list[i] = self->obj_list[i+1]; }
+	
+	--self->obj_count;
 	
 	return 0x00;
 }
