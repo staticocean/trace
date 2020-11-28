@@ -168,4 +168,69 @@ inline uint8_t trj_ellp_lla(s_trj_ellp *ellp, vlf_t *lla, vlf_t *ecef)
 
 //------------------------------------------------------------------------------
 
+inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
+{
+	vlf_t ctn_tnp[9];
+	
+	vlf_t *x = &ctn_tnp[0];
+	vlf_t *y = &ctn_tnp[3];
+	vlf_t *z = &ctn_tnp[6];
+	
+	vlf_t lla[3];
+	vlf_t lla_d[3]; // down
+	vlf_t ecef_d[3];
+	
+	trj_ellp_lla(self, lla, ecef);
+	vl_vcopy(lla_d, lla);
+	lla_d[2] -= 1000;
+	trj_ellp_ecef(self, ecef_d, lla_d);
+
+//	y = lla_to_ecef(lla_ref).vec - lla_to_ecef(lla_bot).vec;
+//	y = y / scipy.linalg.norm(y);
+//
+	vl_vsub(y, lla, lla_d);
+	vl_vmul_s(y, y, 1.0 / vl_vnorm(y));
+
+//	x = numpy.array([0.0, 6.3781E+6, 0.0]) -pos_ecef.vec;
+//	x = x / scipy.linalg.norm(x);
+//	x = x - y * numpy.dot(x, y);
+//	x = x / scipy.linalg.norm(x);
+	
+	vl_vsub(x, (vlf_t[3]) { 0.0, self->a, 0.0 }, ecef);
+	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+	
+	vlf_t xy[3];
+	vl_vmul_s(xy, y, vl_vdot(x, y));
+	vl_vsub(x, x, xy);
+	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+//
+//	z = numpy.cross(x, y);
+//	z = z / scipy.linalg.norm(z);
+	
+	vl_cross(z, x, y);
+	vl_vmul_s(z, z, vl_vnorm(z));
+	
+	vl_tnp(c_tn, ctn_tnp);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *nwh)
+{
+	vlf_t sin_lat = vl_sin(lla[0]);
+	vlf_t temp = 1 - self->ee * sin_lat*sin_lat;
+	
+	vlf_t M = self->a * self->p1mee / vl_pow(temp, 1.5);
+	vlf_t N = self->a / vl_pow(temp, 0.5);
+	
+	nwh[0] = lla[0] / M;
+	nwh[1] = lla[1] / N;
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __TRJ_ELLP__ */
