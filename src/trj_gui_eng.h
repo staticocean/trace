@@ -42,10 +42,6 @@ typedef enum trj_gui_eng_state_t
 
 typedef struct trj_gui_eng
 {
-	float64_t 			time_limit;
-	float64_t 			time_step;
-	uint32_t 			time_iter;
-	
 	trj_gui_eng_state_t state;
 	
 	void* sel_item;
@@ -118,13 +114,6 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	static ImGuiTextFilter filter;
 	static void* selected_item = NULL;
 	
-	char* filter_data[self->obj_count];
-	
-	for (int i = 0; i < self->obj_count; ++i)
-	{
-		filter_data[i] = self->obj_list[i].desc;
-	}
-	
 	ImGui::SetNextItemWidth(-1);
 	filter.Draw("");
 	
@@ -132,17 +121,19 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
+	ImGui::BeginChild("##tree_view");
+	
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
 	
-	for (int i = 0; i < IM_ARRAYSIZE(filter_data); i++)
+	for (int i = 0; i < self->obj_count; i++)
 	{
 		ImGui::PushID(i);
 		
-		if (filter.PassFilter((char*) filter_data[i]))
+		s_trj_gui_obj *obj_gui = &gui->obj_list[i];
+		s_trj_obj *obj = obj_gui->ref;
+		
+		if (filter.PassFilter(obj->desc))
 		{
-			s_trj_gui_obj *obj_gui = &gui->obj_list[i];
-			s_trj_obj *obj = obj_gui->ref;
-			
 			bool node_sel = gui->sel_item == &gui->obj_list[i];
 			
 			bool node_open = ImGui::TreeNodeEx((void*) i,
@@ -150,12 +141,20 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 											   | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
 											   (char*) obj->desc);
 			
-			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, obj_gui); }
+			if (ImGui::BeginPopupContextItem("obj_options"))
+			{
+				if (ImGui::Selectable("delete"))
+				{
+					if (gui->sel_item == obj_gui)
+					{ gui->sel_item = NULL; }
+					
+					trj_eng_del_obj(self, i);
+				}
+				
+				ImGui::EndPopup();
+			}
 			
-			ImGui::SameLine();
-			char *hide_label[2] = { "hide", "show" };
-			if (ImGui::SmallButton(hide_label[obj_gui->hide]))
-			{ obj_gui->hide = !obj_gui->hide; }
+			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, obj_gui); }
 			
 			if (node_open)
 			{
@@ -199,21 +198,24 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 							
 							bool traj_sel = gui->sel_item == &obj->traj_list[j];
 							
-							ImGui::TreeNodeEx(obj->traj_list[j].desc,
+							ImGui::TreeNodeEx(obj->traj_list[j].name,
 											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].desc);
+											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].name);
 							
 							if (ImGui::IsItemClicked())
 							{ trj_gui_eng_sel_traj(gui, &obj->traj_list[j]); }
 							
-							ImGui::SameLine();
-							
-							if (ImGui::SmallButton("del##del_traj"))
+							if (ImGui::BeginPopupContextItem("traj_menu"))
 							{
-								if (gui->sel_item == &obj->traj_list[j])
-								{ gui->sel_item = NULL; }
+								if (ImGui::Selectable("delete"))
+								{
+									if (gui->sel_item == &obj->traj_list[j])
+									{ gui->sel_item = NULL; }
+									
+									trj_obj_del_traj(obj, &obj->traj_list[j]);
+								}
 								
-								trj_obj_del_traj(obj, &obj->traj_list[j]);
+								ImGui::EndPopup();
 							}
 							
 							ImGui::TreePop();
@@ -265,21 +267,24 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 							
 							bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
 							
-							ImGui::TreeNodeEx(obj->ctrl_list[j].desc,
+							ImGui::TreeNodeEx(obj->ctrl_list[j].name,
 											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].desc);
+											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].name);
 							
 							if (ImGui::IsItemClicked())
 							{ trj_gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
 							
-							ImGui::SameLine();
-							
-							if (ImGui::SmallButton("del##del_ctrl"))
+							if (ImGui::BeginPopupContextItem("ctrl_menu"))
 							{
-								if (gui->sel_item == &obj->ctrl_list[j])
-								{ gui->sel_item = NULL; }
+								if (ImGui::Selectable("delete"))
+								{
+									if (gui->sel_item == &obj->ctrl_list[j])
+									{ gui->sel_item = NULL; }
+									
+									trj_obj_del_ctrl(obj, &obj->ctrl_list[j]);
+								}
 								
-								trj_obj_del_ctrl(obj, &obj->ctrl_list[j]);
+								ImGui::EndPopup();
 							}
 							
 							ImGui::TreePop();
@@ -330,21 +335,24 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 							
 							bool ctrl_sel = gui->sel_item == &obj->data_list[j];
 							
-							ImGui::TreeNodeEx(obj->data_list[j].desc,
+							ImGui::TreeNodeEx(obj->data_list[j].name,
 											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].desc);
+											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].name);
 							
 							if (ImGui::IsItemClicked())
 							{ trj_gui_eng_sel_data(gui, &obj->data_list[j]); }
 							
-							ImGui::SameLine();
-							
-							if (ImGui::SmallButton("del##del_data"))
+							if (ImGui::BeginPopupContextItem("data_menu"))
 							{
-								if (gui->sel_item == &obj->data_list[j])
-								{ gui->sel_item = NULL; }
+								if (ImGui::Selectable("delete"))
+								{
+									if (gui->sel_item == &obj->data_list[j])
+									{ gui->sel_item = NULL; }
+									
+									trj_obj_del_data(obj, &obj->data_list[j]);
+								}
 								
-								trj_obj_del_data(obj, &obj->data_list[j]);
+								ImGui::EndPopup();
 							}
 							
 							ImGui::TreePop();
@@ -365,6 +373,16 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	ImGui::PopStyleVar();
 	
+	ImGui::EndChild();
+	
+//	if (ImGui::BeginPopupContextItem("view"))
+//	{
+//		if (ImGui::Selectable("new object"))
+//		{ trj_eng_add_obj(self, (s_trj_obj_init) {.desc = "new object"}); }
+//
+//		ImGui::EndPopup();
+//	}
+//
 	return 0x00;
 }
 
@@ -381,7 +399,7 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		case trj_gui_eng_state_init:
 		{
-			if (gui->time_step < 1E-9)
+			if (self->time_step < 1E-6)
 			{
 				gui->state = trj_gui_eng_state_standby;
 				return 0x01;
@@ -389,14 +407,14 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 			
 			trj_eng_reset(self);
 			
-			gui->time_iter = gui->time_limit / gui->time_step;
+			self->time_iter = self->time_limit / self->time_step;
 			
 			for (int i = 0; i < self->obj_count; ++i)
 			{
 				if (self->obj_list[i].log_list != NULL)
 				{ free(self->obj_list[i].log_list); }
 				
-				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * (gui->time_iter+1));
+				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * (self->time_iter+1));
 				self->obj_list[i].log_offset = 0x00;
 			}
 			
@@ -409,16 +427,16 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		case trj_gui_eng_state_update:
 		{
-			if (gui->time_step < 1E-9)
+			if (self->time_step < 1E-6)
 			{
 				gui->state = trj_gui_eng_state_standby;
 				return 0x01;
 			}
 			
 			// prevent overflowing buffers and time_limit
-			if ((self->time[0]+gui->time_step) < gui->time_limit)
+			if ((self->time[0]+self->time_step) < self->time_limit)
 			{
-				trj_eng_update(self, gui->time_step);
+				trj_eng_update(self, self->time_step);
 				trj_eng_log(self);
 			}
 			
@@ -471,7 +489,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 		if (gui->state == trj_gui_eng_state_update)
 		{
 			ImGui::Text("ctrl pass");
-			ImGui::BufferingBar("##progress", self->time[0] / gui->time_limit, ImVec2(400, 6), bg, col);
+			ImGui::BufferingBar("##progress", self->time[0] / self->time_limit, ImVec2(400, 6), bg, col);
 			
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 		}
