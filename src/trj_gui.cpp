@@ -562,6 +562,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			};
 			
 			vl3d_view_load(self, &view, view);
+			
 			view.scale = 1.0;
 			view.grid_pt_disp = 1.0;
 			view.tbar_en = 0x01;
@@ -571,9 +572,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			vl3d_eng_init(&vl3d, (s_vl3d_eng_init) { .obj_list = obj_list, });
 			
 			ImGuiIO io = ImGui::GetIO();
-			ImGuiStyle style = ImGui::GetStyle();
 			
-			int cnt = 8;
+			int cnt = 6;
 			static vlf_t a_time = 0.0;
 			a_time += 0.5 * io.DeltaTime;
 			vlf_t a_state = 0.5 * (1.0 + vl_sin(a_time));
