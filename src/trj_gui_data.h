@@ -277,8 +277,10 @@ inline void trj_gui_data_ram_view(s_trj_data *self)
 			time[i] = data->data_list[i].time[0];
 			
 			vlf_t acc_tied[3];
+			vlf_t rot_tnp[9];
 			
-			vl_mmul_v(acc_tied, &data->data_list[i].rot[0][0], &data->data_list[i].pos[2][0]);
+			vl_tnp(rot_tnp, &data->data_list[i].rot[0][0]);
+			vl_mmul_v(acc_tied, rot_tnp, &data->data_list[i].pos[2][0]);
 			
 			for (int j = 0; j < 3; ++j)
 			{
