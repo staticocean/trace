@@ -24,6 +24,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
+			.time_limit = 3600.0,
+			.time_step = 0.01,
 			.proc      = self->st_eng_proc_list,
 			
 			.obj_list  = self->st_eng_obj_list,
@@ -236,7 +238,6 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
-			.name   = "default_proc_euler",
 			.desc   = "default_proc_euler",
 			.init   = trj_proc_euler_init_,
 			.free   = trj_proc_euler_free_,
@@ -249,11 +250,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.config = &trj_proc_euler_config_,
 	});
 	
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "ref"    });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "sun"    });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "earth"  });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "moon"   });
-	trj_eng_add(&self->eng, (s_trj_obj_init) { .desc = "object" });
+	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "ref"});
+	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "sun"});
+	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "earth"});
+	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "moon"});
+	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "object"});
 	
 	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
 	{
@@ -348,11 +349,6 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_menu.env = &self->gui_env;
 	self->gui_menu.cmd = &self->gui_cmd;
 	self->gui_menu.eng = &self->eng;
-	
-	self->gui_eng.time_limit = 3600.0;
-	self->gui_eng.time_step = 0.01;
-	self->gui_eng.time_iter = self->gui_eng.time_limit
-						    / self->gui_eng.time_step;
 	
 //	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
@@ -515,7 +511,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			// default view (can be used for debug)
 //			trj_gui_map_view(&map, "map", ImVec2(-1, -1));
 			
-			static s_vl3d_obj  obj_list[30000];
+			static s_vl3d_obj  obj_list[20000];
 			static s_vl3d_eng  vl3d;
 			
 			s_vl3d_view view = {

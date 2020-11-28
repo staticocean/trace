@@ -45,7 +45,9 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::PushID(self);
 	
 	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##name", self->name, 255);
+	ImGui::InputText("##desc", self->desc, 255);
+	// !!! UPDATE HASH !!!
+	self->hash = vl_crc32(self->desc);
 
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -94,48 +96,48 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1, NULL, NULL, "%.3f");
 	ImGui::NextColumn();
 	
-	ImGui::Columns(1);
+	ImGui::Columns();
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("POS");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
-	ImGui::SameLine();
-	vl_gui_vec("##pos_p", &self->pos[0][0], 1, NULL, NULL, "%.1f");
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("VEL");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m/s]"); }
-	ImGui::SameLine();
-	vl_gui_vec("##vel", &self->pos[1][0], 0.1, NULL, NULL, "%.1f");
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("ACC");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m/s2]"); }
-	ImGui::SameLine();
-	vl_gui_vec("##acc", &self->pos[2][0], 0.1, NULL, NULL, "%.1f");
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 5));
-	
-	vlf_t min = -1.0;
-	vlf_t max = +1.0;
-	
-	ImGui::Text("ROT");
-	ImGui::SameLine();
-	vl_gui_rot("##rot", &self->rot[0][0]);
-	vl_rnorm(&self->rot[0][0]);
-	
-	ImGui::Dummy(ImVec2(0, 5));
-	ImGui::Text("SOR");
-	ImGui::SameLine();
-	vl_gui_mat("##sor", &self->rot[1][0], 0.001, &min, &max, "%.3f");
+//	ImGui::AlignTextToFramePadding();
+//	ImGui::Text("POS");
+//	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+//	ImGui::SameLine();
+//	vl_gui_vec("##pos_p", &self->pos[0][0], 1, NULL, NULL, "%.1f");
+//
+//	ImGui::Dummy(ImVec2(0, 5));
+//	ImGui::AlignTextToFramePadding();
+//	ImGui::Text("VEL");
+//	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m/s]"); }
+//	ImGui::SameLine();
+//	vl_gui_vec("##vel", &self->pos[1][0], 0.1, NULL, NULL, "%.1f");
+//
+//	ImGui::Dummy(ImVec2(0, 5));
+//	ImGui::AlignTextToFramePadding();
+//	ImGui::Text("ACC");
+//	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m/s2]"); }
+//	ImGui::SameLine();
+//	vl_gui_vec("##acc", &self->pos[2][0], 0.1, NULL, NULL, "%.1f");
+//
+//	ImGui::Dummy(ImVec2(0, 5));
+//	ImGui::Separator();
+//	ImGui::Dummy(ImVec2(0, 5));
+//
+//	vlf_t min = -1.0;
+//	vlf_t max = +1.0;
+//
+//	ImGui::Text("ROT");
+//	ImGui::SameLine();
+//	vl_gui_rot("##rot", &self->rot[0][0]);
+//	vl_rnorm(&self->rot[0][0]);
+//
+//	ImGui::Dummy(ImVec2(0, 5));
+//	ImGui::Text("SOR");
+//	ImGui::SameLine();
+//	vl_gui_mat("##sor", &self->rot[1][0], 0.001, &min, &max, "%.3f");
 
 //	ImGui::Dummy(ImVec2(0, 5));
 //	ImGui::Separator();

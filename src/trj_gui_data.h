@@ -42,6 +42,10 @@ inline void trj_gui_data_text_edit(s_trj_data *self)
 	
 	ImGui::PushID(self);
 	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
 	vl_gui_hash("##hash", self->hash);
@@ -102,6 +106,10 @@ inline void trj_gui_data_text_view(s_trj_data *self)
 
 inline void trj_gui_data_ram_edit(s_trj_data *self)
 {
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
 	vl_gui_hash("##hash", self->hash);
