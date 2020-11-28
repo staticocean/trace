@@ -47,7 +47,8 @@ enum vl3d_obj_type
 {
 	vl3d_obj_type_line  = 0x01,
 	vl3d_obj_type_point = 0x02,
-	vl3d_obj_type_text  = 0x03,
+	vl3d_obj_type_trngl = 0x03,
+	vl3d_obj_type_text  = 0x04,
 };
 
 
@@ -75,6 +76,19 @@ typedef struct vl3d_point
 	
 }	s_vl3d_point;
 
+typedef struct vl3d_trngl
+{
+	uint8_t  type;
+	uint8_t  spec;
+	uint16_t id;
+	uint32_t color;
+	
+	vlf_t p0[3];
+	vlf_t p1[3];
+	vlf_t p2[3];
+	
+}	s_vl3d_trngl;
+
 typedef struct vl3d_text
 {
 	uint8_t  type;
@@ -99,6 +113,7 @@ typedef union vl3d_obj
 	s_vl3d_line  line;
 	s_vl3d_point point;
 	s_vl3d_text  text;
+	s_vl3d_trngl trngl;
 	
 } 	s_vl3d_obj;
 
@@ -216,6 +231,18 @@ inline uint8_t vl3d_eng_add_point(s_vl3d_eng *self, s_vl3d_point obj)
 
 //------------------------------------------------------------------------------
 
+inline uint8_t vl3d_eng_add_trngl(s_vl3d_eng *self, s_vl3d_trngl obj)
+{
+	self->obj_list[self->obj_offset].trngl = obj;
+	self->obj_list[self->obj_offset].type = vl3d_obj_type_trngl;
+	self->obj_list[self->obj_offset].id = self->obj_offset;
+	self->obj_offset++;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
 inline uint8_t vl3d_eng_add_text(s_vl3d_eng *self, s_vl3d_text obj)
 {
 	self->obj_list[self->obj_offset].text = obj;
@@ -254,6 +281,14 @@ inline ImVec2 __vl3d_view_tf__(s_vl3d_view *view, ImVec2 pos)
 	
 	return ImVec2(x + view->rect.Min.x, y + view->rect.Min.y);
 }
+
+//inline ImVec2 __vl3d_view_tfsi__(s_vl3d_view *view, ImVec2 pos)
+//{
+//	float32_t x = 0.5 * view->rect.GetWidth() + 0.5 * view->scale * view->rect.GetHeight() * pos.x;
+//	float32_t y = view->rect.GetHeight() - (0.5 * view->rect.GetHeight() + 0.5 * view->scale * view->rect.GetHeight() * pos.y);
+//
+//	return ImVec2(x + view->rect.Min.x, y + view->rect.Min.y);
+//}
 
 inline ImVec2 __vl3d_view_inv__(s_vl3d_view *view, ImVec2 pos)
 {
@@ -316,6 +351,35 @@ inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 				if (obj->point.p0[0] > max[0]) max[0] = obj->point.p0[0];
 				if (obj->point.p0[1] > max[1]) max[1] = obj->point.p0[1];
 				if (obj->point.p0[2] > max[2]) max[2] = obj->point.p0[2];
+				
+				break;
+			}
+			
+			case vl3d_obj_type_trngl:
+			{
+				if (obj->trngl.p0[0] < min[0]) min[0] = obj->trngl.p0[0];
+				if (obj->trngl.p0[1] < min[1]) min[1] = obj->trngl.p0[1];
+				if (obj->trngl.p0[2] < min[2]) min[2] = obj->trngl.p0[2];
+				
+				if (obj->trngl.p1[0] < min[0]) min[0] = obj->trngl.p1[0];
+				if (obj->trngl.p1[1] < min[1]) min[1] = obj->trngl.p1[1];
+				if (obj->trngl.p1[2] < min[2]) min[2] = obj->trngl.p1[2];
+				
+				if (obj->trngl.p2[0] < min[0]) min[0] = obj->trngl.p2[0];
+				if (obj->trngl.p2[1] < min[1]) min[1] = obj->trngl.p2[1];
+				if (obj->trngl.p2[2] < min[2]) min[2] = obj->trngl.p2[2];
+				
+				if (obj->trngl.p0[0] > max[0]) max[0] = obj->trngl.p0[0];
+				if (obj->trngl.p0[1] > max[1]) max[1] = obj->trngl.p0[1];
+				if (obj->trngl.p0[2] > max[2]) max[2] = obj->trngl.p0[2];
+				
+				if (obj->trngl.p1[0] > max[0]) max[0] = obj->trngl.p1[0];
+				if (obj->trngl.p1[1] > max[1]) max[1] = obj->trngl.p1[1];
+				if (obj->trngl.p1[2] > max[2]) max[2] = obj->trngl.p1[2];
+				
+				if (obj->trngl.p2[0] > max[0]) max[0] = obj->trngl.p2[0];
+				if (obj->trngl.p2[1] > max[1]) max[1] = obj->trngl.p2[1];
+				if (obj->trngl.p2[2] > max[2]) max[2] = obj->trngl.p2[2];
 				
 				break;
 			}
@@ -530,6 +594,38 @@ inline uint8_t vl3d_eng_render(s_vl3d_eng *self, s_vl3d_view *view, char *label,
 							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
 							obj->point.size,
 							obj->point.color);
+				}
+				
+				break;
+			}
+			
+			case vl3d_obj_type_trngl:
+			{
+				vlf_t l_p0[3] = {
+						vl_vdot(obj->trngl.p0, e0) - vl_vdot(view->pos, e0),
+						vl_vdot(obj->trngl.p0, e1) - vl_vdot(view->pos, e1),
+						vl_vdot(obj->trngl.p0, e2) - vl_vdot(view->pos, e2),
+				};
+				
+				vlf_t l_p1[3] = {
+						vl_vdot(obj->trngl.p1, e0) - vl_vdot(view->pos, e0),
+						vl_vdot(obj->trngl.p1, e1) - vl_vdot(view->pos, e1),
+						vl_vdot(obj->trngl.p1, e2) - vl_vdot(view->pos, e2),
+				};
+				
+				vlf_t l_p2[3] = {
+						vl_vdot(obj->trngl.p2, e0) - vl_vdot(view->pos, e0),
+						vl_vdot(obj->trngl.p2, e1) - vl_vdot(view->pos, e1),
+						vl_vdot(obj->trngl.p2, e2) - vl_vdot(view->pos, e2),
+				};
+				
+				if (l_p0[2] > 0 || l_p1[2] > 0 || 0x01)
+				{
+					window->DrawList->AddTriangle(
+							__vl3d_view_tf__(view, ImVec2(l_p0[0], l_p0[1])),
+							__vl3d_view_tf__(view, ImVec2(l_p1[0], l_p1[1])),
+							__vl3d_view_tf__(view, ImVec2(l_p2[0], l_p2[1])),
+							obj->trngl.color);
 				}
 				
 				break;
