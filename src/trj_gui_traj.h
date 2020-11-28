@@ -659,6 +659,9 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		uint8_t ellp_en_temp = self->ellp_en;
 		self->ellp_en = 0x00;
 
+		s_trj_obj *ref_temp = self->ref;
+		self->ref = &self->eng->obj_list[0x00];
+
 		if (self->pts_offset > 0x01)
 		{
 			vlf_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
@@ -683,7 +686,9 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			// TODO draw one dot
 		}
-		
+
+		self->ref = ref_temp;
+
 //		// heading
 //		if (self->pts_offset > 0x01)
 //		{
