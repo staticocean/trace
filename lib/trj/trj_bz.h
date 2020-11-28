@@ -179,10 +179,10 @@ inline uint8_t trj_bz4_d0(s_trj_bz4 *self, vlf_t t, vlf_t *d0)
 	vlf_t t_ = 1 - t;
 	
 	d0[0] = t_*t_*t_*self->p0[0] + 3*t_*t_*t*self->p1[0]
-			+ 3*t_*t*t*self->p2[0] + t*t*t*self->p3[0];
+		  + 3*t_*t*t*self->p2[0] + t*t*t*self->p3[0];
 	
 	d0[1] = t_*t_*t_*self->p0[1] + 3*t_*t_*t*self->p1[1]
-			+ 3*t_*t*t*self->p2[1] + t*t*t*self->p3[1];
+		  + 3*t_*t*t*self->p2[1] + t*t*t*self->p3[1];
 	
 	return 0x00;
 }
@@ -191,18 +191,18 @@ inline uint8_t trj_bz4_d1(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
 {
 	vlf_t t_ = 1 - t;
 	
-	d1[0] =   3 * t_*t_*(self->p1[0] - self->p0[0])
+	d1[0] =     3 * t_*t_*(self->p1[0] - self->p0[0])
 			  + 6 * t_*t *(self->p2[0] - self->p1[0])
 			  + 3 * t *t *(self->p3[0] - self->p2[0]);
 	
-	d1[1] =   3 * t_*t_* (self->p1[1] - self->p0[1])
+	d1[1] =     3 * t_*t_* (self->p1[1] - self->p0[1])
 			  + 6 * t_*t * (self->p2[1] - self->p1[1])
 			  + 3 * t *t * (self->p3[1] - self->p2[1]);
 	
 	return 0x00;
 }
 
-inline uint8_t trj_bz4_eval(s_trj_bz4 *self, vlf_t x, vlf_t *value)
+inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 {
 	vlf_t roots[4];
 	uint8_t root_count = 0x00;
@@ -213,7 +213,7 @@ inline uint8_t trj_bz4_eval(s_trj_bz4 *self, vlf_t x, vlf_t *value)
 	vlf_t a = -self->p0[0]  +   pb3 - pc3 + self->p3[0];
 	vlf_t b =  pa3 - 2*pb3 + pc3;
 	vlf_t c = -pa3 +   pb3;
-	vlf_t d =  self->p0[0] - x;
+	vlf_t d =  self->p0[0] - t;
 	// Fun fact: any Bezier curve may (accidentally or on purpose)
 	// perfectly model any lower order curve, so we want to test
 	// for that: lower order curves are much easier to root-find.
@@ -263,8 +263,8 @@ inline uint8_t trj_bz4_eval(s_trj_bz4 *self, vlf_t x, vlf_t *value)
 		{
 			vlf_t mp3 = -p / 3;
 			vlf_t r = vl_sqrt(mp3 * mp3 * mp3);
-			vlf_t t = -q / (2 * r);
-			vlf_t cosphi = t < -1 ? -1 : t > 1 ? 1 : t;
+			vlf_t t_ = -q / (2 * r);
+			vlf_t cosphi = t_ < -1 ? -1 : t_ > 1 ? 1 : t_;
 			vlf_t phi = acos(cosphi);
 			vlf_t crtr = vl_crt(r);
 			vlf_t t1 = 2 * crtr;
@@ -303,18 +303,40 @@ inline uint8_t trj_bz4_eval(s_trj_bz4 *self, vlf_t x, vlf_t *value)
 		}
 	}
 	
-	vlf_t t = 0.0;
+	*x = 0.0;
 	
 	for (int i = 0; i < root_count; ++i)
 	{
 		if (roots[i] < 0 || roots[i] > 1) continue;
-		else t = roots[i];
+		else *x = roots[i];
 		break;
 	}
 	
+	return 0x00;
+}
+
+inline uint8_t trj_bz4_d0t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
+{
 	vlf_t temp[2];
+	vlf_t x;
 	
-	trj_bz4_d0(self, t, temp);
+	trj_bz4_inv (self, t, &x);
+	trj_bz4_d0(self, x, temp);
+	
+	*value = temp[1];
+	
+	return 0x00;
+}
+
+
+inline uint8_t trj_bz4_d1t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
+{
+	vlf_t temp[2];
+	vlf_t x;
+	
+	trj_bz4_inv (self, t, &x);
+	trj_bz4_d1(self, x, temp);
+	
 	*value = temp[1];
 	
 	return 0x00;
