@@ -350,6 +350,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_menu.cmd = &self->gui_cmd;
 	self->gui_menu.eng = &self->eng;
 	
+	trj_eng_load(&self->eng, "files/test.trj");
+	
 //	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
 	return 0x00;
