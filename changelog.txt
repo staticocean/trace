@@ -1,0 +1,144 @@
+John Brown
+47b411e
+[B] [data, traj] bz edit and ram data improved
+15 minutes ago	
+John Brown
+5238ecf
+[F] [data] ram data plugin shows tied acc values
+31 minutes ago	
+John Brown
+5f6dfa3
+[B] [traj] all trajectories now fully support relative positioning
+31 minutes ago	
+John Brown
+8219ea7
+[B] [traj] bz view breaks after rendering
+32 minutes ago	
+John Brown
+76663c2
+[B] [gui] screensaver memory leak and drawlist overflow
+1 hour ago	
+John Brown
+d41333a
+[F] [menu] cleanup and new functions
+1 hour ago	
+John Brown
+2db7653
+[F] [traj] trajbz rotation support
+2 hours ago	
+John Brown
+e33e20f
+[F] [data] orientation 3D view support
+2 hours ago	
+John Brown
+d417e3f
+[F] [ctrl] crot plugin support
+2 hours ago	
+John Brown
+714b6da
+[B] [vl3d,ellp] bug fixes
+2 hours ago	
+John Brown
+f6d8b6f
+MERGED
+Merge remote-tracking branch 'origin/master'
+3 hours ago	
+John Brown
+3ec6c8f
+[F] [bz] support for bz4 derivative
+3 hours ago	
+John Brown
+114a981
+[F] [traj] static traj support
+3 hours ago	
+John Brown
+8a01ac9
+MERGED
+Merge remote-tracking branch 'origin/master'
+3 hours ago	
+John Brown
+13f025e
+[B] [ellp] nwhvel function fix
+3 hours ago	
+John Brown
+f84ad79
+[B] [ellp] nwhvel function fix
+3 hours ago	
+John Brown
+7fc7fb7
+[D] [gui] autoload saved file on open
+3 hours ago	
+John Brown
+588e192
+[D] autoload saved file on open
+3 hours ago	
+John Brown
+707f101
+[F] [ellp] ecef, lla, nwh conversions
+3 hours ago	
+John Brown
+97ab039
+[F] [vl3d] triangle rendering support
+3 hours ago	
+John Brown
+64bbd5f
+[R] [objedit] removed unnecessary gui elements
+3 hours ago	
+John Brown
+ab91a8b
+[F] [traj,ctrl,data] added support for plugin renaming
+3 hours ago	
+John Brown
+6eb1fe5
+[F] [bz] support for bz4 derivative
+3 hours ago	
+John Brown
+52c27d0
+[F] [traj] static traj support
+3 hours ago
+Author	Commit	
+Message
+Date
+John Brown
+d8983db
+[B] [ellp] nwhvel function fix
+4 hours ago	
+John Brown
+a281239
+[D] [gui] autoload saved file on open
+4 hours ago	
+John Brown
+b316009
+[B] [ellp] nwhvel function fix
+4 hours ago	
+John Brown
+af4dddc
+[D] autoload saved file on open
+4 hours ago	
+John Brown
+2a0cccd
+[F] [ellp] ecef, lla, nwh conversions
+4 hours ago	
+John Brown
+6059877
+[F] [vl3d] triangle rendering support
+5 hours ago	
+John Brown
+a76dec1
+[R] [objedit] removed unnecessary gui elements
+10 hours ago	
+John Brown
+8649e36
+[F] [traj,ctrl,data] plugins support renaming
+10 hours ago	
+John Brown
+11a45be
+[F] [eng] TSI supports save/load
+10 hours ago	
+John Brown
+19d1d15
+[F] [objlist] context menu added to obj,traj,ctrl,data
+10 hours ago	
+
+
+
