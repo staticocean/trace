@@ -706,7 +706,7 @@ inline uint8_t trj_eng_save(s_trj_eng *self, char *file_name)
 {
 	uint32_t i;
 	
-	uint8_t *__v_file__ = (uint8_t*) malloc(32*1024*1024);
+	uint8_t *__v_file__ = (uint8_t*) malloc(256*1024*1024);
 	uint8_t *v_file = __v_file__;
 	
 	s_trj_eng *v_self = (s_trj_eng*) v_file;
@@ -756,37 +756,40 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 		{ self->obj_list[i].data_list[j].free(&self->obj_list[i].data_list[j].data); }
 	}
 
-	uint8_t *__v_file__ = (uint8_t*) malloc(32*1024*1024);
-	uint8_t *v_file = __v_file__;
-	uint32_t file_size;
-
 	FILE *file_handle = fopen(file_name, "rb");
-	fread(&file_size, 1, sizeof(uint32_t), file_handle);
-	fread(__v_file__, 1, file_size, file_handle);
-	fclose(file_handle);
-	
-	s_trj_eng *v_self = (s_trj_eng*) v_file;
-	v_file += sizeof(s_trj_eng);
-	
-	self->obj_count = v_self->obj_count;
-	self->time_limit = v_self->time_limit;
-	self->time_step = v_self->time_step;
-	if (self->time_step < 1E-6) { self->time_step = 1E-6; }
-	self->time_iter = self->time_limit / self->time_step;
-	
-	for (i = 0; i < self->obj_count; ++i)
+
+	if (file_handle != NULL)
 	{
-		s_trj_obj *obj = &self->obj_list[i];
+        uint8_t *__v_file__ = (uint8_t *) malloc(256*1024*1024);
+        uint8_t *v_file = __v_file__;
+        uint32_t file_size;
 
-		trj_obj_load(obj, self, &v_file);
+        fread(&file_size, 1, sizeof(uint32_t), file_handle);
+        fread(__v_file__, 1, file_size, file_handle);
+        fclose(file_handle);
 
-		obj->time = self->time;
-		obj->log_list = NULL;
-		obj->log_offset = 0x00;
-		obj->hash = vl_crc32(obj->desc);
-	}
-	
-	free(__v_file__);
+        s_trj_eng *v_self = (s_trj_eng *) v_file;
+        v_file += sizeof(s_trj_eng);
+
+        self->obj_count = v_self->obj_count;
+        self->time_limit = v_self->time_limit;
+        self->time_step = v_self->time_step;
+        if (self->time_step < 1E-6) { self->time_step = 1E-6; }
+        self->time_iter = self->time_limit / self->time_step;
+
+        for (i = 0; i < self->obj_count; ++i) {
+            s_trj_obj *obj = &self->obj_list[i];
+
+            trj_obj_load(obj, self, &v_file);
+
+            obj->time = self->time;
+            obj->log_list = NULL;
+            obj->log_offset = 0x00;
+            obj->hash = vl_crc32(obj->desc);
+        }
+
+        free(__v_file__);
+    }
 	
 	return 0x00;
 }
