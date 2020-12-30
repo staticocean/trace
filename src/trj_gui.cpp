@@ -203,7 +203,27 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.reset  = trj_ctrl_crot_reset_,
 			.update = trj_ctrl_crot_update_,
 	});
-	
+
+	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
+            .file_name = "res/ctrl/gm/egm2008.txt",
+            .order = 12,
+	};
+
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+            .name   = "default_ctrl_gm",
+            .desc   = "default_ctrl_gm",
+            .init   = trj_ctrl_gm_init_,
+            .free   = trj_ctrl_gm_free_,
+            .save   = trj_ctrl_gm_save_,
+            .load   = trj_ctrl_gm_load_,
+            .data_size = sizeof(s_trj_ctrl_gm),
+            .data   = NULL,
+            .config_size = sizeof(s_trj_ctrl_gm_init),
+            .config = &trj_ctrl_gm_config_,
+            .reset  = trj_ctrl_gm_reset_,
+            .update = trj_ctrl_gm_update_,
+	});
+
 	static s_trj_data_text_init trj_data_text_config_ = {
 			.file_name = "default_data_text.txt",
 	};
@@ -277,66 +297,68 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.config_size = sizeof(s_trj_proc_euler_init),
 			.config = &trj_proc_euler_config_,
 	});
-	
-	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "ref"});
-	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "sun"});
-	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "earth"});
-	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "moon"});
-	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "object"});
-	
-	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
-	{
-		trj_gui_obj_init(&self->st_gui_eng_obj[i],
-				(s_trj_gui_obj_init) {.ref = &self->eng.obj_list[i]}
-				);
-	}
-	
-	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[1]);
-	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[1]);
-	
-	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[0]);
-	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[0]);
-	
-	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[3]);
-	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
-	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
-	
-	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
-	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
-	
-	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[1]);
-	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[1]);
-	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[1]);
-	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[1]);
-	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[1]);
-	
-	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[2]);
-	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[2]);
-	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[2]);
-	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[2]);
-	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[2]);
-	
-	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
-	{
-		vl_mid(&self->eng.obj_list[i].rot[0][0]);
-	}
-	
+
+    for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
+    {
+        trj_gui_obj_init(&self->st_gui_eng_obj[i],
+                         (s_trj_gui_obj_init) {.ref = &self->eng.obj_list[i]}
+        );
+    }
+
+    //-----------------------------------------------------------------------------
+
+//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "ref"});
+//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "sun"});
+//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "earth"});
+//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "moon"});
+//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "object"});
+//
+//	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[1]);
+//	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[1]);
+//	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[1]);
+//	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[1]);
+//	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[1]);
+//
+//	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[0]);
+//	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[0]);
+//	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[0]);
+//	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[0]);
+//	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[0]);
+//
+//	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[1]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[3]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[1]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[3]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[1]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[3]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[1]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[3]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
+//	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
+//
+//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
+//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
+//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
+//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
+//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
+//
+//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[1]);
+//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[1]);
+//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[1]);
+//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[1]);
+//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[1]);
+//
+//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[2]);
+//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[2]);
+//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[2]);
+//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[2]);
+//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[2]);
+//
+//	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
+//	{
+//		vl_mid(&self->eng.obj_list[i].rot[0][0]);
+//	}
+//
 	ImGui::StyleColorsDark();
 //	ImGui::StyleColorsLight();
 	
@@ -403,7 +425,9 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	const uint32_t data_hash_text = vl_crc32("default_data_text");
 	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
-	
+
+	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
+
 	trj_gui_menu_main(&self->gui_menu);
 	
 	{
@@ -466,8 +490,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
 					trj_gui_ctrl_edit(ctrl);
-					
-					break;
+
+                    if      (ctrl->hash == ctrl_hash_gm) { trj_gui_ctrl_edit_gm(ctrl); }
+//                    else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_edit_orb    (traj); }
+//                    else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
+
+                    break;
 				}
 				
 				case trj_gui_eng_type_data:
@@ -475,8 +503,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					trj_gui_data_edit(data);
 					
-					if      (data->hash == data_hash_text) { trj_gui_data_edit_text (data); }
-					else if (data->hash == data_hash_ram ) { trj_gui_data_edit_ram  (data); }
+					if      (data->hash == data_hash_text) { trj_gui_data_edit_text(data); }
+					else if (data->hash == data_hash_ram ) { trj_gui_data_edit_ram(data); }
 					
 					break;
 				}
@@ -504,7 +532,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_gui_obj *obj_gui = (s_trj_gui_obj*) self->gui_eng.sel_item;
 					s_trj_obj *obj = obj_gui->ref;
 					
-					trj_gui_obj_view(obj_gui, obj);
+//					trj_gui_obj_view(obj_gui, obj);
 					
 					break;
 				}
@@ -522,6 +550,11 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				
 				case trj_gui_eng_type_ctrl:
 				{
+                    s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
+
+                    if      (ctrl->hash == ctrl_hash_gm) { trj_gui_ctrl_view_gm(ctrl); }
+//                    else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_view_orb    (traj); }
+
 					break;
 				}
 				
@@ -529,8 +562,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					
-					if      (data->hash == data_hash_text) { trj_gui_data_text_view (data); }
-					else if (data->hash == data_hash_ram ) { trj_gui_data_ram_view  (data); }
+					if      (data->hash == data_hash_text) { trj_gui_data_view_text(data); }
+					else if (data->hash == data_hash_ram ) { trj_gui_data_view_ram(data); }
 					
 					break;
 				}

@@ -166,6 +166,16 @@ inline uint8_t trj_ellp_lla(s_trj_ellp *ellp, vlf_t *lla, vlf_t *ecef)
 	return 0x00;
 }
 
+inline uint8_t trj_ellp_glla(s_trj_ellp *ellp, vlf_t *lla, vlf_t *ecef)
+{
+    trj_ellp_lla(ellp, lla, ecef);
+
+    vlf_t rn = ellp->a / vl_sqrt(1 - ellp->e*ellp->e*vl_sin(lla[0])*vl_sin(lla[0]));
+    lla[0] = atan(1 - ellp->ee * rn / (rn + lla[2]));
+
+    return 0x00;
+}
+
 //------------------------------------------------------------------------------
 
 inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)

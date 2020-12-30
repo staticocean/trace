@@ -69,7 +69,7 @@ inline void trj_gui_data_edit_text(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_text_view(s_trj_data *self)
+inline void trj_gui_data_view_text(s_trj_data *self)
 {
 	s_trj_data_text *data = (s_trj_data_text*) self->data;
 	
@@ -121,7 +121,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_ram_view(s_trj_data *self)
+inline void trj_gui_data_view_ram(s_trj_data *self)
 {
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
 	uint8_t mode = window->StateStorage.GetInt(ImGui::GetID("data_ram_view_mode"), 0x00);

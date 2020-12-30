@@ -155,49 +155,49 @@ inline uint8_t trj_gui_obj_view(s_trj_gui_obj *gui, s_trj_obj *self)
 	vl3d_eng_init(&gui->traj_vl3d_eng, (s_vl3d_eng_init) {
 			.obj_list = gui->traj_vl3d_eng_objlist,
 	});
-	
+
 	for (int i = 0; i < self->traj_offset; ++i)
 	{
 		vlf_t p0[3];
 		vlf_t p1[3];
-		
+
 		s_trj_traj traj = self->traj_list[i];
 		s_trj_traj_info traj_info;
-		
+
 		traj.info(traj.data, &traj_info);
-		
+
 		vlf_t time = traj_info.preview_time[0];
 		vlf_t time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
-		
+
 		for (int t = 0; t < 1000-1; ++t)
 		{
 			traj.pos(traj.data, time, p0);
 			traj.pos(traj.data, time+time_step, p1);
-			
+
 			vl3d_eng_add_line(&gui->traj_vl3d_eng, (s_vl3d_line) {
 					.color = vl3d_col_l,
 					.p0 = { p0[0], p0[1], p0[2] },
 					.p1 = { p1[0], p1[1], p1[2] }
 			});
-			
+
 			time = time + time_step;
 		}
 	}
-	
+
 	s_vl3d_view view = {
 			.scale = 1.0,
 			.pos = { 0.0, 0.0, 0.0 },
-			
+
 			.tbar_en = 0x01,
-			
+
 			.grid_mode = 0x01,
 			.grid_pt_size = 2.0,
 			.grid_pt_disp = 2.0,
-			
+
 			.xyz_en = 0x01,
 			.xyz_scale = 0.25
 	};
-	
+
 	vl3d_view_load(self, &view, view);
 	vl3d_view_grid(&view, &gui->traj_vl3d_eng);
 	vl3d_view_xyz(&view, &gui->traj_vl3d_eng);

@@ -23,7 +23,7 @@ typedef struct trj_ellp
 	vlf_t c;
 	vlf_t e;
 	vlf_t f;
-	
+
 	vlf_t ee		;
 	vlf_t invaa		;
 	vlf_t l		 	;
@@ -562,7 +562,9 @@ inline uint8_t trj_ctrl_save(s_trj_ctrl *self, s_trj_eng *eng, uint8_t **v_file)
 {
 	memcpy(*v_file, self->data, self->data_size);
 	*v_file += self->data_size;
-	
+
+    self->save(self->data, self->config, v_file);
+
 	return 0x00;
 }
 
@@ -593,7 +595,9 @@ inline uint8_t trj_data_save(s_trj_data *self, s_trj_eng *eng, uint8_t **v_file)
 {
 	memcpy(*v_file, self->data, self->data_size);
 	*v_file += self->data_size;
-	
+
+    self->save(self->data, self->config, v_file);
+
 	return 0x00;
 }
 
@@ -624,7 +628,9 @@ inline uint8_t trj_proc_save(s_trj_proc *self, s_trj_eng *eng, uint8_t **v_file)
 {
 	memcpy(*v_file, self->data, self->data_size);
 	*v_file += self->data_size;
-	
+
+    self->save(self->data, self->config, v_file);
+
 	return 0x00;
 }
 
@@ -633,7 +639,9 @@ inline uint8_t trj_proc_load(s_trj_proc *self, s_trj_eng *eng, uint8_t **v_file)
 	self->data   = malloc(self->data_size);
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
-	
+
+    self->load(self->data, self->config, v_file);
+
 	return 0x00;
 }
 
@@ -760,7 +768,7 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 
 	if (file_handle != NULL)
 	{
-        uint8_t *__v_file__ = (uint8_t *) malloc(256*1024*1024);
+        uint8_t *__v_file__ = (uint8_t*) malloc(256*1024*1024);
         uint8_t *v_file = __v_file__;
         uint32_t file_size;
 
