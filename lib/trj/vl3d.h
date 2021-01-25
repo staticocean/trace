@@ -310,8 +310,11 @@ inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 		return;
 	}
 	
-	vlf_t min[3] = { +INFINITY, +INFINITY, +INFINITY };
-	vlf_t max[3] = { -INFINITY, -INFINITY, -INFINITY };
+//	vlf_t min[3] = { +INFINITY, +INFINITY, +INFINITY };
+//	vlf_t max[3] = { -INFINITY, -INFINITY, -INFINITY };
+//
+	vlf_t min[3] = { 0.0, 0.0, 0.0 };
+	vlf_t max[3] = { 0.0, 0.0, 0.0 };
 	
 	for (int i = 0; i < self->obj_offset; ++i)
 	{
