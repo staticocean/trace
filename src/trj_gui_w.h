@@ -405,16 +405,16 @@ inline void vl_gui_bool(char *label, ImVec2 size, uint8_t *data)
 
 //------------------------------------------------------------------------------
 
-inline void vl_gui_switch(char *label, char *label_on, char *label_off, ImVec2 size, uint8_t *data)
+inline void vl_gui_switch(char *label, char **labels, ImVec2 size, uint8_t *data, int flags = ImGuiButtonFlags_None)
 {
-	ImGui::PushID(label);
-	
-	if (ImGui::Button((*data == 0x00) ? label_off : label_on, size))
-	{ *data = (!*data) & 0x01; }
-	
-	ImGui::PopID();
+    ImGui::PushID(label);
 
-	return;
+    if (ImGui::ButtonEx((*data == 0x00) ? labels[0] : labels[1], size, flags))
+    { *data = ((!*data) > 0x00); }
+
+    ImGui::PopID();
+
+    return;
 }
 
 //------------------------------------------------------------------------------
@@ -508,6 +508,117 @@ inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 	}
 	
 	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void __gui_lla_elem__ (char *label, char **nswe, float64_t *range, float64_t *value)
+{
+    ImGuiWindow *window = ImGui::GetCurrentWindow();
+
+    char mode_str[64];
+    sprintf(mode_str, "##%s_%s", label, "mode");
+    ImGuiID mode_id = ImGui::GetID(mode_str);
+
+    uint8_t mode = window->StateStorage.GetInt(mode_id, 0x00);
+
+    // remove sign life is easier that way
+    // we MUST AND WILL resore it in the end
+    uint8_t nswe_sign = (*value < 0.0) ? 0x00 : 0x01;
+    *value = fabs(*value);
+
+    float64_t value_deg = vl_deg(*value);
+    int dms_d = (int) value_deg;
+    int dms_m = (int) ((value_deg - dms_d) * 60);
+    float64_t dms_s = (value_deg - dms_d - dms_m / (float64_t) 60.0) * 3600;
+
+    ImGui::PushID(label);
+    ImGui::BeginGroup();
+
+//    vl_gui_switch("##d/dms", "Г", "ГМС", ImVec2(50, 0), &mode);
+//    ImGui::SameLine();
+
+    ImGui::SetNextItemWidth(120);
+
+    switch (mode)
+    {
+        case 0x00:
+        {
+            char dms_str[32];
+            sprintf(dms_str, "% 3d°%02d'%06.3f\"", dms_d, dms_m, dms_s);
+            ImGui::InputText("##dms", dms_str, sizeof(dms_str));
+            sscanf(dms_str, "%d°%d'%lf\"", &dms_d, &dms_m, &dms_s);
+
+            dms_s = (dms_s <   0.0) ?  0.0 : dms_s;
+            dms_s = (dms_s >= 60.0) ? 60.0 : dms_s;
+
+            dms_m = (dms_m <   0.0) ?  0.0 : dms_m;
+            dms_m = (dms_m >= 60.0) ? 60.0 : dms_m;
+
+            float64_t value_new = vl_rad(
+                    (float64_t) dms_d + (float64_t) dms_m / 60.0 + (float64_t) dms_s / 3600.0);
+
+            *value = value_new;
+
+            break;
+        }
+
+        default:
+        {
+            float64_t value_new;
+
+            char deg_str[32];
+            sprintf(deg_str, "% 10.6f°", value_deg);
+            ImGui::InputText("##deg", deg_str, sizeof(deg_str));
+            sscanf(deg_str, "%lf°", &value_new);
+
+            value_new = vl_rad(value_new);
+
+            *value = value_new;
+
+            break;
+        }
+    }
+
+    ImGui::SameLine(0,0);
+    vl_gui_switch("##nswe", nswe, ImVec2(40, 0), &nswe_sign);
+
+    *value = (*value < range[0]) ? range[0] : *value;
+    *value = (*value > range[1]) ? range[1] : *value;
+
+    *value *= (nswe_sign == 0x00) ? -1.0 : +1.0;
+
+    ImGui::EndGroup();
+
+    if (ImGui::BeginPopupContextItem("##mode"))
+    {
+        if (ImGui::Selectable("DEG°MIN'SEC\"")) { mode = 0x00; }
+        if (ImGui::Selectable("DEG°")) { mode = 0x01; }
+
+        ImGui::EndPopup();
+    }
+
+    ImGui::PopID();
+
+    window->StateStorage.SetInt(mode_id, mode);
+
+    return;
+}
+
+inline void trj_gui_lat(char *label, float64_t *lat)
+{
+    __gui_lla_elem__(label, (char*[2]){ "S", "N" },
+                     (float64_t[2]) { vl_rad(-90), vl_rad(+90) }, lat);
+
+    return;
+}
+
+inline void trj_gui_lon(char *label, float64_t *lon)
+{
+    __gui_lla_elem__(label, (char*[2]){ "W", "E" },
+                     (float64_t[2]) { vl_rad(-180), vl_rad(+180) }, lon);
+
+    return;
 }
 
 //------------------------------------------------------------------------------
