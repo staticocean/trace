@@ -423,10 +423,22 @@ inline void vl_mmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 
 inline void vl_mmul_v(vlf_t *res, vlf_t *mat, vlf_t *vec)
 {
-	res[0] = mat[0]*vec[0] + mat[1]*vec[1] + mat[2]*vec[2];
-	res[1] = mat[3]*vec[0] + mat[4]*vec[1] + mat[5]*vec[2];
-	res[2] = mat[6]*vec[0] + mat[7]*vec[1] + mat[8]*vec[2];
-	
+    if (res != vec)
+    {
+        res[0] = mat[0] * vec[0] + mat[1] * vec[1] + mat[2] * vec[2];
+        res[1] = mat[3] * vec[0] + mat[4] * vec[1] + mat[5] * vec[2];
+        res[2] = mat[6] * vec[0] + mat[7] * vec[1] + mat[8] * vec[2];
+    }
+
+    else
+    {
+        vlf_t vec_[3] = { vec[0], vec[1], vec[2] };
+
+        res[0] = mat[0] * vec_[0] + mat[1] * vec_[1] + mat[2] * vec_[2];
+        res[1] = mat[3] * vec_[0] + mat[4] * vec_[1] + mat[5] * vec_[2];
+        res[2] = mat[6] * vec_[0] + mat[7] * vec_[1] + mat[8] * vec_[2];
+    }
+
 	return;
 }
 
@@ -436,14 +448,31 @@ inline void vl_tnp(vlf_t *res, vlf_t *mat)
 {
 	uint32_t i;
 	uint32_t j;
-	
-	for (i = 0; i < 3; ++i)
-	{
-		for (j = 0; j < 3; ++j)
-		{
-			res[j*3 + i] = mat[i*3 + j];
-		}
-	}
+
+	if (res != mat)
+    {
+        for (i = 0; i < 3; ++i)
+        {
+            for (j = 0; j < 3; ++j)
+            {
+                res[j*3 + i] = mat[i*3 + j];
+            }
+        }
+    }
+
+	else
+    {
+	    vlf_t mat_[9];
+        vl_mcopy(mat_, mat);
+
+        for (i = 0; i < 3; ++i)
+        {
+            for (j = 0; j < 3; ++j)
+            {
+                res[j*3 + i] = mat_[i*3 + j];
+            }
+        }
+    }
 	
 	return;
 }

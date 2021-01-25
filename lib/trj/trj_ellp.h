@@ -49,11 +49,23 @@ inline void trj_ellp_init(s_trj_ellp *ellp)
 
 inline void trj_ellp_ecef(s_trj_ellp *ellp, vlf_t *ecef, vlf_t *lla)
 {
-	vlf_t n = ellp->a / vl_sqrt(1 - ellp->ee*vl_sin(lla[0])*vl_sin(lla[0]));
+	vlf_t n = ellp->a / vl_sqrt(1 - ellp->ee * vl_sin(lla[0]) * vl_sin(lla[0]));
 	
-	ecef[0] = (n + lla[2] ) * vl_cos(lla[0]) * vl_cos(lla[1]);
-	ecef[1] = (n*(1-ellp->ee) + lla[2]) * vl_sin(lla[0]);
-	ecef[2] =-(n + lla[2] ) * vl_cos(lla[0]) * vl_sin(lla[1]);
+	if (ecef != lla)
+	{
+		ecef[0] = (n + lla[2]) * vl_cos(lla[0]) * vl_cos(lla[1]);
+		ecef[1] = (n * (1 - ellp->ee) + lla[2]) * vl_sin(lla[0]);
+		ecef[2] = -(n + lla[2]) * vl_cos(lla[0]) * vl_sin(lla[1]);
+	}
+	
+	else
+	{
+		vlf_t lla_[3] = { lla[0], lla[1], lla[2] };
+		
+		ecef[0] = (n + lla_[2]) * vl_cos(lla_[0]) * vl_cos(lla_[1]);
+		ecef[1] = (n * (1 - ellp->ee) + lla_[2]) * vl_sin(lla_[0]);
+		ecef[2] = -(n + lla_[2]) * vl_cos(lla_[0]) * vl_sin(lla_[1]);
+	}
 	
 	return;
 }
