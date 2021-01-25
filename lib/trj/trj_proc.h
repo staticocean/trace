@@ -62,11 +62,11 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		vl_vsub (self->d1n, &data[offset+1].pos[0][0], &data[offset].pos[0][0]);
 		
 		// dont need to div 0.0 d1p
-		vl_vmul_s (self->d1n, self->d1n, 1.0 / (data[1].time[0] - data[0].time[0]));
+		vl_vmul_s (self->d1n, self->d1n, (vlf_t) 1.0 / (data[1].time[0] - data[0].time[0]));
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 1.0 / (data[1].time[0] - data[0].time[0]));
+		vl_vmul_s (self->d2, self->d2, (vlf_t) 1.0 / (data[1].time[0] - data[0].time[0]));
 	}
 	
 	else if (offset == (obj->log_offset-1))
@@ -75,11 +75,11 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		vl_vzero (self->d1n);
 		
 		// dont need to div 0.0 d1n
-		vl_vmul_s (self->d1p, self->d1p, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d1p, self->d1p, (vlf_t) 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d2, self->d2, (vlf_t) 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
 	}
 	
 	else
@@ -88,12 +88,12 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		vl_vsub (self->d1n, &data[offset+1].pos[0][0], &data[offset].pos[0][0]);
 		
 		// dont need to div 0.0 d1n
-		vl_vmul_s (self->d1p, self->d1p, 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
-		vl_vmul_s (self->d1n, self->d1n, 1.0 / (data[offset+1].time[0] - data[offset].time[0]));
+		vl_vmul_s (self->d1p, self->d1p, (vlf_t) 1.0 / (data[offset].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d1n, self->d1n, (vlf_t) 1.0 / (data[offset+1].time[0] - data[offset].time[0]));
 		
 		vl_vsub (self->d2, self->d1n, self->d1p);
 		
-		vl_vmul_s (self->d2, self->d2, 0.5 / (data[offset+1].time[0] - data[offset-1].time[0]));
+		vl_vmul_s (self->d2, self->d2, (vlf_t) 0.5 / (data[offset+1].time[0] - data[offset-1].time[0]));
 	}
 	
 	if (offset == (obj->log_offset-1))
