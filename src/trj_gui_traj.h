@@ -164,7 +164,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-60);
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_switch("##sync_en", "SYNC", "FLOAT", ImVec2(-1, 0), &traj->sync_en);
+	vl_gui_switch("##sync_en", (char*[2]) { "SYNC", "FLOAT" }, ImVec2(-1, 0), &traj->sync_en);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -352,37 +352,39 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	{
 		ImGui::PushID(i);
 
-		if (traj->ellp_en == 0x00)
-		{ vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f"); }
-		
-		else
-		{
-			ImGui::BeginGroup();
-			
-			vlf_t time_min = 0.0;
-			ImGui::SetNextItemWidth(50);
-			ImGui::DragScalar("##time", ImGuiDataType_Double, &traj->pts[i].time, 1.0, &time_min, NULL, "%.0f");
-			ImGui::SameLine();
-			
-			vlf_t lla_deg[3] = { vl_deg(traj->pts[i].pos_p[2]), vl_deg(traj->pts[i].pos_p[0]), traj->pts[i].pos_p[1] };
-			vl_gui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
-		
-			traj->pts[i].pos_p[0] = vl_rad(lla_deg[1]);
-			traj->pts[i].pos_p[1] = vl_rad(lla_deg[2]);
-			traj->pts[i].pos_p[2] = vl_rad(lla_deg[0]);
-			
-			ImGui::EndGroup();
-			
-			if (ImGui::BeginPopupContextItem("edit"))
-			{
-				if (ImGui::Selectable("delete")) {
-					trj_traj_bz_rem(traj, i);
-					trj_traj_bz_compile(traj);
-				}
-				
-				ImGui::EndPopup();
-			}
-		}
+        ImGui::BeginGroup();
+
+        vlf_t time_min = 0.0;
+        ImGui::SetNextItemWidth(50);
+        ImGui::DragScalar("##time", ImGuiDataType_Double, &traj->pts[i].time, 1.0, &time_min, NULL, "%.0f");
+        ImGui::SameLine();
+
+        if (traj->ellp_en == 0x00)
+        {
+            vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
+        }
+
+        else
+        {
+            vlf_t lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
+            vl_gui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
+
+            traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
+            traj->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+            traj->pts[i].pos_p[2] = lla_deg[2];
+        }
+
+        ImGui::EndGroup();
+
+        if (ImGui::BeginPopupContextItem("edit"))
+        {
+            if (ImGui::Selectable("delete")) {
+                trj_traj_bz_rem(traj, i);
+                trj_traj_bz_compile(traj);
+            }
+
+            ImGui::EndPopup();
+        }
 	
 		ImGui::PopID();
 	}
@@ -455,16 +457,26 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		for (int i = 0; i < self->pts_offset; ++i)
 		{
 			ImVec2 point;
-			
-			point = ImVec2(self->pts[i].pos_p[0], self->pts[i].pos_p[2]);
-			
+
+			if (self->ellp_en == 0x00) { point = ImVec2(self->pts[i].pos_p[2], self->pts[i].pos_p[0]); }
+			else { point = ImVec2(self->pts[i].pos_p[1], self->pts[i].pos_p[0]); }
+
 			points_max = ImMax(points_max, point);
 			points_min = ImMin(points_min, point);
-			
-			point = ImVec2(
-					self->pts[i].pos_p[0] + self->pts[i].pos_d[0],
-					self->pts[i].pos_p[2] + self->pts[i].pos_d[2]);
-			
+
+            if (self->ellp_en == 0x00)
+            {
+                point = ImVec2(
+                        self->pts[i].pos_p[2] + self->pts[i].pos_d[2],
+                        self->pts[i].pos_p[0] + self->pts[i].pos_d[0]);
+            }
+            else
+            {
+                point = ImVec2(
+                        self->pts[i].pos_p[1] + self->pts[i].pos_d[1],
+                        self->pts[i].pos_p[0] + self->pts[i].pos_d[0]);
+            }
+
 			points_max = ImMax(points_max, point);
 			points_min = ImMin(points_min, point);
 		}
@@ -543,16 +555,34 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		if (view_hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && io.KeyCtrl)
 		{
 			ImVec2 pos_p = inv_transform(&view_top, io.MousePos);
-			
-			s_trj_traj_bz_point point = (s_trj_traj_bz_point)
-					{
-							.time = 0.0,
-							.pos_p = {pos_p[0], 0.0, pos_p[1]},
-							.pos_d = {pos_p[0], 0.0, pos_p[1]},
-							.pos_t = {0.0, 0.0, 0.0},
-							//			.rot_p = {  },
-					};
-			
+
+			s_trj_traj_bz_point point;
+
+            if (self->ellp_en == 0x00)
+			{
+				point = (s_trj_traj_bz_point)
+				{
+						.time = 0.0,
+						.pos_p = {pos_p.y, 0.0, pos_p.x},
+						.pos_d = {pos_p.y, 0.0, pos_p.x},
+						.pos_t = {0.0, 0.0, 0.0},
+						//			.rot_p = {  },
+				};
+			}
+            
+            else
+			{
+				point = (s_trj_traj_bz_point)
+				{
+						.time = 0.0,
+						.pos_p = {pos_p.y, pos_p.x, 0.0},
+						.pos_d = {pos_p.y, pos_p.x, 0.0},
+						.pos_t = {0.0, 0.0, 0.0},
+						//			.rot_p = {  },
+				};
+			}
+   
+   
 			if (self->pts_offset > 0x00)
 			{
 				point.time = self->pts[self->pts_offset - 1].time + 1.0;
@@ -564,6 +594,17 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		view_top.width = (view_top.p1 - view_top.p0).x;
 		view_top.height = (view_top.p1 - view_top.p0).y;
 		view_top.rect = window->InnerRect;
+		
+		// draw toolbar
+		{
+			ImGui::BeginGroup();
+			ImGui::AlignTextToFramePadding();
+			
+			if (ImGui::Button("AUTO"))
+			{ view_top.p0 = points_min; view_top.p1 = points_max; }
+			
+			ImGui::EndGroup();
+		}
 		
 		// draw grid TODO:: replace with rectangles coz they are drawn faster on GPUs
 		{
@@ -626,7 +667,11 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			ImGui::PushID(i);
 			
-			ImVec2 point_pos = ImVec2(self->pts[i].pos_p[0], self->pts[i].pos_p[2]);
+			ImVec2 point_pos;
+			
+			if (self->ellp_en == 0x00) { point_pos = ImVec2(self->pts[i].pos_p[2], self->pts[i].pos_p[0]); }
+			else { point_pos = ImVec2(self->pts[i].pos_p[1], self->pts[i].pos_p[0]); }
+			
 			ImGui::SetCursorScreenPos(transform(&view_top, point_pos) - ImVec2(8, 8));
 			
 			ImGui::InvisibleButton("##pt", ImVec2(16, 16));
@@ -654,24 +699,94 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				mouse_drag_delta.y = -mouse_drag_delta.y;
 				point_pos += mouse_drag_delta;
 			}
-			
-			if (ImGui::BeginPopupContextItem("view"))
+
+			if (self->ellp_en == 0x00)
 			{
-				ImGui::Text("%d", i);
-				
-				if (ImGui::Selectable("delete"))
-				{
-					del_req = 0x01;
-					del_index = i;
-				}
-				
-				ImGui::EndPopup();
+				self->pts[i].pos_p[2] = point_pos.x;
+				self->pts[i].pos_p[0] = point_pos.y;
 			}
 			
-			self->pts[i].pos_p[0] = point_pos.x;
-			self->pts[i].pos_p[2] = point_pos.y;
+			else
+			{
+				self->pts[i].pos_p[1] = point_pos.x;
+				self->pts[i].pos_p[0] = point_pos.y;
+			}
 			
-			ImGui::PopID();
+            if (ImGui::BeginPopupContextItem("view"))
+            {
+                ImGui::Text("Point %d", i);
+
+                ImGui::Separator();
+
+                ImGui::Text("time");
+                const vlf_t time_min = 0.0;
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(150);
+                ImGui::DragScalar("##time", ImGuiDataType_Double, &self->pts[i].time,
+                                  1, &time_min, NULL, "%.3f");
+
+                if (self->ellp_en == 0x00)
+                {
+                    ImGui::Text("x   ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##x", ImGuiDataType_Double, &self->pts[i].pos_p[0],
+                                      1, NULL, NULL, "%.3f");
+
+                    ImGui::Text("y   ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##y", ImGuiDataType_Double, &self->pts[i].pos_p[1],
+                                      1, NULL, NULL, "%.3f");
+
+                    ImGui::Text("z   ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##z", ImGuiDataType_Double, &self->pts[i].pos_p[2],
+                                      1, NULL, NULL, "%.3f");
+                }
+
+                else
+                {
+                    vlf_t lla_deg[3] = {vl_deg(self->pts[i].pos_p[0]),
+                                        vl_deg(self->pts[i].pos_p[1]),
+                                        self->pts[i].pos_p[2]};
+
+                    ImGui::Text("lat ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##lat", ImGuiDataType_Double, &lla_deg[0],
+                                      1, NULL, NULL, "%.6f");
+
+                    ImGui::Text("lon ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##lon", ImGuiDataType_Double, &lla_deg[1],
+                                      1, NULL, NULL, "%.6f");
+
+                    ImGui::Text("alt ");
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(150);
+                    ImGui::DragScalar("##alt", ImGuiDataType_Double, &lla_deg[2],
+                                      1, NULL, NULL, "%.3f");
+
+                    self->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
+                    self->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+                    self->pts[i].pos_p[2] = lla_deg[2];
+                }
+
+                ImGui::Separator();
+
+                if (ImGui::Selectable("delete"))
+                {
+                    del_req = 0x01;
+                    del_index = i;
+                }
+
+                ImGui::EndPopup();
+            }
+
+            ImGui::PopID();
 		}
 		
 		// restore ImGui cursor position
@@ -682,13 +797,37 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			ImGui::PushID(i);
 			
-			ImVec2 p = transform(&view_top, ImVec2(
-					self->pts[i].pos_p[0],
-					self->pts[i].pos_p[2]));
+			ImVec2 p;
 			
-			ImVec2 d = transform(&view_top, ImVec2(
-					self->pts[i].pos_p[0] + self->pts[i].pos_d[0],
-					self->pts[i].pos_p[2] + self->pts[i].pos_d[2]));
+			if (self->ellp_en == 0x00)
+			{
+				p = transform(&view_top, ImVec2(
+						self->pts[i].pos_p[2],
+						self->pts[i].pos_p[0]));
+			}
+			
+			else
+			{
+				p = transform(&view_top, ImVec2(
+						self->pts[i].pos_p[1],
+						self->pts[i].pos_p[0]));
+			}
+			
+			ImVec2 d;
+			
+			if (self->ellp_en == 0x00)
+			{
+				d = transform(&view_top, ImVec2(
+						self->pts[i].pos_p[2] + self->pts[i].pos_d[2],
+						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+			}
+			
+			else
+			{
+				d = transform(&view_top, ImVec2(
+						self->pts[i].pos_p[1] + self->pts[i].pos_d[1],
+						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+			}
 			
 			//		window->DrawList->AddTriangleFilled(
 			//				pos_d + ImVec2(-4,0),
@@ -731,14 +870,27 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				trj_traj_bz_pos(self, time, p0);
 				trj_traj_bz_pos(self, time + time_step, p1);
 				
-				ImVec2 p0_ = ImVec2(p0[0], p0[2]);
-				ImVec2 p1_ = ImVec2(p1[0], p1[2]);
+				if (ellp_en_temp == 0x00)
+				{
+					ImVec2 p0_ = ImVec2(p0[2], p0[0]);
+					ImVec2 p1_ = ImVec2(p1[2], p1[0]);
+					
+					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), col_text_u32);
+				}
 				
-				window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), col_text_u32);
+				else
+				{
+					ImVec2 p0_ = ImVec2(p0[1], p0[0]);
+					ImVec2 p1_ = ImVec2(p1[1], p1[0]);
+					
+					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), col_text_u32);
+				}
 				
 				time += time_step;
 			}
-		} else
+		}
+		
+		else
 		{
 			// TODO draw one dot
 		}
@@ -837,14 +989,29 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		
 		for (int i = 0; i < self->pts_offset; ++i)
 		{
-			ImVec2 point = ImVec2(self->pts[i].time, self->pts[i].pos_p[1]);
+			ImVec2 point;
 			
+			if (self->ellp_en == 0x00)
+			{ point = ImVec2(self->pts[i].time, self->pts[i].pos_p[1]); }
+			else
+			{ point = ImVec2(self->pts[i].time, self->pts[i].pos_p[2]); }
+
 			points_max = ImMax(points_max, point);
 			points_min = ImMin(points_min, point);
 			
-			point = ImVec2(
-					self->pts[i].time + self->pts[i].pos_t[1],
-					self->pts[i].pos_p[1] + self->pts[i].pos_d[1]);
+			if (self->ellp_en == 0x00)
+			{
+				point = ImVec2(
+						self->pts[i].time + self->pts[i].pos_t[1],
+						self->pts[i].pos_p[1] + self->pts[i].pos_d[1]);
+			}
+			else
+			{
+				point = ImVec2(
+						self->pts[i].time + self->pts[i].pos_t[2],
+						self->pts[i].pos_p[2] + self->pts[i].pos_d[2]);
+			}
+			
 			
 			points_max = ImMax(points_max, point);
 			points_min = ImMin(points_min, point);
@@ -891,6 +1058,17 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		view_bot.width = (view_bot.p1 - view_bot.p0).x;
 		view_bot.height = (view_bot.p1 - view_bot.p0).y;
 		
+		// draw toolbar
+		{
+			ImGui::BeginGroup();
+			ImGui::AlignTextToFramePadding();
+			
+			if (ImGui::Button("AUTO"))
+			{ view_bot.p0 = points_min; view_bot.p1 = points_max; }
+			
+			ImGui::EndGroup();
+		}
+		
 		if (io.MouseWheel != 0x00 && view_hovered && !view_bot.int_drag)
 		{
 			ImVec2 scale_point = inv_transform(&view_bot, ImGui::GetMousePos());
@@ -929,14 +1107,30 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 			
 			trj_traj_bz_pos(self, view_pt.x, pt_pos);
 			
-			s_trj_traj_bz_point point = (s_trj_traj_bz_point)
-					{
-							.time = view_pt.x,
-							.pos_p = { pt_pos[0], view_pt.y, pt_pos[2] },
-							.pos_d = { pt_pos[0], view_pt.y, pt_pos[2] },
-							.pos_t = { 0.0, 0.0, 0.0 },
-							//			.rot_p = {  },
-					};
+			s_trj_traj_bz_point point;
+			
+			if (self->ellp_en == 0x00)
+			{
+				point = (s_trj_traj_bz_point)
+				{
+						.time = view_pt.x,
+						.pos_p = { pt_pos[0], view_pt.y, pt_pos[2] },
+						.pos_d = { pt_pos[0], view_pt.y, pt_pos[2] },
+						.pos_t = { 0.0, 0.0, 0.0 },
+						//			.rot_p = {  },
+				};
+			}
+			else
+			{
+				point = (s_trj_traj_bz_point)
+				{
+						.time = view_pt.x,
+						.pos_p = { pt_pos[0], pt_pos[1], view_pt.y },
+						.pos_d = { pt_pos[0], pt_pos[1], view_pt.y },
+						.pos_t = { 0.0, 0.0, 0.0 },
+						//			.rot_p = {  },
+				};
+			}
 			
 			trj_traj_bz_add(self, point);
 		}
@@ -993,7 +1187,11 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 		{
 			ImGui::PushID(i);
 			
-			ImVec2 point_pos = ImVec2(self->pts[i].time, self->pts[i].pos_p[1]);
+			ImVec2 point_pos;
+			
+			if (self->ellp_en == 0x00) { point_pos = ImVec2(self->pts[i].time, self->pts[i].pos_p[1]); }
+			else { point_pos = ImVec2(self->pts[i].time, self->pts[i].pos_p[2]); }
+			
 			ImGui::SetCursorScreenPos(transform(&view_bot, point_pos) - ImVec2(8, 8));
 			
 			ImGui::InvisibleButton("##pt", ImVec2(16, 16));
@@ -1023,7 +1221,11 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 			}
 			
 			self->pts[i].time = point_pos.x;
-			self->pts[i].pos_p[1] = point_pos.y;
+			
+			if (self->ellp_en == 0x00)
+			{ self->pts[i].pos_p[1] = point_pos.y; }
+			else
+			{ self->pts[i].pos_p[2] = point_pos.y; }
 			
 			ImGui::PopID();
 		}
@@ -1049,10 +1251,20 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				trj_traj_bz_pos(self, time, p0);
 				trj_traj_bz_pos(self, time + time_step, p1);
 				
-				ImVec2 p0_ = ImVec2(time, p0[1]);
-				ImVec2 p1_ = ImVec2(time+time_step, p1[1]);
-				
-				window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), col_text_u32);
+				if (ellp_en_temp == 0x00)
+				{
+					ImVec2 p0_ = ImVec2(time, p0[1]);
+					ImVec2 p1_ = ImVec2(time+time_step, p1[1]);
+					
+					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), col_text_u32);
+				}
+				else
+				{
+					ImVec2 p0_ = ImVec2(time, p0[2]);
+					ImVec2 p1_ = ImVec2(time+time_step, p1[2]);
+					
+					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), col_text_u32);
+				}
 				
 				time += time_step;
 			}
