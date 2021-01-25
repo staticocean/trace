@@ -305,10 +305,40 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-40);
 	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
+	uint8_t ellp_en = traj->ellp_en;
 	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
 	
+	if (ellp_en != traj->ellp_en) // support conversion when changing ellp support
+    {
+	    // if we turn off ellp support then convert degrees to m
+	    if (traj->ellp_en == 0x00)
+        {
+            vlf_t pos_ecef[3];
+
+            for (int i = 0; i < traj->pts_offset; ++i)
+            {
+                trj_ellp_ecef(traj->ellp, pos_ecef, traj->pts[i].pos_p);
+                vl_vcopy(traj->pts[i].pos_p, pos_ecef);
+            }
+        }
+
+	    // if we turn on ellp support then convert m to lla
+	    if (traj->ellp_en != 0x00)
+        {
+            vlf_t pos_lla[3];
+
+            for (int i = 0; i < traj->pts_offset; ++i)
+            {
+                trj_ellp_lla(traj->ellp, pos_lla, traj->pts[i].pos_p);
+                vl_vcopy(traj->pts[i].pos_p, pos_lla);
+            }
+        }
+	    
+	    trj_traj_bz_compile(traj);
+    }
+
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
