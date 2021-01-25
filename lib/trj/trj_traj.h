@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 
 #include "vl.h"
+#include "vl_svd.h"
 #include "trj_utils.h"
 #include "trj_api.h"
 #include "trj_bz.h"
@@ -204,9 +205,6 @@ inline uint8_t trj_traj_static_info_(void *data, s_trj_traj_info *info)
 	return 0x00;
 }
 //------------------------------------------------------------------------------
-
-
-#define trj_traj_orb_id (0x00000002)
 
 typedef struct trj_traj_orb
 {
@@ -651,8 +649,7 @@ inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	vlf_t *rot_d0 = (vlf_t*) malloc(sizeof(vlf_t) * 2 * self->pts_offset);
 	vlf_t *rot_d1 = (vlf_t*) malloc(sizeof(vlf_t) * 2 * self->pts_offset);
 	vlf_t *rot_d2 = (vlf_t*) malloc(sizeof(vlf_t) * 2 * self->pts_offset);
-	
-	
+
 	for (i = 1; i < self->pts_offset-1; ++i)
 	{
 		pos_p0[2 * i + 0] = 3 * (self->pts[i + 1].time - self->pts[i - 1].time);
@@ -901,8 +898,7 @@ inline uint8_t trj_traj_bz_pos_local(s_trj_traj_bz *self, vlf_t time, vlf_t *pos
 	
 	if (self->ellp_en != 0x00 && self->ellp != NULL)
 	{
-		vlf_t lla[3] = { pos[2], pos[0], pos[1] };
-		trj_ellp_ecef(self->ellp, pos, lla);
+		trj_ellp_ecef(self->ellp, pos, pos);
 	}
 	
 	return 0x00;
@@ -923,6 +919,19 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 
 inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 {
+//    vlf_t p0[3];
+//    vlf_t p1[3];
+//
+//    trj_traj_bz_pos_local(self, time, p0);
+//    trj_ellp_lla(self->ellp, p0, p0);
+//    trj_traj_bz_pos_local(self, time + 1E-0, p1);
+//    trj_ellp_lla(self->ellp, p1, p1);
+//
+//    vl_vsub(vel, p1, p0);
+//    vl_vmul_s(vel, vel, 1E+0);
+//
+//    return 0x00;
+
 	uint32_t offset = 0x00;
 	
 	if (self->pts_offset == 0x00) { return 0x01; }
@@ -1025,10 +1034,8 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 	
 	if (self->ellp_en != 0x00 && self->ellp != NULL)
 	{
-		vlf_t lla[3] = { vel[2], vel[0], vel[1] };
-		vl_vcopy(vel, lla);
 	}
-	
+
 	return 0x00;
 }
 
@@ -1036,12 +1043,6 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 
 inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 {
-	vlf_t vel[3];
-	vlf_t pos[3];
-	
-	trj_traj_bz_vel(self, time, vel);
-	trj_traj_bz_pos(self, time, pos);
-	
 	if (self->ellp_en == 0x00)
 	{
 	
@@ -1049,9 +1050,17 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 	
 	else
 	{
-		vlf_t nwh[3];
-		trj_ellp_nwhvel(self->ellp, vel, nwh);
-		
+        vlf_t vel_lla[3];
+        vlf_t pos_ecef[3];
+        vlf_t pos_lla[3];
+
+        trj_traj_bz_pos_local(self, time, pos_ecef);
+        trj_traj_bz_vel(self, time, vel_lla);
+
+        vlf_t nwh[3];
+        trj_ellp_lla(self->ellp, pos_lla, pos_ecef);
+		trj_ellp_nwhvel(self->ellp, pos_lla, vel_lla, nwh);
+
 		vlf_t rot_nwh_tnp[9] = {
 			nwh[0], nwh[2], nwh[1],
 			0.0, 1.0, 0.0,
@@ -1075,21 +1084,20 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		
 		vl_cross(z, x, y);
 		vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
-		
+
+//		vl_rnorm(rot_nwh_tnp);
+
 		vlf_t rot_nwh[9];
 		vl_tnp(rot_nwh, rot_nwh_tnp);
-		
+
 		s_trj_rot_hpr rot_nwh_hpr;
 		trj_ctn_to_hpr(&rot_nwh_hpr, rot_nwh);
 		rot_nwh_hpr.roll = 0.0;
 		trj_hpr_to_ctn(rot_nwh, rot_nwh_hpr);
-		
+
 //		vl_mprint(rot_nwh);
 //		fflush(stdout);
-		
-		vlf_t pos_ecef[3];
-		trj_traj_bz_pos_local(self, time, pos_ecef);
-		
+
 		vlf_t ecef_ctn[9];
 		trj_ellp_ecefrot(self->ellp, pos_ecef, ecef_ctn);
 		
@@ -1099,7 +1107,9 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		vl_mmul_m(r_ref, ecef_ctn, rot_nwh);
 		vl_mmul_m(r_inr, &self->ref->rot[0][0], r_ref);
 	}
-	
+
+	vl_rnorm(rot);
+
 	return 0x00;
 }
 
