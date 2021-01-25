@@ -9,7 +9,7 @@ C_DEFINES =
 
 C_INCLUDES = @CMakeFiles/trj.dir/includes_C.rsp
 
-CXX_FLAGS =  -std=c++17 -Wdeprecated-declarations -static-libstdc++ -static-libgcc -D_DLL -D_MT -Xclang --dependent-lib=msvcrt  
+CXX_FLAGS =  -std=c++17 -static-libstdc++ -static-libgcc -D_DLL -D_MT -Xclang --dependent-lib=msvcrt  
 
 CXX_DEFINES = 
 
