@@ -227,7 +227,7 @@ inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
 
 //------------------------------------------------------------------------------
 
-inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *nwh)
+inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *vel, vlf_t *nwh)
 {
 	vlf_t sin_lat = vl_sin(lla[0]);
 	vlf_t temp = 1 - self->ee * sin_lat*sin_lat;
@@ -235,10 +235,9 @@ inline void trj_ellp_nwhvel(s_trj_ellp *self, vlf_t *lla, vlf_t *nwh)
 	vlf_t M = self->a * self->p1mee / vl_pow(temp, 1.5);
 	vlf_t N = self->a / vl_pow(temp, 0.5);
 	
-	// DO NOT CHANGE ORDER
-	// if lla == nwh then lla[0] must be used first and written last
-	nwh[1] = lla[1] * (N * vl_cos(lla[0]));
-	nwh[0] = lla[0] * M;
+	nwh[0] = vel[0] * M;
+	nwh[1] = vel[1] * N * vl_cos(lla[0]);
+	nwh[2] = vel[2];
 	
 	return;
 }
