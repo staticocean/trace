@@ -106,6 +106,16 @@ inline void trj_gui_data_view_text(s_trj_data *self)
 
 inline void trj_gui_data_edit_ram(s_trj_data *self)
 {
+	ImGui::PushID(self);
+	
+	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (data->ref  != NULL) { data->ref_hash  = data->ref->hash ; }
+	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+	
 	ImGui::Text("desc  ");
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
@@ -118,6 +128,29 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", data->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	trj_gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ellp  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-40);
+	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
+	if (data->ellp == NULL) { data->ellp_en = 0x00; }
+	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+	
+	ImGui::PopID();
+	
 	return;
 }
 
@@ -128,7 +161,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	
 	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
 	
-	if (data->data_list == NULL || data->data_offset == NULL)
+	if (data->offset == 0x00)
 	{
 		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
 		return;
@@ -140,7 +173,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	{
 		s_vl3d_eng vl3d_eng;
 		
-		s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (*data->data_offset*2 + 4096));
+		s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
 		
 		s_vl3d_view view = {
 				.scale = 1.0,
@@ -162,22 +195,22 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 		s_vl3d_line line = {.color = vl3d_col_l};
 		
 		// pos
-		if (*data->data_offset > 10000)
+		if (data->offset > 10000)
 		{
-			for (int di = *data->data_offset / 10000, i = 0;
+			for (int di = data->offset / 10000, i = 0;
 				 i < 10000 - 1; ++i)
 			{
-				vl_vcopy(line.p0, &data->data_list[i * di].pos[0][0]);
-				vl_vcopy(line.p1, &data->data_list[(i + 1) * di].pos[0][0]);
+				vl_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
+				vl_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
 				
 				vl3d_eng_add_line(&vl3d_eng, line);
 			}
 		} else
 		{
-			for (int i = 0; i < *data->data_offset - 1; ++i)
+			for (int i = 0; i < data->offset - 1; ++i)
 			{
-				vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
-				vl_vcopy(line.p1, &data->data_list[i + 1].pos[0][0]);
+				vl_vcopy(line.p0, &data->ecef_pos[i*3]);
+				vl_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
 				
 				vl3d_eng_add_line(&vl3d_eng, line);
 			}
@@ -191,22 +224,22 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 //		vl3d_eng_add_trngl(&vl3d_eng, trngl);
 		
 		// hpr
-		if (*data->data_offset > 20)
+		if (data->offset > 20)
 		{
-			for (int di = *data->data_offset / 20, i = 0;
+			for (int di = data->offset / 20, i = 0;
 				 i < 20 - 1; ++i)
 			{
-				vl_vcopy(trngl.p0, &data->data_list[i * di].pos[0][0]);
-				vl_vcopy(trngl.p1, &data->data_list[i * di].pos[0][0]);
-				vl_vcopy(trngl.p2, &data->data_list[i * di].pos[0][0]);
+				vl_vcopy(trngl.p0, &data->ecef_pos[i * di * 3]);
+				vl_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
+				vl_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 				
 				vlf_t rot[9];
-				vl_tnp(rot, &data->data_list[i * di].rot[0][0]);
+				vl_tnp(rot, &data->ctn[i * di * 9]);
 				vl_mmul_s(rot, rot, 0.025 / view.scale);
 				
 				// top middle
 				
-				vl_vmul_s(&rot[0], &rot[0], 2.0);
+				vl_vmul_s(&rot[0], &rot[0], 3.0);
 				vl_vsum(trngl.p0, trngl.p0, &rot[0]);
 				
 				// left
@@ -219,14 +252,14 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			}
 		} else
 		{
-			for (int i = 0; i < *data->data_offset - 1; ++i)
+			for (int i = 0; i < data->offset - 1; ++i)
 			{
-				vl_vcopy(trngl.p0, &data->data_list[i].pos[0][0]);
-				vl_vcopy(trngl.p1, &data->data_list[i].pos[0][0]);
-				vl_vcopy(trngl.p2, &data->data_list[i].pos[0][0]);
+				vl_vcopy(trngl.p0, &data->ecef_pos[i*3]);
+				vl_vcopy(trngl.p1, &data->ecef_pos[i*3]);
+				vl_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 				
 				vlf_t rot[9];
-				vl_tnp(rot, &data->data_list[i].rot[0][0]);
+				vl_tnp(rot, &data->ctn[i*9]);
 				vl_mmul_s(rot, rot, 10.0 / view.scale);
 				
 				// top middle
@@ -252,82 +285,87 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	
 	if (mode == 0x01)
 	{
-		float *pos[3] = {
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-		};
-		
-		float *vel[3] = {
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-		};
-		
-		float *acc[3] = {
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-				(float *) malloc(sizeof(float) * *data->data_offset),
-		};
-		
-		float *time = (float*) malloc(sizeof(float) * *data->data_offset);
-		
-		for (int i = 0; i < *data->data_offset; ++i)
+		if (ImPlot::BeginPlot("heading"))
 		{
-			time[i] = data->data_list[i].time[0];
-			
-			vlf_t acc_tied[3];
-			vlf_t rot_tnp[9];
-			
-			vl_tnp(rot_tnp, &data->data_list[i].rot[0][0]);
-			vl_mmul_v(acc_tied, rot_tnp, &data->data_list[i].pos[2][0]);
-			
-			for (int j = 0; j < 3; ++j)
-			{
-				pos[j][i] = data->data_list[i].pos[0][j];
-				vel[j][i] = data->data_list[i].pos[1][j];
-				acc[j][i] = acc_tied[j];
-			}
+			// hide first and last
+			ImPlot::PlotLine("heading", data->time, &data->heading[2], data->offset-3);
+			ImPlot::EndPlot();
+		}
+		
+		if (ImPlot::BeginPlot("pitch"))
+		{
+			// hide first and last
+			ImPlot::PlotLine("pitch", data->time, &data->pitch[2], data->offset-3);
+			ImPlot::EndPlot();
+		}
+		
+		if (ImPlot::BeginPlot("roll"))
+		{
+			// hide first and last
+			ImPlot::PlotLine("roll", data->time, &data->roll[2], data->offset-3);
+			ImPlot::EndPlot();
 		}
 
-		if (ImPlot::BeginPlot("acc"))
+		if (ImPlot::BeginPlot("tied_acc"))
 		{
 			// hide first and last
-			ImPlot::PlotLine("acc_0", time, &acc[0][1], *data->data_offset-2);
-			ImPlot::PlotLine("acc_1", time, &acc[1][1], *data->data_offset-2);
-			ImPlot::PlotLine("acc_2", time, &acc[2][1], *data->data_offset-2);
+			ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
 			
 			ImPlot::EndPlot();
 		}
 		
-		if (ImPlot::BeginPlot("vel"))
+		if (ImPlot::BeginPlot("lla_vel"))
 		{
 			// hide first and last
-			ImPlot::PlotLine("vel_0", time, &vel[0][1], *data->data_offset-2);
-			ImPlot::PlotLine("vel_1", time, &vel[1][1], *data->data_offset-2);
-			ImPlot::PlotLine("vel_2", time, &vel[2][1], *data->data_offset-2);
+			ImPlot::PlotLine("vel_lat", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("vel_lon", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("vel_alt", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
 			
 			ImPlot::EndPlot();
 		}
 		
-		if (ImPlot::BeginPlot("pos"))
+		if (ImPlot::BeginPlot("lla_pos"))
 		{
 			// hide first and last
-			ImPlot::PlotLine("pos_0", time, &pos[0][1], *data->data_offset-2);
-			ImPlot::PlotLine("pos_1", time, &pos[1][1], *data->data_offset-2);
-			ImPlot::PlotLine("pos_2", time, &pos[2][1], *data->data_offset-2);
+			ImPlot::PlotLine("pos_lat", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("pos_lon", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("pos_alt", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
 			
 			ImPlot::EndPlot();
 		}
 		
-		for (int j = 0; j < 3; ++j)
+		
+		if (ImPlot::BeginPlot("ecef_acc"))
 		{
-			free(pos[j]);
-			free(vel[j]);
-			free(acc[j]);
+			// hide first and last
+			ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			
+			ImPlot::EndPlot();
 		}
 		
-		free(time);
+		if (ImPlot::BeginPlot("ecef_vel"))
+		{
+			// hide first and last
+			ImPlot::PlotLine("vel_x", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("vel_y", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("vel_z", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			
+			ImPlot::EndPlot();
+		}
+		
+		if (ImPlot::BeginPlot("ecef_pos"))
+		{
+			// hide first and last
+			ImPlot::PlotLine("pos_x", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("pos_y", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("pos_z", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+			
+			ImPlot::EndPlot();
+		}
 	}
 	
 	ImGui::EndGroup();

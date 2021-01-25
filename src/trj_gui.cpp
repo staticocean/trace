@@ -244,7 +244,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	static s_trj_data_ram_init trj_data_ram_config_ = {
-			.temp = 0x00,
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+			
+			.ellp_en = 0x00,
+			.ellp = NULL,
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
