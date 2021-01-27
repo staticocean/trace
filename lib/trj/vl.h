@@ -380,17 +380,17 @@ inline void vl_col (vlf_t *res, vlf_t *mat, uint8_t col)
 
 inline void vl_mmul_s(vlf_t *res, vlf_t *mat, vlf_t scalar)
 {
-	res[0 + 0] = res[0 + 0] * scalar;
-	res[0 + 1] = res[0 + 1] * scalar;
-	res[0 + 2] = res[0 + 2] * scalar;
+	res[0 + 0] = mat[0 + 0] * scalar;
+	res[0 + 1] = mat[0 + 1] * scalar;
+	res[0 + 2] = mat[0 + 2] * scalar;
 	
-	res[3 + 0] = res[3 + 0] * scalar;
-	res[3 + 1] = res[3 + 1] * scalar;
-	res[3 + 2] = res[3 + 2] * scalar;
+	res[3 + 0] = mat[3 + 0] * scalar;
+	res[3 + 1] = mat[3 + 1] * scalar;
+	res[3 + 2] = mat[3 + 2] * scalar;
 	
-	res[6 + 0] = res[6 + 0] * scalar;
-	res[6 + 1] = res[6 + 1] * scalar;
-	res[6 + 2] = res[6 + 2] * scalar;
+	res[6 + 0] = mat[6 + 0] * scalar;
+	res[6 + 1] = mat[6 + 1] * scalar;
+	res[6 + 2] = mat[6 + 2] * scalar;
 	
 	return;
 }
@@ -620,6 +620,13 @@ inline void vl_unskew(vlf_t *res, vlf_t *mat)
 	res[2] = mat[1*3 + 0];
 	
 	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline vlf_t vl_mtrace(vlf_t *mat)
+{
+	return (mat[0] + mat[4] + mat[8]);
 }
 
 //------------------------------------------------------------------------------
