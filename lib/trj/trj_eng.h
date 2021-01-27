@@ -156,6 +156,8 @@ inline uint8_t trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
 	obj->time 		= self->time;
 	obj->log_list   = NULL;
 	obj->log_offset = 0x00;
+	obj->pos_inert  = 1.0;
+	obj->rot_inert  = 1.0;
 	
 	self->obj_count++;
 	
