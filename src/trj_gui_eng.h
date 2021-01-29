@@ -7,6 +7,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 
+#include <lib/implot/implot.h>
+
 #include <lib/trj/vl.h>
 #include <lib/trj/trj_api.h>
 #include <lib/trj/trj_eng.h>
@@ -111,6 +113,8 @@ inline void trj_gui_eng_sel_data(s_trj_gui_eng *gui, s_trj_data *data)
 
 inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 {
+	ImGui::PushID(self);
+	
 	static ImGuiTextFilter filter;
 	static void* selected_item = NULL;
 	
@@ -127,7 +131,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	for (int i = 0; i < self->obj_count; i++)
 	{
-		ImGui::PushID(i);
+		ImGui::PushID(&gui->obj_list[i]);
 		
 		s_trj_gui_obj *obj_gui = &gui->obj_list[i];
 		s_trj_obj *obj = obj_gui->ref;
@@ -172,7 +176,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 						{
 							for (int j = 0; j < self->traj_offset; ++j)
 							{
-								ImGui::PushID(j);
+								ImGui::PushID(&self->traj_list[j]);
 								ImGui::Selectable(self->traj_list[j].desc);
 								
 								if (ImGui::IsItemClicked())
@@ -194,7 +198,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 						
 						for (int j = 0; j < obj->traj_offset; ++j)
 						{
-							ImGui::PushID(j);
+							ImGui::PushID(&obj->traj_list[j]);
 							
 							bool traj_sel = gui->sel_item == &obj->traj_list[j];
 							
@@ -241,7 +245,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 						{
 							for (int j = 0; j < self->ctrl_offset; ++j)
 							{
-								ImGui::PushID(j);
+								ImGui::PushID(&self->ctrl_list[j]);
 								ImGui::Selectable(self->ctrl_list[j].desc);
 								
 								if (ImGui::IsItemClicked())
@@ -263,7 +267,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 						
 						for (int j = 0; j < obj->ctrl_offset; ++j)
 						{
-							ImGui::PushID(j);
+							ImGui::PushID(&obj->ctrl_list[j]);
 							
 							bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
 							
@@ -297,69 +301,67 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				}
 				{
 					bool data_open = ImGui::TreeNodeEx("data");
-					
+
 					if (self->data_offset > 0x00)
 					{
 						ImGui::SameLine();
-						
+
 						if (ImGui::SmallButton("add##add_data"))
 						{ ImGui::OpenPopup("add_data_popup"); }
-						
+
 						if (ImGui::BeginPopup("add_data_popup"))
 						{
 							for (int j = 0; j < self->data_offset; ++j)
 							{
-								ImGui::PushID(j);
+								ImGui::PushID(&self->data_list[j]);
 								ImGui::Selectable(self->data_list[j].desc);
-								
+
 								if (ImGui::IsItemClicked())
-								{
-									trj_obj_add_data(obj, self->data_list[j]);
-								}
-								
+								{ trj_obj_add_data(obj, self->data_list[j]); }
+
 								ImGui::PopID();
 							}
-							
+
 							ImGui::EndPopup();
 						}
 					}
-					
+
 					if (data_open)
 					{
 						if (obj->data_offset == 0x00)
 						{ ImGui::Text("[no items]"); }
-						
+
 						for (int j = 0; j < obj->data_offset; ++j)
 						{
-							ImGui::PushID(j);
-							
-							bool ctrl_sel = gui->sel_item == &obj->data_list[j];
-							
+							ImGui::PushID(&obj->data_list[j]);
+
+							bool data_sel = gui->sel_item == &obj->data_list[j];
+
 							ImGui::TreeNodeEx(obj->data_list[j].name,
-											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+											  (data_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].name);
-							
+
 							if (ImGui::IsItemClicked())
 							{ trj_gui_eng_sel_data(gui, &obj->data_list[j]); }
-							
+//
 							if (ImGui::BeginPopupContextItem("data_menu"))
 							{
 								if (ImGui::Selectable("delete"))
 								{
 									if (gui->sel_item == &obj->data_list[j])
 									{ gui->sel_item = NULL; }
-									
+
 									trj_obj_del_data(obj, &obj->data_list[j]);
 								}
-								
+
 								ImGui::EndPopup();
 							}
-							
+
 							ImGui::TreePop();
-							
+
 							ImGui::PopID();
 						}
-						
+
 						ImGui::TreePop();
 					}
 				}
@@ -374,6 +376,8 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	ImGui::PopStyleVar();
 
 	ImGui::EndChild();
+	
+	ImGui::PopID();
 	
 	return 0x00;
 }
@@ -472,6 +476,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 {
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Always);
 	
 	const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
 	const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
@@ -503,9 +508,44 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		if (gui->state == trj_gui_eng_state_standby)
 		{
-			ImGui::Text("stby mode");
+			ImGui::AlignTextToFramePadding();
+			ImGui::Text("errors");
+			ImGui::SameLine();
 			
 			if (ImGui::Button("CLOSE", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			
+			ImGui::Dummy(ImVec2(0, 5));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0, 5));
+			
+			ImGui::BeginChild("##errors");
+			{
+				for (int i = 0; i < self->obj_count; ++i)
+				{
+					s_trj_obj *obj = &self->obj_list[i];
+					
+					ImGui::PushID(obj);
+					
+					if (ImGui::CollapsingHeader(obj->desc))
+					{
+						if (ImPlot::BeginPlot(obj->desc))
+						{
+							ImPlot::PlotLine("pos_error [m]  ",
+									&obj->log_list[0].time[0], &obj->log_list[0].pos_error,
+									obj->log_offset, 0x00, sizeof(s_trj_obj_data));
+							
+							ImPlot::PlotLine("rot_error [rad]",
+									&obj->log_list[0].time[0], &obj->log_list[0].rot_error,
+									obj->log_offset, 0x00, sizeof(s_trj_obj_data));
+							
+							ImPlot::EndPlot();
+						}
+					}
+					
+					ImGui::PopID();
+				}
+			}
+			ImGui::EndChild();
 		}
 
 //		ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
