@@ -11,8 +11,6 @@
 
 #include "vl.h"
 
-#include "trj_obj.h"
-
 //------------------------------------------------------------------------------
 
 typedef struct insu_rot_hpr
