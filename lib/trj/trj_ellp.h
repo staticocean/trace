@@ -1,7 +1,7 @@
 
 //
 //  Created by Egor Chekhov O'Leo on 24/12/2015.
-//  Copyright © 2015 Control Systems Interfaces. All rights reserved.
+//  Copyright ? 2015 Control Systems Interfaces. All rights reserved.
 //
 
 #ifndef __TRJ_ELLP__
@@ -15,6 +15,17 @@
 
 //------------------------------------------------------------------------------
 
+#ifdef __TRJ_ENV__
+
+static s_trj_ellp trj_ellp_wgs84;
+trj_ellp_wgs84.desc   	= "wgs84";
+trj_ellp_wgs84.a 		=  6.37813700000000000000e+0006;
+trj_ellp_wgs84.b 		=  6.35675231424517949745e+0006;
+trj_ellp_wgs84.e  		=  8.18191908426214947083e-0002;
+trj_ellp_wgs84.f  		=  3.35281066474748071998e-0003;
+
+#else
+
 static s_trj_ellp trj_ellp_wgs84 = {
 		
 		.desc   = "wgs84",
@@ -24,6 +35,8 @@ static s_trj_ellp trj_ellp_wgs84 = {
 		.e  	=  8.18191908426214947083e-0002,
 		.f  	=  3.35281066474748071998e-0003,
 };
+
+#endif
 
 //------------------------------------------------------------------------------
 
@@ -40,7 +53,7 @@ inline void trj_ellp_init(s_trj_ellp *ellp)
 	ellp->ll		= ellp->l * ellp->l;
 	ellp->invcbrt2	= 1.0 / (vl_pow(2.0, 1.0 / 3.0));
 	
-	ellp->hash = vl_crc32(ellp->desc);
+	ellp->hash 		= vl_crc32(ellp->desc);
 	
 	return;
 }
@@ -199,35 +212,19 @@ inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
 	vlf_t *z = &ctn_tnp[6];
 	
 	vlf_t lla[3];
-	vlf_t lla_d[3]; // down
-	vlf_t ecef_d[3];
-	
 	trj_ellp_lla(self, lla, ecef);
-	vl_vcopy(lla_d, lla);
-	lla_d[2] -= 1000;
-	trj_ellp_ecef(self, ecef_d, lla_d);
-
-//	y = lla_to_ecef(lla_ref).vec - lla_to_ecef(lla_bot).vec;
-//	y = y / scipy.linalg.norm(y);
-//
-	vl_vsub(y, ecef, ecef_d);
-	vl_vmul_s(y, y, 1.0 / vl_vnorm(y));
-
-//	x = numpy.array([0.0, 6.3781E+6, 0.0]) -pos_ecef.vec;
-//	x = x / scipy.linalg.norm(x);
-//	x = x - y * numpy.dot(x, y);
-//	x = x / scipy.linalg.norm(x);
+	y[0] =  cos(lla[1]) * cos(lla[0]);
+	y[2] = -sin(lla[1]) * cos(lla[0]);
+	y[1] = sin(lla[0]);
 	
-	vl_vsub(x, (vlf_t[3]) { 0.0, self->a, 0.0 }, ecef);
+	vlf_t north[3] = { 0.0, self->a, 0.0 };
+	vl_vsub(x, north, ecef);
 	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
 	
 	vlf_t xy[3];
 	vl_vmul_s(xy, y, vl_vdot(x, y));
 	vl_vsub(x, x, xy);
 	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
-//
-//	z = numpy.cross(x, y);
-//	z = z / scipy.linalg.norm(z);
 	
 	vl_cross(z, x, y);
 	vl_vmul_s(z, z, 1.0 / vl_vnorm(z));

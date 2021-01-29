@@ -1,7 +1,7 @@
 
 //
 //  Created by Egor Chekhov O'Leo on 24/12/2015.
-//  Copyright © 2015 Control Systems Interfaces. All rights reserved.
+//  Copyright ? 2015 Control Systems Interfaces. All rights reserved.
 //
 
 #ifndef __TRJ_API__
@@ -48,8 +48,10 @@ typedef struct trj_traj_info
 
 typedef struct trj_traj
 {
-	char desc[32];
-	uint64_t hash;
+		char desc[32];
+	uint32_t hash;
+	
+	char name[32];
 	
 	uint32_t config_size;
 	void *config;
@@ -73,7 +75,7 @@ typedef struct trj_traj
 typedef struct trj_traj
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
 	
 	char name[32];
 	
@@ -103,7 +105,9 @@ typedef struct trj_traj
 typedef struct trj_ctrl
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
+	
+	char name[32];
 	
 	uint32_t config_size;
 	void *config;
@@ -125,7 +129,7 @@ typedef struct trj_ctrl
 typedef struct trj_ctrl
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
 	
 	char name[32];
 	
@@ -153,7 +157,9 @@ typedef struct trj_ctrl
 typedef struct trj_data
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
+	
+	char name[32];
 	
 	uint32_t config_size;
 	void *config;
@@ -175,7 +181,7 @@ typedef struct trj_data
 typedef struct trj_data
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
 	
 	char name[32];
 	
@@ -203,7 +209,7 @@ typedef struct trj_data
 typedef struct trj_proc
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
 	
 	uint32_t config_size;
 	void *config;
@@ -224,7 +230,7 @@ typedef struct trj_proc
 typedef struct trj_proc
 {
 	char desc[32];
-	uint64_t hash;
+	uint32_t hash;
 	
 	uint32_t config_size;
 	void *config;
@@ -253,6 +259,9 @@ typedef struct trj_obj_data
 	
 	vlf_t pos_force[3];
 	vlf_t rot_force[3];
+	
+	vlf_t pos_error;
+	vlf_t rot_error;
 	
 }	s_trj_obj_data;
 
@@ -515,13 +524,22 @@ inline s_trj_obj* trj_eng_find_obj(s_trj_eng *self, uint32_t hash)
 	return res;
 }
 
+// No pointer arifmetics in TRJ ENV - sadge
+#ifndef __TRJ_ENV__
+
 inline uint32_t trj_eng_obj_index(s_trj_eng *self, s_trj_obj *obj)
 {
-	uintptr_t diff = ((uintptr_t) self->obj_list - (uintptr_t) obj) / sizeof(s_trj_obj);
+	uint32_t diff = (uint32_t) (self->obj_list - obj) / sizeof(s_trj_obj);
 	
-	return (uint32_t) diff;
+	return diff;
 }
+
+#endif
+
 //------------------------------------------------------------------------------
+
+// TRJ ENV does not support function pointers and does not need save load functionality
+#ifndef __TRJ_ENV__
 
 inline uint8_t trj_traj_save(s_trj_traj *self, s_trj_eng *eng, uint8_t **v_file)
 {
@@ -801,10 +819,11 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 	
 	return 0x00;
 }
+
+#endif /* __TRJ_ENV__ */
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRJ_API__ */
-
-
 
 

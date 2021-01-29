@@ -198,7 +198,7 @@ void __env_init__(s_trj_gui_env *self)
 				fread (plugin_data, plugin_size, 1, plugin_file);
 				fclose(plugin_file);
 				
-				while (plugin_size > 0x00 && plugin_data[plugin_size] != '\r' && plugin_data[plugin_size] != '\n')
+				while (plugin_size > 0x00 && plugin_data[plugin_size-1] != '\r' && plugin_data[plugin_size-1] != '\n')
 				{
 					plugin_size--;
 				}

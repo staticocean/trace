@@ -161,7 +161,8 @@ inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 			
 			ImGui::Separator();
 			
-			if (ImGui::MenuItem("Reset", "")) { trj_gui_env_reset(self->env); }
+			if (ImGui::MenuItem("Reset", ""))
+			{ trj_gui_cmd_clearlog(self->cmd); trj_gui_env_reset(self->env); }
 
 //			ImGui::Separator();
 			
