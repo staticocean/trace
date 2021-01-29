@@ -82,10 +82,14 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 	else 									{ vl_vinter(&data[offset].pos[1][0], self->d1p, self->d1n, 0.5); }
 	
 	vl_vsub (self->d2, self->d1n, self->d1p);
-	
-	if 		(offset == 0x00) 				{ vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 1.0 / (data[offset+1].time[0] - data[offset].time[0])); }
-	else if (offset == (obj->log_offset-1)) { vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 1.0 / (data[offset].time[0] - data[offset-1].time[0])); }
-	else 									{ vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 0.5 / (data[offset+1].time[0] - data[offset-1].time[0])); }
+//
+//	if 		(offset == 0x00) 				{ vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 1.0 / (data[offset+1].time[0] - data[offset].time[0])); }
+//	else if (offset == (obj->log_offset-1)) { vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 1.0 / (data[offset].time[0] - data[offset-1].time[0])); }
+//	else 									{ vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 0.5 / (data[offset+1].time[0] - data[offset-1].time[0])); }
+
+	if 		(offset == 0x00) 				{ vl_vzero(&data[offset].pos[2][0]); }
+	else if (offset == (obj->log_offset-1)) { vl_vzero(&data[offset].pos[2][0]); }
+	else 									{ vl_vmul_s(&data[offset].pos[2][0], self->d2, (vlf_t) 2.0 / (data[offset+1].time[0] - data[offset-1].time[0])); }
 	
 	if (offset > 0x00
 		&& fabs(vl_mdist(&data[offset-1].rot[0][0], &data[offset].rot[0][0])) > 1E-16)
@@ -153,20 +157,21 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 		vl_mmul_v(inert_acc, &obj->rot[0][0], tied_acc);
 		vl_mmul_m(inert_grs, &obj->rot[0][0], tied_grs);
 		
-		vl_vcopy(inert_acc, &obj->log_list[offset-1].pos[2][0]);
+//		vl_vcopy(inert_acc, &obj->log_list[offset-1].pos[2][0]);
 		
 		vl_mmul_m(inert_grs, inert_grs, &obj->rot[0][0]);
 		vl_msumm(&obj->rot[0][0], &obj->rot[0][0], inert_grs, obj->log_list[offset+1].time[1]);
 		vl_rnorm(&obj->rot[0][0]);
 //
-		vl_vcopy(&obj->pos[1][0], &obj->log_list[offset-1].pos[1][0]);
-		vl_vcopy(&obj->pos[2][0], &obj->log_list[offset-1].pos[2][0]);
+//		vl_vcopy(&obj->pos[1][0], &obj->log_list[offset-1].pos[1][0]);
+//		vl_vcopy(&obj->pos[2][0], &obj->log_list[offset-1].pos[2][0]);
 //
 		
 		vl_vsumm(&obj->pos[0][0], &obj->pos[0][0], &obj->pos[1][0], obj->log_list[offset].time[1]);
 		vl_vsumm(&obj->pos[0][0], &obj->pos[0][0], &obj->pos[2][0], obj->log_list[offset].time[1]*obj->log_list[offset].time[1]*0.5);
 
 		vl_vsumm(&obj->pos[1][0], &obj->pos[1][0], inert_acc, obj->log_list[offset].time[1]);
+		
 		vl_vcopy(&obj->pos[2][0], inert_acc);
 	}
 	
