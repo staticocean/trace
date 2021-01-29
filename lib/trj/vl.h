@@ -1,7 +1,7 @@
 
 //
 //  Created by Egor Chekhov O'Leo on 24/12/2015.
-//  Copyright © 2015 Control Systems Interfaces. All rights reserved.
+//  Copyright ? 2015 Control Systems Interfaces. All rights reserved.
 //
 
 #ifndef __VL__
@@ -148,7 +148,7 @@ inline void vl_mcopy(vlf_t *res, vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
-inline vlf_t vl_dist(vlf_t *vec_0, vlf_t *vec_1)
+inline vlf_t vl_vdist(vlf_t *vec_0, vlf_t *vec_1)
 {
 	uint8_t i;
 	
@@ -164,7 +164,7 @@ inline vlf_t vl_dist(vlf_t *vec_0, vlf_t *vec_1)
 	return vl_sqrt(vec_dist);
 }
 
-inline vlf_t vl_dist2(vlf_t *vec_0, vlf_t *vec_1)
+inline vlf_t vl_vdist2(vlf_t *vec_0, vlf_t *vec_1)
 {
 	uint8_t i;
 	
@@ -403,15 +403,37 @@ inline void vl_mmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 	uint8_t j;
 	uint8_t k;
 	
-	for (i = 0; i < 3; ++i)
+	if (res != mat_0 && res != mat_1)
 	{
-		for (j = 0; j < 3; ++j)
+		for (i = 0; i < 3; ++i)
 		{
-			res[i*3+j] = 0;
-			
-			for (k = 0; k < 3; ++k)
+			for (j = 0; j < 3; ++j)
 			{
-				res[i*3+j] += mat_0[i*3+k] * mat_1[k*3+j];
+				res[i * 3 + j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3 + j] += mat_0[i*3 + k] * mat_1[k*3 + j];
+				}
+			}
+		}
+	}
+	
+	else
+	{
+		vlf_t m0_[9] = { mat_0[0], mat_0[1], mat_0[2], mat_0[3], mat_0[4], mat_0[5], mat_0[6], mat_0[7], mat_0[8] };
+		vlf_t m1_[9] = { mat_1[0], mat_1[1], mat_1[2], mat_1[3], mat_1[4], mat_1[5], mat_1[6], mat_1[7], mat_1[8] };;
+		
+		for (i = 0; i < 3; ++i)
+		{
+			for (j = 0; j < 3; ++j)
+			{
+				res[i * 3 + j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3 + j] += m0_[i*3 + k] * m1_[k*3 + j];
+				}
 			}
 		}
 	}
@@ -421,24 +443,92 @@ inline void vl_mmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 
 //------------------------------------------------------------------------------
 
+inline void vl_mtmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
+{
+	uint8_t i;
+	uint8_t j;
+	uint8_t k;
+	
+	if (res != mat_0 && res != mat_1)
+	{
+		for (i = 0; i < 3; ++i)
+		{
+			for (j = 0; j < 3; ++j)
+			{
+				res[i*3+j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3+j] += mat_0[k*3+i] * mat_1[k*3+j];
+				}
+			}
+		}
+	}
+	else
+	{
+		vlf_t m0_[9] = { mat_0[0], mat_0[1], mat_0[2], mat_0[3], mat_0[4], mat_0[5], mat_0[6], mat_0[7], mat_0[8] };
+		vlf_t m1_[9] = { mat_1[0], mat_1[1], mat_1[2], mat_1[3], mat_1[4], mat_1[5], mat_1[6], mat_1[7], mat_1[8] };;
+		
+		for (i = 0; i < 3; ++i)
+		{
+			for (j = 0; j < 3; ++j)
+			{
+				res[i*3+j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3+j] += m0_[k*3+i] * m1_[k*3+j];
+				}
+			}
+		}
+	}
+		
+		return;
+}
+
+//------------------------------------------------------------------------------
+
 inline void vl_mmul_v(vlf_t *res, vlf_t *mat, vlf_t *vec)
 {
-    if (res != vec)
-    {
-        res[0] = mat[0] * vec[0] + mat[1] * vec[1] + mat[2] * vec[2];
-        res[1] = mat[3] * vec[0] + mat[4] * vec[1] + mat[5] * vec[2];
-        res[2] = mat[6] * vec[0] + mat[7] * vec[1] + mat[8] * vec[2];
-    }
+	if (res != vec)
+	{
+		res[0] = mat[0] * vec[0] + mat[1] * vec[1] + mat[2] * vec[2];
+		res[1] = mat[3] * vec[0] + mat[4] * vec[1] + mat[5] * vec[2];
+		res[2] = mat[6] * vec[0] + mat[7] * vec[1] + mat[8] * vec[2];
+	}
+	
+	else
+	{
+		vlf_t vec_[3] = { vec[0], vec[1], vec[2] };
+		
+		res[0] = mat[0] * vec_[0] + mat[1] * vec_[1] + mat[2] * vec_[2];
+		res[1] = mat[3] * vec_[0] + mat[4] * vec_[1] + mat[5] * vec_[2];
+		res[2] = mat[6] * vec_[0] + mat[7] * vec_[1] + mat[8] * vec_[2];
+	}
+	
+	return;
+}
 
-    else
-    {
-        vlf_t vec_[3] = { vec[0], vec[1], vec[2] };
+//------------------------------------------------------------------------------
 
-        res[0] = mat[0] * vec_[0] + mat[1] * vec_[1] + mat[2] * vec_[2];
-        res[1] = mat[3] * vec_[0] + mat[4] * vec_[1] + mat[5] * vec_[2];
-        res[2] = mat[6] * vec_[0] + mat[7] * vec_[1] + mat[8] * vec_[2];
-    }
-
+inline void vl_mtmul_v(vlf_t *res, vlf_t *mat, vlf_t *vec)
+{
+	if (res != vec)
+	{
+		res[0] = mat[0] * vec[0] + mat[3] * vec[1] + mat[6] * vec[2];
+		res[1] = mat[1] * vec[0] + mat[4] * vec[1] + mat[7] * vec[2];
+		res[2] = mat[2] * vec[0] + mat[5] * vec[1] + mat[8] * vec[2];
+	}
+	
+	else
+	{
+		vlf_t vec_[3] = { vec[0], vec[1], vec[2] };
+		
+		res[0] = mat[0] * vec_[0] + mat[3] * vec_[1] + mat[6] * vec_[2];
+		res[1] = mat[1] * vec_[0] + mat[4] * vec_[1] + mat[7] * vec_[2];
+		res[2] = mat[2] * vec_[0] + mat[5] * vec_[1] + mat[8] * vec_[2];
+	}
+	
 	return;
 }
 
@@ -502,6 +592,18 @@ inline void vl_msum(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 	return;
 }
 
+inline void vl_msumm(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1, vlf_t gain)
+{
+	uint32_t i;
+	
+	for (i = 0; i < 9; ++i)
+	{
+		res[i] = mat_0[i] + gain*mat_1[i];
+	}
+	
+	return;
+}
+
 inline void vl_msub(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 {
 	uint32_t i;
@@ -514,6 +616,18 @@ inline void vl_msub(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 	return;
 }
 
+inline void vl_msubm(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1, vlf_t gain)
+{
+	uint32_t i;
+	
+	for (i = 0; i < 9; ++i)
+	{
+		res[i] = mat_0[i] - gain*mat_1[i];
+	}
+	
+	return;
+}
+
 //------------------------------------------------------------------------------
 
 inline void vl_vsum(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
@@ -521,6 +635,17 @@ inline void vl_vsum(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
 	res[0] = vec_0[0] + vec_1[0];
 	res[1] = vec_0[1] + vec_1[1];
 	res[2] = vec_0[2] + vec_1[2];
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void vl_vsumm(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1, vlf_t gain)
+{
+	res[0] = vec_0[0] + gain * vec_1[0];
+	res[1] = vec_0[1] + gain * vec_1[1];
+	res[2] = vec_0[2] + gain * vec_1[2];
 	
 	return;
 }
@@ -631,7 +756,72 @@ inline vlf_t vl_mtrace(vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
+inline void vl_vinter(vlf_t *res, vlf_t *v0, vlf_t *v1, vlf_t dist)
+{
+	vlf_t ndist = 1.0 - dist;
+	
+	res[0] = v0[0] * ndist + v1[0] * dist;
+	res[1] = v0[1] * ndist + v1[1] * dist;
+	res[2] = v0[2] * ndist + v1[2] * dist;
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void vl_minter(vlf_t *res, vlf_t *m0, vlf_t *m1, vlf_t dist)
+{
+	vlf_t ndist = 1.0 - dist;
+	
+	res[0] = m0[0] * ndist + m1[0] * dist;
+	res[1] = m0[1] * ndist + m1[1] * dist;
+	res[2] = m0[2] * ndist + m1[2] * dist;
+	res[3] = m0[3] * ndist + m1[3] * dist;
+	res[4] = m0[4] * ndist + m1[4] * dist;
+	res[5] = m0[5] * ndist + m1[5] * dist;
+	res[6] = m0[6] * ndist + m1[6] * dist;
+	res[7] = m0[7] * ndist + m1[7] * dist;
+	res[8] = m0[8] * ndist + m1[8] * dist;
+
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline vlf_t vl_mdist(vlf_t *m0, vlf_t *m1)
+{
+	// does not work due to numerical instabilities and also pretty slow
+//	vlf_t m0t[9] = {
+//			m0[0], m0[3], m0[6],
+//			m0[1], m0[4], m0[7],
+//			m0[2], m0[5], m0[8],
+//	};
+//
+//	vlf_t m0tm1[9];
+//
+//	vl_mmul_m(m0tm1, m0t, m1);
+//
+//	return acos((vl_mtrace(m0tm1) - 1.0) * 0.5);
+	
+	uint32_t i;
+	vlf_t dist = 0.0;
+
+	for (i = 0; i < 9; ++i)
+	{
+		dist += (m0[i] - m1[i]) * (m0[i] - m1[i]);
+//		dist += m0tm1[i] * m0tm1[i];
+	}
+
+	return vl_sqrt(dist);
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __VL__ */
+
+
+
+
 
 
 
