@@ -37,7 +37,8 @@ inline uint8_t trj_gui_tbar_main(s_trj_gui_tbar *gui)
 	static uint32_t  time_iter_min = 0x00;
 	
 //	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
-	
+
+	ImGui::AlignTextToFramePadding();
 	ImGui::Text("TSI"); ImGui::SameLine();
 
 //	ImGui::Text("time_limit"); ImGui::SameLine();

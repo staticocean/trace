@@ -395,7 +395,7 @@ inline void vl3d_view_reset(s_vl3d_eng *self, s_vl3d_view *view)
 //	printf(" max "); vl_vprint(max);
 //	fflush(stdout);
 	
-	vlf_t dist = vl_dist(min, max);
+	vlf_t dist = vl_vdist(min, max);
 	view->scale = 1 / dist;
 }
 
