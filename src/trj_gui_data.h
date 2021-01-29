@@ -38,9 +38,9 @@ inline void trj_gui_data_edit(s_trj_data *self)
 
 inline void trj_gui_data_edit_text(s_trj_data *self)
 {
-	s_trj_data_text *data = (s_trj_data_text*) self->data;
-	
 	ImGui::PushID(self);
+	
+	s_trj_data_text *data = (s_trj_data_text*) self->data;
 	
 	ImGui::Text("desc  ");
 	ImGui::SameLine();
@@ -71,6 +71,8 @@ inline void trj_gui_data_edit_text(s_trj_data *self)
 
 inline void trj_gui_data_view_text(s_trj_data *self)
 {
+	ImGui::PushID(self);
+	
 	s_trj_data_text *data = (s_trj_data_text*) self->data;
 	
 	if (data->file_data == NULL || data->file_data == 0x00)
@@ -78,8 +80,6 @@ inline void trj_gui_data_view_text(s_trj_data *self)
 		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
 		return;
 	}
-	
-	ImGui::PushID(self);
 	
 	// Multiple calls to Text(), manually coarsely clipped - demonstrate how to use the ImGuiListClipper helper.
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
@@ -156,218 +156,252 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 
 inline void trj_gui_data_view_ram(s_trj_data *self)
 {
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
-	uint8_t mode = window->StateStorage.GetInt(ImGui::GetID("data_ram_view_mode"), 0x00);
-	
 	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
 	
+	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
 	if (data->offset == 0x00)
 	{
 		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
 		return;
 	}
 	
+	ImGui::PushID(self);
+	
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	uint8_t mode = window->StateStorage.GetInt(ImGui::GetID("data_ram_view_mode"), 0x00);
+	
 	ImGui::BeginGroup();
-	
-	if (mode == 0x00)
 	{
-		s_vl3d_eng vl3d_eng;
-		
-		s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
-		
-		s_vl3d_view view = {
-				.scale = 1.0,
-				.pos = {0.0, 0.0, 0.0},
-				
-				.tbar_en = 0x01,
-				
-				.grid_mode = 0x01,
-				.grid_pt_size = 2.0,
-				.grid_pt_disp = 2.0,
-				
-				.xyz_en = 0x01,
-				.xyz_scale = 0.25
-		};
-		
-		vl3d_view_load(self, &view, view);
-		vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
-		
-		s_vl3d_line line = {.color = vl3d_col_l};
-		
-		// pos
-		if (data->offset > 10000)
+		if (mode == 0x00)
 		{
-			for (int di = data->offset / 10000, i = 0;
-				 i < 10000 - 1; ++i)
+			s_vl3d_eng vl3d_eng;
+			
+			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
+			
+			s_vl3d_view view = {
+					.scale = 1.0,
+					.pos = {0.0, 0.0, 0.0},
+					
+					.tbar_en = 0x01,
+					
+					.grid_mode = 0x01,
+					.grid_pt_size = 2.0,
+					.grid_pt_disp = 2.0,
+					
+					.xyz_en = 0x01,
+					.xyz_scale = 0.25
+			};
+			
+			vl3d_view_load(self, &view, view);
+			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
+			
+			s_vl3d_line line = {.color = vl3d_col_l};
+			
+			// pos
+			if (data->offset > 10000)
 			{
-				vl_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
-				vl_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
-				
-				vl3d_eng_add_line(&vl3d_eng, line);
-			}
-		} else
-		{
-			for (int i = 0; i < data->offset - 1; ++i)
+				for (int di = data->offset / 10000, i = 0;
+					 i < 10000 - 1; ++i)
+				{
+					vl_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
+					vl_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
+					
+					vl3d_eng_add_line(&vl3d_eng, line);
+				}
+			} else
 			{
-				vl_vcopy(line.p0, &data->ecef_pos[i*3]);
-				vl_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
-				
-				vl3d_eng_add_line(&vl3d_eng, line);
+				for (int i = 0; i < data->offset - 1; ++i)
+				{
+					vl_vcopy(line.p0, &data->ecef_pos[i*3]);
+					vl_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
+					
+					vl3d_eng_add_line(&vl3d_eng, line);
+				}
 			}
+			
+			s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
+		
+	//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
+	//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
+	//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
+	//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
+			
+			// hpr
+			if (data->offset > 20)
+			{
+				for (int di = data->offset / 20, i = 0;
+					 i < 20 - 1; ++i)
+				{
+					vl_vcopy(trngl.p0, &data->ecef_pos[i * di * 3]);
+					vl_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
+					vl_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
+					
+					vlf_t rot[9];
+					vl_tnp(rot, &data->ecef_ctn[i * di * 9]);
+					vl_mmul_s(rot, rot, 0.015 / view.scale);
+					
+					// top middle
+					
+					vl_vmul_s(&rot[0], &rot[0], 3.0);
+					vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+					
+					// left
+					vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+					
+					// right
+					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+					
+					vl3d_eng_add_trngl(&vl3d_eng, trngl);
+				}
+			} else
+			{
+				for (int i = 0; i < data->offset - 1; ++i)
+				{
+					vl_vcopy(trngl.p0, &data->ecef_pos[i*3]);
+					vl_vcopy(trngl.p1, &data->ecef_pos[i*3]);
+					vl_vcopy(trngl.p2, &data->ecef_pos[i*3]);
+					
+					vlf_t rot[9];
+					vl_tnp(rot, &data->ecef_ctn[i*9]);
+					vl_mmul_s(rot, rot, 10.0 / view.scale);
+					
+					// top middle
+					vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+					
+					// left
+					vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+					
+					// right
+					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+					
+					vl3d_eng_add_trngl(&vl3d_eng, trngl);
+				}
+			}
+			
+			vl3d_view_grid(&view, &vl3d_eng);
+			vl3d_view_xyz(&view, &vl3d_eng);
+			vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
+			vl3d_view_save(self, &view);
+			
+			free(obj_list);
 		}
 		
-		s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
-	
-//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
-//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
-//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
-//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
-		
-		// hpr
-		if (data->offset > 20)
+		if (mode == 0x01)
 		{
-			for (int di = data->offset / 20, i = 0;
-				 i < 20 - 1; ++i)
+			if (ImGui::CollapsingHeader("heading"))
 			{
-				vl_vcopy(trngl.p0, &data->ecef_pos[i * di * 3]);
-				vl_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
-				vl_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
-				
-				vlf_t rot[9];
-				vl_tnp(rot, &data->ctn[i * di * 9]);
-				vl_mmul_s(rot, rot, 0.025 / view.scale);
-				
-				// top middle
-				
-				vl_vmul_s(&rot[0], &rot[0], 3.0);
-				vl_vsum(trngl.p0, trngl.p0, &rot[0]);
-				
-				// left
-				vl_vsub(trngl.p1, trngl.p1, &rot[6]);
-				
-				// right
-				vl_vsum(trngl.p2, trngl.p2, &rot[6]);
-				
-				vl3d_eng_add_trngl(&vl3d_eng, trngl);
+				if (ImPlot::BeginPlot("heading"))
+				{
+					ImPlot::PlotLine("heading", data->time, &data->heading[2], data->offset - 3);
+					ImPlot::EndPlot();
+				}
 			}
-		} else
-		{
-			for (int i = 0; i < data->offset - 1; ++i)
+			
+			if (ImGui::CollapsingHeader("pitch"))
 			{
-				vl_vcopy(trngl.p0, &data->ecef_pos[i*3]);
-				vl_vcopy(trngl.p1, &data->ecef_pos[i*3]);
-				vl_vcopy(trngl.p2, &data->ecef_pos[i*3]);
+				if (ImPlot::BeginPlot("pitch"))
+				{
+					ImPlot::PlotLine("pitch", data->time, &data->pitch[2], data->offset - 3);
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (ImGui::CollapsingHeader("roll"))
+			{
+				if (ImPlot::BeginPlot("roll"))
+				{
+					ImPlot::PlotLine("roll", data->time, &data->roll[2], data->offset - 3);
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (ImGui::CollapsingHeader("tied_acc"))
+			{
+				if (ImPlot::BeginPlot("tied_acc"))
+				{
+					ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (ImGui::CollapsingHeader("tied_grs"))
+			{
+				if (ImPlot::BeginPlot("tied_grs"))
+				{
+					ImPlot::PlotLine("grs_x", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_y", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_z", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (data->ellp != NULL && data->ellp_en)
+			{
+				if (ImGui::CollapsingHeader("lla_pos"))
+				{
+					if (ImPlot::BeginPlot("lla_pos lat,lon"))
+					{
+						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[2*3 + 0], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[2*3 + 1], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::EndPlot();
+					}
+					
+					if (ImPlot::BeginPlot("lla_pos alt"))
+					{
+						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2*3 + 2], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::EndPlot();
+					}
+				}
 				
-				vlf_t rot[9];
-				vl_tnp(rot, &data->ctn[i*9]);
-				vl_mmul_s(rot, rot, 10.0 / view.scale);
-				
-				// top middle
-				vl_vsum(trngl.p0, trngl.p0, &rot[0]);
-				
-				// left
-				vl_vsub(trngl.p1, trngl.p1, &rot[6]);
-				
-				// right
-				vl_vsum(trngl.p2, trngl.p2, &rot[6]);
-				
-				vl3d_eng_add_trngl(&vl3d_eng, trngl);
+				if (ImGui::CollapsingHeader("lla_vel"))
+				{
+					if (ImPlot::BeginPlot("lla_vel"))
+					{
+						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[2*3 + 0], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[2*3 + 1], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2*3 + 2], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::EndPlot();
+					}
+				}
+			}
+			
+			
+			if (ImGui::CollapsingHeader("ecef_pos"))
+			{
+				if (ImPlot::BeginPlot("ecef_pos"))
+				{
+					ImPlot::PlotLine("ecef_pos_x", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_y", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_z", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (ImGui::CollapsingHeader("ecef_vel"))
+			{
+				if (ImPlot::BeginPlot("ecef_vel"))
+				{
+					ImPlot::PlotLine("ecef_vel_x", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_y", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_z", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::EndPlot();
+				}
+			}
+			
+			if (ImGui::CollapsingHeader("ecef_acc"))
+			{
+				if (ImPlot::BeginPlot("ecef_acc"))
+				{
+					ImPlot::PlotLine("ecef_acc_x", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_y", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_z", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::EndPlot();
+				}
 			}
 		}
-		
-		vl3d_view_grid(&view, &vl3d_eng);
-		vl3d_view_xyz(&view, &vl3d_eng);
-		vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
-		vl3d_view_save(self, &view);
-		
-		free(obj_list);
 	}
-	
-	if (mode == 0x01)
-	{
-		if (ImPlot::BeginPlot("heading"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("heading", data->time, &data->heading[2], data->offset-3);
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("pitch"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("pitch", data->time, &data->pitch[2], data->offset-3);
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("roll"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("roll", data->time, &data->roll[2], data->offset-3);
-			ImPlot::EndPlot();
-		}
-
-		if (ImPlot::BeginPlot("tied_acc"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("lla_vel"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("vel_lat", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("vel_lon", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("vel_alt", &data->time3[2*3 + 0x00], &data->lla_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("lla_pos"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("pos_lat", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("pos_lon", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("pos_alt", &data->time3[2*3 + 0x00], &data->lla_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-		
-		
-		if (ImPlot::BeginPlot("ecef_acc"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("ecef_vel"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("vel_x", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("vel_y", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("vel_z", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-		
-		if (ImPlot::BeginPlot("ecef_pos"))
-		{
-			// hide first and last
-			ImPlot::PlotLine("pos_x", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("pos_y", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("pos_z", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-			
-			ImPlot::EndPlot();
-		}
-	}
-	
 	ImGui::EndGroup();
 	
 	if (ImGui::BeginPopupContextItem("view"))
@@ -379,6 +413,8 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	}
 	
 	window->StateStorage.SetInt(ImGui::GetID("data_ram_view_mode"), mode);
+	
+	ImGui::PopID();
 	
 	return;
 }

@@ -182,15 +182,14 @@ typedef struct trj_data_ram
 	vlf_t 		*time;
 	vlf_t 		*time3;
 	
-	vlf_t 		*ctn;
 	vlf_t 		*heading;
 	vlf_t 		*pitch;
 	vlf_t 		*roll;
-	
 	vlf_t 		*lla_pos;
 	vlf_t 		*lla_vel;
 	vlf_t 		*lla_acc;
 	
+	vlf_t 		*ecef_ctn;
 	vlf_t 		*ecef_pos;
 	vlf_t 		*ecef_vel;
 	vlf_t 		*ecef_acc;
@@ -217,15 +216,14 @@ inline void __trj_data_ram_null__(s_trj_data_ram *self)
 	self->time 		= NULL;
 	self->time3		= NULL;
 	
-	self->ctn 		= NULL;
 	self->heading 	= NULL;
 	self->pitch 	= NULL;
 	self->roll 		= NULL;
-	
 	self->lla_pos 	= NULL;
 	self->lla_vel 	= NULL;
 	self->lla_acc 	= NULL;
 	
+	self->ecef_ctn	= NULL;
 	self->ecef_pos 	= NULL;
 	self->ecef_vel 	= NULL;
 	self->ecef_acc 	= NULL;
@@ -243,15 +241,14 @@ inline void __trj_data_ram_free__(s_trj_data_ram *self)
 	if (self->time 		!= NULL) free(self->time 		);
 	if (self->time3		!= NULL) free(self->time3 		);
 	
-	if (self->ctn 		!= NULL) free(self->ctn 		);
 	if (self->heading 	!= NULL) free(self->heading 	);
 	if (self->pitch 	!= NULL) free(self->pitch 		);
 	if (self->roll 		!= NULL) free(self->roll 		);
-	
 	if (self->lla_pos 	!= NULL) free(self->lla_pos 	);
 	if (self->lla_vel 	!= NULL) free(self->lla_vel 	);
 	if (self->lla_acc 	!= NULL) free(self->lla_acc 	);
 	
+	if (self->ecef_ctn	!= NULL) free(self->ecef_ctn	);
 	if (self->ecef_pos 	!= NULL) free(self->ecef_pos 	);
 	if (self->ecef_vel 	!= NULL) free(self->ecef_vel 	);
 	if (self->ecef_acc 	!= NULL) free(self->ecef_acc 	);
@@ -320,7 +317,6 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 		self->time 	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->time3	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		
-		self->ctn 	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
 		self->heading 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->pitch 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->roll 		= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
@@ -329,6 +325,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 		self->lla_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->lla_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		
+		self->ecef_ctn	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
 		self->ecef_pos 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->ecef_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->ecef_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
@@ -350,56 +347,112 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 				vlf_t ref_cnt[9];
 				
 				vl_tnp(ref_cnt, &self->ref->log_list[i].rot[0][0]);
-				vl_mmul_m(&self->ctn[i*9], ref_cnt, &obj->log_list[i].rot[0][0]);
+				vl_mmul_m(&self->ecef_ctn[i*9], ref_cnt, &obj->log_list[i].rot[0][0]);
 				
-				vl_vcopy(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0]);
-				vl_vsub(&self->ecef_pos[i*3], &self->ecef_pos[i*3], &self->ref->log_list[i].pos[0][0]);
+				vl_vsub(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
 				vl_mmul_v(&self->ecef_pos[i*3], ref_cnt, &self->ecef_pos[i*3]);
 				
-				vl_vcopy(&self->ecef_vel[i*3], &obj->log_list[i].pos[1][0]);
-				vl_mmul_v(&self->ecef_vel[i*3], ref_cnt, &self->ecef_vel[i*3]);
-
-				vl_vcopy(&self->ecef_acc[i*3], &obj->log_list[i].pos[2][0]);
-				vl_mmul_v(&self->ecef_acc[i*3], ref_cnt, &self->ecef_acc[i*3]);
+				vl_mmul_v(&self->ecef_vel[i*3], ref_cnt, &obj->log_list[i].pos[1][0]);
+				
+				vl_mmul_v(&self->ecef_acc[i*3], ref_cnt, &obj->log_list[i].pos[2][0]);
 			}
 			
 			else
 			{
+				vl_mcopy(&self->ecef_ctn[i*9], &obj->log_list[i].rot[0][0]);
 				vl_vcopy(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0]);
 				vl_vcopy(&self->ecef_vel[i*3], &obj->log_list[i].pos[1][0]);
 				vl_vcopy(&self->ecef_acc[i*3], &obj->log_list[i].pos[2][0]);
 			}
 			
-			if (self->ellp != NULL)
+			if (self->ellp != NULL && self->ref != NULL)
 			{
-				vlf_t cnt_ecef[9];
+				vlf_t ecef_ctn[9];
 				vlf_t ctn_local[9];
-				trj_ellp_ecefrot(self->ellp, &self->ecef_pos[i*3], cnt_ecef);
-				vl_tnp(cnt_ecef, cnt_ecef);
-				vl_mmul_m(ctn_local, cnt_ecef, &self->ctn[i*9]);
-				
+				trj_ellp_ecefrot(self->ellp, &self->ecef_pos[i*3], ecef_ctn);
+				vl_mtmul_m(ctn_local, ecef_ctn, &self->ecef_ctn[i*9]);
+
 				s_trj_rot_hpr hpr;
 				trj_ctn_to_hpr(&hpr, ctn_local);
+
+				self->heading[i] 	= hpr.heading;
+				self->pitch[i] 		= hpr.pitch;
+				self->roll[i] 		= hpr.roll;
+
+				trj_ellp_lla(self->ellp, &self->lla_pos[i*3], &self->ecef_pos[i*3]);
+
+//				vlf_t ecef_p0[3];
+//				vlf_t ecef_p1[3];
+//				vlf_t ecef_p2[3];
+//				vlf_t ref_cnt0[9];
+//				vlf_t ref_cnt1[9];
+//				vlf_t ref_cnt2[9];
+//				vlf_t ecef_cnt[9];
+//
+//				vl_tnp(ref_cnt0, &self->ref->log_list[i-1].rot[0][0]);
+//				vl_tnp(ref_cnt1, &self->ref->log_list[i+0].rot[0][0]);
+//				vl_tnp(ref_cnt1, &self->ref->log_list[i+1].rot[0][0]);
+//				vl_vsub(ecef_p0, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+//				vl_vsub(ecef_p1, &obj->log_list[i+1].pos[0][0], &self->ref->log_list[i+1].pos[0][0]);
+//				vl_mmul_v(ecef_p0, ref_cnt0, ecef_p0);
+//				vl_mmul_v(ecef_p1, ref_cnt1, ecef_p1);
+//				vl_vsub(&self->lla_vel[i*3], ecef_p1, ecef_p0);
+//				vl_vmul_s(&self->lla_vel[i*3], &self->lla_vel[i*3],
+//						1.0 / (self->ref->log_list[i+1].time[0] - self->ref->log_list[i].time[0]));
+//
+//				trj_ellp_ecefrot(self->ellp, ecef_p0, ecef_cnt);
+//				vl_tnp(ecef_cnt, ecef_cnt);
+//				vl_mmul_v(&self->lla_vel[i*3], ecef_cnt, &self->lla_vel[i*3]);
+				
+				if (i >= 0x01)
+				{
+					vlf_t ecef_ctn_[9];
+					vlf_t ecef_pos_[3];
+
+					vl_vsub(ecef_pos_, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+					vl_mtmul_v(ecef_pos_, &self->ref->log_list[i].rot[0][0], ecef_pos_);
+					trj_ellp_ecefrot(self->ellp, ecef_pos_, ecef_ctn_);
+					
+					vl_vsub(&self->lla_vel[i*3], &obj->log_list[i].pos[1][0], &self->ref->log_list[i].pos[1][0]);
+					vlf_t rel_pos[3];
+					vl_vsub(rel_pos, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+					vlf_t ang_vel[3];
+					vl_mmul_v(ang_vel, &self->ref->log_list[i].rot[1][0], rel_pos);
+					vl_vsub(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
+
+					vl_mtmul_v(&self->lla_vel[i*3], &self->ref->log_list[i-1].rot[0][0], &self->lla_vel[i*3]);
+					vl_mtmul_v(&self->lla_vel[i*3], ecef_ctn_, &self->lla_vel[i*3]);
+
+					// swap 1 and 2 because ecef_cnt is proj to NHW not NWH
+					vlf_t vh = self->lla_vel[i*3 + 1];
+					self->lla_vel[i*3 + 1] = self->lla_vel[i*3 + 2];
+					self->lla_vel[i*3 + 2] = vh;
+				}
+
+				else
+				{
+					vl_vzero(self->lla_vel);
+				}
+			}
+			
+			else
+			{
+				s_trj_rot_hpr hpr;
+				trj_ctn_to_hpr(&hpr, &self->ecef_ctn[i*9]);
 				
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;
 				self->roll[i] 		= hpr.roll;
-				
-				trj_ellp_lla(self->ellp, &self->lla_pos[i*3], &self->ecef_pos[i*3]);
-//				trj_ellp_nwhvel(self->ellp, &self->lla_pos[i*3], &self->lla_vel[i*3]);
 			}
-			
-			else
-			{
-				vl_mcopy(&self->ctn[i*9], &obj->log_list[i].rot[0][0]);
-			}
-			
-			vlf_t self_cnt[9];
-			vl_tnp(self_cnt, &obj->log_list[i].rot[0][0]);
 			
 			vl_vmul_s(&self->tied_acc[i*3], obj->log_list[i].pos_force, 1.0 / obj->pos_inert);
 			vl_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &obj->log_list[i].pos[2][0]);
-			vl_mmul_v(&self->tied_acc[i*3], self_cnt, &self->tied_acc[i*3]);
+			vl_mtmul_v(&self->tied_acc[i*3], &obj->log_list[i].rot[0][0], &self->tied_acc[i*3]);
+			
+			vlf_t tied_grs[9];
+			vl_mtmul_m(tied_grs, &obj->log_list[i].rot[0][0], &obj->log_list[i].rot[1][0]);
+			vl_mmul_m(tied_grs, tied_grs, &obj->log_list[i].rot[0][0]);
+			vl_unskew(&self->tied_grs[i*3], tied_grs);
 		}
 	}
 	
