@@ -721,58 +721,61 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
                 ImGui::Text("time");
                 const vlf_t time_min = 0.0;
                 ImGui::SameLine();
-                ImGui::SetNextItemWidth(150);
+                ImGui::SetNextItemWidth(160);
                 ImGui::DragScalar("##time", ImGuiDataType_Double, &self->pts[i].time,
                                   1, &time_min, NULL, "%.3f");
+				if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[sec]"); }
 
                 if (self->ellp_en == 0x00)
                 {
                     ImGui::Text("x   ");
+					if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
+                    ImGui::SetNextItemWidth(160);
                     ImGui::DragScalar("##x", ImGuiDataType_Double, &self->pts[i].pos_p[0],
                                       1, NULL, NULL, "%.3f");
 
                     ImGui::Text("y   ");
+					if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
+                    ImGui::SetNextItemWidth(160);
                     ImGui::DragScalar("##y", ImGuiDataType_Double, &self->pts[i].pos_p[1],
                                       1, NULL, NULL, "%.3f");
 
                     ImGui::Text("z   ");
+					if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
+                    ImGui::SetNextItemWidth(160);
                     ImGui::DragScalar("##z", ImGuiDataType_Double, &self->pts[i].pos_p[2],
                                       1, NULL, NULL, "%.3f");
                 }
 
                 else
                 {
-                    vlf_t lla_deg[3] = {vl_deg(self->pts[i].pos_p[0]),
-                                        vl_deg(self->pts[i].pos_p[1]),
-                                        self->pts[i].pos_p[2]};
+//                    vlf_t lla_deg[3] = {vl_deg(),
+//                                        vl_deg(self->pts[i].pos_p[1]),
+//                                        self->pts[i].pos_p[2]};
 
                     ImGui::Text("lat ");
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
-                    ImGui::DragScalar("##lat", ImGuiDataType_Double, &lla_deg[0],
-                                      1, NULL, NULL, "%.6f");
+                    ImGui::SetNextItemWidth(160);
+                    trj_gui_lat("##lat", &self->pts[i].pos_p[0]);
 
                     ImGui::Text("lon ");
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
-                    ImGui::DragScalar("##lon", ImGuiDataType_Double, &lla_deg[1],
-                                      1, NULL, NULL, "%.6f");
+                    ImGui::SetNextItemWidth(160);
+					trj_gui_lon("##lon", &self->pts[i].pos_p[1]);
 
                     ImGui::Text("alt ");
+					if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
                     ImGui::SameLine();
-                    ImGui::SetNextItemWidth(150);
-                    ImGui::DragScalar("##alt", ImGuiDataType_Double, &lla_deg[2],
+                    ImGui::SetNextItemWidth(160);
+                    ImGui::DragScalar("##alt", ImGuiDataType_Double, &self->pts[i].pos_p[2],
                                       1, NULL, NULL, "%.3f");
-
-                    self->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
-                    self->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
-                    self->pts[i].pos_p[2] = lla_deg[2];
+                    
+//                    self->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
+//                    self->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+//                    self->pts[i].pos_p[2] = lla_deg[2];
                 }
 
                 ImGui::Separator();
@@ -867,8 +870,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 			
 			for (int i = 0; i < 1000; ++i)
 			{
-				trj_traj_bz_pos(self, time, p0);
-				trj_traj_bz_pos(self, time + time_step, p1);
+				trj_traj_bz_pos_local(self, time, p0);
+				trj_traj_bz_pos_local(self, time + time_step, p1);
 				
 				if (ellp_en_temp == 0x00)
 				{
@@ -1248,8 +1251,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 			
 			for (int i = 0; i < 1000; ++i)
 			{
-				trj_traj_bz_pos(self, time, p0);
-				trj_traj_bz_pos(self, time + time_step, p1);
+				trj_traj_bz_pos_local(self, time, p0);
+				trj_traj_bz_pos_local(self, time + time_step, p1);
 				
 				if (ellp_en_temp == 0x00)
 				{

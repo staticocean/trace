@@ -335,8 +335,9 @@ inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
 			
 			vlf_t rot_t[9];
 			
+			// NEGATIVE HEADING!!! because heading is CW and all angles are CCW
 			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
-					.heading = angle, .pitch = 0.0, .roll = 0.0
+					.heading = -angle, .pitch = 0.0, .roll = 0.0
 			});
 			
 			vl_mmul_m(rot, self->s_tilt, rot_t);
@@ -353,8 +354,9 @@ inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
 			vlf_t rot_t[9];
 			vlf_t rot_n[9];
 			
+			// NEGATIVE HEADING!!! because heading is CW and all angles are CCW
 			trj_hpr_to_ctn(rot_t, (s_trj_rot_hpr) {
-					.heading = angle, .pitch = 0.0, .roll = 0.0
+					.heading = -angle, .pitch = 0.0, .roll = 0.0
 			});
 			
 			vl_mmul_m(rot_n, self->s_tilt, rot_t);
