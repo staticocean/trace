@@ -183,7 +183,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::SameLine();
 	vlf_t rate_deg = vl_deg(traj->rate);
 	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.3f");
+	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.9f");
 	traj->rate = vl_rad(rate_deg);
 	
 	ImGui::Text("tilt  "); ImGui::SameLine();
@@ -198,7 +198,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::SameLine();
 	vlf_t s_rate_deg = vl_deg(traj->s_rate);
 	ImGui::SetNextItemWidth(-1);
-	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.3f");
+	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.9f");
 	traj->s_rate = vl_rad(s_rate_deg);
 	
 	ImGui::Text("s_tilt"); ImGui::SameLine();
@@ -720,12 +720,12 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
                 ImGui::Separator();
 
                 ImGui::Text("time");
+				if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[sec]"); }
                 const vlf_t time_min = 0.0;
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(160);
                 ImGui::DragScalar("##time", ImGuiDataType_Double, &self->pts[i].time,
                                   1, &time_min, NULL, "%.3f");
-				if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[sec]"); }
 
                 if (self->ellp_en == 0x00)
                 {

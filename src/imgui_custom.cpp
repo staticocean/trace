@@ -15,7 +15,8 @@ namespace ImGui {
 		
 		ImVec2 pos = window->DC.CursorPos;
 		ImVec2 size = size_arg;
-		size.x -= style.FramePadding.x * 2;
+		
+		if (size.x < 0) size.x = ImGui::GetContentRegionAvailWidth();
 		
 		const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
 		ItemSize(bb, style.FramePadding.y);
