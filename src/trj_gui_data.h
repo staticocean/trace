@@ -167,12 +167,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	
 	ImGui::PushID(self);
 	
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
-	uint8_t mode = window->StateStorage.GetInt(ImGui::GetID("data_ram_view_mode"), 0x00);
-	
-	ImGui::BeginGroup();
+	if (ImGui::BeginTabBar("##data_view", ImGuiTabBarFlags_None))
 	{
-		if (mode == 0x00)
+		if (ImGui::BeginTabItem("3D view"))
 		{
 			s_vl3d_eng vl3d_eng;
 			
@@ -284,9 +281,11 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			vl3d_view_save(self, &view);
 			
 			free(obj_list);
+			
+			ImGui::EndTabItem();
 		}
-		
-		if (mode == 0x01)
+
+		if (ImGui::BeginTabItem("details"))
 		{
 			if (ImGui::CollapsingHeader("heading"))
 			{
@@ -400,19 +399,12 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 					ImPlot::EndPlot();
 				}
 			}
+			
+			ImGui::EndTabItem();
 		}
-	}
-	ImGui::EndGroup();
-	
-	if (ImGui::BeginPopupContextItem("view"))
-	{
-		if (ImGui::Selectable("3D POS")) { mode = 0x00; }
-		if (ImGui::Selectable("2D INS")) { mode = 0x01; }
 		
-		ImGui::EndPopup();
+		ImGui::EndTabBar();
 	}
-	
-	window->StateStorage.SetInt(ImGui::GetID("data_ram_view_mode"), mode);
 	
 	ImGui::PopID();
 	
