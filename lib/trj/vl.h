@@ -921,9 +921,10 @@ typedef struct
 	
 } 	s_vl_rd1;
 
+// https://math.stackexchange.com/questions/668866/how-do-you-find-angular-velocity-given-a-pair-of-3x3-rotation-matrices
 inline void vl_rd1f(s_vl_rd1 *self, vlf_t *res, vlf_t *r0, vlf_t *r1)
 {
-	if (fabs(vl_mdist(r0, r1)) > 1E-16)
+	if (fabs(vl_mdist(r0, r1)) > 1E-32)
 	{
 		vl_mmul_mt(self->a, r1, r0);
 		self->trace_a = vl_mtrace(self->a);
@@ -943,6 +944,25 @@ inline void vl_rd1(vlf_t *res, vlf_t *r0, vlf_t *r1)
 {
 	s_vl_rd1 self;
 	vl_rd1f(&self, res, r0, r1);
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void vl_rinter(vlf_t *res, vlf_t *r0, vlf_t *r1, vlf_t dist)
+{
+	vlf_t rot[9];
+	
+	vl_rd1(rot, r0, r1);
+	vl_mmul_s(rot, rot, dist);
+	
+	vl_vcopy(res, r0);
+	vl_mmul_m(res, rot, r0);
+	
+	vlf_t test[9];
+	vl_mmul_m(test, rot, r0);
+	vl_msub(test, test, r1);
 	
 	return;
 }
