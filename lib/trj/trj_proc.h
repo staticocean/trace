@@ -123,9 +123,9 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 	}
 	else { vl_mzero(self->d1rn); }
 	
-	if (offset == 0x00) { vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 0.0); }
-	else if (offset == (obj->log_offset-1)) { vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 1.0); }
-	else { vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 0.5); }
+	if 		(offset == 0x00) 				{ vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 1.0); }
+	else if (offset == (obj->log_offset-1)) { vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 0.0); }
+	else 									{ vl_minter(&data[offset].rot[1][0], self->d1rp, self->d1rn, 0.5); }
 	
 	// Error calculation
 	// if first log then set
@@ -176,9 +176,9 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 	}
 	
 	// Calculate and write to pos/rot error L2 norm
-	obj->log_list[offset].pos_error = fabs(vl_vdist(&obj->log_list[offset].pos[0][0], &obj->pos[0][0]));
-	obj->log_list[offset].rot_error = fabs(vl_mdist(&obj->log_list[offset].rot[0][0], &obj->rot[0][0]));
-	
+	obj->log_list[offset].pos_error = vl_vdist(&obj->log_list[offset].pos[0][0], &obj->pos[0][0]);
+	obj->log_list[offset].rot_error = vl_mdist(&obj->log_list[offset].rot[0][0], &obj->rot[0][0]);
+
 //	printf("%s %f \n", obj->desc, fabs(vl_mdist(&obj->log_list[offset].rot[0][0], &obj->rot[0][0])));
 //	fflush(stdout);
 	
