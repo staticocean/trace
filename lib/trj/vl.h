@@ -443,6 +443,52 @@ inline void vl_mmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 
 //------------------------------------------------------------------------------
 
+inline void vl_mmul_mt(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
+{
+	uint8_t i;
+	uint8_t j;
+	uint8_t k;
+	
+	if (res != mat_0 && res != mat_1)
+	{
+		for (i = 0; i < 3; ++i)
+		{
+			for (j = 0; j < 3; ++j)
+			{
+				res[i * 3 + j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3 + j] += mat_0[i*3 + k] * mat_1[j*3 + k];
+				}
+			}
+		}
+	}
+	
+	else
+	{
+		vlf_t m0_[9] = { mat_0[0], mat_0[1], mat_0[2], mat_0[3], mat_0[4], mat_0[5], mat_0[6], mat_0[7], mat_0[8] };
+		vlf_t m1_[9] = { mat_1[0], mat_1[1], mat_1[2], mat_1[3], mat_1[4], mat_1[5], mat_1[6], mat_1[7], mat_1[8] };;
+		
+		for (i = 0; i < 3; ++i)
+		{
+			for (j = 0; j < 3; ++j)
+			{
+				res[i * 3 + j] = 0;
+				
+				for (k = 0; k < 3; ++k)
+				{
+					res[i*3 + j] += m0_[i*3 + k] * m1_[j*3 + k];
+				}
+			}
+		}
+	}
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 inline void vl_mtmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 {
 	uint8_t i;
@@ -823,6 +869,55 @@ inline vlf_t vl_mdist(vlf_t *m0, vlf_t *m1)
 	}
 
 	return vl_sqrt(dist);
+}
+
+//------------------------------------------------------------------------------
+
+inline void vl_mset(vlf_t *m, vlf_t value)
+{
+	m[0] = value; m[1] = value; m[2] = value;
+	m[3] = value; m[4] = value; m[5] = value;
+	m[6] = value; m[7] = value; m[8] = value;
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+	vlf_t a[9];
+	vlf_t at[9];
+	vlf_t da[9];
+	vlf_t trace_a;
+	vlf_t omega;
+	
+} 	s_vl_rd1;
+
+inline void vl_rd1f(s_vl_rd1 *self, vlf_t *res, vlf_t *r0, vlf_t *r1)
+{
+	if (fabs(vl_mdist(r0, r1)) > 1E-16)
+	{
+		vl_mmul_mt(self->a, r1, r0);
+		self->trace_a = vl_mtrace(self->a);
+		self->omega = acos(0.5*(self->trace_a - 1.0));
+		vl_tnp(self->at, self->a);
+		vl_msub(self->da, self->a, self->at);
+		
+		vl_mmul_s(res, self->da, 0.5 * (self->omega / vl_sin(self->omega)));
+	}
+	else { vl_mset(res, 0.0); }
+	
+	return;
+	
+}
+
+inline void vl_rd1(vlf_t *res, vlf_t *r0, vlf_t *r1)
+{
+	s_vl_rd1 self;
+	vl_rd1f(&self, res, r0, r1);
+	
+	return;
 }
 
 //------------------------------------------------------------------------------
