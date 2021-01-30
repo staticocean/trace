@@ -301,6 +301,23 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.config_size = sizeof(s_trj_proc_euler_init),
 			.config = &trj_proc_euler_config_,
 	});
+	
+	static s_trj_proc_fps_init trj_proc_fps_config_ = {
+			.temp = 0x00,
+	};
+	
+	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+			.desc   = "default_proc_fps",
+			.init   = trj_proc_fps_init_,
+			.free   = trj_proc_fps_free_,
+			.save   = trj_proc_fps_save_,
+			.load   = trj_proc_fps_load_,
+			.update = trj_proc_fps_update_,
+			.data_size = sizeof(s_trj_proc_fps),
+			.data   = NULL,
+			.config_size = sizeof(s_trj_proc_fps_init),
+			.config = &trj_proc_fps_config_,
+	});
 
     for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
     {
