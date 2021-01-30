@@ -476,49 +476,65 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 {
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-	ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_Always);
 	
 	const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
 	const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
 	
-	if (ImGui::BeginPopupModal("RENDERING", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	char window_name[255] = "RENDERING";
+	
+//	if      (gui->state == trj_gui_eng_state_update ) 	{ sprintf(window_name, "RENDERING - CTRL PASS"); }
+//	else if (gui->state == trj_gui_eng_state_proc   ) 	{ sprintf(window_name, "RENDERING - PROC PASS"); }
+//	else if (gui->state == trj_gui_eng_state_deinit ) 	{ sprintf(window_name, "RENDERING - DATA PASS"); }
+//	else if (gui->state == trj_gui_eng_state_standby) 	{ sprintf(window_name, "RENDERING - SUMMARY"); }
+	
+	if (ImGui::BeginPopupModal(window_name, NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
+		ImGui::Dummy(ImVec2(0, 5));
+		
+		ImGui::AlignTextToFramePadding();
+		
 		if (gui->state == trj_gui_eng_state_update)
 		{
-			ImGui::Text("ctrl pass");
-			ImGui::BufferingBar("##progress", self->time[0] / self->time_limit, ImVec2(400, 6), bg, col);
-			
+			ImGui::Text("CTRL PASS %02.0f%%", 100 * self->time[0] / self->time_limit);
+			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			ImGui::Dummy(ImVec2(0, 5));
+			ImGui::BufferingBar("##progress", self->time[0] / self->time_limit, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == trj_gui_eng_state_proc)
 		{
-			ImGui::Text("proc pass");
-			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(400, 6), bg, col);
-			
+			ImGui::Text("PROC PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
+			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			ImGui::Dummy(ImVec2(0, 5));
+			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == trj_gui_eng_state_deinit)
 		{
-			ImGui::Text("data pass");
-			
+			ImGui::Text("DATA PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
+			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			ImGui::Dummy(ImVec2(0, 5));
+			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == trj_gui_eng_state_standby)
 		{
-			ImGui::AlignTextToFramePadding();
-			ImGui::Text("errors");
+			ImGui::Text("COMPLETE");
 			ImGui::SameLine();
-			
 			if (ImGui::Button("CLOSE", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-			
-			ImGui::Dummy(ImVec2(0, 5));
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(0, 5));
-			
-			ImGui::BeginChild("##errors");
+		}
+		
+		ImGui::Dummy(ImVec2(0, 5));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0, 5));
+		
+		ImGui::BeginChild("##scroll_view");
+		{
+			if (gui->state == trj_gui_eng_state_standby)
 			{
 				for (int i = 0; i < self->obj_count; ++i)
 				{
@@ -545,14 +561,8 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 					ImGui::PopID();
 				}
 			}
-			ImGui::EndChild();
 		}
-
-//		ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
-//		ImGui::Separator();
-//
-//		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-//		ImGui::PopStyleVar();
+		ImGui::EndChild();
 		
 		ImGui::EndPopup();
 	}
@@ -562,7 +572,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	{
 		case trj_gui_eng_state_init:
 		{
-			ImGui::OpenPopup("RENDERING");
+			ImGui::OpenPopup(window_name);
 			
 			break;
 		}
