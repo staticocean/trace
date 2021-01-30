@@ -218,11 +218,35 @@ inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 	// perfectly model any lower order curve, so we want to test
 	// for that: lower order curves are much easier to root-find.
 	
-	if (fabs(a) <= 1E-9) {
+	if (fabs(a) < 1E-9) {
 		// this is not a cubic curve.
-		if (fabs(b) <= 1E-9) {
+		if (fabs(b) < 1E-9) {
 			// in fact, this is not a quadratic curve either.
-			if (fabs(c) <= 1E-9) {
+			if (fabs(c) < 1E-9) {
+				// in fact in fact, there are no solutions.
+				return 0x01;
+			}
+			
+			root_count = 0x01;
+			roots[0] = -d / c;
+		}
+		else
+		{
+			// quadratic solution:
+			vlf_t q = vl_sqrt(c * c - 4 * b * d);
+			vlf_t b2 = 2 * b;
+			
+			root_count = 0x02;
+			roots[0] = (q - c) / b2;
+			roots[1] = (-c - q) / b2;
+		}
+	}
+	
+	if (fabs(a) < 1E-9) {
+		// this is not a cubic curve.
+		if (fabs(b) < 1E-9) {
+			// in fact, this is not a quadratic curve either.
+			if (fabs(c) < 1E-9) {
 				// in fact in fact, there are no solutions.
 				return 0x01;
 			}
@@ -295,8 +319,8 @@ inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 		else
 		{
 			vlf_t sd = sqrt(discriminant);
-			u1 = vl_crt(-q2 + sd);
-			v1 = vl_crt(q2 + sd);
+			u1 = cbrt(-q2 + sd);
+			v1 = cbrt(q2 + sd);
 			
 			root_count = 0x01;
 			roots[0] = u1 - v1 - b3;
@@ -317,13 +341,17 @@ inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 
 inline uint8_t trj_bz4_d0t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 {
-	vlf_t temp[2];
+	vlf_t d0[2];
+	vlf_t d1[2];
 	vlf_t x;
 	
 	trj_bz4_inv (self, t, &x);
-	trj_bz4_d0(self, x, temp);
+	trj_bz4_d0(self, x, d0);
+	trj_bz4_d1(self, x, d1);
 	
-	*value = temp[1];
+	vlf_t dt = t - d0[0];
+	
+	*value = d0[1] + dt*d1[1];
 	
 	return 0x00;
 }
