@@ -192,12 +192,25 @@ inline uint8_t trj_bz4_d1(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
 	vlf_t t_ = 1 - t;
 	
 	d1[0] =     3 * t_*t_*(self->p1[0] - self->p0[0])
-			  + 6 * t_*t *(self->p2[0] - self->p1[0])
-			  + 3 * t *t *(self->p3[0] - self->p2[0]);
+				+ 6 * t_*t *(self->p2[0] - self->p1[0])
+				+ 3 * t *t *(self->p3[0] - self->p2[0]);
 	
 	d1[1] =     3 * t_*t_* (self->p1[1] - self->p0[1])
-			  + 6 * t_*t * (self->p2[1] - self->p1[1])
-			  + 3 * t *t * (self->p3[1] - self->p2[1]);
+				+ 6 * t_*t * (self->p2[1] - self->p1[1])
+				+ 3 * t *t * (self->p3[1] - self->p2[1]);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_bz4_d2(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
+{
+	vlf_t t_ = 1 - t;
+	
+	d1[0] 	= 6*(1-t)*(self->p2[0]-self->p1[0] - self->p0[0]-self->p1[0])
+			+ 6*(  t)*(self->p3[0]-self->p2[0] - self->p1[0]-self->p2[0]);
+	
+	d1[1] 	= 6*(1-t)*(self->p2[1]-self->p1[1] - self->p0[1]-self->p1[1])
+			+ 6*(  t)*(self->p3[1]-self->p2[1] - self->p1[1]-self->p2[1]);
 	
 	return 0x00;
 }
@@ -218,35 +231,11 @@ inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 	// perfectly model any lower order curve, so we want to test
 	// for that: lower order curves are much easier to root-find.
 	
-	if (fabs(a) < 1E-9) {
+	if (fabs(a) < 1E-32) {
 		// this is not a cubic curve.
-		if (fabs(b) < 1E-9) {
+		if (fabs(b) < 1E-32) {
 			// in fact, this is not a quadratic curve either.
-			if (fabs(c) < 1E-9) {
-				// in fact in fact, there are no solutions.
-				return 0x01;
-			}
-			
-			root_count = 0x01;
-			roots[0] = -d / c;
-		}
-		else
-		{
-			// quadratic solution:
-			vlf_t q = vl_sqrt(c * c - 4 * b * d);
-			vlf_t b2 = 2 * b;
-			
-			root_count = 0x02;
-			roots[0] = (q - c) / b2;
-			roots[1] = (-c - q) / b2;
-		}
-	}
-	
-	if (fabs(a) < 1E-9) {
-		// this is not a cubic curve.
-		if (fabs(b) < 1E-9) {
-			// in fact, this is not a quadratic curve either.
-			if (fabs(c) < 1E-9) {
+			if (fabs(c) < 1E-32) {
 				// in fact in fact, there are no solutions.
 				return 0x01;
 			}
@@ -329,11 +318,24 @@ inline uint8_t trj_bz4_inv (s_trj_bz4 *self, vlf_t t, vlf_t *x)
 	
 	*x = 0.0;
 	
+//	uint32_t valid_roots = 0x00;
+//
+//	for (int i = 0; i < root_count; ++i)
+//	{
+//		if (roots[i] >= 0.0 && roots[i] <= 1.0) ++valid_roots;
+//	}
+//
+//	if (valid_roots > 1)
+//	{
+//		printf("shit");
+//	}
+	
 	for (int i = 0; i < root_count; ++i)
 	{
-		if (roots[i] < 0 || roots[i] > 1) continue;
-		else *x = roots[i];
-		break;
+		if (roots[i] >= 0.0 && roots[i] <= 1.0)
+		{
+			*x = roots[i];
+		}
 	}
 	
 	return 0x00;
@@ -351,21 +353,26 @@ inline uint8_t trj_bz4_d0t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 	
 	vlf_t dt = t - d0[0];
 	
-	*value = d0[1] + dt*d1[1];
+	*value = d0[1] + dt*d1[1]/d1[0]; // ???? HELLO
 	
 	return 0x00;
 }
 
-
 inline uint8_t trj_bz4_d1t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 {
-	vlf_t temp[2];
+	vlf_t d0[2];
+	vlf_t d1[2];
+	vlf_t d2[2];
 	vlf_t x;
 	
 	trj_bz4_inv (self, t, &x);
-	trj_bz4_d1(self, x, temp);
+	trj_bz4_d0(self, x, d0);
+	trj_bz4_d1(self, x, d1);
+	trj_bz4_d2(self, x, d2);
 	
-	*value = temp[1];
+	vlf_t dt = t - d0[0];
+	
+	*value = d1[1] + dt*d2[1]/d2[0]; // ???? HELLO
 	
 	return 0x00;
 }
