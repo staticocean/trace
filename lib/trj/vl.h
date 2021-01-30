@@ -397,6 +397,33 @@ inline void vl_mmul_s(vlf_t *res, vlf_t *mat, vlf_t scalar)
 
 //------------------------------------------------------------------------------
 
+inline void vl_mmul_m_(uint32_t n, vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
+{
+	uint8_t i;
+	uint8_t j;
+	uint8_t k;
+	
+	if (res != mat_0 && res != mat_1)
+	{
+		for (i = 0; i < n; ++i)
+		{
+			for (j = 0; j < n; ++j)
+			{
+				res[i*n + j] = 0;
+				
+				for (k = 0; k < n; ++k)
+				{
+					res[i*n + j] += mat_0[i*n + k] * mat_1[k*n + j];
+				}
+			}
+		}
+	}
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 inline void vl_mmul_m(vlf_t *res, vlf_t *mat_0, vlf_t *mat_1)
 {
 	uint8_t i;
