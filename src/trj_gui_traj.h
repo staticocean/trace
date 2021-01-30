@@ -303,9 +303,10 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
+	uint8_t ellp_en = traj->ellp_en;
+	s_trj_ellp *ellp_ref = traj->ellp;
 	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
-	uint8_t ellp_en = traj->ellp_en;
 	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
@@ -319,7 +320,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 
             for (int i = 0; i < traj->pts_offset; ++i)
             {
-                trj_ellp_ecef(traj->ellp, pos_ecef, traj->pts[i].pos_p);
+                trj_ellp_ecef(ellp_ref, pos_ecef, traj->pts[i].pos_p);
                 vl_vcopy(traj->pts[i].pos_p, pos_ecef);
             }
         }
