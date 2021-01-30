@@ -679,6 +679,15 @@ inline void vl_vmul_v(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
 	return;
 }
 
+inline void vl_vdiv_v(vlf_t *res, vlf_t *vec_0, vlf_t *vec_1)
+{
+	res[0] = vec_0[0] / vec_1[0];
+	res[1] = vec_0[1] / vec_1[1];
+	res[2] = vec_0[2] / vec_1[2];
+	
+	return;
+}
+
 inline void vl_inv(uint32_t n, vlf_t *inv, vlf_t *mat_)
 {
 	vlf_t temp;
@@ -791,25 +800,26 @@ inline void vl_minter(vlf_t *res, vlf_t *m0, vlf_t *m1, vlf_t dist)
 inline vlf_t vl_mdist(vlf_t *m0, vlf_t *m1)
 {
 	// does not work due to numerical instabilities and also pretty slow
-//	vlf_t m0t[9] = {
-//			m0[0], m0[3], m0[6],
-//			m0[1], m0[4], m0[7],
-//			m0[2], m0[5], m0[8],
-//	};
-//
-//	vlf_t m0tm1[9];
-//
-//	vl_mmul_m(m0tm1, m0t, m1);
-//
-//	return acos((vl_mtrace(m0tm1) - 1.0) * 0.5);
+	vlf_t m0tm1[9];
+	vl_mtmul_m(m0tm1, m0, m1);
 	
+//	vlf_t cosm = (vl_mtrace(m0tm1) - 1.0) * 0.5;
+//
+//	cosm = (cosm > +1.0) ? +1.0 : cosm;
+//	cosm = (cosm < -1.0) ? -1.0 : cosm;
+//
+//	return acos(cosm);
+//
+	
+	return (vl_mtrace(m0tm1) - 3.0);
+
 	uint32_t i;
 	vlf_t dist = 0.0;
 
 	for (i = 0; i < 9; ++i)
 	{
-		dist += (m0[i] - m1[i]) * (m0[i] - m1[i]);
-//		dist += m0tm1[i] * m0tm1[i];
+//		dist += (m0[i] - m1[i]) * (m0[i] - m1[i]);
+		dist += m0tm1[i] * m0tm1[i];
 	}
 
 	return vl_sqrt(dist);
