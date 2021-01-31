@@ -25,7 +25,7 @@
 // ADDITIONAL CONTRIBUTORS
 //
 //   Mikko Mononen: compound shape support, more cmap formats
-//   Tor Andersso kerning, subpixel rendering
+//   Tor Andersson: kerning, subpixel rendering
 //   Dougall Johnson: OpenType / Type 2 font handling
 //   Daniel Ribeiro Maciel: basic GPOS-based kerning
 //
