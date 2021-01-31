@@ -295,7 +295,7 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	ImGui::Separator();
 	
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	
 	// Command-line
 	bool reclaim_focus = false;

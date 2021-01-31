@@ -44,7 +44,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##desc", self->desc, 255);
 	// !!! UPDATE HASH !!!
 	self->hash = vl_crc32(self->desc);
@@ -65,7 +65,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 //	const char* items[*self->obj_count];
 //	for (int i = 0; i < *self->obj_count; ++i)
 //	{ items[i] = self->obj_list[i].name; }
-//	ImGui::SetNextItemWidth(-1);
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 //	if (ImGui::BeginCombo("##ref",
 //			items[self->ref->id],
 //			ImGuiComboFlags_NoArrowButton))
@@ -85,14 +85,14 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	ImGui::Text("pos_inert");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
 	ImGui::NextColumn();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1, NULL, NULL, "%.3f");
 	ImGui::NextColumn();
 	
 	ImGui::Text("rot_inert");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[?]"); }
 	ImGui::NextColumn();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1, NULL, NULL, "%.3f");
 	ImGui::NextColumn();
 	

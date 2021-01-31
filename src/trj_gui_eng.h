@@ -118,7 +118,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	static ImGuiTextFilter filter;
 	static void* selected_item = NULL;
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	filter.Draw("");
 	
 	ImGui::Dummy(ImVec2(0, 5));

@@ -22,7 +22,7 @@ inline void trj_gui_data_edit(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -52,12 +52,12 @@ inline void trj_gui_data_edit_text(s_trj_data *self)
 	
 	ImGui::Text("file  ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##file", data->file_name, 256);
 	
 	ImGui::Text("size  ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::Text("%.1f kb", (float) data->file_size / 1024);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -135,7 +135,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	trj_gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
 	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 	

@@ -17,7 +17,7 @@ inline void trj_gui_ctrl_edit(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -44,12 +44,12 @@ inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
 
     ImGui::Text("file  ");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(-1);
+    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
     ImGui::InputText("##file_name", ctrl->file_name, 256);
 
     ImGui::Text("order ");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(-1);
+    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
     ImGui::InputScalar("##order", ImGuiDataType_U32, &ctrl->order,
             NULL, NULL, "%u", ImGuiInputTextFlags_None);
 

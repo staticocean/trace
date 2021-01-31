@@ -63,7 +63,7 @@ inline void vl_gui_mat_set(void *ptr, vlf_t *mat)
 
 inline void vl_gui_vec(char *label, vlf_t *vec, float v_speed, vlf_t *min, vlf_t *max, char *format)
 {
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalarN(label, ImGuiDataType_Double, vec, 3, v_speed, min, max, format);
 	
 	return;
@@ -138,7 +138,7 @@ inline void vl_gui_mat(char *label, vlf_t *mat, float v_speed, vlf_t *min, vlf_t
 	for (int i = 0; i < 3; ++i)
 	{
 		ImGui::PushID(i);
-		ImGui::SetNextItemWidth(-1);
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 		ImGui::DragScalarN("##mat_view", ImGuiDataType_Double, &mat[3 * i], 3, v_speed, min, max, format);
 		ImGui::PopID();
 	}
@@ -314,7 +314,7 @@ inline bool vl_gui_hash(char *label, uint32_t hash)
 	ImVec2 p = ImGui::GetCursorScreenPos();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 	
-	float dy = ImGui::GetTextLineHeight() / 2.0;
+	float dy = ImGui::GetTextLineHeightWithSpacing() * 0.5;
 	float dx = ImGui::GetContentRegionAvailWidth() / 16.0;
 	
 	float height = 2 * dy;

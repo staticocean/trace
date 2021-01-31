@@ -51,7 +51,7 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -86,7 +86,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
@@ -175,14 +175,14 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 	ImGui::SameLine();
 	vlf_t radius_min = 0.0;
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
 	
 	ImGui::Text("rate  ");
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 	ImGui::SameLine();
 	vlf_t rate_deg = vl_deg(traj->rate);
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.9f");
 	traj->rate = vl_rad(rate_deg);
 	
@@ -197,7 +197,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 	ImGui::SameLine();
 	vlf_t s_rate_deg = vl_deg(traj->s_rate);
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.9f");
 	traj->s_rate = vl_rad(s_rate_deg);
 	
@@ -295,7 +295,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(-1);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
