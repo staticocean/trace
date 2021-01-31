@@ -59,7 +59,7 @@ inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 //		ImGui::EndMenu();
 //	}
 //
-	if (ImGui::MenuItem("Save", "Ctrl+S")) { trj_eng_save(self->eng, "files/test.trj"); }
+	if (ImGui::MenuItem("Save", "Ctrl+S")) { trj_eng_save(self->eng, "res/saves/test.trj"); }
 //	if (ImGui::MenuItem("Save As..")) {}
 	
 	ImGui::Separator();
