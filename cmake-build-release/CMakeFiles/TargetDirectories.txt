@@ -1,3 +1,0 @@
-C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-release/CMakeFiles/trj.dir
-C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-release/CMakeFiles/edit_cache.dir
-C:/Users/cel/dev/git/bitbucket/trajectory/cmake-build-release/CMakeFiles/rebuild_cache.dir
