@@ -20,8 +20,6 @@
 static s_trj_ellp trj_ellp_wgs84;
 trj_ellp_wgs84.desc   	= "wgs84";
 trj_ellp_wgs84.a 		=  6.37813700000000000000e+0006;
-trj_ellp_wgs84.b 		=  6.35675231424517949745e+0006;
-trj_ellp_wgs84.e  		=  8.18191908426214947083e-0002;
 trj_ellp_wgs84.f  		=  3.35281066474748071998e-0003;
 
 #else
@@ -31,9 +29,27 @@ static s_trj_ellp trj_ellp_wgs84 = {
 		.desc   = "wgs84",
 		
 		.a 		=  6.37813700000000000000e+0006,
-		.b 		=  6.35675231424517949745e+0006,
-		.e  	=  8.18191908426214947083e-0002,
 		.f  	=  3.35281066474748071998e-0003,
+};
+
+#endif
+
+
+#ifdef __TRJ_ENV__
+
+static s_trj_ellp trj_ellp_pz90;
+trj_ellp_wgs84.desc   	= "pz90";
+trj_ellp_wgs84.a 		=  6378136;
+trj_ellp_wgs84.f  		=  3.35280374301947673491022158624e-0003;
+
+#else
+
+static s_trj_ellp trj_ellp_pz90 = {
+		
+		.desc   = "pz90",
+		
+		.a 		=  6378136,
+		.f  	=  3.35280374301947673491022158624e-0003,
 };
 
 #endif
@@ -42,7 +58,9 @@ static s_trj_ellp trj_ellp_wgs84 = {
 
 inline void trj_ellp_init(s_trj_ellp *ellp)
 {
-	ellp->ee		= ellp->e * ellp->e;
+	ellp->b         = ellp->a * (1 - ellp->f);
+	ellp->ee		= 1 + ellp->a*ellp->a / (ellp->b*ellp->b);
+	ellp->e 		= vl_sqrt(ellp->ee);
 	ellp->invaa		= 1.0 / (ellp->a * ellp->a);
 	ellp->l		 	= (ellp->e * ellp->e) / 2.0;
 	ellp->p1mee		= 1.0 - (ellp->e * ellp->e);
