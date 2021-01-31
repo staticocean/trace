@@ -571,6 +571,10 @@ inline uint8_t trj_traj_load(s_trj_traj *self, s_trj_eng *eng, uint8_t **v_file)
 	
 	self->load(self->data, self->config, v_file);
 	
+	// compile trajectory for previews and interaction
+	// to prevent damaged values when executing pos/rot calls
+	self->compile(self->data);
+	
 	return 0x00;
 }
 
