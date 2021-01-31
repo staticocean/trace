@@ -12,3 +12,6 @@
 *.log
 *.ini
 *.internal
+*.zip
+cmake-build-debug/
+cmake-build-release/
