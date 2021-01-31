@@ -630,7 +630,7 @@ inline ImGui::FileBrowser __file_browser__;
 inline void trj_gui_fileopen(char *file_path)
 {
 	ImGui::SetNextItemWidth(-40);
-	ImGui::InputText("##file_path", file_path, 256);
+	ImGui::InputText("##file_path", file_path, 512);
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip(file_path); }
 
@@ -646,6 +646,59 @@ inline void trj_gui_fileopen(char *file_path)
 		strcpy(file_path, __file_browser__.GetSelected().string().c_str());
 		__file_browser__.ClearSelected();
 	}
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+typedef struct
+{
+	int day;
+	int month;
+	int year;
+	
+	int hour;
+	int min;
+	int sec;
+	
+}	s_trj_gui_datetime;
+
+inline void trj_gui_datetime(char *label,
+		int *day, int *month, int *year,
+		int *hour, int *min, int *sec)
+{
+	ImGui::PushID(label);
+	
+	char datetime_str[64];
+	
+	sprintf(datetime_str, "%02d/%02d/%04d %02d:%02d:%02d",
+			*day, *month, *year, *hour, *min, *sec);
+	
+	ImGui::InputText("##datetime", datetime_str, sizeof(datetime_str));
+	
+	sscanf(datetime_str, "%02d/%02d/%04d %02d:%02d:%02d",
+		   day , month, year, hour, min  , sec);
+	
+	*day   = (*day   <    1) ?    1 : *day;
+	*day   = (*day   >   30) ?   30 : *day;
+	
+	*month = (*month <    1) ?    1 : *month;
+	*month = (*month >   12) ?   12 : *month;
+	
+	*year  = (*year  < 1990) ? 1990 : *year;
+	*year  = (*year  > 3000) ? 3000 : *year;
+	
+	*hour  = (*hour  <    0) ?    0 : *hour;
+	*hour  = (*hour  >   23) ?   23 : *hour;
+	
+	*min   = (*min   <    0) ?    0 : *min;
+	*min   = (*min   >   59) ?   59 : *min;
+	
+	*sec   = (*sec   <    0) ?    0 : *sec;
+	*sec   = (*sec   >   59) ?   59 : *sec;
+	
+	ImGui::PopID();
 	
 	return;
 }
