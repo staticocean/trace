@@ -1305,4 +1305,255 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 
 //------------------------------------------------------------------------------
 
+inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
+{
+	s_trj_traj_navsat *traj = (s_trj_traj_navsat*) self->data;
+	
+	ImGui::PushID(self);
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", traj->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("file  ");
+	if (ImGui::IsItemHovered())
+	{ ImGui::SetTooltip("Path to almanac file"); }
+	ImGui::SameLine();
+	trj_gui_fileopen(traj->file_path);
+	
+	ImGui::Text("type  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	int file_type = traj->file_type;
+	char *file_types[] = {
+			"none",
+			".AGP [glonass-iac.ru]",
+			".AGL [glonass-iac.ru]",
+	};
+	
+	ImGui::Combo("##file_type", &file_type, file_types, IM_ARRAYSIZE(file_types), 10);
+	traj->file_type = (trj_traj_navsat_filetype_t) file_type;
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("resol ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	ImGui::SliderInt("##resolution", &traj->resolution, 1, 1000);
+	
+	if (traj->data_offset > 0x00)
+	{
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("satnum");
+		ImGui::SameLine();
+		
+		char satnum[32];
+		sprintf(satnum, "SAT %d", traj->data_list[traj->sat_offset].satnum);
+		
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+		if (ImGui::BeginCombo("##satnum", satnum, ImGuiComboFlags_None))
+		{
+			for (int i = 0; i < traj->data_offset; ++i)
+			{
+				const bool is_selected = (i == traj->sat_offset);
+				sprintf(satnum, "SAT %d", traj->data_list[i].satnum);
+				if (ImGui::Selectable(satnum, is_selected))
+				{ traj->sat_offset = i; }
+				
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected) ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+	}
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("time  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	trj_gui_datetime("##datetime",
+		 &traj->day, &traj->month, &traj->year,
+		 &traj->hour, &traj->min, &traj->sec);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_traj_view_navsat(s_trj_traj *self)
+{
+	s_trj_traj_navsat *traj = (s_trj_traj_navsat*) self->data;
+	
+	ImGui::PushID(self);
+	
+	if (ImGui::BeginTabBar("##data_view", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("3D view"))
+		{
+			s_vl3d_eng vl3d_eng;
+			s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 4);
+			s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
+
+			vl3d_view_load(self, &view, view);
+
+			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
+					.obj_list = obj_list,
+			});
+			
+			for (int i = 0; i < traj->data_offset; ++i)
+			{
+				vlf_t time = 0.0;
+				vlf_t time_limit = 3600*12;
+				vlf_t time_step = time_limit / 64;
+				int time_iter = time_limit / time_step;
+				
+				vlf_t p0[3];
+				vlf_t p1[3];
+				vlf_t rot[9];
+				
+				trj_traj_navsat_pos_local(traj, time, p0, i);
+				trj_traj_navsat_pos_local(traj, time, p1, i);
+				
+				for (int j = 0; j < time_iter; ++j)
+				{
+					time += time_step;
+
+					vl_vcopy(p0, p1);
+					trj_traj_navsat_pos_local(traj, time, p1, i);
+					
+					if (i == traj->sat_offset)
+					{
+						vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
+								.color = vl3d_col_l,
+								.p0 = { p0[0], p0[1], p0[2] },
+								.p1 = { p1[0], p1[1], p1[2] },
+						});
+					}
+					
+					else
+					{
+						vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
+								.color = vl3d_col_d,
+								.p0 = { p0[0], p0[1], p0[2] },
+								.p1 = { p1[0], p1[1], p1[2] },
+						});
+					}
+				}
+			}
+
+			vl3d_view_grid(&view, &vl3d_eng);
+			vl3d_view_xyz(&view, &vl3d_eng);
+			vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
+			vl3d_view_save(self, &view);
+
+			free(obj_list);
+		
+			ImGui::EndTabItem();
+		}
+		
+		if (ImGui::BeginTabItem("Almanac"))
+		{
+			if (ImGui::Button("load"))
+			{ trj_traj_navsat_compile(traj); }
+			
+			ImGui::Dummy(ImVec2(0, 5));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0, 5));
+			
+			if (ImGui::BeginTable("table1", 17, ImGuiTableFlags_None))
+			{
+				ImGui::TableSetupColumn("satnum", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("health", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("week  ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("tow   ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("day   ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("month ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("year  ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("atime ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("tcorr ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("dtcorr", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("domg  ", ImGuiTableColumnFlags_WidthFixed);
+				
+				ImGui::TableSetupColumn("omg0  ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("i     ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("w     ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("e     ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("sqrta ", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("m0    ", ImGuiTableColumnFlags_WidthFixed);
+				
+				ImGui::TableHeadersRow();
+				
+				for (int row = 0; row < traj->data_offset; row++)
+				{
+					ImGui::TableNextRow();
+					
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].satnum);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].health);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].week);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].tow);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].day);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].month);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].year);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].atime);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].tcorr);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].dtcorr);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].domg);
+					
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].omg0);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].i);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].w);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].e);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].sqrta);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].m0);
+				}
+				ImGui::EndTable();
+			}
+			
+			ImGui::EndTabItem();
+		}
+		
+		ImGui::EndTabBar();
+	}
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __TRJ_GUI_TRAJ__ */

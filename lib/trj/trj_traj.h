@@ -482,12 +482,12 @@ typedef struct trj_traj_bz
 	uint8_t 	ellp_en;
 	s_trj_ellp 	*ellp;
 	uint32_t 	ellp_hash;
-	
-	vlf_t 		p_bias[3];
-	vlf_t 		p_gain[3];
-	
-	vlf_t 		t_bias;
-	vlf_t 		t_gain;
+//
+//	vlf_t 		p_bias[3];
+//	vlf_t 		p_gain[3];
+//
+//	vlf_t 		t_bias;
+//	vlf_t 		t_gain;
 	
 } 	s_trj_traj_bz;
 
@@ -523,11 +523,11 @@ inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 	if (self->ellp != NULL)
 	{ self->ellp_hash = vl_crc32(self->ellp->desc); }
 	
-	vl_vset(self->p_bias, 0.0);
-	vl_vset(self->p_gain, 1.0);
-	
-	self->t_bias = 0.0;
-	self->t_gain = 1.0;
+//	vl_vset(self->p_bias, 0.0);
+//	vl_vset(self->p_gain, 1.0);
+//
+//	self->t_bias = 0.0;
+//	self->t_gain = 1.0;
 	
 	return 0x00;
 }

@@ -11,7 +11,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	map = *temp_map;
 	free(temp_map);
 	
-	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
+//	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
 //	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
 	
 	self->w_height = 720;
@@ -126,6 +126,28 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.rot = trj_traj_bz_rot_,
 			.pos = trj_traj_bz_pos_,
 			.info = trj_traj_bz_info_,
+	});
+	
+	static s_trj_traj_navsat_init trj_traj_navsat_config_ = {
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+	};
+	
+	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
+			.name = "default_traj_navsat",
+			.desc = "default_traj_navsat",
+			.init = trj_traj_navsat_init_,
+			.free = trj_traj_navsat_free_,
+			.save = trj_traj_navsat_save_,
+			.load = trj_traj_navsat_load_,
+			.data_size = sizeof(s_trj_traj_navsat),
+			.data = NULL,
+			.config_size = sizeof(s_trj_traj_navsat_init),
+			.config = &trj_traj_navsat_config_,
+			.compile = trj_traj_navsat_compile_,
+			.rot = trj_traj_navsat_rot_,
+			.pos = trj_traj_navsat_pos_,
+			.info = trj_traj_navsat_info_,
 	});
 	
 	static s_trj_ctrl_upos_init trj_ctrl_upos_config_ = {
@@ -421,7 +443,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_menu.cmd = &self->gui_cmd;
 	self->gui_menu.eng = &self->eng;
 	
-	trj_eng_load(&self->eng, "files/test.trj");
+	trj_eng_load(&self->eng, "res/saves/test.trj");
 	
 //	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
@@ -443,6 +465,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
 	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
 	const uint32_t traj_hash_bz     = vl_crc32("default_traj_bz");
+	const uint32_t traj_hash_navsat = vl_crc32("default_traj_navsat");
 	
 	const uint32_t data_hash_text = vl_crc32("default_data_text");
 	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
@@ -503,6 +526,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					if      (traj->hash == traj_hash_static) { trj_gui_traj_edit_static (traj); }
 					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_edit_orb    (traj); }
 					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
+					else if (traj->hash == traj_hash_navsat) { trj_gui_traj_edit_navsat (traj); }
 					
 					break;
 				}
@@ -565,6 +589,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					if      (traj->hash == traj_hash_static) { trj_gui_traj_view_static (traj); }
 					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_view_orb    (traj); }
 					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_view_bz((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
+					else if (traj->hash == traj_hash_navsat) { trj_gui_traj_view_navsat (traj); }
 					
 					break;
 				}
