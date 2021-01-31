@@ -289,7 +289,11 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 	
 	static s_trj_data_mat_init trj_data_mat_config_ = {
-			.file_name = "default_data_mat.mat",
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+			
+			.ellp_en = 0x00,
+			.ellp = NULL,
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
@@ -469,6 +473,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	const uint32_t data_hash_text = vl_crc32("default_data_text");
 	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
+	const uint32_t data_hash_mat  = vl_crc32("default_data_mat");
 
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 
@@ -550,6 +555,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					
 					if      (data->hash == data_hash_text) { trj_gui_data_edit_text(data); }
 					else if (data->hash == data_hash_ram ) { trj_gui_data_edit_ram(data); }
+					else if (data->hash == data_hash_mat ) { trj_gui_data_edit_mat(data); }
 					
 					break;
 				}
@@ -610,6 +616,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					
 					if      (data->hash == data_hash_text) { trj_gui_data_view_text(data); }
 					else if (data->hash == data_hash_ram ) { trj_gui_data_view_ram(data); }
+					else if (data->hash == data_hash_mat ) { trj_gui_data_view_mat(data); }
 					
 					break;
 				}

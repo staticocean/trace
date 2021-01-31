@@ -413,4 +413,113 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 
 //------------------------------------------------------------------------------
 
+inline void trj_gui_data_edit_mat(s_trj_data *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (data->ref  != NULL) { data->ref_hash  = data->ref->hash ; }
+	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", data->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	trj_gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ellp  ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-40);
+	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	ImGui::SameLine(0.0, 0.0);
+	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
+	if (data->ellp == NULL) { data->ellp_en = 0x00; }
+	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("file  ");
+	if (ImGui::IsItemHovered())
+	{ ImGui::SetTooltip("Path to almanac file"); }
+	ImGui::SameLine();
+	trj_gui_filesave(data->file_name);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("hpr   ");
+	ImGui::SameLine();
+	vl_gui_bool("##hpr", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->hpr_en);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("lla   ");
+	ImGui::SameLine();
+	vl_gui_bool("##lla", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->lla_en);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ecef  ");
+	ImGui::SameLine();
+	vl_gui_bool("##ecef", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ecef_en);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("tied  ");
+	ImGui::SameLine();
+	vl_gui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+inline void trj_gui_data_view_mat(s_trj_data *self)
+{
+//	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+//
+//	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
+//	if (data->offset == 0x00)
+//	{
+//		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
+//		return;
+//	}
+	
+	ImGui::PushID(self);
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __TRJ_GUI_DATA__ */
