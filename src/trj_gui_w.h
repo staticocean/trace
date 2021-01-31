@@ -18,6 +18,8 @@
 #include <lib/imgui/imgui_internal.h>
 #include <lib/trj/vl3d.h>
 
+#include <lib/imfilebrowser/imfilebrowser.h>
+
 //------------------------------------------------------------------------------
 
 inline void vl_gui_mat_get(void *ptr, vlf_t *mat, vlf_t *def)
@@ -619,6 +621,33 @@ inline void trj_gui_lon(char *label, float64_t *lon)
                      (float64_t[2]) { vl_rad(-180), vl_rad(+180) }, lon);
 
     return;
+}
+
+//------------------------------------------------------------------------------
+
+inline ImGui::FileBrowser __file_browser__;
+
+inline void trj_gui_fileopen(char *file_path)
+{
+	ImGui::SetNextItemWidth(-40);
+	ImGui::InputText("##file_path", file_path, 256);
+	if (ImGui::IsItemHovered())
+	{ ImGui::SetTooltip(file_path); }
+
+	ImGui::SameLine(0.0, 0.0);
+	
+	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvailWidth(),0)))
+	{ __file_browser__.Open(); }
+	
+	__file_browser__.Display();
+	
+	if(__file_browser__.HasSelected())
+	{
+		strcpy(file_path, __file_browser__.GetSelected().string().c_str());
+		__file_browser__.ClearSelected();
+	}
+	
+	return;
 }
 
 //------------------------------------------------------------------------------
