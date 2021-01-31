@@ -625,10 +625,13 @@ inline void trj_gui_lon(char *label, float64_t *lon)
 
 //------------------------------------------------------------------------------
 
-inline ImGui::FileBrowser __file_browser__;
+inline ImGui::FileBrowser __file_browser_open__ = ImGui::FileBrowser();
+inline ImGui::FileBrowser __file_browser_save__ = ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
 
 inline void trj_gui_fileopen(char *file_path)
 {
+	ImGui::PushID(file_path);
+	
 	ImGui::SetNextItemWidth(-40);
 	ImGui::InputText("##file_path", file_path, 512);
 	if (ImGui::IsItemHovered())
@@ -637,15 +640,44 @@ inline void trj_gui_fileopen(char *file_path)
 	ImGui::SameLine(0.0, 0.0);
 	
 	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvailWidth(),0)))
-	{ __file_browser__.Open(); }
+	{ __file_browser_open__.Open(); }
 	
-	__file_browser__.Display();
+	__file_browser_open__.Display();
 	
-	if(__file_browser__.HasSelected())
+	if(__file_browser_open__.HasSelected())
 	{
-		strcpy(file_path, __file_browser__.GetSelected().string().c_str());
-		__file_browser__.ClearSelected();
+		strcpy(file_path, __file_browser_open__.GetSelected().string().c_str());
+		__file_browser_open__.ClearSelected();
 	}
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+inline void trj_gui_filesave(char *file_path)
+{
+	ImGui::PushID(file_path);
+	
+	ImGui::SetNextItemWidth(-40);
+	ImGui::InputText("##file_path", file_path, 512);
+	if (ImGui::IsItemHovered())
+	{ ImGui::SetTooltip(file_path); }
+	
+	ImGui::SameLine(0.0, 0.0);
+	
+	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvailWidth(),0)))
+	{ __file_browser_save__.Open(); }
+	
+	__file_browser_save__.Display();
+	
+	if(__file_browser_save__.HasSelected())
+	{
+		strcpy(file_path, __file_browser_save__.GetSelected().string().c_str());
+		__file_browser_save__.ClearSelected();
+	}
+	
+	ImGui::PopID();
 	
 	return;
 }
