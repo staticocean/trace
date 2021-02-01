@@ -818,13 +818,24 @@ inline void vl_unskew(vlf_t *res, vlf_t *mat)
 	
 	vl_tnp(mat_tnp, mat);
 	vl_msub(temp_mat, mat, mat_tnp);
-	vl_mmul_s(mat, mat, 0.5);
 	
 	// mat = 0.5 * (mat - mat.T);
-	
-	res[0] = mat[2*3 + 1];
-	res[1] = mat[0*3 + 2];
-	res[2] = mat[1*3 + 0];
+//
+//	res[0 + 0] = 0;
+//	res[0 + 1] = -vec[2];
+//	res[0 + 2] = +vec[1];
+//
+//	res[3 + 0] = +vec[2];
+//	res[3 + 1] = 0;
+//	res[3 + 2] = -vec[0];
+//
+//	res[6 + 0] = -vec[1];
+//	res[6 + 1] = +vec[0];
+//	res[6 + 2] = 0;
+//
+	res[0] = 0.5 * (mat[2*3 + 1] - mat[1*3 + 2]);
+	res[1] = 0.5 * (mat[0*3 + 2] - mat[2*3 + 0]);
+	res[2] = 0.5 * (mat[1*3 + 0] - mat[0*3 + 1]);
 	
 	return;
 }
@@ -873,29 +884,15 @@ inline void vl_minter(vlf_t *res, vlf_t *m0, vlf_t *m1, vlf_t dist)
 inline vlf_t vl_mdist(vlf_t *m0, vlf_t *m1)
 {
 	// does not work due to numerical instabilities and also pretty slow
-	vlf_t m0tm1[9];
-	vl_mtmul_m(m0tm1, m0, m1);
+	vlf_t m0m1t[9];
+	vl_mmul_mt(m0m1t, m1, m0);
 	
-//	vlf_t cosm = (vl_mtrace(m0tm1) - 1.0) * 0.5;
-//
-//	cosm = (cosm > +1.0) ? +1.0 : cosm;
-//	cosm = (cosm < -1.0) ? -1.0 : cosm;
-//
-//	return acos(cosm);
-//
+	vlf_t cosm = (vl_mtrace(m0m1t) - 1.0) * 0.5;
 	
-	return (vl_mtrace(m0tm1) - 3.0);
-
-	uint32_t i;
-	vlf_t dist = 0.0;
-
-	for (i = 0; i < 9; ++i)
-	{
-//		dist += (m0[i] - m1[i]) * (m0[i] - m1[i]);
-		dist += m0tm1[i] * m0tm1[i];
-	}
-
-	return vl_sqrt(dist);
+	if (cosm < -1) cosm = -1;
+	if (cosm > +1) cosm = +1;
+	
+	return acos(cosm);
 }
 
 //------------------------------------------------------------------------------
@@ -915,26 +912,40 @@ typedef struct
 {
 	vlf_t a[9];
 	vlf_t at[9];
-	vlf_t da[9];
 	vlf_t trace_a;
 	vlf_t omega;
+	vlf_t v[3];
 	
 } 	s_vl_rd1;
 
 // https://math.stackexchange.com/questions/668866/how-do-you-find-angular-velocity-given-a-pair-of-3x3-rotation-matrices
 inline void vl_rd1f(s_vl_rd1 *self, vlf_t *res, vlf_t *r0, vlf_t *r1)
 {
-	if (fabs(vl_mdist(r0, r1)) > 1E-16)
+	vl_mmul_mt(self->a, r1, r0);
+	self->trace_a = vl_mtrace(self->a);
+	
+	vlf_t acos_arg = 0.5*(self->trace_a - 1.0);
+	
+	if (acos_arg < -1.0) acos_arg = -1.0;
+	if (acos_arg > +1.0) acos_arg = +1.0;
+	
+	self->omega = acos(acos_arg);
+	
+	if (fabs(self->omega) < 1E-16)
 	{
-		vl_mmul_mt(self->a, r1, r0);
-		self->trace_a = vl_mtrace(self->a);
-		self->omega = acos(0.5*(self->trace_a - 1.0));
-		vl_tnp(self->at, self->a);
-		vl_msub(self->da, self->a, self->at);
-		
-		vl_mmul_s(res, self->da, 0.5 * (self->omega / vl_sin(self->omega)));
+		vl_mset(res, 0.0);
 	}
-	else { vl_mset(res, 0.0); }
+	
+	else
+	{
+		// https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
+		vlf_t k = self->omega * 0.5 / vl_sin(self->omega);
+		self->v[0] = (self->a[2*3+1] - self->a[1*3+2]) * k;
+		self->v[1] = (self->a[0*3+2] - self->a[2*3+0]) * k;
+		self->v[2] = (self->a[1*3+0] - self->a[0*3+1]) * k;
+		
+		vl_skew(res, self->v);
+	}
 	
 	return;
 	
@@ -957,8 +968,8 @@ inline void vl_rinter(vlf_t *res, vlf_t *r0, vlf_t *r1, vlf_t dist)
 	vl_rd1(rot, r0, r1);
 	vl_mmul_s(rot, rot, dist);
 	
-	vl_vcopy(res, r0);
 	vl_mmul_m(res, rot, r0);
+	vl_msum(res, res, r0);
 	
 //	vlf_t test[9];
 //	vl_mmul_m(test, rot, r0);
