@@ -37,7 +37,18 @@ inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 //	ImGui::MenuItem("(demo menu)", NULL, false, false);
 	
 //	if (ImGui::MenuItem("New")) {}
-	if (ImGui::MenuItem("Open", "Ctrl+O")) { trj_eng_load(self->eng, "files/test.trj"); }
+	{
+		if (ImGui::MenuItem("Open", "Ctrl+O"))
+		{
+//			__file_browser_open__.Open();
+		}
+		
+//		if(__file_browser_open__.HasSelected())
+//		{
+//			trj_eng_load(self->eng, (char*) __file_browser_open__.GetSelected().string().c_str());
+//			__file_browser_open__.ClearSelected();
+//		}
+	}
 //	if (ImGui::BeginMenu("Open Recent"))
 //	{
 //		ImGui::MenuItem("fish_hat.c");
@@ -132,11 +143,14 @@ inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 	{
 		self->height = ImGui::GetWindowHeight();
 		
-		if (ImGui::BeginMenu("File"))
-		{
-			trj_gui_menu_file(self);
-			ImGui::EndMenu();
-		}
+		// Temporary disabled because ImGui filebrowser cant be rendered from menu
+		// thats why SAVE/LOAD is placed in toolbar and thats why we dont have a reference here
+		// TODO find workaround to render filebrowser from menu context
+//		if (ImGui::BeginMenu("File"))
+//		{
+//			trj_gui_menu_file(self);
+//			ImGui::EndMenu();
+//		}
 		
 		if (ImGui::BeginMenu("Edit"))
 		{

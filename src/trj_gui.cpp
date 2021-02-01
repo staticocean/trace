@@ -20,6 +20,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_tbar.eng = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
 	self->gui_tbar.height = 38;
+	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	
@@ -449,7 +450,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_menu.cmd = &self->gui_cmd;
 	self->gui_menu.eng = &self->eng;
 	
-	trj_eng_load(&self->eng, "res/saves/test.trj");
+	trj_eng_load(&self->eng, self->gui_tbar.file_path);
 	
 //	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	

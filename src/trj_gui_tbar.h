@@ -25,6 +25,8 @@ typedef struct trj_gui_tbar
 	s_trj_eng *eng;
 	s_trj_gui_eng *eng_gui;
 	
+	char file_path[512];
+	
 } 	s_trj_gui_tbar;
 
 //------------------------------------------------------------------------------
@@ -69,10 +71,67 @@ inline uint8_t trj_gui_tbar_main(s_trj_gui_tbar *gui)
 
 //	ImGui::SameLine();
 //	ImGui::Dummy(ImVec2(-1, -1));
-	
+
 //	ImGui::PopStyleVar();
 
 //	ImGui::Separator();
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(100);
+	
+	{
+		ImGui::PushID(gui->file_path);
+		
+		ImGui::SetNextItemWidth(160);
+		char *file_name = gui->file_path + strlen(gui->file_path);
+		while (file_name > gui->file_path && *(file_name-1) != '\\' && *(file_name-1) != '/')
+		{ --file_name; }
+		
+		ImGui::InputText("##file_path", file_name, 512, ImGuiInputTextFlags_ReadOnly);
+		if (ImGui::IsItemHovered())
+		{ ImGui::SetTooltip(gui->file_path); }
+		
+		ImGui::SameLine(0.0, 0.0);
+		
+		if(ImGui::Button("SEL", ImVec2(40,0)))
+		{ __file_browser_open__.Open(); }
+		
+		__file_browser_open__.Display();
+		
+		if(__file_browser_open__.HasSelected())
+		{
+			strcpy(gui->file_path, __file_browser_open__.GetSelected().string().c_str());
+			__file_browser_open__.ClearSelected();
+			trj_eng_load(gui->eng, gui->file_path);
+		}
+		
+		ImGui::PopID();
+	}
+	{
+		ImGui::PushID(gui->file_path);
+		
+		ImGui::SameLine(0.0, 0.0);
+		
+		if(ImGui::Button("SAVE", ImVec2(40,0)))
+		{ trj_eng_save(gui->eng, gui->file_path); }
+		
+		ImGui::SameLine(0.0, 0.0);
+		
+		if(ImGui::Button("SAVE AS", ImVec2(60,0)))
+		{ __file_browser_save__.Open(); }
+		
+		__file_browser_save__.Display();
+		
+		if(__file_browser_save__.HasSelected())
+		{
+			strcpy(gui->file_path, __file_browser_save__.GetSelected().string().c_str());
+			__file_browser_save__.ClearSelected();
+			trj_eng_save(gui->eng, gui->file_path);
+		}
+		
+		ImGui::PopID();
+	}
+//			trj_eng_load(self->eng, (char*) __file_browser_open__.GetSelected().string().c_str());
 
 	return 0x00;
 }
