@@ -468,7 +468,7 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_
 			
 			bool is_selected = false;
 			
-			if (!is_none && ((*ellp)->hash, ellp_list[i].hash))
+			if (!is_none && ((*ellp)->hash == ellp_list[i].hash))
 			{ is_selected = true; }
 			
 			if (ImGui::Selectable(ellp_list[i].desc, is_selected))

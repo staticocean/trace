@@ -291,7 +291,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("heading"))
 				{
-					ImPlot::PlotLine("heading", data->time, &data->heading[2], data->offset - 3);
+					ImPlot::PlotLine("heading", data->time, data->heading, data->offset);
 					ImPlot::EndPlot();
 				}
 			}
@@ -300,7 +300,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("pitch"))
 				{
-					ImPlot::PlotLine("pitch", data->time, &data->pitch[2], data->offset - 3);
+					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset);
 					ImPlot::EndPlot();
 				}
 			}
@@ -309,7 +309,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("roll"))
 				{
-					ImPlot::PlotLine("roll", data->time, &data->roll[2], data->offset - 3);
+					ImPlot::PlotLine("roll", data->time, data->roll, data->offset);
 					ImPlot::EndPlot();
 				}
 			}
@@ -318,9 +318,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_acc"))
 				{
-					ImPlot::PlotLine("acc_x", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("acc_y", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("acc_z", &data->time3[2*3 + 0x00], &data->tied_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -329,9 +329,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_grs"))
 				{
-					ImPlot::PlotLine("grs_x", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("grs_y", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("grs_z", &data->time3[2*3 + 0x00], &data->tied_grs[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset, 0x00, 3 * sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -342,14 +342,14 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_pos lat,lon"))
 					{
-						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[2*3 + 0], data->offset-3, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[2*3 + 1], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset, 0, 3 * sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 					
 					if (ImPlot::BeginPlot("lla_pos alt"))
 					{
-						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2*3 + 2], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset, 0, 3 * sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -358,9 +358,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_vel"))
 					{
-						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[2*3 + 0], data->offset-3, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[2*3 + 1], data->offset-3, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2*3 + 2], data->offset-3, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset, 0, 3 * sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -371,9 +371,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_pos"))
 				{
-					ImPlot::PlotLine("ecef_pos_x", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_y", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_z", &data->time3[2*3 + 0x00], &data->ecef_pos[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset, 0x00, 3 * sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -382,9 +382,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_vel"))
 				{
-					ImPlot::PlotLine("ecef_vel_x", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_y", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_z", &data->time3[2*3 + 0x00], &data->ecef_vel[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset, 0x00, 3 * sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -393,9 +393,9 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_acc"))
 				{
-					ImPlot::PlotLine("ecef_acc_x", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 0], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_y", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 1], data->offset-3, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_z", &data->time3[2*3 + 0x00], &data->ecef_acc[2*3 + 2], data->offset-3, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -504,16 +504,128 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 
 inline void trj_gui_data_view_mat(s_trj_data *self)
 {
-//	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
-//
-//	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
-//	if (data->offset == 0x00)
-//	{
-//		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
-//		return;
-//	}
+	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+
+	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
+	if (data->offset == 0x00)
+	{
+		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
+		return;
+	}
 	
 	ImGui::PushID(self);
+	if (ImGui::CollapsingHeader("heading"))
+	{
+		if (ImPlot::BeginPlot("heading"))
+		{
+			ImPlot::PlotLine("heading", data->time, data->heading, data->offset);
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("pitch"))
+	{
+		if (ImPlot::BeginPlot("pitch"))
+		{
+			ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset);
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("roll"))
+	{
+		if (ImPlot::BeginPlot("roll"))
+		{
+			ImPlot::PlotLine("roll", data->time, data->roll, data->offset);
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("tied_acc"))
+	{
+		if (ImPlot::BeginPlot("tied_acc"))
+		{
+			ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("tied_grs"))
+	{
+		if (ImPlot::BeginPlot("tied_grs"))
+		{
+			ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (data->ellp != NULL && data->ellp_en)
+	{
+		if (ImGui::CollapsingHeader("lla_pos"))
+		{
+			if (ImPlot::BeginPlot("lla_pos lat,lon"))
+			{
+				ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::EndPlot();
+			}
+			
+			if (ImPlot::BeginPlot("lla_pos alt"))
+			{
+				ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::EndPlot();
+			}
+		}
+		
+		if (ImGui::CollapsingHeader("lla_vel"))
+		{
+			if (ImPlot::BeginPlot("lla_vel"))
+			{
+				ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset, 0, 3 * sizeof(vlf_t));
+				ImPlot::EndPlot();
+			}
+		}
+	}
+	
+	
+	if (ImGui::CollapsingHeader("ecef_pos"))
+	{
+		if (ImPlot::BeginPlot("ecef_pos"))
+		{
+			ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("ecef_vel"))
+	{
+		if (ImPlot::BeginPlot("ecef_vel"))
+		{
+			ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::EndPlot();
+		}
+	}
+	
+	if (ImGui::CollapsingHeader("ecef_acc"))
+	{
+		if (ImPlot::BeginPlot("ecef_acc"))
+		{
+			ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+			ImPlot::EndPlot();
+		}
+	}
 	
 	ImGui::PopID();
 	
