@@ -219,6 +219,12 @@ inline uint8_t trj_eng_reset(s_trj_eng *self)
 		// some RT plotting functions may still try to draw this
 		obj->log_offset = 0x00;
 		
+		// remove all forces coz they are additive
+		// thus all the plugins will add and never set
+		// so we need to zero it manually
+		vl_vset(obj->pos_force, 0.0);
+		vl_vset(obj->rot_force, 0.0);
+		
 		if (obj->log_list != NULL)
 		{
 			free(obj->log_list);
@@ -259,6 +265,12 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		obj = &self->obj_list[i];
+		
+		// remove all forces coz they are additive
+		// thus all the plugins will add and never set
+		// so we need to zero it manually
+		vl_vset(obj->pos_force, 0.0);
+		vl_vset(obj->rot_force, 0.0);
 		
 		for (j = 0; j < obj->ctrl_offset; ++j)
 		{

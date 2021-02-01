@@ -38,6 +38,59 @@ inline void trj_gui_ctrl_view(s_trj_ctrl *self)
 
 //------------------------------------------------------------------------------
 
+inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) self->data;
+	
+	// !!! UPDATE HASHES !!!
+	// if ref name was changed we must recalc hash
+	// to retain save/load and gui objsel functionality
+	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
+	
+	ImGui::Text("desc  ");
+	ImGui::SameLine();
+	ImGui::Text(self->desc);
+	
+	ImGui::Text("hash  ");
+	ImGui::SameLine();
+	vl_gui_hash("##hash", self->hash);
+	
+	ImGui::Text("eng   ");
+	ImGui::SameLine();
+	ImGui::Text("%08X", ctrl->eng);
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("ref   ");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	trj_gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_ctrl_view_egms(s_trj_ctrl *self)
+{
+	ImGui::PushID(self);
+	
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
 {
     s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;

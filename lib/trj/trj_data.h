@@ -445,7 +445,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 				self->roll[i] 		= hpr.roll;
 			}
 			
-			vl_vmul_s(&self->tied_acc[i*3], obj->log_list[i].pos_force, 1.0 / obj->pos_inert);
+			vl_vmul_s(&self->tied_acc[i*3], obj->log_list[i].pos_force, -1.0 / obj->pos_inert);
 			vl_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &obj->log_list[i].pos[2][0]);
 			vl_mtmul_v(&self->tied_acc[i*3], &obj->log_list[i].rot[0][0], &self->tied_acc[i*3]);
 			

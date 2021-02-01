@@ -4,8 +4,8 @@
 //  Copyright © 2015 Control Systems Interfaces. All rights reserved.
 //
 
-#ifndef __INS_CTRL__
-#define __INS_CTRL__
+#ifndef __TRJ_CTRL__
+#define __TRJ_CTRL__
 
 //------------------------------------------------------------------------------
 
@@ -673,5 +673,157 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 
 //------------------------------------------------------------------------------
 
-#endif /* __INS_CTRL__ */
+typedef struct trj_ctrl_egms
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	uint32_t ref_hash;
+	
+}   s_trj_ctrl_egms;
+
+
+typedef struct trj_ctrl_egms_init
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
+}   s_trj_ctrl_egms_init;
+
+inline uint8_t trj_ctrl_egms_init(s_trj_ctrl_egms *self, s_trj_ctrl_egms_init attr)
+{
+	self->eng = attr.eng;
+	self->ref = attr.ref;
+	
+	if (self->ref != NULL) { self->ref_hash = self->ref->hash; }
+	else { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egms_save(s_trj_ctrl_egms *self, s_trj_ctrl_egms_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egms_load(s_trj_ctrl_egms *self, s_trj_ctrl_egms_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	
+	self->ref = trj_eng_find_obj (self->eng, self->ref_hash);
+	
+	if (self->ref == NULL) { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline void __trj_ctrl_egms_calc__(s_trj_obj *ref, s_trj_obj *obj)
+{
+	const vlf_t beta  = 0.0053171;
+	const vlf_t beta1 = 71E-7;
+	const vlf_t q     = 0.00346775;
+	const vlf_t ge    = 9.78049;
+	const vlf_t a     = 6378136;
+	const vlf_t e2    = 0.0066943662;
+	
+	vlf_t ecef[3];
+	
+	vl_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vl_mtmul_v(ecef, &ref->rot[0][0], ecef);
+	
+	vlf_t lla[3];
+	
+	trj_ellp_lla(&trj_ellp_pz90, lla, ecef);
+	
+	vlf_t g0 = ge*(1 + beta*pow(sin(lla[0]),2) + beta1*pow(sin(2*lla[0]),2));
+	
+	vlf_t g_hor[3] = {
+			g0*sin(2*lla[0])*(lla[2]/a)*((e2)/a - 2*q),
+			g0 + (lla[2]/a)*((3*lla[2]/a) - 2*q*ge*pow(cos(lla[0]),2)
+			+ (e2)*(3*pow(sin(lla[0]),2) - 1) - q*(1+6*pow(sin(lla[0]),2))),
+			0.0
+	};
+	
+	vl_vmul_s(g_hor, g_hor, -1.0);
+	
+	vlf_t ecef_ctn[9];
+	trj_ellp_ecefrot(&trj_ellp_pz90, ecef, ecef_ctn);
+	
+	vlf_t g_ecef[3];
+	vl_mmul_v(g_ecef, ecef_ctn, g_hor);
+	
+	vlf_t g_inert[3];
+	vl_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
+	vl_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
+	
+	vl_vsum(obj->pos_force, obj->pos_force, g_inert);
+	
+	return;
+}
+
+inline uint8_t trj_ctrl_egms_reset(s_trj_ctrl_egms *self, s_trj_obj *obj)
+{
+	__trj_ctrl_egms_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egms_update(s_trj_ctrl_egms *self, s_trj_obj *obj)
+{
+	__trj_ctrl_egms_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_ctrl_egms_init_(void **data, void *config)
+{
+	*data = (s_trj_ctrl_egms*) malloc(sizeof(s_trj_ctrl_egms));
+	
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) *data;
+	s_trj_ctrl_egms_init *init = (s_trj_ctrl_egms_init*) config;
+	
+	return trj_ctrl_egms_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_egms_free_(void **data)
+{
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) *data;
+	free(ctrl);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egms_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egms_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) data;
+	s_trj_ctrl_egms_init *attr = (s_trj_ctrl_egms_init*) config;
+	
+	return trj_ctrl_egms_load(ctrl, attr, v_file);
+}
+
+inline uint8_t trj_ctrl_egms_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_egms_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_egms_update_(void *data, void *obj)
+{
+	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_egms_update(ctrl, obj_);
+}
+
+//------------------------------------------------------------------------------
+
+#endif /* __TRJ_CTRL__ */
 
