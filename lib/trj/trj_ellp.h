@@ -59,7 +59,7 @@ static s_trj_ellp trj_ellp_pz90 = {
 inline void trj_ellp_init(s_trj_ellp *ellp)
 {
 	ellp->b         = ellp->a * (1 - ellp->f);
-	ellp->ee		= 1 + ellp->a*ellp->a / (ellp->b*ellp->b);
+	ellp->ee		= 1 - ellp->b*ellp->b / (ellp->a*ellp->a );
 	ellp->e 		= vl_sqrt(ellp->ee);
 	ellp->invaa		= 1.0 / (ellp->a * ellp->a);
 	ellp->l		 	= (ellp->e * ellp->e) / 2.0;
