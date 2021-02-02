@@ -20,6 +20,8 @@ typedef struct trj_proc_euler
 	vlf_t pos[3][3];
 	vlf_t rot[3][9];
 	
+	vlf_t rd1[2][9];
+	
 	s_vl_rd1 rd1_data;
 	
 }   s_trj_proc_euler;
@@ -49,19 +51,23 @@ inline uint8_t trj_proc_euler_load(s_trj_proc_euler *self, s_trj_proc_euler_init
 
 inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uint32_t offset)
 {
-	vlf_t *vel = &obj->log_list[offset].pos[1][0];
-	vlf_t *acc = &obj->log_list[offset].pos[2][0];
+	s_trj_obj_data *l0 = &obj->log_list[offset-1];
+	s_trj_obj_data *l1 = &obj->log_list[offset+0];
+	s_trj_obj_data *l2 = &obj->log_list[offset+1];
+	
+	vlf_t *vel = &l1->pos[1][0];
+	vlf_t *acc = &l1->pos[2][0];
 	
 	// assume fixed step for now
 	vlf_t h = obj->log_list[0x01].time[1];
 	
-	if (offset >= 0x01) { vl_vcopy(&self->pos[0][0], &obj->log_list[offset-1].pos[0][0]); }
-	else  				{ vl_vinter(&self->pos[0][0], &obj->log_list[offset].pos[0][0], &obj->log_list[offset+1].pos[0][0], -1.0); }
+	if (offset >= 0x01) { vl_vcopy(&self->pos[0][0], &l0->pos[0][0]); }
+	else  				{ vl_vinter(&self->pos[0][0], &l1->pos[0][0], &l2->pos[0][0], -1.0); }
 	
-	vl_vcopy(&self->pos[1][0], &obj->log_list[offset].pos[0][0]);
+	vl_vcopy(&self->pos[1][0], &l1->pos[0][0]);
 	
-	if (offset <= obj->log_offset-2) { vl_vcopy(&self->pos[2][0], &obj->log_list[offset+1].pos[0][0]); }
-	else  							 { vl_vinter(&self->pos[2][0], &obj->log_list[offset-1].pos[0][0], &obj->log_list[offset].pos[0][0], 2.0); }
+	if (offset <= obj->log_offset-2) { vl_vcopy(&self->pos[2][0], &l2->pos[0][0]); }
+	else  							 { vl_vinter(&self->pos[2][0], &l1->pos[0][0], &l0->pos[0][0], -1.0); }
 	
 	vl_vset(vel, 0.0);
 	vl_vsumm(vel, vel, &self->pos[0][0], -1.0 / (2.0 * h));
@@ -72,19 +78,29 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 	vl_vsumm(acc, acc, &self->pos[1][0], -2.0 / (h * h));
 	vl_vsumm(acc, acc, &self->pos[2][0], +1.0 / (h * h));
 	
-	vlf_t *rot = &obj->log_list[offset].rot[1][0];
+	//handle last and first
+	//acc
+	if (offset == 0x01) { vl_vcopy(&l0->pos[2][0], &l1->pos[2][0]); }
+	if (offset == obj->log_offset-1) { vl_vcopy(&l1->pos[2][0], &l0->pos[2][0]); }
 	
-	if (offset >= 0x01) { vl_mcopy(&self->rot[0][0], &obj->log_list[offset-1].rot[0][0]); }
-	else  				{ vl_rinter(&self->rot[0][0], &obj->log_list[offset].rot[0][0], &obj->log_list[offset+1].rot[0][0], -1.0); }
 	
-	vl_mcopy(&self->rot[1][0], &obj->log_list[offset].rot[0][0]);
+	vlf_t *rot = &l1->rot[1][0];
 	
-	if (offset <= obj->log_offset-2) { vl_mcopy(&self->rot[2][0], &obj->log_list[offset+1].rot[0][0]); }
-	else  							 { vl_rinter(&self->rot[2][0], &obj->log_list[offset-1].rot[0][0], &obj->log_list[offset].rot[0][0], +2.0); }
+	if (offset >= 0x01) { vl_mcopy(&self->rot[0][0], &l0->rot[0][0]); }
+	else  				{ vl_rinter(&self->rot[0][0], &l1->rot[0][0], &l2->rot[0][0], -1.0); }
 	
-	vl_vset(rot, 0.0);
-	vl_rd1f(&self->rd1_data, rot, &self->rot[0][0], &self->rot[2][0]);
-	vl_mmul_s(rot, rot, 1.0 / (2.0 * h));
+	vl_mcopy(&self->rot[1][0], &l1->rot[0][0]);
+	
+	if (offset <= obj->log_offset-2) { vl_mcopy(&self->rot[2][0], &l2->rot[0][0]); }
+	else  							 { vl_rinter(&self->rot[2][0], &l1->rot[0][0], &l0->rot[0][0], -1.0); }
+	
+//	vl_rd1f(&self->rd1_data, &self->rd1[0][0], &self->rot[0][0], &self->rot[1][0]);
+//	vl_rd1f(&self->rd1_data, &self->rd1[1][0], &self->rot[1][0], &self->rot[2][0]);
+//	vl_msum(rot, &self->rd1[1][0], &self->rd1[0][0]);
+//	vl_mmul_s(rot, rot, 0.5 / h);
+	
+	vl_rd1f(&self->rd1_data, &self->rd1[1][0], &self->rot[0][0], &self->rot[2][0]);
+	vl_mmul_s(rot, &self->rd1[1][0], 0.5 / h);
 	
 	// Error calculation
 	// if first log then set
@@ -210,25 +226,31 @@ inline uint8_t trj_proc_fps_load(s_trj_proc_fps *self, s_trj_proc_fps_init *attr
 
 inline uint8_t trj_proc_fps_update(s_trj_proc_fps *self, s_trj_obj *obj, uint32_t offset)
 {
-	vlf_t *vel = &obj->log_list[offset].pos[1][0];
-	vlf_t *acc = &obj->log_list[offset].pos[2][0];
+	s_trj_obj_data *l0 = &obj->log_list[offset-2];
+	s_trj_obj_data *l1 = &obj->log_list[offset-1];
+	s_trj_obj_data *l2 = &obj->log_list[offset+0];
+	s_trj_obj_data *l3 = &obj->log_list[offset+1];
+	s_trj_obj_data *l4 = &obj->log_list[offset+2];
+	
+	vlf_t *vel = &l2->pos[1][0];
+	vlf_t *acc = &l2->pos[2][0];
 	
 	// assume fixed step for now
 	vlf_t h = obj->log_list[0x01].time[1];
 	
-	if (offset >= 0x02) { vl_vcopy(&self->pos[0][0], &obj->log_list[offset-2].pos[0][0]); }
-	else  				{ vl_vinter(&self->pos[0][0], &obj->log_list[offset].pos[0][0], &obj->log_list[offset+2].pos[0][0], -1.0); }
+	if (offset >= 0x02) { vl_vcopy(&self->pos[0][0], &l0->pos[0][0]); }
+	else  				{ vl_vinter(&self->pos[0][0], &l2->pos[0][0], &l4->pos[0][0], -1.0); }
 	
-	if (offset >= 0x01) { vl_vcopy(&self->pos[1][0], &obj->log_list[offset-1].pos[0][0]); }
-	else  				{ vl_vinter(&self->pos[1][0], &obj->log_list[offset].pos[0][0], &obj->log_list[offset+1].pos[0][0], -1.0); }
+	if (offset >= 0x01) { vl_vcopy(&self->pos[1][0], &l1->pos[0][0]); }
+	else  				{ vl_vinter(&self->pos[1][0], &l2->pos[0][0], &l3->pos[0][0], -1.0); }
 	
-	vl_vcopy(&self->pos[2][0], &obj->log_list[offset].pos[0][0]);
+	vl_vcopy(&self->pos[2][0], &l2->pos[0][0]);
 	
-	if (offset <= obj->log_offset-2) { vl_vcopy(&self->pos[3][0], &obj->log_list[offset+1].pos[0][0]); }
-	else  							 { vl_vinter(&self->pos[3][0], &obj->log_list[offset-1].pos[0][0], &obj->log_list[offset].pos[0][0], 2.0); }
+	if (offset <= obj->log_offset-2) { vl_vcopy(&self->pos[3][0], &l3->pos[0][0]); }
+	else  							 { vl_vinter(&self->pos[3][0], &l2->pos[0][0], &l1->pos[0][0], -1.0); }
 	
-	if (offset <= obj->log_offset-3) { vl_vcopy(&self->pos[4][0], &obj->log_list[offset+2].pos[0][0]); }
-	else  							 { vl_vinter(&self->pos[4][0], &obj->log_list[offset-2].pos[0][0], &obj->log_list[offset].pos[0][0], 2.0); }
+	if (offset <= obj->log_offset-3) { vl_vcopy(&self->pos[4][0], &l4->pos[0][0]); }
+	else  							 { vl_vinter(&self->pos[4][0], &l2->pos[0][0], &l0->pos[0][0], -1.0); }
 	
 	vl_vset(vel, 0.0);
 	vl_vsumm(vel, vel, &self->pos[0][0], +1.0 / (12.0 * h));
@@ -243,21 +265,26 @@ inline uint8_t trj_proc_fps_update(s_trj_proc_fps *self, s_trj_obj *obj, uint32_
 	vl_vsumm(acc, acc, &self->pos[3][0], +16.0 / (12.0 * h * h));
 	vl_vsumm(acc, acc, &self->pos[4][0], - 1.0 / (12.0 * h * h));
 	
-	vlf_t *rot = &obj->log_list[offset].rot[1][0];
+	//handle last and first
+	//acc
+	if (offset == 0x01) { vl_vcopy(&l1->pos[2][0], &l2->pos[2][0]); }
+	if (offset == obj->log_offset-1) { vl_vcopy(&l2->pos[2][0], &l1->pos[2][0]); }
 	
-	if (offset >= 0x02) { vl_mcopy(&self->rot[0][0], &obj->log_list[offset-2].rot[0][0]); }
-	else  				{ vl_rinter(&self->rot[0][0], &obj->log_list[offset].rot[0][0], &obj->log_list[offset+2].rot[0][0], -1.0); }
+	vlf_t *rot = &l2->rot[1][0];
 	
-	if (offset >= 0x01) { vl_mcopy(&self->rot[1][0], &obj->log_list[offset-1].rot[0][0]); }
-	else  				{ vl_rinter(&self->rot[1][0], &obj->log_list[offset].rot[0][0], &obj->log_list[offset+1].rot[0][0], -1.0); }
+	if (offset >= 0x02) { vl_mcopy(&self->rot[0][0], &l0->rot[0][0]); }
+	else  				{ vl_rinter(&self->rot[0][0], &l2->rot[0][0], &l4->rot[0][0], -1.0); }
 	
-	vl_mcopy(&self->rot[2][0], &obj->log_list[offset].rot[0][0]);
+	if (offset >= 0x01) { vl_mcopy(&self->rot[1][0], &l1->rot[0][0]); }
+	else  				{ vl_rinter(&self->rot[1][0], &l2->rot[0][0], &l3->rot[0][0], -1.0); }
 	
-	if (offset <= obj->log_offset-2) { vl_mcopy(&self->rot[3][0], &obj->log_list[offset+1].rot[0][0]); }
-	else  							 { vl_rinter(&self->rot[3][0], &obj->log_list[offset-1].rot[0][0], &obj->log_list[offset].rot[0][0], +2.0); }
+	vl_mcopy(&self->rot[2][0], &l2->rot[0][0]);
 	
-	if (offset <= obj->log_offset-3) { vl_mcopy(&self->rot[4][0], &obj->log_list[offset+2].rot[0][0]); }
-	else  							 { vl_rinter(&self->rot[4][0], &obj->log_list[offset-2].rot[0][0], &obj->log_list[offset].rot[0][0], +2.0); }
+	if (offset <= obj->log_offset-2) { vl_mcopy(&self->rot[3][0], &l3->rot[0][0]); }
+	else  							 { vl_rinter(&self->rot[3][0], &l2->rot[0][0], &l1->rot[0][0], -1.0); }
+	
+	if (offset <= obj->log_offset-3) { vl_mcopy(&self->rot[4][0], &l4->rot[0][0]); }
+	else  							 { vl_rinter(&self->rot[4][0], &l2->rot[0][0], &l0->rot[0][0], -1.0); }
 	
 	// f_x = (1*f[i-2]-8*f[i-1]+0*f[i+0]+8*f[i+1]-1*f[i+2])/(12*1.0*h**1)
 	// f_x = (8*(f[i+1]-f[i-1])    -(f[i+2]-f[i-2]))/(12*1.0*h**1)
