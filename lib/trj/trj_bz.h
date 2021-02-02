@@ -204,13 +204,22 @@ inline uint8_t trj_bz4_d1(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
 
 inline uint8_t trj_bz4_d2(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
 {
-	vlf_t t_ = 1 - t;
-	
 	d1[0] 	= 6*(1-t)*(self->p2[0]-self->p1[0] - self->p0[0]-self->p1[0])
 			+ 6*(  t)*(self->p3[0]-self->p2[0] - self->p1[0]-self->p2[0]);
 	
 	d1[1] 	= 6*(1-t)*(self->p2[1]-self->p1[1] - self->p0[1]-self->p1[1])
 			+ 6*(  t)*(self->p3[1]-self->p2[1] - self->p1[1]-self->p2[1]);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_bz4_d3(s_trj_bz4 *self, vlf_t t, vlf_t *d1)
+{
+	d1[0] 	= -6*(self->p2[0]-self->p1[0] - self->p0[0]-self->p1[0])
+			+  6*(self->p3[0]-self->p2[0] - self->p1[0]-self->p2[0]);
+	
+	d1[1] 	= -6*(self->p2[1]-self->p1[1] - self->p0[1]-self->p1[1])
+			+  6*(self->p3[1]-self->p2[1] - self->p1[1]-self->p2[1]);
 	
 	return 0x00;
 }
@@ -373,6 +382,27 @@ inline uint8_t trj_bz4_d1t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 	vlf_t dt = t - d0[0];
 	
 	*value = d1[1] + dt*d2[1]/d2[0]; // ???? HELLO
+//	*value = d1[1];
+	
+	return 0x00;
+}
+
+inline uint8_t trj_bz4_d2t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
+{
+	vlf_t d0[2];
+	vlf_t d2[2];
+	vlf_t d3[2];
+	vlf_t x;
+	
+	trj_bz4_inv (self, t, &x);
+	trj_bz4_d0(self, x, d0);
+	trj_bz4_d1(self, x, d2);
+	trj_bz4_d2(self, x, d3);
+	
+	vlf_t dt = t - d0[0];
+	
+	*value = d2[1] + dt*d3[1]/d3[0]; // ???? HELLO
+//	*value = d1[1];
 	
 	return 0x00;
 }
