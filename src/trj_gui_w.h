@@ -514,7 +514,7 @@ inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 
 //------------------------------------------------------------------------------
 
-inline void __gui_lla_elem__ (char *label, char **nswe, float64_t *range, float64_t *value)
+inline void __gui_lla_elem__ (char *label, char **nswe, float64_t *range, float64_t *value, float width)
 {
     ImGuiWindow *window = ImGui::GetCurrentWindow();
 
@@ -540,7 +540,7 @@ inline void __gui_lla_elem__ (char *label, char **nswe, float64_t *range, float6
 //    vl_gui_switch("##d/dms", "Г", "ГМС", ImVec2(50, 0), &mode);
 //    ImGui::SameLine();
 
-    ImGui::SetNextItemWidth(120);
+    ImGui::SetNextItemWidth(width-40);
 
     switch (mode)
     {
@@ -607,18 +607,18 @@ inline void __gui_lla_elem__ (char *label, char **nswe, float64_t *range, float6
     return;
 }
 
-inline void trj_gui_lat(char *label, float64_t *lat)
+inline void trj_gui_lat(char *label, float64_t *lat, float width = 160)
 {
     __gui_lla_elem__(label, (char*[2]){ "S", "N" },
-                     (float64_t[2]) { vl_rad(-90), vl_rad(+90) }, lat);
+                     (float64_t[2]) { vl_rad(-90), vl_rad(+90) }, lat, width);
 
     return;
 }
 
-inline void trj_gui_lon(char *label, float64_t *lon)
+inline void trj_gui_lon(char *label, float64_t *lon, float width = 160)
 {
     __gui_lla_elem__(label, (char*[2]){ "W", "E" },
-                     (float64_t[2]) { vl_rad(-180), vl_rad(+180) }, lon);
+                     (float64_t[2]) { vl_rad(-180), vl_rad(+180) }, lon, width);
 
     return;
 }

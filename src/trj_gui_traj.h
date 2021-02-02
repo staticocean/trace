@@ -104,9 +104,31 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::Text("pos   "); ImGui::SameLine();
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
-	vl_gui_vec("##pos", traj->pos, 1.0, NULL, NULL, "%.3f");
+	if (traj->ellp_en == 0x00)
+	{
+		ImGui::Text("pos   "); ImGui::SameLine();
+		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+		vl_gui_vec("##pos", traj->pos, 1.0, NULL, NULL, "%.3f");
+	}
+	else
+	{
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("lat   "); ImGui::SameLine();
+		ImGui::SameLine();
+		trj_gui_lat("##lat", &traj->pos[0], ImGui::GetContentRegionAvailWidth());
+		
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("lon   "); ImGui::SameLine();
+		ImGui::SameLine();
+		trj_gui_lon("##lon", &traj->pos[1], ImGui::GetContentRegionAvailWidth());
+		
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("alt   "); ImGui::SameLine();
+		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+		ImGui::DragScalar("##alt", ImGuiDataType_Double, &traj->pos[2], 1.0, NULL, NULL, "%.3f");
+	}
 	
 	ImGui::Text("rot   "); ImGui::SameLine();
 	vl_gui_rot("##rot", traj->rot);

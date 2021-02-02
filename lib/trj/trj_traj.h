@@ -88,8 +88,7 @@ inline uint8_t trj_traj_static_compile(s_trj_traj_static *self)
 {
 	if (self->ellp_en != 0x00)
 	{
-		vlf_t lla[3] = { self->pos[2], self->pos[0], self->pos[1] };
-		trj_ellp_ecef(self->ellp, self->pos_cache, lla);
+		trj_ellp_ecef(self->ellp, self->pos_cache, self->pos);
 		
 		vlf_t ecef_ctn[9];
 		trj_ellp_ecefrot(self->ellp, self->pos_cache, ecef_ctn);
@@ -108,9 +107,8 @@ inline uint8_t trj_traj_static_pos(s_trj_traj_static *self, vlf_t time, vlf_t *p
 	else
 	{ vl_vcopy(pos, self->pos_cache); }
 	
-	vlf_t pos_[3];
-	vl_mmul_v(pos_, &self->ref->rot[0][0], pos);
-	vl_vsum(pos_, pos_, &self->ref->pos[0][0]);
+	vl_mmul_v(pos, &self->ref->rot[0][0], pos);
+	vl_vsum(pos, pos, &self->ref->pos[0][0]);
 	
 	return 0x00;
 }
@@ -123,9 +121,7 @@ inline uint8_t trj_traj_static_rot(s_trj_traj_static *self, vlf_t time, vlf_t *r
 	else
 	{ vl_mcopy(rot, self->rot_cache); }
 	
-	vlf_t rot_[9];
-	vl_mmul_m(rot_, &self->ref->rot[0][0], rot);
-	vl_mcopy(rot, rot_);
+	vl_mmul_m(rot, &self->ref->rot[0][0], rot);
 	
 	return 0x00;
 }
