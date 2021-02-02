@@ -430,7 +430,7 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 			}
 			
 			// prevent overflowing buffers and time_limit
-			if ((self->time[0]+self->time_step) < self->time_limit)
+			if ((self->time[0]+self->time_step) < (self->time_limit+1E-9))
 			{
 				trj_eng_update(self, self->time_step);
 				trj_eng_log(self);
