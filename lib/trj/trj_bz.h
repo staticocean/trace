@@ -381,8 +381,8 @@ inline uint8_t trj_bz4_d1t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 	
 	vlf_t dt = t - d0[0];
 	
-	*value = d1[1] + dt*d2[1]/d2[0]; // ???? HELLO
-//	*value = d1[1];
+	*value = d1[1] + dt*d2[1]/d2[0]; // does NOT work
+	*value = d1[1];
 	
 	return 0x00;
 }
@@ -402,7 +402,7 @@ inline uint8_t trj_bz4_d2t(s_trj_bz4 *self, vlf_t t, vlf_t *value)
 	vlf_t dt = t - d0[0];
 	
 	*value = d2[1] + dt*d3[1]/d3[0]; // ???? HELLO
-//	*value = d1[1];
+	*value = d2[1];
 	
 	return 0x00;
 }
