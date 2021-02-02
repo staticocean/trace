@@ -204,12 +204,13 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 		
 		for (int i = 0; i < self->offset; ++i)
 		{
-			self->time[i] = obj->log_list[i].time[0];
+			s_trj_obj_data *log = &obj->log_list[i];
+			self->time[i] = log->time[0];
 			
 			// support for implot strange api
-			self->time3[i*3 + 0x00] = obj->log_list[i].time[0];
-			self->time3[i*3 + 0x01] = obj->log_list[i].time[0];
-			self->time3[i*3 + 0x02] = obj->log_list[i].time[0];
+			self->time3[i*3 + 0x00] = log->time[0];
+			self->time3[i*3 + 0x01] = log->time[0];
+			self->time3[i*3 + 0x02] = log->time[0];
 			
 			if (self->ref != NULL)
 			{
@@ -249,59 +250,28 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 				self->roll[i] 		= hpr.roll;
 				
 				trj_ellp_lla(self->ellp, &self->lla_pos[i*3], &self->ecef_pos[i*3]);
-
-//				vlf_t ecef_p0[3];
-//				vlf_t ecef_p1[3];
-//				vlf_t ecef_p2[3];
-//				vlf_t ref_cnt0[9];
-//				vlf_t ref_cnt1[9];
-//				vlf_t ref_cnt2[9];
-//				vlf_t ecef_cnt[9];
-//
-//				vl_tnp(ref_cnt0, &self->ref->log_list[i-1].rot[0][0]);
-//				vl_tnp(ref_cnt1, &self->ref->log_list[i+0].rot[0][0]);
-//				vl_tnp(ref_cnt1, &self->ref->log_list[i+1].rot[0][0]);
-//				vl_vsub(ecef_p0, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-//				vl_vsub(ecef_p1, &obj->log_list[i+1].pos[0][0], &self->ref->log_list[i+1].pos[0][0]);
-//				vl_mmul_v(ecef_p0, ref_cnt0, ecef_p0);
-//				vl_mmul_v(ecef_p1, ref_cnt1, ecef_p1);
-//				vl_vsub(&self->lla_vel[i*3], ecef_p1, ecef_p0);
-//				vl_vmul_s(&self->lla_vel[i*3], &self->lla_vel[i*3],
-//						1.0 / (self->ref->log_list[i+1].time[0] - self->ref->log_list[i].time[0]));
-//
-//				trj_ellp_ecefrot(self->ellp, ecef_p0, ecef_cnt);
-//				vl_tnp(ecef_cnt, ecef_cnt);
-//				vl_mmul_v(&self->lla_vel[i*3], ecef_cnt, &self->lla_vel[i*3]);
 				
-				if (i >= 0x01)
-				{
-					vlf_t ecef_ctn_[9];
-					vlf_t ecef_pos_[3];
-					
-					vl_vsub(ecef_pos_, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-					vl_mtmul_v(ecef_pos_, &self->ref->log_list[i].rot[0][0], ecef_pos_);
-					trj_ellp_ecefrot(self->ellp, ecef_pos_, ecef_ctn_);
-					
-					vl_vsub(&self->lla_vel[i*3], &obj->log_list[i].pos[1][0], &self->ref->log_list[i].pos[1][0]);
-					vlf_t rel_pos[3];
-					vl_vsub(rel_pos, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-					vlf_t ang_vel[3];
-					vl_mmul_v(ang_vel, &self->ref->log_list[i].rot[1][0], rel_pos);
-					vl_vsub(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
-					
-					vl_mtmul_v(&self->lla_vel[i*3], &self->ref->log_list[i-1].rot[0][0], &self->lla_vel[i*3]);
-					vl_mtmul_v(&self->lla_vel[i*3], ecef_ctn_, &self->lla_vel[i*3]);
-					
-					// swap 1 and 2 because ecef_cnt is proj to NHW not NWH
-					vlf_t vh = self->lla_vel[i*3 + 1];
-					self->lla_vel[i*3 + 1] = self->lla_vel[i*3 + 2];
-					self->lla_vel[i*3 + 2] = vh;
-				}
+				vlf_t ecef_ctn_[9];
+				vlf_t ecef_pos_[3];
 				
-				else
-				{
-					vl_vzero(self->lla_vel);
-				}
+				vl_vsub(ecef_pos_, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+				vl_mtmul_v(ecef_pos_, &self->ref->log_list[i].rot[0][0], ecef_pos_);
+				trj_ellp_ecefrot(self->ellp, ecef_pos_, ecef_ctn_);
+				
+				vl_vsub(&self->lla_vel[i*3], &obj->log_list[i].pos[1][0], &self->ref->log_list[i].pos[1][0]);
+				vlf_t rel_pos[3];
+				vl_vsub(rel_pos, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+				vlf_t ang_vel[3];
+				vl_mmul_v(ang_vel, &self->ref->log_list[i].rot[1][0], rel_pos);
+				vl_vsub(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
+				
+				vl_mtmul_v(&self->lla_vel[i*3], &self->ref->log_list[i].rot[0][0], &self->lla_vel[i*3]);
+				vl_mtmul_v(&self->lla_vel[i*3], ecef_ctn_, &self->lla_vel[i*3]);
+				
+				// swap 1 and 2 because ecef_cnt is proj to NHW not NWH
+				vlf_t vh = self->lla_vel[i*3 + 1];
+				self->lla_vel[i*3 + 1] = self->lla_vel[i*3 + 2];
+				self->lla_vel[i*3 + 2] = vh;
 			}
 			
 			else
@@ -314,14 +284,12 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 				self->roll[i] 		= hpr.roll;
 			}
 			
-			vl_vmul_s(&self->tied_acc[i*3], obj->log_list[i].pos_force, -1.0 / obj->pos_inert);
-			vl_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &obj->log_list[i].pos[2][0]);
-			vl_mtmul_v(&self->tied_acc[i*3], &obj->log_list[i].rot[0][0], &self->tied_acc[i*3]);
+			vl_vmul_s(&self->tied_acc[i*3], log->pos_force, -1.0 / obj->pos_inert);
+			vl_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &log->pos[2][0]);
+			vl_mtmul_v(&self->tied_acc[i*3], &log->rot[0][0], &self->tied_acc[i*3]);
 			
-			vlf_t tied_grs[9];
-			vl_mtmul_m(tied_grs, &obj->log_list[i].rot[0][0], &obj->log_list[i].rot[1][0]);
-			vl_mmul_m(tied_grs, tied_grs, &obj->log_list[i].rot[0][0]);
-			vl_unskew(&self->tied_grs[i*3], tied_grs);
+			vl_unskew(&self->tied_grs[i*3], &log->rot[1][0]);
+			vl_mtmul_v(&self->tied_grs[i*3], &log->rot[0][0], &self->tied_grs[i*3]);
 		}
 	}
 	
@@ -329,18 +297,21 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 	
 	if (self->file_data)
 	{
+		TinyMATWriter_writeVectorAsColumn(
+				self->file_data, "time", self->time, self->offset);
+		
 		// HPR
 		
 		if (self->hpr_en != 0x00)
 		{
-			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "heading", self->heading, 1, self->offset);
-		
-			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "pitch", self->pitch, 1, self->offset);
-		
-			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "roll", self->roll, 1, self->offset);
+			TinyMATWriter_writeVectorAsColumn(
+					self->file_data, "heading", self->heading, self->offset);
+			
+			TinyMATWriter_writeVectorAsColumn(
+					self->file_data, "pitch", self->pitch, self->offset);
+			
+			TinyMATWriter_writeVectorAsColumn(
+					self->file_data, "roll", self->roll, self->offset);
 		}
 		
 		// LLA
