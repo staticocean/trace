@@ -851,11 +851,9 @@ inline vlf_t vl_mtrace(vlf_t *mat)
 
 inline void vl_vinter(vlf_t *res, vlf_t *v0, vlf_t *v1, vlf_t dist)
 {
-	vlf_t ndist = 1.0 - dist;
-	
-	res[0] = v0[0] * ndist + v1[0] * dist;
-	res[1] = v0[1] * ndist + v1[1] * dist;
-	res[2] = v0[2] * ndist + v1[2] * dist;
+	res[0] = v0[0] + (v1[0]-v0[0]) * dist;
+	res[1] = v0[1] + (v1[1]-v0[1]) * dist;
+	res[2] = v0[2] + (v1[2]-v0[2]) * dist;
 	
 	return;
 }
@@ -864,17 +862,15 @@ inline void vl_vinter(vlf_t *res, vlf_t *v0, vlf_t *v1, vlf_t dist)
 
 inline void vl_minter(vlf_t *res, vlf_t *m0, vlf_t *m1, vlf_t dist)
 {
-	vlf_t ndist = 1.0 - dist;
-	
-	res[0] = m0[0] * ndist + m1[0] * dist;
-	res[1] = m0[1] * ndist + m1[1] * dist;
-	res[2] = m0[2] * ndist + m1[2] * dist;
-	res[3] = m0[3] * ndist + m1[3] * dist;
-	res[4] = m0[4] * ndist + m1[4] * dist;
-	res[5] = m0[5] * ndist + m1[5] * dist;
-	res[6] = m0[6] * ndist + m1[6] * dist;
-	res[7] = m0[7] * ndist + m1[7] * dist;
-	res[8] = m0[8] * ndist + m1[8] * dist;
+	res[0] = m0[0] + (m1[0]-m0[0]) * dist;
+	res[1] = m0[1] + (m1[1]-m0[1]) * dist;
+	res[2] = m0[2] + (m1[2]-m0[2]) * dist;
+	res[3] = m0[3] + (m1[3]-m0[3]) * dist;
+	res[4] = m0[4] + (m1[4]-m0[4]) * dist;
+	res[5] = m0[5] + (m1[5]-m0[5]) * dist;
+	res[6] = m0[6] + (m1[6]-m0[6]) * dist;
+	res[7] = m0[7] + (m1[7]-m0[7]) * dist;
+	res[8] = m0[8] + (m1[8]-m0[8]) * dist;
 
 	return;
 }
@@ -961,20 +957,32 @@ inline void vl_rd1(vlf_t *res, vlf_t *r0, vlf_t *r1)
 
 //------------------------------------------------------------------------------
 
-inline void vl_rinter(vlf_t *res, vlf_t *r0, vlf_t *r1, vlf_t dist)
+inline void vl_raxis(vlf_t *angle, vlf_t *vec, vlf_t *mat)
 {
-	vlf_t rot[9];
+	vlf_t tr_a = vl_mtrace(mat);
+	vlf_t acos_arg = 0.5*(tr_a - 1.0);
 	
-	vl_rd1(rot, r0, r1);
-	vl_mmul_s(rot, rot, dist);
+	if (acos_arg < -1.0) acos_arg = -1.0;
+	if (acos_arg > +1.0) acos_arg = +1.0;
 	
-	vl_mmul_m(res, rot, r0);
-	vl_msum(res, res, r0);
+	*angle = acos(acos_arg);
 	
-//	vlf_t test[9];
-//	vl_mmul_m(test, rot, r0);
-//	vl_msub(test, test, r1);
+	if (fabs(*angle) < 1E-16)
+	{
+		vec[0] = 1.0;
+		vec[1] = 0.0;
+		vec[2] = 0.0;
+	}
 	
+	else
+	{
+		// https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
+		vlf_t k = *angle * 0.5 / vl_sin(*angle);
+		vec[0] = (mat[2*3+1] - mat[1*3+2]) * k;
+		vec[1] = (mat[0*3+2] - mat[2*3+0]) * k;
+		vec[2] = (mat[1*3+0] - mat[0*3+1]) * k;
+	}
+
 	return;
 }
 

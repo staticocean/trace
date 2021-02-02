@@ -456,4 +456,55 @@ inline void vl_rnorm(vlf_t *mat)
 
 //------------------------------------------------------------------------------
 
+//inline void vl_rinter(vlf_t *res, vlf_t *r0, vlf_t *r1, vlf_t dist)
+//{
+//	vlf_t r[9];
+//	vlf_t a;
+//	vlf_t v[3];
+//
+//	vl_mmul_mt(r, r1, r0);
+//	vl_raxis(&a, v, r);
+//
+//	a *= dist;
+//
+//	vl_mid(res);
+//	vl_mmul_s(res, res, cos(a));
+//	vlf_t temp[9];
+//	vl_skew(temp, v);
+//	vl_mmul_s(temp, temp, sin(a));
+//	vl_msum(res, res, temp);
+//	vl_skew(temp, v);
+//	vl_mmul_m(temp, temp, temp);
+//	vl_mmul_s(temp, temp, 1-cos(a));
+//	vl_msum(res, res, temp);
+//
+//	vl_mmul_m(res, res, r0);
+//	vl_rnorm(res);
+//
+////	vlf_t test[9];
+////	vl_mmul_m(test, rot, r0);
+////	vl_msub(test, test, r1);
+//
+//	return;
+//}
+
+inline void vl_rinter(vlf_t *res, vlf_t *r0, vlf_t *r1, vlf_t dist)
+{
+	vlf_t rot[9];
+	
+	vl_rd1(rot, r0, r1);
+	vl_mmul_s(rot, rot, dist);
+	vl_mmul_m(res, rot, r0);
+	vl_msum(res, res, r0);
+	vl_rnorm(res);
+
+//	vlf_t test[9];
+//	vl_mmul_m(test, rot, r0);
+//	vl_msub(test, test, r1);
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __LV_SVD_H__ */
