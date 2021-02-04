@@ -157,7 +157,7 @@ inline vlf_t vl_vdist(vlf_t *vec_0, vlf_t *vec_1)
 	
 	for (i = 0; i < 3; ++i)
 	{
-		temp_float = vec_0[0] - vec_1[0];
+		temp_float = vec_0[i] - vec_1[i];
 		vec_dist += temp_float * temp_float;
 	}
 	
@@ -173,7 +173,7 @@ inline vlf_t vl_vdist2(vlf_t *vec_0, vlf_t *vec_1)
 	
 	for (i = 0; i < 3; ++i)
 	{
-		temp_float = vec_0[0] - vec_1[0];
+		temp_float = vec_0[i] - vec_1[i];
 		vec_dist += temp_float * temp_float;
 	}
 	
