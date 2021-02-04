@@ -229,7 +229,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.update = trj_ctrl_crot_update_,
 	});
 	
-	static s_trj_ctrl_egms_init trj_ctrl_egmins_config_ = {
+	static s_trj_ctrl_egms_init trj_ctrl_egms_config_ = {
 			.eng = &self->eng,
 			.ref = self->eng.obj_list,
 	};
@@ -244,9 +244,29 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.data_size = sizeof(s_trj_ctrl_egms),
 			.data   = NULL,
 			.config_size = sizeof(s_trj_ctrl_egms_init),
-			.config = &trj_ctrl_egmins_config_,
+			.config = &trj_ctrl_egms_config_,
 			.reset  = trj_ctrl_egms_reset_,
 			.update = trj_ctrl_egms_update_,
+	});
+	
+	static s_trj_ctrl_gms_init trj_ctrl_gms_config_ = {
+			.eng = &self->eng,
+			.ref = self->eng.obj_list,
+	};
+	
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			.name   = "default_ctrl_gms",
+			.desc   = "default_ctrl_gms",
+			.init   = trj_ctrl_gms_init_,
+			.free   = trj_ctrl_gms_free_,
+			.save   = trj_ctrl_gms_save_,
+			.load   = trj_ctrl_gms_load_,
+			.data_size = sizeof(s_trj_ctrl_gms),
+			.data   = NULL,
+			.config_size = sizeof(s_trj_ctrl_gms_init),
+			.config = &trj_ctrl_gms_config_,
+			.reset  = trj_ctrl_gms_reset_,
+			.update = trj_ctrl_gms_update_,
 	});
 	
 	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
@@ -500,6 +520,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
+	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
 
 	trj_gui_menu_main(&self->gui_menu);
 	
@@ -566,7 +587,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					trj_gui_ctrl_edit(ctrl);
 
                     if      (ctrl->hash == ctrl_hash_gm  ) { trj_gui_ctrl_edit_gm  (ctrl); }
-                    else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_edit_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_edit_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms ) { trj_gui_ctrl_edit_gms (ctrl); }
 //                    else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
 
                     break;
@@ -629,7 +651,8 @@ uint8_t trj_gui_main(s_trj_gui *self)
                     s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
 
                     if      (ctrl->hash == ctrl_hash_gm  ) { trj_gui_ctrl_view_gm  (ctrl); }
-                    else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_view_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_view_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms ) { trj_gui_ctrl_view_gms (ctrl); }
 
 					break;
 				}

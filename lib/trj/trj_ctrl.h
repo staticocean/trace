@@ -825,5 +825,137 @@ inline uint8_t trj_ctrl_egms_update_(void *data, void *obj)
 
 //------------------------------------------------------------------------------
 
+typedef struct trj_ctrl_gms
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	uint32_t ref_hash;
+	
+}   s_trj_ctrl_gms;
+
+
+typedef struct trj_ctrl_gms_init
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
+}   s_trj_ctrl_gms_init;
+
+inline uint8_t trj_ctrl_gms_init(s_trj_ctrl_gms *self, s_trj_ctrl_gms_init attr)
+{
+	self->eng = attr.eng;
+	self->ref = attr.ref;
+	
+	if (self->ref != NULL) { self->ref_hash = self->ref->hash; }
+	else { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_gms_save(s_trj_ctrl_gms *self, s_trj_ctrl_gms_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_gms_load(s_trj_ctrl_gms *self, s_trj_ctrl_gms_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	
+	self->ref = trj_eng_find_obj (self->eng, self->ref_hash);
+	
+	if (self->ref == NULL) { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline void __trj_ctrl_gms_calc__(s_trj_obj *ref, s_trj_obj *obj)
+{
+	const vlf_t g = 6.67428E-11;
+	
+	vlf_t force_magn = 0.0;
+	vlf_t dist2 = vl_vdist2(&ref->pos[0][0], &obj->pos[0][0]);
+	
+	if (dist2 > 1E-16)
+	{ force_magn = g * ref->pos_inert * obj->pos_inert / dist2; }
+	
+	vlf_t force_dir[3];
+	vl_vset(force_dir, 0.0);
+	
+	if (dist2 > 1E-16)
+	{
+		vl_vsub(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
+		vl_vmul_s(force_dir, force_dir, force_magn / vl_sqrt(dist2));
+	}
+	
+	vl_vsum(obj->pos_force, obj->pos_force, force_dir);
+	
+	return;
+}
+
+inline uint8_t trj_ctrl_gms_reset(s_trj_ctrl_gms *self, s_trj_obj *obj)
+{
+	__trj_ctrl_gms_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_gms_update(s_trj_ctrl_gms *self, s_trj_obj *obj)
+{
+	__trj_ctrl_gms_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline uint8_t trj_ctrl_gms_init_(void **data, void *config)
+{
+	*data = (s_trj_ctrl_gms*) malloc(sizeof(s_trj_ctrl_gms));
+	
+	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) *data;
+	s_trj_ctrl_gms_init *init = (s_trj_ctrl_gms_init*) config;
+	
+	return trj_ctrl_gms_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_gms_free_(void **data)
+{
+	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) *data;
+	free(ctrl);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_gms_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_gms_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) data;
+	s_trj_ctrl_gms_init *attr = (s_trj_ctrl_gms_init*) config;
+	
+	return trj_ctrl_gms_load(ctrl, attr, v_file);
+}
+
+inline uint8_t trj_ctrl_gms_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_gms_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_gms_update_(void *data, void *obj)
+{
+	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_gms_update(ctrl, obj_);
+}
+
+//------------------------------------------------------------------------------
+
 #endif /* __TRJ_CTRL__ */
 
