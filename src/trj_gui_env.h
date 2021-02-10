@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <lib/trj/vl.h>
-#include <lib/trj/vl_svd.h>
+#include <isss_lib/vl.h>
+
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
 

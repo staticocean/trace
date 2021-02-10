@@ -373,8 +373,8 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 				trj_ellp_ecefrot(self->ellp, &self->ecef_pos[i*3], ecef_ctn);
 				vl_mtmul_m(ctn_local, ecef_ctn, &self->ecef_ctn[i*9]);
 
-				s_trj_rot_hpr hpr;
-				trj_ctn_to_hpr(&hpr, ctn_local);
+				s_vl_hpr hpr;
+				vl_hpr(&hpr, ctn_local);
 
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;
@@ -407,8 +407,8 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 			
 			else
 			{
-				s_trj_rot_hpr hpr;
-				trj_ctn_to_hpr(&hpr, &self->ecef_ctn[i*9]);
+				s_vl_hpr hpr;
+				vl_hpr(&hpr, &self->ecef_ctn[i*9]);
 				
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;

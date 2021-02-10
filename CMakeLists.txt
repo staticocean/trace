@@ -5,6 +5,7 @@ project(trj)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -static-libstdc++ -static-libgcc")
 
 include_directories(./)
+include_directories(isss_lib/)
 include_directories(lib/imgui/)
 include_directories(lib/opengl/)
 include_directories(lib/trj/)

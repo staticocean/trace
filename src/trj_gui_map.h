@@ -8,9 +8,10 @@
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
 
-#include <lib/trj/vl.h>
-#include <lib/trj/vl3d.h>
-#include <lib/trj/gjson.h>
+#include <isss_lib/vl.h>
+#include <isss_lib/vl3d.h>
+#include <isss_lib/gjson.h>
+
 #include <lib/json11/json11.hpp>
 
 #include <fstream>

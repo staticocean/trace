@@ -724,12 +724,12 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			s_vl3d_point point;
 			s_vl3d_line  line;
 			
-			s_trj_rot_hpr view_hpr;
-			trj_ctn_to_hpr(&view_hpr, &view.rot[0][0]);
+			s_vl_hpr view_hpr;
+			vl_hpr(&view_hpr, &view.rot[0][0]);
 			view_hpr.heading += io.DeltaTime * 0.01;
 			view_hpr.pitch   += io.DeltaTime * 0.02;
 			view_hpr.roll    += io.DeltaTime * 0.03;
-			trj_hpr_to_ctn(&view.rot[0][0], view_hpr);
+			vl_rot(&view.rot[0][0], view_hpr);
 			
 			for (int x = 0; x < cnt; ++x)
 			{

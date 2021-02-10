@@ -5,11 +5,10 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 
-#include <lib/trj/vl.h>
-#include <lib/trj/vl3d.h>
-#include <lib/trj/vl_svd.h>
+#include <isss_lib/vl.h>
+#include <isss_lib/vl3d.h>
+
 #include <lib/trj/trj_obj.h>
-#include <lib/trj/trj_utils.h>
 
 #include "trj_gui_w.h"
 
@@ -57,7 +56,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	
 	ImGui::Text("hash");
 	ImGui::NextColumn();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	ImGui::NextColumn();
 
 //	ImGui::Text("ref");

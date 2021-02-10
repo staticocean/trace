@@ -6,7 +6,8 @@
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
 
-#include <lib/trj/vl.h>
+#include <isss_lib/vl.h>
+
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_ctrl_.h>
@@ -55,7 +56,7 @@ inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
@@ -108,7 +109,7 @@ inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();

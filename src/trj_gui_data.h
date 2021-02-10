@@ -10,8 +10,9 @@
 
 #include <lib/implot/implot.h>
 
-#include <lib/trj/vl.h>
-#include <lib/trj/vl3d.h>
+#include <isss_lib/vl.h>
+#include <isss_lib/vl3d.h>
+
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_data_.h>
@@ -48,7 +49,7 @@ inline void trj_gui_data_edit_text(s_trj_data *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("file  ");
 	ImGui::SameLine();
@@ -122,7 +123,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -145,7 +146,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	ImGui::SetNextItemWidth(-40);
 	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
+	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
 	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
 	
@@ -431,7 +432,7 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -454,7 +455,7 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	ImGui::SetNextItemWidth(-40);
 	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
+	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
 	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
 	
@@ -476,22 +477,22 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("hpr   ");
 	ImGui::SameLine();
-	vl_gui_bool("##hpr", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->hpr_en);
+	imgui_bool("##hpr", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->hpr_en);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("lla   ");
 	ImGui::SameLine();
-	vl_gui_bool("##lla", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->lla_en);
+	imgui_bool("##lla", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->lla_en);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ecef  ");
 	ImGui::SameLine();
-	vl_gui_bool("##ecef", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ecef_en);
+	imgui_bool("##ecef", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ecef_en);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("tied  ");
 	ImGui::SameLine();
-	vl_gui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
+	imgui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();

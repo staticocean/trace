@@ -8,8 +8,9 @@
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
 
-#include <lib/trj/vl.h>
-#include <lib/trj/vl3d.h>
+#include <isss_lib/vl.h>
+#include <isss_lib/vl3d.h>
+
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_traj.h>
 
@@ -77,7 +78,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
@@ -96,7 +97,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-40);
 	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
+	imgui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
 	
@@ -108,19 +109,19 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	{
 		ImGui::Text("pos   "); ImGui::SameLine();
 		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
-		vl_gui_vec("##pos", traj->pos, 1.0, NULL, NULL, "%.3f");
+		imgui_vec("##pos", traj->pos, 1.0, NULL, NULL, "%.3f");
 	}
 	else
 	{
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("lat   "); ImGui::SameLine();
 		ImGui::SameLine();
-		trj_gui_lat("##lat", &traj->pos[0], ImGui::GetContentRegionAvailWidth());
+		imgui_lat("##lat", &traj->pos[0], ImGui::GetContentRegionAvailWidth());
 		
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("lon   "); ImGui::SameLine();
 		ImGui::SameLine();
-		trj_gui_lon("##lon", &traj->pos[1], ImGui::GetContentRegionAvailWidth());
+		imgui_lon("##lon", &traj->pos[1], ImGui::GetContentRegionAvailWidth());
 		
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("alt   "); ImGui::SameLine();
@@ -131,7 +132,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	}
 	
 	ImGui::Text("rot   "); ImGui::SameLine();
-	vl_gui_rot("##rot", traj->rot);
+	imgui_rot("##rot", traj->rot);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -174,7 +175,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
@@ -186,7 +187,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-60);
 	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_switch("##sync_en", (char*[2]) { "SYNC", "FLOAT" }, ImVec2(-1, 0), &traj->sync_en);
+	imgui_switch("##sync_en", (char*[2]) { "SYNC", "FLOAT" }, ImVec2(-1, 0), &traj->sync_en);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -209,7 +210,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	traj->rate = vl_rad(rate_deg);
 	
 	ImGui::Text("tilt  "); ImGui::SameLine();
-	vl_gui_rot("##tilt", traj->tilt);
+	imgui_rot("##tilt", traj->tilt);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -224,7 +225,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	traj->s_rate = vl_rad(s_rate_deg);
 	
 	ImGui::Text("s_tilt"); ImGui::SameLine();
-	vl_gui_rot("##s_tilt", traj->s_tilt);
+	imgui_rot("##s_tilt", traj->s_tilt);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -308,7 +309,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
@@ -329,7 +330,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	s_trj_ellp *ellp_ref = traj->ellp;
 	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
-	vl_gui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
+	imgui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
 	if (traj->ellp != NULL) { traj->ellp_hash = traj->ellp->hash; }
 	
@@ -384,13 +385,13 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 
         if (traj->ellp_en == 0x00)
         {
-            vl_gui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
+            imgui_vec("point", traj->pts[i].pos_p, 1.0, NULL, NULL, "%.3f");
         }
 
         else
         {
             vlf_t lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
-            vl_gui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
+            imgui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 
             traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
             traj->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
@@ -782,12 +783,12 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
                     ImGui::Text("lat ");
                     ImGui::SameLine();
                     ImGui::SetNextItemWidth(160);
-                    trj_gui_lat("##lat", &self->pts[i].pos_p[0]);
+                    imgui_lat("##lat", &self->pts[i].pos_p[0]);
 
                     ImGui::Text("lon ");
                     ImGui::SameLine();
                     ImGui::SetNextItemWidth(160);
-					trj_gui_lon("##lon", &self->pts[i].pos_p[1]);
+					imgui_lon("##lon", &self->pts[i].pos_p[1]);
 
                     ImGui::Text("alt ");
 					if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
@@ -1344,7 +1345,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	
 	ImGui::Text("hash  ");
 	ImGui::SameLine();
-	vl_gui_hash("##hash", self->hash);
+	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
@@ -1421,7 +1422,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	ImGui::Text("time  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_datetime("##datetime",
+	imgui_datetime("##datetime",
 		 &traj->day, &traj->month, &traj->year,
 		 &traj->hour, &traj->min, &traj->sec);
 	

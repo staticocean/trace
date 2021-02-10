@@ -1,3 +1,3 @@
-[submodule "geojson-world-cities"]
-	path = res/maps/earth/geojson-world-cities
-	url = https://github.com/drei01/geojson-world-cities.git
+[submodule "isss_lib"]
+	path = isss_lib
+	url = https://staticocean@bitbucket.org/staticocean/isss_lib.git
