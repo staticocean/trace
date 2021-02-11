@@ -218,11 +218,11 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			}
 			
 			s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
-		
-	//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
-	//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
-	//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
-	//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
+			
+			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
+			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
+			//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
+			//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
 			
 			// hpr
 			if (data->offset > 20)
@@ -285,7 +285,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			
 			ImGui::EndTabItem();
 		}
-
+		
 		if (ImGui::BeginTabItem("details"))
 		{
 			if (ImGui::CollapsingHeader("heading"))
@@ -414,11 +414,11 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 
 //------------------------------------------------------------------------------
 
-inline void trj_gui_data_edit_mat(s_trj_data *self)
+inline void trj_gui_data_edit_ramld(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -459,6 +459,56 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
 	if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
 	
+	ImGui::PopID();
+	
+	return;
+}
+
+inline void trj_gui_data_view_ramld(s_trj_data *self)
+{
+	s_trj_data_ramld *data = (s_trj_data_ramld*) self->data;
+	
+	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
+	if (data->offset == 0x00)
+	{
+		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
+		return;
+	}
+	
+	ImGui::PushID(self);
+	
+	if (ImGui::CollapsingHeader("lateral deviation"))
+	{
+		if (ImPlot::BeginPlot("lateral deviation"))
+		{
+			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset);
+			ImPlot::EndPlot();
+		}
+	}
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//------------------------------------------------------------------------------
+
+inline void trj_gui_data_edit_mat(s_trj_data *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+	
+	s_trj_data ram = *self;
+	ram.data = &data->ram;
+	
+	s_trj_data ramld = *self;
+	ramld.data = &data->ramld;
+	
+	trj_gui_data_edit_ram(&ram);
+	// no need to edit ramld coz theris only ellp which we use from mat plugin
+//	trj_gui_data_edit_ramld(&ramld);
+	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
@@ -494,139 +544,43 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	ImGui::SameLine();
 	imgui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
 	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("latdev");
+	ImGui::SameLine();
+	imgui_bool("##latdev", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ld_en);
+	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
 	ImGui::PopID();
 	
+	// copy data from ram which user can edit
+	// to ramld which user cant edit but we assume it uses same parameters
+	
+	data->ramld.ellp_en = data->ram.ellp_en;
+	data->ramld.ellp = data->ram.ellp;
+	data->ramld.ref = data->ram.ref;
+	data->ramld.ellp_hash = data->ram.ellp_hash;
+	data->ramld.ref_hash = data->ram.ref_hash;
+	
 	return;
 }
 
 inline void trj_gui_data_view_mat(s_trj_data *self)
 {
-	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
-
-	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
-	if (data->offset == 0x00)
-	{
-		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
-		return;
-	}
-	
 	ImGui::PushID(self);
-	if (ImGui::CollapsingHeader("heading"))
-	{
-		if (ImPlot::BeginPlot("heading"))
-		{
-			ImPlot::PlotLine("heading", data->time, data->heading, data->offset);
-			ImPlot::EndPlot();
-		}
-	}
 	
-	if (ImGui::CollapsingHeader("pitch"))
-	{
-		if (ImPlot::BeginPlot("pitch"))
-		{
-			ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset);
-			ImPlot::EndPlot();
-		}
-	}
+	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
 	
-	if (ImGui::CollapsingHeader("roll"))
-	{
-		if (ImPlot::BeginPlot("roll"))
-		{
-			ImPlot::PlotLine("roll", data->time, data->roll, data->offset);
-			ImPlot::EndPlot();
-		}
-	}
+	s_trj_data ram = *self;
+	ram.data = &data->ram;
 	
-	if (ImGui::CollapsingHeader("tied_acc"))
-	{
-		if (ImPlot::BeginPlot("tied_acc"))
-		{
-			ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::EndPlot();
-		}
-	}
+	s_trj_data ramld = *self;
+	ramld.data = &data->ramld;
 	
-	if (ImGui::CollapsingHeader("tied_grs"))
-	{
-		if (ImPlot::BeginPlot("tied_grs"))
-		{
-			ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::EndPlot();
-		}
-	}
-	
-	if (data->ellp != NULL && data->ellp_en)
-	{
-		if (ImGui::CollapsingHeader("lla_pos"))
-		{
-			if (ImPlot::BeginPlot("lla_pos lat,lon"))
-			{
-				ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::EndPlot();
-			}
-			
-			if (ImPlot::BeginPlot("lla_pos alt"))
-			{
-				ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::EndPlot();
-			}
-		}
-		
-		if (ImGui::CollapsingHeader("lla_vel"))
-		{
-			if (ImPlot::BeginPlot("lla_vel"))
-			{
-				ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset, 0, 3 * sizeof(vlf_t));
-				ImPlot::EndPlot();
-			}
-		}
-	}
-	
-	
-	if (ImGui::CollapsingHeader("ecef_pos"))
-	{
-		if (ImPlot::BeginPlot("ecef_pos"))
-		{
-			ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::EndPlot();
-		}
-	}
-	
-	if (ImGui::CollapsingHeader("ecef_vel"))
-	{
-		if (ImPlot::BeginPlot("ecef_vel"))
-		{
-			ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::EndPlot();
-		}
-	}
-	
-	if (ImGui::CollapsingHeader("ecef_acc"))
-	{
-		if (ImPlot::BeginPlot("ecef_acc"))
-		{
-			ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
-			ImPlot::EndPlot();
-		}
-	}
+	trj_gui_data_view_ram(&ram);
+	trj_gui_data_view_ramld(&ramld);
 	
 	ImGui::PopID();
 	

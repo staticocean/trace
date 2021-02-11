@@ -25,13 +25,13 @@ typedef struct trj_data_text
 
 typedef struct trj_data_text_init
 {
-	char file_name[256];
+	uint32_t temp;
 	
 } 	s_trj_data_text_init;
 
 inline uint8_t trj_data_text_init(s_trj_data_text *self, s_trj_data_text_init attr)
 {
-	strcpy(self->file_name, attr.file_name);
+	strcpy(self->file_name, "No file selected");
 	self->file_data = NULL;
 	self->file_size = 0x00;
 	self->file_lcnt = 0x00;
@@ -204,9 +204,6 @@ typedef struct trj_data_ram_init
 	s_trj_eng *eng;
 	s_trj_obj *ref;
 	
-	uint8_t ellp_en;
-	s_trj_ellp *ellp;
-	
 } 	s_trj_data_ram_init;
 
 inline void __trj_data_ram_null__(s_trj_data_ram *self)
@@ -269,10 +266,8 @@ inline uint8_t trj_data_ram_init(s_trj_data_ram *self, s_trj_data_ram_init attr)
 	if (self->ref != NULL)
 	{ self->ref_hash = self->ref->hash; }
 	
-	self->ellp_en = attr.ellp_en;
-	self->ellp = attr.ellp;
-	if (self->ellp != NULL)
-	{ self->ellp_hash = vl_crc32(self->ellp->desc); }
+	self->ellp_en = 0x00;
+	self->ellp = NULL;
 	
 	__trj_data_ram_null__(self);
 	
@@ -481,6 +476,238 @@ inline uint8_t trj_data_ram_reset_(void *data, void *obj)
 	s_trj_obj *obj_ = (s_trj_obj*) obj;
 	
 	return trj_data_ram_reset(data_, obj_);
+}
+
+//------------------------------------------------------------------------------
+
+typedef struct trj_data_ramld
+{
+	s_trj_eng 	*eng;
+	s_trj_obj 	*ref;
+	uint32_t 	ref_hash;
+	
+	uint8_t 	ellp_en;
+	s_trj_ellp 	*ellp;
+	uint32_t 	ellp_hash;
+	
+	uint32_t 	offset;
+	
+	vlf_t 		*time;
+	vlf_t 		*time3;
+	
+	vlf_t 		*ld;
+	
+} 	s_trj_data_ramld;
+
+typedef struct trj_data_ramld_init
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
+} 	s_trj_data_ramld_init;
+
+inline void __trj_data_ramld_null__(s_trj_data_ramld *self)
+{
+	self->offset = 0x00;
+	
+	self->time 		= NULL;
+	self->time3		= NULL;
+	
+	self->ld    	= NULL;
+	
+	return;
+}
+
+inline void __trj_data_ramld_free__(s_trj_data_ramld *self)
+{
+	self->offset = 0x00;
+	
+	if (self->time 		!= NULL) free(self->time 		);
+	if (self->time3		!= NULL) free(self->time3 		);
+	
+	if (self->ld 	 	!= NULL) free(self->ld       	);
+	
+	__trj_data_ramld_null__(self);
+	
+	return;
+}
+
+inline uint8_t trj_data_ramld_init(s_trj_data_ramld *self, s_trj_data_ramld_init attr)
+{
+	self->eng = attr.eng;
+	
+	self->ref = attr.ref;
+	if (self->ref != NULL)
+	{ self->ref_hash = self->ref->hash; }
+	
+	self->ellp_en = 0x00;
+	self->ellp = NULL;
+	
+	__trj_data_ramld_null__(self);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_save(s_trj_data_ramld *self, s_trj_data_ramld_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_load(s_trj_data_ramld *self, s_trj_data_ramld_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	
+	self->ref  = trj_eng_find_obj (self->eng, self->ref_hash);
+	self->ellp = trj_eng_find_ellp(self->eng, self->ellp_hash);
+	
+	if (self->ref == NULL)
+	{
+		self->ref_hash = 0x00;
+	}
+	
+	if (self->ellp == NULL)
+	{
+		self->ellp_hash = 0x00;
+		self->ellp_en = 0x00;
+	}
+	
+	__trj_data_ramld_null__(self);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_render(s_trj_data_ramld *self, s_trj_obj *obj)
+{
+	__trj_data_ramld_free__(self);
+	self->offset = obj->log_offset;
+	
+	if (self->offset != 0x00)
+	{
+		self->time 	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
+		self->time3	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
+		
+		self->ld 		= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
+		
+		vlf_t ecef_f[3]; // first
+		vlf_t ecef_l[3]; // last
+		
+		if (self->ref != NULL)
+		{
+			vl_vsub(ecef_f, &obj->log_list[0].pos[0][0], &self->ref->log_list[0].pos[0][0]);
+			vl_vsub(ecef_l, &obj->log_list[self->ref->log_offset-1].pos[0][0], &self->ref->log_list[self->ref->log_offset-1].pos[0][0]);
+			vl_mtmul_v(ecef_f, &self->ref->log_list[0].rot[0][0], ecef_f);
+			vl_mtmul_v(ecef_l, &self->ref->log_list[self->ref->log_offset-1].rot[0][0], ecef_l);
+		}
+		
+		for (int i = 0; i < self->offset; ++i)
+		{
+			s_trj_obj_data *log = &obj->log_list[i];
+			self->time[i] = log->time[0];
+			
+			// support for implot strange api
+			self->time3[i*3 + 0x00] = log->time[0];
+			self->time3[i*3 + 0x01] = log->time[0];
+			self->time3[i*3 + 0x02] = log->time[0];
+			
+			vlf_t ecef[3];
+			
+			if (self->ref != NULL && self->ellp != NULL && self->ellp_en != 0x00)
+			{
+				vl_vsub(ecef, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
+				vl_mtmul_v(ecef, &self->ref->log_list[i].rot[0][0], ecef);
+				
+				vlf_t trje[3];
+				vl_vsub(trje, ecef_l, ecef_f);
+				vl_vmul_s(trje, trje, 1.0 / vl_vnorm(trje));
+				
+				vlf_t ort[3];
+				vl_vsub(ort, ecef, ecef_f);
+				
+				vlf_t path = vl_vdot(ort, trje);
+				vl_vsumm(ort, ort, trje, -path);
+				
+				vlf_t ref_pos[3];
+				vl_vsub(ref_pos, ecef, ort);
+				
+				vl_vmul_s(ecef, ecef, 1.0 / vl_vnorm(ecef));
+				vl_vmul_s(ort, ort, 1.0 / vl_vnorm(ort));
+				vl_vmul_s(ref_pos, ref_pos, 1.0 / vl_vnorm(ref_pos));
+				
+				vlf_t arc_cos = vl_vdot(ref_pos, ecef);
+				vlf_t arc = acos(arc_cos);
+				
+				vlf_t right_e[3];
+				vl_cross(right_e, ecef, trje);
+				
+				if (vl_vdot(ort, right_e) < 0.0) { arc = -arc; }
+				
+				self->ld[i] = arc * self->ellp->a;
+			}
+			
+			else
+			{
+				vl_vcopy(ecef, &obj->log_list[i].pos[0][0]);
+			}
+		}
+	}
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_reset(s_trj_data_ramld *self, s_trj_obj *obj)
+{
+	__trj_data_ramld_free__(self);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_init_ (void **data, void *config)
+{
+	*data = (s_trj_data_ramld*) malloc(sizeof(s_trj_data_ramld));
+	
+	s_trj_data_ramld *data_ = (s_trj_data_ramld*) *data;
+	s_trj_data_ramld_init *data_init = (s_trj_data_ramld_init*) config;
+	
+	return trj_data_ramld_init(data_, *data_init);
+}
+
+inline uint8_t trj_data_ramld_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_data_ramld_init *attr = (s_trj_data_ramld_init*) config;
+	s_trj_data_ramld *data_ = (s_trj_data_ramld*) data;
+	
+	return trj_data_ramld_load(data_, attr, v_file);
+}
+
+inline uint8_t trj_data_ramld_free_ (void **data)
+{
+	s_trj_data_ramld *data_ = (s_trj_data_ramld*) *data;
+	__trj_data_ramld_free__(data_);
+	
+	free(data_);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_ramld_render_(void *data, void *obj)
+{
+	s_trj_data_ramld *data_ = (s_trj_data_ramld*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_data_ramld_render(data_, obj_);
+}
+
+inline uint8_t trj_data_ramld_reset_(void *data, void *obj)
+{
+	s_trj_data_ramld *data_ = (s_trj_data_ramld*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_data_ramld_reset(data_, obj_);
 }
 
 //------------------------------------------------------------------------------

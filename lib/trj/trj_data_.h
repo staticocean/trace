@@ -9,47 +9,25 @@
 
 //------------------------------------------------------------------------------
 
-#include "vl.h"
-#include "trj_api.h"
+#include <isss_lib/vl.h>
 
 #include <lib/tinymat/tinymat.h>
+
+#include "trj_api.h"
+#include "trj_data.h"
 
 //------------------------------------------------------------------------------
 
 typedef struct trj_data_mat
 {
-	s_trj_eng 	*eng;
-	s_trj_obj 	*ref;
-	uint32_t 	ref_hash;
-	
-	uint8_t 	ellp_en;
-	s_trj_ellp 	*ellp;
-	uint32_t 	ellp_hash;
-	
-	uint32_t 	offset;
-	
-	vlf_t 		*time;
-	vlf_t 		*time3;
+	s_trj_data_ram   ram;
+	s_trj_data_ramld ramld;
 	
 	uint8_t 	hpr_en;
-	vlf_t 		*heading;
-	vlf_t 		*pitch;
-	vlf_t 		*roll;
-	
 	uint8_t 	lla_en;
-	vlf_t 		*lla_pos;
-	vlf_t 		*lla_vel;
-	vlf_t 		*lla_acc;
-	
 	uint8_t 	ecef_en;
-	vlf_t 		*ecef_ctn;
-	vlf_t 		*ecef_pos;
-	vlf_t 		*ecef_vel;
-	vlf_t 		*ecef_acc;
-	
 	uint8_t 	tied_en;
-	vlf_t 		*tied_acc;
-	vlf_t 		*tied_grs;
+	uint8_t 	ld_en;
 	
 	char file_name[256];
 	TinyMATWriterFile *file_data;
@@ -61,91 +39,47 @@ typedef struct trj_data_mat_init
 	s_trj_eng *eng;
 	s_trj_obj *ref;
 	
-	uint8_t ellp_en;
-	s_trj_ellp *ellp;
-	
 } 	s_trj_data_mat_init;
-
-inline void __trj_data_mat_null__(s_trj_data_mat *self)
-{
-	self->offset = 0x00;
-	
-	self->time 		= NULL;
-	self->time3		= NULL;
-	
-	self->heading 	= NULL;
-	self->pitch 	= NULL;
-	self->roll 		= NULL;
-	self->lla_pos 	= NULL;
-	self->lla_vel 	= NULL;
-	self->lla_acc 	= NULL;
-	
-	self->ecef_ctn	= NULL;
-	self->ecef_pos 	= NULL;
-	self->ecef_vel 	= NULL;
-	self->ecef_acc 	= NULL;
-	
-	self->tied_acc 	= NULL;
-	self->tied_grs 	= NULL;
-	
-	return;
-}
-
-inline void __trj_data_mat_free__(s_trj_data_mat *self)
-{
-	self->offset = 0x00;
-	
-	if (self->time 		!= NULL) free(self->time 		);
-	if (self->time3		!= NULL) free(self->time3 		);
-	
-	if (self->heading 	!= NULL) free(self->heading 	);
-	if (self->pitch 	!= NULL) free(self->pitch 		);
-	if (self->roll 		!= NULL) free(self->roll 		);
-	if (self->lla_pos 	!= NULL) free(self->lla_pos 	);
-	if (self->lla_vel 	!= NULL) free(self->lla_vel 	);
-	if (self->lla_acc 	!= NULL) free(self->lla_acc 	);
-	
-	if (self->ecef_ctn	!= NULL) free(self->ecef_ctn	);
-	if (self->ecef_pos 	!= NULL) free(self->ecef_pos 	);
-	if (self->ecef_vel 	!= NULL) free(self->ecef_vel 	);
-	if (self->ecef_acc 	!= NULL) free(self->ecef_acc 	);
-	
-	if (self->tied_acc 	!= NULL) free(self->tied_acc 	);
-	if (self->tied_grs 	!= NULL) free(self->tied_grs 	);
-	
-	__trj_data_mat_null__(self);
-	
-	return;
-}
 
 inline uint8_t trj_data_mat_init(s_trj_data_mat *self, s_trj_data_mat_init attr)
 {
 	self->file_data = NULL;
 	sprintf(self->file_name, "mat file not selected");
 	
-	self->eng = attr.eng;
+	trj_data_ram_init(&self->ram, (s_trj_data_ram_init) {
+		.eng = attr.eng,
+		.ref = attr.ref,
+	});
 	
-	self->ref = attr.ref;
-	if (self->ref != NULL)
-	{ self->ref_hash = self->ref->hash; }
-	
-	self->ellp_en = attr.ellp_en;
-	self->ellp = attr.ellp;
-	if (self->ellp != NULL)
-	{ self->ellp_hash = vl_crc32(self->ellp->desc); }
-	
-	__trj_data_mat_null__(self);
+	trj_data_ramld_init(&self->ramld, (s_trj_data_ramld_init) {
+		.eng = attr.eng,
+		.ref = attr.ref,
+	});
 	
 	self->tied_en = 0x00;
 	self->lla_en  = 0x00;
 	self->hpr_en  = 0x00;
 	self->ecef_en = 0x00;
+	self->ld_en = 0x00;
 	
 	return 0x00;
 }
 
 inline uint8_t trj_data_mat_save(s_trj_data_mat *self, s_trj_data_mat_init *attr, uint8_t **v_file)
 {
+	s_trj_data_ram_init data_ram_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
+	
+	trj_data_ram_save(&self->ram, &data_ram_attr, v_file);
+	
+	s_trj_data_ramld_init data_ramld_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
+	trj_data_ramld_save(&self->ramld, &data_ramld_attr, v_file);
+	
 	return 0x00;
 }
 
@@ -153,165 +87,50 @@ inline uint8_t trj_data_mat_load(s_trj_data_mat *self, s_trj_data_mat_init *attr
 {
 	self->file_data = NULL;
 	
-	self->eng = attr->eng;
+	s_trj_data_ram_init data_ram_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
 	
-	self->ref  = trj_eng_find_obj (self->eng, self->ref_hash);
-	self->ellp = trj_eng_find_ellp(self->eng, self->ellp_hash);
+	trj_data_ram_load(&self->ram, &data_ram_attr, v_file);
 	
-	if (self->ref == NULL)
-	{
-		self->ref_hash = 0x00;
-	}
+	s_trj_data_ramld_init data_ramld_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
 	
-	if (self->ellp == NULL)
-	{
-		self->ellp_hash = 0x00;
-		self->ellp_en = 0x00;
-	}
-	
-	__trj_data_mat_null__(self);
+	trj_data_ramld_load(&self->ramld, &data_ramld_attr, v_file);
 	
 	return 0x00;
 }
 
 inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 {
-	uint32_t i;
+	s_trj_data_ram *ram = &self->ram;
+	s_trj_data_ramld *ramld = &self->ramld;
 	
-	__trj_data_mat_free__(self);
-	self->offset = obj->log_offset;
-	
-	if (self->offset != 0x00)
-	{
-		self->time 	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
-		self->time3	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		
-		self->heading 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
-		self->pitch 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
-		self->roll 		= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
-		
-		self->lla_pos 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		self->lla_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		self->lla_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		
-		self->ecef_ctn	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
-		self->ecef_pos 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		self->ecef_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		self->ecef_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		
-		self->tied_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		self->tied_grs 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
-		
-		for (int i = 0; i < self->offset; ++i)
-		{
-			s_trj_obj_data *log = &obj->log_list[i];
-			self->time[i] = log->time[0];
-			
-			// support for implot strange api
-			self->time3[i*3 + 0x00] = log->time[0];
-			self->time3[i*3 + 0x01] = log->time[0];
-			self->time3[i*3 + 0x02] = log->time[0];
-			
-			if (self->ref != NULL)
-			{
-				vlf_t ref_cnt[9];
-				
-				vl_tnp(ref_cnt, &self->ref->log_list[i].rot[0][0]);
-				vl_mmul_m(&self->ecef_ctn[i*9], ref_cnt, &obj->log_list[i].rot[0][0]);
-				
-				vl_vsub(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-				vl_mmul_v(&self->ecef_pos[i*3], ref_cnt, &self->ecef_pos[i*3]);
-				
-				vl_mmul_v(&self->ecef_vel[i*3], ref_cnt, &obj->log_list[i].pos[1][0]);
-				
-				vl_mmul_v(&self->ecef_acc[i*3], ref_cnt, &obj->log_list[i].pos[2][0]);
-			}
-			
-			else
-			{
-				vl_mcopy(&self->ecef_ctn[i*9], &obj->log_list[i].rot[0][0]);
-				vl_vcopy(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0]);
-				vl_vcopy(&self->ecef_vel[i*3], &obj->log_list[i].pos[1][0]);
-				vl_vcopy(&self->ecef_acc[i*3], &obj->log_list[i].pos[2][0]);
-			}
-			
-			if (self->ellp != NULL && self->ref != NULL)
-			{
-				vlf_t ecef_ctn[9];
-				vlf_t ctn_local[9];
-				trj_ellp_ecefrot(self->ellp, &self->ecef_pos[i*3], ecef_ctn);
-				vl_mtmul_m(ctn_local, ecef_ctn, &self->ecef_ctn[i*9]);
-				
-				s_vl_hpr hpr;
-				vl_hpr(&hpr, ctn_local);
-				
-				self->heading[i] 	= hpr.heading;
-				self->pitch[i] 		= hpr.pitch;
-				self->roll[i] 		= hpr.roll;
-				
-				trj_ellp_lla(self->ellp, &self->lla_pos[i*3], &self->ecef_pos[i*3]);
-				
-				vlf_t ecef_ctn_[9];
-				vlf_t ecef_pos_[3];
-				
-				vl_vsub(ecef_pos_, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-				vl_mtmul_v(ecef_pos_, &self->ref->log_list[i].rot[0][0], ecef_pos_);
-				trj_ellp_ecefrot(self->ellp, ecef_pos_, ecef_ctn_);
-				
-				vl_vsub(&self->lla_vel[i*3], &obj->log_list[i].pos[1][0], &self->ref->log_list[i].pos[1][0]);
-				vlf_t rel_pos[3];
-				vl_vsub(rel_pos, &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
-				vlf_t ang_vel[3];
-				vl_mmul_v(ang_vel, &self->ref->log_list[i].rot[1][0], rel_pos);
-				vl_vsub(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
-				
-				vl_mtmul_v(&self->lla_vel[i*3], &self->ref->log_list[i].rot[0][0], &self->lla_vel[i*3]);
-				vl_mtmul_v(&self->lla_vel[i*3], ecef_ctn_, &self->lla_vel[i*3]);
-				
-				// swap 1 and 2 because ecef_cnt is proj to NHW not NWH
-				vlf_t vh = self->lla_vel[i*3 + 1];
-				self->lla_vel[i*3 + 1] = self->lla_vel[i*3 + 2];
-				self->lla_vel[i*3 + 2] = vh;
-			}
-			
-			else
-			{
-				s_vl_hpr hpr;
-				vl_hpr(&hpr, &self->ecef_ctn[i*9]);
-				
-				self->heading[i] 	= hpr.heading;
-				self->pitch[i] 		= hpr.pitch;
-				self->roll[i] 		= hpr.roll;
-			}
-			
-			vl_vmul_s(&self->tied_acc[i*3], log->pos_force, -1.0 / obj->pos_inert);
-			vl_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &log->pos[2][0]);
-			vl_mtmul_v(&self->tied_acc[i*3], &log->rot[0][0], &self->tied_acc[i*3]);
-			
-			vl_unskew(&self->tied_grs[i*3], &log->rot[1][0]);
-			vl_mtmul_v(&self->tied_grs[i*3], &log->rot[0][0], &self->tied_grs[i*3]);
-		}
-	}
+	trj_data_ram_render(ram, obj);
+	trj_data_ramld_render(ramld, obj);
 	
 	self->file_data = TinyMATWriter_open(self->file_name);
 	
 	if (self->file_data)
 	{
 		TinyMATWriter_writeVectorAsColumn(
-				self->file_data, "time", self->time, self->offset);
+				self->file_data, "time", ram->time, ram->offset);
 		
 		// HPR
 		
 		if (self->hpr_en != 0x00)
 		{
 			TinyMATWriter_writeVectorAsColumn(
-					self->file_data, "heading", self->heading, self->offset);
+					self->file_data, "heading", ram->heading, ram->offset);
 			
 			TinyMATWriter_writeVectorAsColumn(
-					self->file_data, "pitch", self->pitch, self->offset);
+					self->file_data, "pitch", ram->pitch, ram->offset);
 			
 			TinyMATWriter_writeVectorAsColumn(
-					self->file_data, "roll", self->roll, self->offset);
+					self->file_data, "roll", ram->roll, ram->offset);
 		}
 		
 		// LLA
@@ -319,13 +138,13 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 		if (self->lla_en != 0x00)
 		{
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "lla_pos", self->lla_pos, 3, self->offset);
+					self->file_data, "lla_pos", ram->lla_pos, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "lla_vel", self->lla_vel, 3, self->offset);
+					self->file_data, "lla_vel", ram->lla_vel, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "lla_acc", self->lla_acc, 3, self->offset);
+					self->file_data, "lla_acc", ram->lla_acc, 3, ram->offset);
 		}
 		
 		// ECEF
@@ -333,13 +152,13 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 		if (self->lla_en != 0x00)
 		{
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "ecef_pos", self->ecef_pos, 3, self->offset);
+					self->file_data, "ecef_pos", ram->ecef_pos, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "ecef_vel", self->ecef_vel, 3, self->offset);
+					self->file_data, "ecef_vel", ram->ecef_vel, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "ecef_acc", self->ecef_acc, 3, self->offset);
+					self->file_data, "ecef_acc", ram->ecef_acc, 3, ram->offset);
 		}
 		
 		// TIED
@@ -347,10 +166,18 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 		if (self->tied_en != 0x00)
 		{
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "tied_acc", self->tied_acc, 3, self->offset);
+					self->file_data, "tied_acc", ram->tied_acc, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "tied_grs", self->tied_grs, 3, self->offset);
+					self->file_data, "tied_grs", ram->tied_grs, 3, ram->offset);
+		}
+		
+		// LATERAL DEVIATION
+		
+		if (self->ld_en != 0x00)
+		{
+			TinyMATWriter_writeVectorAsColumn(
+					self->file_data, "ld", ramld->ld, ramld->offset);
 		}
 		
 		TinyMATWriter_close(self->file_data);
@@ -366,7 +193,8 @@ inline uint8_t trj_data_mat_reset(s_trj_data_mat *self, s_trj_obj *obj)
 		self->file_data = NULL;
 	}
 	
-	__trj_data_mat_free__(self);
+	trj_data_ram_reset(&self->ram, obj);
+	trj_data_ramld_reset(&self->ramld, obj);
 	
 	return 0x00;
 }

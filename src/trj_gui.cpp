@@ -290,7 +290,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	});
 
 	static s_trj_data_text_init trj_data_text_config_ = {
-			.file_name = "default_data_text.txt",
+	
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
@@ -311,9 +311,6 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	static s_trj_data_ram_init trj_data_ram_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
-			
-			.ellp_en = 0x00,
-			.ellp = NULL,
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
@@ -331,12 +328,29 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.reset  = trj_data_ram_reset_,
 	});
 	
+	static s_trj_data_ramld_init trj_data_ramld_config_ = {
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+	};
+	
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			.name   = "default_data_ramld",
+			.desc   = "default_data_ramld",
+			.init   = trj_data_ramld_init_,
+			.free   = trj_data_ramld_free_,
+			.save   = trj_data_ramld_save_,
+			.load   = trj_data_ramld_load_,
+			.data_size = sizeof(s_trj_data_ramld),
+			.data   = NULL,
+			.config_size = sizeof(s_trj_data_ramld_init),
+			.config = &trj_data_ramld_config_,
+			.render = trj_data_ramld_render_,
+			.reset  = trj_data_ramld_reset_,
+	});
+	
 	static s_trj_data_mat_init trj_data_mat_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
-			
-			.ellp_en = 0x00,
-			.ellp = NULL,
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
@@ -516,6 +530,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	const uint32_t data_hash_text = vl_crc32("default_data_text");
 	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
+	const uint32_t data_hash_ramld= vl_crc32("default_data_ramld");
 	const uint32_t data_hash_mat  = vl_crc32("default_data_mat");
 	
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
@@ -599,9 +614,10 @@ uint8_t trj_gui_main(s_trj_gui *self)
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					trj_gui_data_edit(data);
 					
-					if      (data->hash == data_hash_text) { trj_gui_data_edit_text(data); }
-					else if (data->hash == data_hash_ram ) { trj_gui_data_edit_ram(data); }
-					else if (data->hash == data_hash_mat ) { trj_gui_data_edit_mat(data); }
+					if      (data->hash == data_hash_text ) { trj_gui_data_edit_text (data); }
+					else if (data->hash == data_hash_ram  ) { trj_gui_data_edit_ram  (data); }
+					else if (data->hash == data_hash_ramld) { trj_gui_data_edit_ramld(data); }
+					else if (data->hash == data_hash_mat  ) { trj_gui_data_edit_mat  (data); }
 					
 					break;
 				}
@@ -661,9 +677,10 @@ uint8_t trj_gui_main(s_trj_gui *self)
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					
-					if      (data->hash == data_hash_text) { trj_gui_data_view_text(data); }
-					else if (data->hash == data_hash_ram ) { trj_gui_data_view_ram(data); }
-					else if (data->hash == data_hash_mat ) { trj_gui_data_view_mat(data); }
+					if      (data->hash == data_hash_text ) { trj_gui_data_view_text  (data); }
+					else if (data->hash == data_hash_ram  ) { trj_gui_data_view_ram   (data); }
+					else if (data->hash == data_hash_ramld) { trj_gui_data_view_ramld (data); }
+					else if (data->hash == data_hash_mat  ) { trj_gui_data_view_mat   (data); }
 					
 					break;
 				}
