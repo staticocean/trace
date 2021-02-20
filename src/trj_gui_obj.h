@@ -5,8 +5,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 
-#include <isss_lib/vl.h>
-#include <isss_lib/vl3d.h>
+#include <softael_lib/vl.h>
+#include <softael_lib/vl3d.h>
 
 #include <lib/trj/trj_obj.h>
 

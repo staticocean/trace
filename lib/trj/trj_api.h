@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------------------------
 
-#include "vl.h"
+#include <softael_lib/vl.h>
 
 //------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ typedef struct trj_traj_info
 
 typedef struct trj_traj
 {
-		char desc[32];
+	char desc[32];
 	uint32_t hash;
 	
 	char name[32];

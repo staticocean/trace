@@ -17,8 +17,7 @@ extern "C"
 	#include <lib/picoc/picoc.h>
 }
 
-#include <isss_lib/vl.h>
-#include <isss_lib/bz.h>
+#include <softael_lib/vl.h>
 
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
