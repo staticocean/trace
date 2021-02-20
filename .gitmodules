@@ -1,3 +1,3 @@
-[submodule "isss_lib"]
-	path = isss_lib
-	url = https://staticocean@bitbucket.org/staticocean/isss_lib.git
+[submodule "softael_lib"]
+	path = softael_lib
+	url = https://staticocean@bitbucket.org/staticocean/softael_lib.git
