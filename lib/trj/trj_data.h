@@ -183,9 +183,11 @@ typedef struct trj_data_ram
 	vlf_t 		*time;
 	vlf_t 		*time3;
 	
+	vlf_t 		*ctn;
 	vlf_t 		*heading;
 	vlf_t 		*pitch;
 	vlf_t 		*roll;
+	
 	vlf_t 		*lla_pos;
 	vlf_t 		*lla_vel;
 	vlf_t 		*lla_acc;
@@ -214,9 +216,11 @@ inline void __trj_data_ram_null__(s_trj_data_ram *self)
 	self->time 		= NULL;
 	self->time3		= NULL;
 	
+	self->ctn 		= NULL;
 	self->heading 	= NULL;
 	self->pitch 	= NULL;
 	self->roll 		= NULL;
+	
 	self->lla_pos 	= NULL;
 	self->lla_vel 	= NULL;
 	self->lla_acc 	= NULL;
@@ -239,9 +243,11 @@ inline void __trj_data_ram_free__(s_trj_data_ram *self)
 	if (self->time 		!= NULL) free(self->time 		);
 	if (self->time3		!= NULL) free(self->time3 		);
 	
+	if (self->ctn 		!= NULL) free(self->ctn 		);
 	if (self->heading 	!= NULL) free(self->heading 	);
 	if (self->pitch 	!= NULL) free(self->pitch 		);
 	if (self->roll 		!= NULL) free(self->roll 		);
+	
 	if (self->lla_pos 	!= NULL) free(self->lla_pos 	);
 	if (self->lla_vel 	!= NULL) free(self->lla_vel 	);
 	if (self->lla_acc 	!= NULL) free(self->lla_acc 	);
@@ -313,6 +319,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 		self->time 	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->time3	 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		
+		self->ctn 		= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
 		self->heading 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->pitch 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
 		self->roll 		= (vlf_t*) malloc(sizeof(vlf_t) * self->offset);
@@ -371,7 +378,8 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 
 				s_vl_hpr hpr;
 				vl_hpr(&hpr, ctn_local);
-
+				
+				vl_mcopy(&self->ctn[i*9], ctn_local);
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;
 				self->roll[i] 		= hpr.roll;
