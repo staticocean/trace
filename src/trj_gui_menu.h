@@ -2,23 +2,23 @@
 #ifndef __TRJ_GUI_MENU__
 #define __TRJ_GUI_MENU__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
+
+//----------------------------------------------------------------
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
-
 #include <softael_lib/vl.h>
 
+#include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 
 #include "trj_gui_env.h"
 #include "trj_gui_cmd.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_gui_menu
 {
@@ -31,7 +31,7 @@ typedef struct trj_gui_menu
 	
 } 	s_trj_gui_menu;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 {
@@ -136,7 +136,7 @@ inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 {
@@ -190,6 +190,6 @@ inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif

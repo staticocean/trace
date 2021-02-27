@@ -2,10 +2,7 @@
 #ifndef __TRJ_GUI_W__
 #define __TRJ_GUI_W__
 
-//------------------------------------------------------------------------------
-
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 #include <softael_lib/vl3d.h>
@@ -18,11 +15,11 @@
 #include <lib/trj/trj_proc.h>
 #include <lib/trj/trj_eng.h>
 
+#include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
-
 #include <lib/imfilebrowser/imfilebrowser.h>
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
 {
@@ -49,7 +46,7 @@ inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list,
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
 {
@@ -88,7 +85,7 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 {
@@ -115,7 +112,7 @@ inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline ImGui::FileBrowser __file_browser_open__ = ImGui::FileBrowser();
 inline ImGui::FileBrowser __file_browser_save__ = ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
@@ -184,7 +181,7 @@ inline void trj_gui_filesave(char *file_path)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_OBJ__ */
 

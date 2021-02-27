@@ -2,21 +2,19 @@
 #ifndef __TRJ_GUI_MAP__
 #define __TRJ_GUI_MAP__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+#include <fstream>
 
 #include <softael_lib/vl.h>
 #include <softael_lib/vl3d.h>
 #include <softael_lib/gjson.h>
 
+#include <lib/imgui/imgui.h>
+#include <lib/imgui/imgui_internal.h>
 #include <lib/json11/json11.hpp>
 
-#include <fstream>
-
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_gui_map
 {
@@ -24,7 +22,7 @@ typedef struct trj_gui_map
 	
 } 	s_trj_gui_map;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline ImVec2 __transform__(s_view_data *view, ImVec2 pos)
 {
@@ -291,6 +289,6 @@ inline void trj_gui_map_view(s_trj_gui_map *self, char* label, ImVec2 size)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_MAP__ */

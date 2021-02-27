@@ -1,6 +1,8 @@
 
 #include "trj_gui_env.h"
 
+//----------------------------------------------------------------
+
 //dummy lib
 struct LibraryFunction __null_api__[] = { {NULL, NULL} };
 void __null_api_init__(Picoc *pc) {}
@@ -263,3 +265,8 @@ void trj_gui_env_sreset(s_trj_gui_env *self)
 	self->out_s = fmemopen(self->out_s_data, sizeof(self->out_s_data), "w+");
 	rewind(self->out_s);
 }
+
+//----------------------------------------------------------------
+
+
+

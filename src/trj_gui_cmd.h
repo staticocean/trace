@@ -2,29 +2,30 @@
 #ifndef __TRJ_GUI_CMD__
 #define __TRJ_GUI_CMD__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
+
+//----------------------------------------------------------------
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "lib/imgui/imgui.h"
-
-extern "C"
-{
-	#include <lib/fmemopen/fmemopen.h>
-
-	#include <lib/picoc/picoc.h>
-}
 
 #include <softael_lib/vl.h>
 
+#include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
 
 #include "trj_gui_env.h"
 
-//------------------------------------------------------------------------------
+extern "C"
+{
+	#include <lib/fmemopen/fmemopen.h>
+	#include <lib/picoc/picoc.h>
+}
+
+//----------------------------------------------------------------
 
 typedef struct trj_gui_cmd
 {
@@ -58,7 +59,7 @@ void trj_gui_cmd_clearlog(s_trj_gui_cmd *self);
 void trj_gui_cmd_render(s_trj_gui_cmd *self);
 void trj_gui_cmd_exec(s_trj_gui_cmd *self);
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 
 #endif /* __TRJ_GUI_CMD__ */

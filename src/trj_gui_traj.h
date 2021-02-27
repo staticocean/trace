@@ -2,21 +2,19 @@
 #ifndef __TRJ_GUI_TRAJ__
 #define __TRJ_GUI_TRAJ__
 
-//------------------------------------------------------------------------------
-
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 #include <softael_lib/vl3d.h>
 
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_traj.h>
+#include <lib/imgui/imgui.h>
+#include <lib/imgui/imgui_internal.h>
 
 #include "trj_gui_w.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct view_data
 {
@@ -33,7 +31,7 @@ typedef struct view_data
 	
 } 	s_view_data;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 enum st
 {
@@ -46,7 +44,7 @@ enum st
 	st_int_drag_dy,
 };
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_edit(s_trj_traj *self)
 {
@@ -64,7 +62,7 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_edit_static(s_trj_traj *self)
 {
@@ -82,7 +80,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", traj->eng);
+	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -143,7 +141,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_view_static(s_trj_traj *self)
 {
@@ -156,7 +154,7 @@ inline void trj_gui_traj_view_static(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 {
@@ -179,7 +177,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", traj->eng);
+	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -236,7 +234,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_view_orb(s_trj_traj *self)
 {
@@ -244,7 +242,7 @@ inline void trj_gui_traj_view_orb(s_trj_traj *self)
 	
 	s_vl3d_eng vl3d_eng;
 	s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 2);
-	s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
+	s_vl3d_view view = { .pos = { 0.0, 0.0, 0.0 }, .scale = 1.0, .tbar_en = 0x01, .xyz_en = 0x01, .xyz_scale = 0.25, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0,  };
 	
 	vl3d_view_load(self, &view, view);
 	
@@ -289,7 +287,7 @@ inline void trj_gui_traj_view_orb(s_trj_traj *self)
 	free(obj_list);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 {
@@ -313,7 +311,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", traj->eng);
+	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -422,7 +420,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline ImVec2 transform(s_view_data *view, ImVec2 pos)
 {
@@ -588,8 +586,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				{
 						.time = 0.0,
 						.pos_p = {pos_p.y, 0.0, pos_p.x},
-						.pos_d = {pos_p.y, 0.0, pos_p.x},
 						.pos_t = {0.0, 0.0, 0.0},
+						.pos_d = {pos_p.y, 0.0, pos_p.x},
 						//			.rot_p = {  },
 				};
 			}
@@ -600,8 +598,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				{
 						.time = 0.0,
 						.pos_p = {pos_p.y, pos_p.x, 0.0},
-						.pos_d = {pos_p.y, pos_p.x, 0.0},
 						.pos_t = {0.0, 0.0, 0.0},
+						.pos_d = {pos_p.y, pos_p.x, 0.0},
 						//			.rot_p = {  },
 				};
 			}
@@ -1142,8 +1140,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				{
 						.time = view_pt.x,
 						.pos_p = { pt_pos[0], view_pt.y, pt_pos[2] },
-						.pos_d = { pt_pos[0], view_pt.y, pt_pos[2] },
 						.pos_t = { 0.0, 0.0, 0.0 },
+						.pos_d = { pt_pos[0], view_pt.y, pt_pos[2] },
 						//			.rot_p = {  },
 				};
 			}
@@ -1153,8 +1151,8 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 				{
 						.time = view_pt.x,
 						.pos_p = { pt_pos[0], pt_pos[1], view_pt.y },
-						.pos_d = { pt_pos[0], pt_pos[1], view_pt.y },
 						.pos_t = { 0.0, 0.0, 0.0 },
+						.pos_d = { pt_pos[0], pt_pos[1], view_pt.y },
 						//			.rot_p = {  },
 				};
 			}
@@ -1326,7 +1324,7 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 {
@@ -1349,7 +1347,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", traj->eng);
+	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -1435,7 +1433,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_traj_view_navsat(s_trj_traj *self)
 {
@@ -1449,8 +1447,8 @@ inline void trj_gui_traj_view_navsat(s_trj_traj *self)
 		{
 			s_vl3d_eng vl3d_eng;
 			s_vl3d_obj *obj_list = (s_vl3d_obj*) malloc(sizeof(s_vl3d_obj) * 4096 * 4);
-			s_vl3d_view view = { .scale = 1.0, .xyz_scale = 0.25, .pos = { 0.0, 0.0, 0.0 }, .tbar_en = 0x01, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0, .xyz_en = 0x01 };
-
+			s_vl3d_view view = { .pos = { 0.0, 0.0, 0.0 }, .scale = 1.0, .tbar_en = 0x01, .xyz_en = 0x01, .xyz_scale = 0.25, .grid_mode = 0x01, .grid_pt_size = 2.0, .grid_pt_disp = 2.0 };
+			
 			vl3d_view_load(self, &view, view);
 
 			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {
@@ -1577,6 +1575,6 @@ inline void trj_gui_traj_view_navsat(s_trj_traj *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_TRAJ__ */

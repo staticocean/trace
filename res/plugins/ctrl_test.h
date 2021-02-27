@@ -2,7 +2,7 @@
 #ifndef __CTRL_TEST__
 #define __CTRL_TEST__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct ctrl_test
 {
@@ -18,7 +18,7 @@ typedef struct ctrl_test_init
 	
 } 	s_ctrl_test_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t ctrl_test_init(s_ctrl_test *data, s_ctrl_test_init attr)
 {
@@ -37,7 +37,7 @@ inline uint8_t ctrl_test_update(s_ctrl_test *data, s_trj_obj *obj)
 {
 	return 0x00;
 }
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t ctrl_test_init_ (void **data, void *config)
 {
@@ -80,6 +80,6 @@ inline uint8_t ctrl_test_update_(void *data, void *obj)
 	return ctrl_test_update(ctrl, obj);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif __CTRL_TEST__

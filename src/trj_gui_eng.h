@@ -2,11 +2,9 @@
 #ifndef __TRJ_GUI_ENG__
 #define __TRJ_GUI_ENG__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
-
 #include <lib/implot/implot.h>
 
 #include <softael_lib/vl.h>
@@ -19,11 +17,10 @@
 #include <lib/trj/trj_ellp.h>
 
 #include "imgui_custom.h"
-
 #include "trj_gui_obj.h"
 #include "trj_gui_traj.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 enum trj_gui_eng_type_t
 {
@@ -34,13 +31,14 @@ enum trj_gui_eng_type_t
 	trj_gui_eng_type_proc,
 };
 
-typedef enum trj_gui_eng_state_t
+enum trj_gui_eng_state_t
 {
 	trj_gui_eng_state_standby,
 	trj_gui_eng_state_init,
 	trj_gui_eng_state_update,
 	trj_gui_eng_state_proc,
 	trj_gui_eng_state_deinit,
+	
 };
 
 typedef struct trj_gui_eng
@@ -60,7 +58,7 @@ typedef struct trj_gui_eng_init
 
 } 	s_trj_gui_eng_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 {
@@ -78,7 +76,7 @@ inline uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_gui_obj *obj)
 {
@@ -110,7 +108,7 @@ inline void trj_gui_eng_sel_data(s_trj_gui_eng *gui, s_trj_data *data)
 	gui->sel_item = data;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 {
@@ -383,7 +381,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 {
@@ -471,7 +469,7 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 {
@@ -584,6 +582,6 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_ENG__ */

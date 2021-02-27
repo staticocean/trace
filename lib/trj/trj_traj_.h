@@ -7,11 +7,11 @@
 #ifndef __TRJ_TRAJ___
 #define __TRJ_TRAJ___
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef enum trj_traj_navsat_filetype
 {
@@ -82,7 +82,7 @@ typedef struct trj_traj_navsat_init
 	
 } 	s_trj_traj_navsat_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_navsat_init(s_trj_traj_navsat *self, s_trj_traj_navsat_init attr)
 {
@@ -275,6 +275,9 @@ inline uint8_t trj_traj_navsat_compile(s_trj_traj_navsat *self)
 	{
 		case trj_traj_navsat_filetype_agp: { trj_traj_navsat_parseagp(self); break; }
 		case trj_traj_navsat_filetype_agl: { trj_traj_navsat_parseagl(self); break; }
+		case trj_traj_navsat_filetype_none: { break; }
+
+		default: break;
 	}
 	
 	for (i = 0; i < self->data_offset; ++i)
@@ -289,7 +292,7 @@ inline uint8_t trj_traj_navsat_compile(s_trj_traj_navsat *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 // API
 //uint8_t (*init) 		(void *data, void *config)
@@ -362,7 +365,7 @@ inline uint8_t trj_traj_navsat_info_(void *data, s_trj_traj_info *info)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 
 #endif /* __TRJ_TRAJ__ */

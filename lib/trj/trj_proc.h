@@ -7,13 +7,13 @@
 #ifndef __TRJ_PROC__
 #define __TRJ_PROC__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 
 #include "trj_api.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_proc_euler
 {
@@ -32,7 +32,7 @@ typedef struct trj_proc_euler_init
 
 }   s_trj_proc_euler_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init attr)
 {
@@ -151,7 +151,7 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_proc_euler_init_ (void **data, void *config)
 {
@@ -189,7 +189,7 @@ inline uint8_t trj_proc_euler_update_ (void *data, void *obj, uint32_t offset)
 	return trj_proc_euler_update(proc, (s_trj_obj*) obj, offset);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 // Five point stnecil
 typedef struct trj_proc_fps
 {
@@ -207,7 +207,7 @@ typedef struct trj_proc_fps_init
 	
 }   s_trj_proc_fps_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_proc_fps_init(s_trj_proc_fps *self, s_trj_proc_fps_init attr)
 {
@@ -344,7 +344,7 @@ inline uint8_t trj_proc_fps_update(s_trj_proc_fps *self, s_trj_obj *obj, uint32_
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_proc_fps_init_ (void **data, void *config)
 {
@@ -382,7 +382,7 @@ inline uint8_t trj_proc_fps_update_ (void *data, void *obj, uint32_t offset)
 	return trj_proc_fps_update(proc, (s_trj_obj*) obj, offset);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __INS_PROC__ */
 

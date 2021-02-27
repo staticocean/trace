@@ -7,7 +7,7 @@
 #ifndef __TRJ_TRAJ__
 #define __TRJ_TRAJ__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 #include <softael_lib/bz.h>
@@ -15,7 +15,7 @@
 #include "trj_api.h"
 #include "trj_ellp.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_traj_static
 {
@@ -49,7 +49,7 @@ typedef struct trj_traj_static_init
 	
 } 	s_trj_traj_static_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_static_init(s_trj_traj_static *self, s_trj_traj_static_init attr)
 {
@@ -125,7 +125,7 @@ inline uint8_t trj_traj_static_rot(s_trj_traj_static *self, vlf_t time, vlf_t *r
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 // API
 //uint8_t (*init) 		(void *data, void *config)
@@ -199,7 +199,7 @@ inline uint8_t trj_traj_static_info_(void *data, s_trj_traj_info *info)
 	
 	return 0x00;
 }
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_traj_orb
 {
@@ -235,7 +235,7 @@ typedef struct trj_traj_orb_init
 	
 } 	s_trj_traj_orb_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
 {
@@ -366,7 +366,7 @@ inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
 	return 0x01;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 // API
 //uint8_t (*init) 		(void *data, void *config)
@@ -440,7 +440,7 @@ inline uint8_t trj_traj_orb_info_(void *data, s_trj_traj_info *info)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_traj_bz_point
 {
@@ -491,15 +491,15 @@ typedef struct trj_traj_bz_init
 	s_trj_eng *eng;
 	s_trj_obj *ref;
 	
-	s_trj_traj_bz_point *pts;
-	uint32_t pts_size;
-	
 	uint8_t ellp_en;
 	s_trj_ellp *ellp;
 	
+	uint32_t pts_size;
+	s_trj_traj_bz_point *pts;
+	
 } 	s_trj_traj_bz_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 {
@@ -859,7 +859,7 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_bz_pos_local(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 {
@@ -1030,7 +1030,7 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 {
@@ -1104,7 +1104,7 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 {
@@ -1393,7 +1393,7 @@ inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 // API
 //uint8_t (*init) 		(void *data, void *config)
@@ -1485,6 +1485,6 @@ inline uint8_t trj_traj_bz_info_(void *data, s_trj_traj_info *info)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_TRAJ__ */

@@ -376,7 +376,7 @@ void ExpressionAssignToPointer(struct ParseState *Parser, struct Value *ToValue,
 	else if (AllowPointerCoercion && IS_NUMERIC_COERCIBLE(FromValue))
 	{
 		/* assign integer to native pointer */
-		ToValue->Val->Pointer = (void *)(unsigned long)ExpressionCoerceUnsignedInteger(FromValue);
+		ToValue->Val->Pointer = (void *)(uintptr_t)ExpressionCoerceUnsignedInteger(FromValue);
 	}
 	else if (AllowPointerCoercion && FromValue->Typ->Base == TypePointer)
 	{
@@ -420,7 +420,9 @@ void ExpressionAssign(struct ParseState *Parser, struct Value *DestValue, struct
 			break;
 		
 		case TypeArray:
-			if (SourceValue->Typ->Base == TypeArray && DestValue->Typ->FromType == DestValue->Typ->FromType && DestValue->Typ->ArraySize == 0)
+			// TODO: What did he mean ?
+//			if ((SourceValue->Typ->Base == TypeArray) && DestValue->Typ->FromType == DestValue->Typ->FromType && (DestValue->Typ->ArraySize == 0))
+			if ((SourceValue->Typ->Base == TypeArray) && (DestValue->Typ->ArraySize == 0))
 			{
 				/* destination array is unsized - need to resize the destination array to the same size as the source array */
 				DestValue->Typ = SourceValue->Typ;

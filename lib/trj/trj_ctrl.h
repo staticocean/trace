@@ -7,14 +7,14 @@
 #ifndef __TRJ_CTRL__
 #define __TRJ_CTRL__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 
 #include "trj_api.h"
 #include "trj_obj.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_ctrl_upos
 {
@@ -140,7 +140,7 @@ typedef struct trj_ctrl_crot_init
 //
 //        return;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_ctrl_upos_init(s_trj_ctrl_upos *self, s_trj_ctrl_upos_init attr)
 {
@@ -266,7 +266,7 @@ inline uint8_t trj_ctrl_crot_update(s_trj_ctrl_crot *self, s_trj_obj *obj)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_ctrl_upos_init_(void **data, void *config)
 {
@@ -444,7 +444,7 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 	return trj_ctrl_crot_update(ctrl, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 
 //	vlf_t dp0_p1[3];
@@ -495,7 +495,7 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 //	return;
 //}
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 //inline void ins_ctrl_uins_update(void *__ctrl__)
 //{
@@ -545,7 +545,7 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 //	return;
 //}
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 //inline void ins_ctrl_corb_update(void *__ctrl__)
 //{
@@ -583,7 +583,7 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 //	return;
 //}
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 //    def get_pos(self, seg_offset, time):
 //
@@ -669,7 +669,7 @@ inline uint8_t trj_ctrl_crot_update_(void *data, void *obj)
 //
 //        return;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_ctrl_egms
 {
@@ -714,7 +714,7 @@ inline uint8_t trj_ctrl_egms_load(s_trj_ctrl_egms *self, s_trj_ctrl_egms_init *a
 	return 0x00;
 }
 
-inline void __trj_ctrl_egms_calc__(s_trj_obj *ref, s_trj_obj *obj)
+inline static void __trj_ctrl_egms_calc__(s_trj_obj *ref, s_trj_obj *obj)
 {
 	const vlf_t beta  = 0.0053171;
 	const vlf_t beta1 = 71E-7;
@@ -772,7 +772,7 @@ inline uint8_t trj_ctrl_egms_update(s_trj_ctrl_egms *self, s_trj_obj *obj)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_ctrl_egms_init_(void **data, void *config)
 {
@@ -821,7 +821,7 @@ inline uint8_t trj_ctrl_egms_update_(void *data, void *obj)
 	return trj_ctrl_egms_update(ctrl, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_ctrl_gms
 {
@@ -904,7 +904,7 @@ inline uint8_t trj_ctrl_gms_update(s_trj_ctrl_gms *self, s_trj_obj *obj)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_ctrl_gms_init_(void **data, void *config)
 {
@@ -953,7 +953,7 @@ inline uint8_t trj_ctrl_gms_update_(void *data, void *obj)
 	return trj_ctrl_gms_update(ctrl, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_CTRL__ */
 

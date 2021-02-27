@@ -1,7 +1,7 @@
 
 #include "trj_gui.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 static 	s_trj_gui_map map;
 
@@ -25,8 +25,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
-			.time_limit = 3600.0,
-			.time_step = 0.01,
+		
 			.proc      = self->st_eng_proc_list,
 			
 			.obj_list  = self->st_eng_obj_list,
@@ -36,6 +35,9 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.ctrl_list = self->st_eng_ctrl_list,
 			.data_list = self->st_eng_data_list,
 			.proc_list = self->st_eng_proc_list,
+			
+			.time_limit = 3600.0,
+			.time_step = 0.01,
 	});
 	
 	trj_ellp_init(&trj_ellp_wgs84);
@@ -56,20 +58,24 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.name = "default_traj_static",
+		
 			.desc = "default_traj_static",
+			.name = "default_traj_static",
+			
+			.config_size = sizeof(s_trj_traj_static_init),
+			.config = &trj_traj_static_config_,
+			
+			.data_size = sizeof(s_trj_traj_static),
+			.data = NULL,
+			
 			.init = trj_traj_static_init_,
 			.free = trj_traj_static_free_,
 			.save = trj_traj_static_save_,
 			.load = trj_traj_static_load_,
-			.data_size = sizeof(s_trj_traj_static),
-			.data = NULL,
-			.config_size = sizeof(s_trj_traj_static_init),
-			.config = &trj_traj_static_config_,
 			.compile = trj_traj_static_compile_,
-			.rot  = trj_traj_static_rot_,
-			.pos  = trj_traj_static_pos_,
 			.info = trj_traj_static_info_,
+			.pos  = trj_traj_static_pos_,
+			.rot  = trj_traj_static_rot_,
 	});
 	
 	static s_trj_traj_orb_init trj_traj_orb_config_ = {
@@ -88,23 +94,28 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	vl_mid(trj_traj_orb_config_.s_tilt);
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.name = "default_traj_orb",
+		
 			.desc = "default_traj_orb",
+			.name = "default_traj_orb",
+			
+			.config_size = sizeof(s_trj_traj_orb_init),
+			.config = &trj_traj_orb_config_,
+			
+			.data_size = sizeof(s_trj_traj_orb),
+			.data = NULL,
+			
 			.init = trj_traj_orb_init_,
 			.free = trj_traj_orb_free_,
 			.save = trj_traj_orb_save_,
 			.load = trj_traj_orb_load_,
-			.data_size = sizeof(s_trj_traj_orb),
-			.data = NULL,
-			.config_size = sizeof(s_trj_traj_orb_init),
-			.config = &trj_traj_orb_config_,
 			.compile = trj_traj_orb_compile_,
-			.rot = trj_traj_orb_rot_,
-			.pos = trj_traj_orb_pos_,
 			.info = trj_traj_orb_info_,
+			.pos = trj_traj_orb_pos_,
+			.rot = trj_traj_orb_rot_,
 	});
 	
 	static s_trj_traj_bz_init trj_traj_bz_config_ = {
+			
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
 			
@@ -115,20 +126,24 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.name = "default_traj_bz",
+		
 			.desc = "default_traj_bz",
+			.name = "default_traj_bz",
+			
+			.config_size = sizeof(s_trj_traj_bz_init),
+			.config = &trj_traj_bz_config_,
+			
+			.data_size = sizeof(s_trj_traj_bz),
+			.data = NULL,
+			
 			.init = trj_traj_bz_init_,
 			.free = trj_traj_bz_free_,
 			.save = trj_traj_bz_save_,
 			.load = trj_traj_bz_load_,
-			.data_size = sizeof(s_trj_traj_bz),
-			.data = NULL,
-			.config_size = sizeof(s_trj_traj_bz_init),
-			.config = &trj_traj_bz_config_,
 			.compile = trj_traj_bz_compile_,
-			.rot = trj_traj_bz_rot_,
-			.pos = trj_traj_bz_pos_,
 			.info = trj_traj_bz_info_,
+			.pos = trj_traj_bz_pos_,
+			.rot = trj_traj_bz_rot_,
 	});
 	
 	static s_trj_traj_navsat_init trj_traj_navsat_config_ = {
@@ -137,20 +152,24 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
-			.name = "default_traj_navsat",
+		
 			.desc = "default_traj_navsat",
+			.name = "default_traj_navsat",
+			
+			.config_size = sizeof(s_trj_traj_navsat_init),
+			.config = &trj_traj_navsat_config_,
+			
+			.data_size = sizeof(s_trj_traj_navsat),
+			.data = NULL,
+			
 			.init = trj_traj_navsat_init_,
 			.free = trj_traj_navsat_free_,
 			.save = trj_traj_navsat_save_,
 			.load = trj_traj_navsat_load_,
-			.data_size = sizeof(s_trj_traj_navsat),
-			.data = NULL,
-			.config_size = sizeof(s_trj_traj_navsat_init),
-			.config = &trj_traj_navsat_config_,
 			.compile = trj_traj_navsat_compile_,
-			.rot = trj_traj_navsat_rot_,
-			.pos = trj_traj_navsat_pos_,
 			.info = trj_traj_navsat_info_,
+			.pos = trj_traj_navsat_pos_,
+			.rot = trj_traj_navsat_rot_,
 	});
 	
 	static s_trj_ctrl_upos_init trj_ctrl_upos_config_ = {
@@ -170,61 +189,77 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_upos",
+		
 			.desc   = "default_ctrl_upos",
+			.name   = "default_ctrl_upos",
+			
+			.config_size = sizeof(s_trj_ctrl_upos_init),
+			.config = &trj_ctrl_upos_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_upos),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_upos_init_,
 			.free   = trj_ctrl_upos_free_,
 			.save   = trj_ctrl_upos_save_,
 			.load   = trj_ctrl_upos_load_,
-			.data_size = sizeof(s_trj_ctrl_upos),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_upos_init),
-			.config = &trj_ctrl_upos_config_,
 			.reset  = trj_ctrl_upos_reset_,
 			.update = trj_ctrl_upos_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_cpos",
+		
 			.desc   = "default_ctrl_cpos",
+			.name   = "default_ctrl_cpos",
+			
+			.config_size = sizeof(s_trj_ctrl_cpos_init),
+			.config = &trj_ctrl_cpos_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_cpos),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_cpos_init_,
 			.free   = trj_ctrl_cpos_free_,
 			.save   = trj_ctrl_cpos_save_,
 			.load   = trj_ctrl_cpos_load_,
-			.data_size = sizeof(s_trj_ctrl_cpos),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_cpos_init),
-			.config = &trj_ctrl_cpos_config_,
 			.reset  = trj_ctrl_cpos_reset_,
 			.update = trj_ctrl_cpos_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_urot",
+			
 			.desc   = "default_ctrl_urot",
+			.name   = "default_ctrl_urot",
+			
+			.config_size = sizeof(s_trj_ctrl_urot_init),
+			.config = &trj_ctrl_urot_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_urot),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_urot_init_,
 			.free   = trj_ctrl_urot_free_,
 			.save   = trj_ctrl_urot_save_,
 			.load   = trj_ctrl_urot_load_,
-			.data_size = sizeof(s_trj_ctrl_urot),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_urot_init),
-			.config = &trj_ctrl_urot_config_,
 			.reset  = trj_ctrl_urot_reset_,
 			.update = trj_ctrl_urot_update_,
 	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_crot",
+			
 			.desc   = "default_ctrl_crot",
+			.name   = "default_ctrl_crot",
+			
+			.config_size = sizeof(s_trj_ctrl_crot_init),
+			.config = &trj_ctrl_crot_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_crot),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_crot_init_,
 			.free   = trj_ctrl_crot_free_,
 			.save   = trj_ctrl_crot_save_,
 			.load   = trj_ctrl_crot_load_,
-			.data_size = sizeof(s_trj_ctrl_crot),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_crot_init),
-			.config = &trj_ctrl_crot_config_,
 			.reset  = trj_ctrl_crot_reset_,
 			.update = trj_ctrl_crot_update_,
 	});
@@ -235,16 +270,20 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_egms",
+			
 			.desc   = "default_ctrl_egms",
+			.name   = "default_ctrl_egms",
+			
+			.config_size = sizeof(s_trj_ctrl_egms_init),
+			.config = &trj_ctrl_egms_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_egms),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_egms_init_,
 			.free   = trj_ctrl_egms_free_,
 			.save   = trj_ctrl_egms_save_,
 			.load   = trj_ctrl_egms_load_,
-			.data_size = sizeof(s_trj_ctrl_egms),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_egms_init),
-			.config = &trj_ctrl_egms_config_,
 			.reset  = trj_ctrl_egms_reset_,
 			.update = trj_ctrl_egms_update_,
 	});
@@ -255,36 +294,44 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			.name   = "default_ctrl_gms",
+			
 			.desc   = "default_ctrl_gms",
+			.name   = "default_ctrl_gms",
+			
+			.config_size = sizeof(s_trj_ctrl_gms_init),
+			.config = &trj_ctrl_gms_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_gms),
+			.data   = NULL,
+			
 			.init   = trj_ctrl_gms_init_,
 			.free   = trj_ctrl_gms_free_,
 			.save   = trj_ctrl_gms_save_,
 			.load   = trj_ctrl_gms_load_,
-			.data_size = sizeof(s_trj_ctrl_gms),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_ctrl_gms_init),
-			.config = &trj_ctrl_gms_config_,
 			.reset  = trj_ctrl_gms_reset_,
 			.update = trj_ctrl_gms_update_,
 	});
 	
 	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
+			.order = 12,
             .file_name = "res/ctrl/gm/egm2008.txt",
-            .order = 12,
 	};
 
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+			
+			.desc   = "default_ctrl_gm",
             .name   = "default_ctrl_gm",
-            .desc   = "default_ctrl_gm",
+			
+			.config_size = sizeof(s_trj_ctrl_gm_init),
+			.config = &trj_ctrl_gm_config_,
+			
+			.data_size = sizeof(s_trj_ctrl_gm),
+			.data   = NULL,
+			
             .init   = trj_ctrl_gm_init_,
             .free   = trj_ctrl_gm_free_,
             .save   = trj_ctrl_gm_save_,
             .load   = trj_ctrl_gm_load_,
-            .data_size = sizeof(s_trj_ctrl_gm),
-            .data   = NULL,
-            .config_size = sizeof(s_trj_ctrl_gm_init),
-            .config = &trj_ctrl_gm_config_,
             .reset  = trj_ctrl_gm_reset_,
             .update = trj_ctrl_gm_update_,
 	});
@@ -294,18 +341,22 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.name   = "default_data_text",
+			
 			.desc   = "default_data_text",
+			.name   = "default_data_text",
+			
+			.config_size = sizeof(s_trj_data_text_init),
+			.config = &trj_data_text_config_,
+			
+			.data_size = sizeof(s_trj_data_text),
+			.data   = NULL,
+			
 			.init   = trj_data_text_init_,
 			.free   = trj_data_text_free_,
 			.save   = trj_data_text_save_,
 			.load   = trj_data_text_load_,
-			.data_size = sizeof(s_trj_data_text),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_data_text_init),
-			.config = &trj_data_text_config_,
-			.render = trj_data_text_render_,
 			.reset  = trj_data_text_reset_,
+			.render = trj_data_text_render_,
 	});
 	
 	static s_trj_data_ram_init trj_data_ram_config_ = {
@@ -314,18 +365,22 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.name   = "default_data_ram",
+			
 			.desc   = "default_data_ram",
+			.name   = "default_data_ram",
+			
+			.config_size = sizeof(s_trj_data_ram_init),
+			.config = &trj_data_ram_config_,
+			
+			.data_size = sizeof(s_trj_data_ram),
+			.data   = NULL,
+			
 			.init   = trj_data_ram_init_,
 			.free   = trj_data_ram_free_,
 			.save   = trj_data_ram_save_,
 			.load   = trj_data_ram_load_,
-			.data_size = sizeof(s_trj_data_ram),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_data_ram_init),
-			.config = &trj_data_ram_config_,
-			.render = trj_data_ram_render_,
 			.reset  = trj_data_ram_reset_,
+			.render = trj_data_ram_render_,
 	});
 	
 	static s_trj_data_ramld_init trj_data_ramld_config_ = {
@@ -334,18 +389,22 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.name   = "default_data_ramld",
+			
 			.desc   = "default_data_ramld",
+			.name   = "default_data_ramld",
+			
+			.config_size = sizeof(s_trj_data_ramld_init),
+			.config = &trj_data_ramld_config_,
+			
+			.data_size = sizeof(s_trj_data_ramld),
+			.data   = NULL,
+			
 			.init   = trj_data_ramld_init_,
 			.free   = trj_data_ramld_free_,
 			.save   = trj_data_ramld_save_,
 			.load   = trj_data_ramld_load_,
-			.data_size = sizeof(s_trj_data_ramld),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_data_ramld_init),
-			.config = &trj_data_ramld_config_,
-			.render = trj_data_ramld_render_,
 			.reset  = trj_data_ramld_reset_,
+			.render = trj_data_ramld_render_,
 	});
 	
 	static s_trj_data_mat_init trj_data_mat_config_ = {
@@ -354,18 +413,22 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
-			.name   = "default_data_mat",
+			
 			.desc   = "default_data_mat",
+			.name   = "default_data_mat",
+			
+			.config_size = sizeof(s_trj_data_mat_init),
+			.config = &trj_data_mat_config_,
+			
+			.data_size = sizeof(s_trj_data_mat),
+			.data   = NULL,
+			
 			.init   = trj_data_mat_init_,
 			.free   = trj_data_mat_free_,
 			.save   = trj_data_mat_save_,
 			.load   = trj_data_mat_load_,
-			.data_size = sizeof(s_trj_data_mat),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_data_mat_init),
-			.config = &trj_data_mat_config_,
-			.render = trj_data_mat_render_,
 			.reset  = trj_data_mat_reset_,
+			.render = trj_data_mat_render_,
 	});
 	
 	static s_trj_proc_euler_init trj_proc_euler_config_ = {
@@ -373,16 +436,20 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+		
 			.desc   = "default_proc_euler",
+			
+			.config_size = sizeof(s_trj_proc_euler_init),
+			.config = &trj_proc_euler_config_,
+			
+			.data_size = sizeof(s_trj_proc_euler),
+			.data   = NULL,
+			
 			.init   = trj_proc_euler_init_,
 			.free   = trj_proc_euler_free_,
 			.save   = trj_proc_euler_save_,
 			.load   = trj_proc_euler_load_,
 			.update = trj_proc_euler_update_,
-			.data_size = sizeof(s_trj_proc_euler),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_proc_euler_init),
-			.config = &trj_proc_euler_config_,
 	});
 	
 	static s_trj_proc_fps_init trj_proc_fps_config_ = {
@@ -390,16 +457,20 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+			
 			.desc   = "default_proc_fps",
+			
+			.config_size = sizeof(s_trj_proc_fps_init),
+			.config = &trj_proc_fps_config_,
+			
+			.data_size = sizeof(s_trj_proc_fps),
+			.data   = NULL,
+			
 			.init   = trj_proc_fps_init_,
 			.free   = trj_proc_fps_free_,
 			.save   = trj_proc_fps_save_,
 			.load   = trj_proc_fps_load_,
 			.update = trj_proc_fps_update_,
-			.data_size = sizeof(s_trj_proc_fps),
-			.data   = NULL,
-			.config_size = sizeof(s_trj_proc_fps_init),
-			.config = &trj_proc_fps_config_,
 	});
 
     for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
@@ -496,8 +567,8 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)
 	{
 		.env = &self->gui_env,
+		.visible = false,
 		.title = "env",
-		.visible = false
 	});
 	
 	self->gui_menu.env = &self->gui_env;
@@ -511,7 +582,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 uint8_t trj_gui_main(s_trj_gui *self)
 {
@@ -698,17 +769,18 @@ uint8_t trj_gui_main(s_trj_gui *self)
 			static s_vl3d_eng  vl3d;
 			
 			s_vl3d_view view = {
-					.scale = 1.0,
+					
 					.pos = { 0.0, 0.0, 0.0 },
+					.scale = 1.0,
 					
 					.tbar_en = 0x01,
+					
+					.xyz_en = 0x01,
+					.xyz_scale = 0.25,
 					
 					.grid_mode = 0x01,
 					.grid_pt_size = 2.0,
 					.grid_pt_disp = 2.0,
-					
-					.xyz_en = 0x01,
-					.xyz_scale = 0.25
 			};
 			
 			vl3d_view_load(self, &view, view);
@@ -925,4 +997,4 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------

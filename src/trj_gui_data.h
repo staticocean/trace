@@ -2,22 +2,19 @@
 #ifndef __TRJ_GUI_DATA__
 #define __TRJ_GUI_DATA__
 
-//------------------------------------------------------------------------------
-
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
-
-#include <lib/implot/implot.h>
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 #include <softael_lib/vl3d.h>
 
+#include <lib/imgui/imgui.h>
+#include <lib/imgui/imgui_internal.h>
+#include <lib/implot/implot.h>
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_data_.h>
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_data_edit(s_trj_data *self)
 {
@@ -35,7 +32,7 @@ inline void trj_gui_data_edit(s_trj_data *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_data_edit_text(s_trj_data *self)
 {
@@ -103,7 +100,7 @@ inline void trj_gui_data_view_text(s_trj_data *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_data_edit_ram(s_trj_data *self)
 {
@@ -131,7 +128,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", data->eng);
+	ImGui::Text("%08X", (uint32_t) data->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -177,17 +174,18 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
 			
 			s_vl3d_view view = {
-					.scale = 1.0,
+					
 					.pos = {0.0, 0.0, 0.0},
+					.scale = 1.0,
 					
 					.tbar_en = 0x01,
+					
+					.xyz_en = 0x01,
+					.xyz_scale = 0.25,
 					
 					.grid_mode = 0x01,
 					.grid_pt_size = 2.0,
 					.grid_pt_disp = 2.0,
-					
-					.xyz_en = 0x01,
-					.xyz_scale = 0.25
 			};
 			
 			vl3d_view_load(self, &view, view);
@@ -217,7 +215,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 				}
 			}
 			
-			s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
+			s_vl3d_trngl trngl = { .spec = 0x01, .color = vl3d_col_l, };
 			
 			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
 			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
@@ -412,7 +410,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_data_edit_ramld(s_trj_data *self)
 {
@@ -440,7 +438,7 @@ inline void trj_gui_data_edit_ramld(s_trj_data *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", data->eng);
+	ImGui::Text("%08X", (uint32_t) data->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -491,7 +489,7 @@ inline void trj_gui_data_view_ramld(s_trj_data *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_data_edit_mat(s_trj_data *self)
 {
@@ -587,6 +585,6 @@ inline void trj_gui_data_view_mat(s_trj_data *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_DATA__ */

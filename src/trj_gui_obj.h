@@ -2,17 +2,17 @@
 #ifndef __TRJ_GUI_OBJ__
 #define __TRJ_GUI_OBJ__
 
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 #include <softael_lib/vl3d.h>
 
+#include <lib/imgui/imgui.h>
 #include <lib/trj/trj_obj.h>
 
 #include "trj_gui_w.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_gui_obj
 {
@@ -30,7 +30,7 @@ typedef struct trj_gui_obj_init
 
 } 	s_trj_gui_obj_init;
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_obj_init(s_trj_gui_obj *gui, s_trj_gui_obj_init attr)
 {
@@ -147,7 +147,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline uint8_t trj_gui_obj_view(s_trj_gui_obj *gui, s_trj_obj *self)
 {
@@ -184,17 +184,18 @@ inline uint8_t trj_gui_obj_view(s_trj_gui_obj *gui, s_trj_obj *self)
 	}
 
 	s_vl3d_view view = {
-			.scale = 1.0,
+			
 			.pos = { 0.0, 0.0, 0.0 },
+			.scale = 1.0,
 
 			.tbar_en = 0x01,
+			
+			.xyz_en = 0x01,
+			.xyz_scale = 0.25,
 
 			.grid_mode = 0x01,
 			.grid_pt_size = 2.0,
 			.grid_pt_disp = 2.0,
-
-			.xyz_en = 0x01,
-			.xyz_scale = 0.25
 	};
 
 	vl3d_view_load(self, &view, view);
@@ -206,6 +207,6 @@ inline uint8_t trj_gui_obj_view(s_trj_gui_obj *gui, s_trj_obj *self)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_OBJ__ */

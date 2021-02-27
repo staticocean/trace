@@ -7,13 +7,13 @@
 #ifndef __TRJ_DATA__
 #define __TRJ_DATA__
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 
 #include "trj_api.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_data_text
 {
@@ -67,7 +67,7 @@ inline uint8_t trj_data_text_render(s_trj_data_text *self, s_trj_obj *obj)
 	
 	for (i = 0; i < obj->log_offset; ++i)
 	{
-		self->file_size += sprintf(file_ptr, "%Lf %Lf %Lf %Lf %Lf %Lf %Lf %Lf %Lf %Lf",
+		self->file_size += sprintf(file_ptr, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 			obj->log_list[i].time[0],
 			
 			obj->log_list[i].pos[0][0],
@@ -166,7 +166,7 @@ inline uint8_t trj_data_text_reset_(void *data, void *obj)
 	return trj_data_text_reset(data_, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_data_ram
 {
@@ -487,7 +487,7 @@ inline uint8_t trj_data_ram_reset_(void *data, void *obj)
 	return trj_data_ram_reset(data_, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 typedef struct trj_data_ramld
 {
@@ -719,6 +719,6 @@ inline uint8_t trj_data_ramld_reset_(void *data, void *obj)
 	return trj_data_ramld_reset(data_, obj_);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_UTILS__ */

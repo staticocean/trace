@@ -2,17 +2,17 @@
 #ifndef __TRJ_GUI_CTRL__
 #define __TRJ_GUI_CTRL__
 
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+//----------------------------------------------------------------
 
 #include <softael_lib/vl.h>
 
+#include <lib/imgui/imgui.h>
+#include <lib/imgui/imgui_internal.h>
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_ctrl_.h>
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_edit(s_trj_ctrl *self)
 {
@@ -37,7 +37,7 @@ inline void trj_gui_ctrl_view(s_trj_ctrl *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 {
@@ -60,7 +60,7 @@ inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", ctrl->eng);
+	ImGui::Text("%08X", (uint32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -78,7 +78,7 @@ inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_view_egms(s_trj_ctrl *self)
 {
@@ -90,7 +90,7 @@ inline void trj_gui_ctrl_view_egms(s_trj_ctrl *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 {
@@ -113,7 +113,7 @@ inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 	
 	ImGui::Text("eng   ");
 	ImGui::SameLine();
-	ImGui::Text("%08X", ctrl->eng);
+	ImGui::Text("%08X", (uint32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -131,7 +131,7 @@ inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_view_gms(s_trj_ctrl *self)
 {
@@ -143,7 +143,7 @@ inline void trj_gui_ctrl_view_gms(s_trj_ctrl *self)
 	return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
 {
@@ -163,7 +163,7 @@ inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
     return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 inline void trj_gui_ctrl_view_gm(s_trj_ctrl *self)
 {
@@ -174,17 +174,18 @@ inline void trj_gui_ctrl_view_gm(s_trj_ctrl *self)
     s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * 10000);
 
     s_vl3d_view view = {
+    
+			.pos = {0.0, 0.0, 0.0},
             .scale = 1.0,
-            .pos = {0.0, 0.0, 0.0},
 
             .tbar_en = 0x01,
-
+		
+			.xyz_en = 0x01,
+			.xyz_scale = 0.25,
+					
             .grid_mode = 0x01,
             .grid_pt_size = 2.0,
             .grid_pt_disp = 2.0,
-
-            .xyz_en = 0x01,
-            .xyz_scale = 0.25
     };
 
     vl3d_view_load(self, &view, view);
@@ -327,6 +328,6 @@ inline void trj_gui_ctrl_view_gm(s_trj_ctrl *self)
     return;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------
 
 #endif /* __TRJ_GUI_CTRL__ */
