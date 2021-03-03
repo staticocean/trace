@@ -600,9 +600,6 @@ inline uint8_t gui_main(s_trj_gui *self)
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
 	
-	__file_browser_save__.Display();
-	__file_browser_open__.Display();
-	
 	#ifdef NDEBUG
 	#else
 	
@@ -1008,6 +1005,10 @@ inline uint8_t gui_main(s_trj_gui *self)
 		// Scripting view
 		gui_cmd_render(&self->gui_cmd);
 	}
+	
+	__file_browser_save__.Display();
+	__file_browser_open__.Display();
+	
 	
 	return 0x00;
 }

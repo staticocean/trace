@@ -37,33 +37,14 @@ typedef struct gui_tbar
 
 inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 {
-	{
-		if (ImGui::MenuItem("Open", "Ctrl+O"))
-		{ __file_browser_open__.Open(); }
-		
-		if (__file_browser_open__.HasSelected())
-		{
-			trj_eng_load(tbar->eng, (char*) __file_browser_open__.GetSelected().string().c_str());
-			__file_browser_open__.ClearSelected();
-		}
-	}
-	
-	{
-		if (ImGui::MenuItem("Save", "Ctrl+S"))
-		{ trj_eng_save(tbar->eng, tbar->file_path); }
-	}
-	
-	{
-		if (ImGui::MenuItem("Save As...", ""))
-		{ __file_browser_save__.Open(); }
-		
-		if (__file_browser_save__.HasSelected())
-		{
-			strcpy(tbar->file_path, __file_browser_save__.GetSelected().string().c_str());
-			__file_browser_save__.ClearSelected();
-			trj_eng_save(tbar->eng, tbar->file_path);
-		}
-	}
+	if (ImGui::MenuItem("Open", "Ctrl+O"))
+	{ __file_browser_open__.Open(); }
+
+	if (ImGui::MenuItem("Save", "Ctrl+S"))
+	{ trj_eng_save(tbar->eng, tbar->file_path); }
+
+	if (ImGui::MenuItem("Save As...", ""))
+	{ __file_browser_save__.Open(); }
 	
 	ImGui::EndMenu();
 	
@@ -200,6 +181,23 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 	
 	if(ImGui::Button("RENDER", ImVec2(80,0)))
 	{ tbar->eng_gui->state = gui_eng_state_init; }
+	
+	// Process filebrowser state here, because menu/file/open will
+	// not be rendered after you press OK in filebrowser
+	
+	if (__file_browser_open__.HasSelected())
+	{
+		strcpy(tbar->file_path, __file_browser_open__.GetSelected().string().c_str());
+		__file_browser_open__.ClearSelected();
+		trj_eng_load(tbar->eng, tbar->file_path);
+	}
+	
+	if (__file_browser_save__.HasSelected())
+	{
+		strcpy(tbar->file_path, __file_browser_save__.GetSelected().string().c_str());
+		__file_browser_save__.ClearSelected();
+		trj_eng_save(tbar->eng, tbar->file_path);
+	}
 	
 	return 0x00;
 }
