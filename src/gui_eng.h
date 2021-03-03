@@ -127,6 +127,8 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 	ImGui::BeginChild("##tree_view");
 	
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
+	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
+//	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
 	
 	for (int i = 0; i < self->obj_count; i++)
 	{
@@ -139,6 +141,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 		{
 			bool node_sel = gui->sel_item == &gui->obj_list[i];
 			
+			ImGui::AlignTextToFramePadding();
 			bool node_open = ImGui::TreeNodeEx((void*) i,
 											   (node_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											   | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
@@ -162,6 +165,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 			if (node_open)
 			{
 				{
+					ImGui::AlignTextToFramePadding();
 					bool traj_open = ImGui::TreeNodeEx("traj");
 					
 					if (self->traj_offset > 0x00)
@@ -201,6 +205,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 							
 							bool traj_sel = gui->sel_item == &obj->traj_list[j];
 							
+							ImGui::AlignTextToFramePadding();
 							ImGui::TreeNodeEx(obj->traj_list[j].name,
 											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].name);
@@ -231,6 +236,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 				}
 				
 				{
+					ImGui::AlignTextToFramePadding();
 					bool ctrl_open = ImGui::TreeNodeEx("ctrl");
 					
 					if (self->ctrl_offset > 0x00)
@@ -270,6 +276,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 							
 							bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
 							
+							ImGui::AlignTextToFramePadding();
 							ImGui::TreeNodeEx(obj->ctrl_list[j].name,
 											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].name);
@@ -299,6 +306,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					}
 				}
 				{
+					ImGui::AlignTextToFramePadding();
 					bool data_open = ImGui::TreeNodeEx("data");
 
 					if (self->data_offset > 0x00)
@@ -335,7 +343,8 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 							ImGui::PushID(&obj->data_list[j]);
 
 							bool data_sel = gui->sel_item == &obj->data_list[j];
-
+							
+							ImGui::AlignTextToFramePadding();
 							ImGui::TreeNodeEx(obj->data_list[j].name,
 											  (data_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].name);
@@ -372,7 +381,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 		ImGui::PopID();
 	}
 	
-	ImGui::PopStyleVar();
+	ImGui::PopStyleVar(2);
 
 	ImGui::EndChild();
 	
