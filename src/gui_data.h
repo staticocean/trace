@@ -44,9 +44,9 @@ inline void gui_data_edit_text(s_trj_data *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
 	
 	ImGui::Text("file  ");
 	ImGui::SameLine();
@@ -118,17 +118,17 @@ inline void gui_data_edit_ram(s_trj_data *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) data->eng);
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) data->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");

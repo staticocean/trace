@@ -541,7 +541,7 @@ uint8_t gui_main(s_trj_gui *self)
 	#ifdef NDEBUG
 	#else
 	
-		static bool show_demo = true;
+//		static bool show_demo = true;
 		static bool show_metrics = true;
 	
 		ImGui::ShowMetricsWindow(&show_metrics);

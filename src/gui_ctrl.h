@@ -54,13 +54,13 @@ inline void gui_ctrl_edit_egms(s_trj_ctrl *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) ctrl->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -107,13 +107,13 @@ inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) ctrl->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");

@@ -38,32 +38,36 @@ inline uint8_t gui_tbar_main(s_gui_tbar *gui)
 	static uint32_t  time_iter_min = 0x00;
 	
 //	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
-
+//
 	ImGui::AlignTextToFramePadding();
-	ImGui::Text("TSI"); ImGui::SameLine();
+//	ImGui::Text("TIME"); ImGui::SameLine();
 
 //	ImGui::Text("time_limit"); ImGui::SameLine();
-	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &gui->eng->time_limit, 1.0, &time_limit_min, NULL, "T:%.0f");
-	ImGui::SameLine();
+	ImGui::SetNextItemWidth(100);
+	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &gui->eng->time_limit, 1.0, &time_limit_min, NULL, "TIME:%.0f");
+	gui_hint("Time limit [sec]");
+	ImGui::SameLine(0,0);
 
 //	ImGui::Text("time_step"); ImGui::SameLine();
-	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &gui->eng->time_step, 0.001, &time_step_min, &time_step_max, "S:%.3f");
+	ImGui::SetNextItemWidth(100);
+	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &gui->eng->time_step, 0.001, &time_step_min, &time_step_max, "STEP:%.3f");
+	gui_hint("Time step [sec]");
 	ImGui::SameLine();
 	
 	gui->eng->time_iter = gui->eng->time_limit / gui->eng->time_step;
 
 //	ImGui::Text("time_step"); ImGui::SameLine();
-	ImGui::SetNextItemWidth(60);
-	ImGui::DragScalar("##time_iter", ImGuiDataType_U32, &gui->eng->time_iter, 1.0, &time_iter_min, NULL, "I:%d");
-	ImGui::SameLine();
+//	ImGui::SetNextItemWidth(60);
+//	ImGui::DragScalar("##time_iter", ImGuiDataType_U32, &gui->eng->time_iter, 1.0, &time_iter_min, NULL, "I:%d");
+//	ImGui::SameLine();
 
 //	*self->time_limit = *self->time_iter * *self->time_step;
 	
-	ImGui::SetNextItemWidth(200);
+//	ImGui::Text("METHOD");
+//	ImGui::SameLine();
+	ImGui::SetNextItemWidth(180);
 	gui_procsel("##proc", gui->eng);
-	ImGui::SameLine();
+	ImGui::SameLine(0,0);
 	
 	if(ImGui::Button("RENDER"))
 	{ gui->eng_gui->state = gui_eng_state_init; }

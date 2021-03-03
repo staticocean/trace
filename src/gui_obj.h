@@ -54,31 +54,9 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 	
 	ImGui::Columns(2);
 	
-	ImGui::Text("hash");
-	ImGui::NextColumn();
-	imgui_hash("##hash", self->hash);
-	ImGui::NextColumn();
-
-//	ImGui::Text("ref");
+//	ImGui::Text("hash");
 //	ImGui::NextColumn();
-//	const char* items[*self->obj_count];
-//	for (int i = 0; i < *self->obj_count; ++i)
-//	{ items[i] = self->obj_list[i].name; }
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-//	if (ImGui::BeginCombo("##ref",
-//			items[self->ref->id],
-//			ImGuiComboFlags_NoArrowButton))
-//	{
-//		for (int i = 0; i < IM_ARRAYSIZE(items); ++i)
-//		{
-//			const bool is_selected = (self->ref->id == i);
-//
-//			if (ImGui::Selectable(items[i], is_selected)) { self->ref = &self->obj_list[i]; }
-//			if (is_selected) { ImGui::SetItemDefaultFocus(); }
-//		}
-//
-//		ImGui::EndCombo();
-//	}
+//	imgui_hash("##hash", self->hash);
 //	ImGui::NextColumn();
 	
 	ImGui::Text("pos_inert");

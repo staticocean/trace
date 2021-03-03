@@ -74,13 +74,13 @@ inline void gui_traj_edit_static(s_trj_traj *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) traj->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -171,13 +171,13 @@ inline void gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) traj->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -305,13 +305,13 @@ inline void gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) traj->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
