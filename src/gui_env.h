@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_ENV_H__
-#define __TRJ_GUI_ENV_H__
+#ifndef __GUI_ENV_H__
+#define __GUI_ENV_H__
 
 //----------------------------------------------------------------
 
@@ -76,5 +76,5 @@ void gui_env_sreset(s_gui_env *self);
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_ENV_H__ */
+#endif /* __GUI_ENV_H__ */
 

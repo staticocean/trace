@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_TBAR__
-#define __TRJ_GUI_TBAR__
+#ifndef __GUI_TBAR__
+#define __GUI_TBAR__
 
 //----------------------------------------------------------------
 
@@ -137,7 +137,7 @@ inline uint8_t gui_tbar_main(s_gui_tbar *gui)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_TBAR__ */
+#endif /* __GUI_TBAR__ */
 
 
 

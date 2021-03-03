@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_CTRL__
-#define __TRJ_GUI_CTRL__
+#ifndef __GUI_CTRL__
+#define __GUI_CTRL__
 
 //----------------------------------------------------------------
 
@@ -330,4 +330,4 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_CTRL__ */
+#endif /* __GUI_CTRL__ */

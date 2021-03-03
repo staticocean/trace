@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_OBJ__
-#define __TRJ_GUI_OBJ__
+#ifndef __GUI_OBJ__
+#define __GUI_OBJ__
 
 //----------------------------------------------------------------
 
@@ -209,4 +209,4 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_OBJ__ */
+#endif /* __GUI_OBJ__ */

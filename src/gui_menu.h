@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_MENU__
-#define __TRJ_GUI_MENU__
+#ifndef __GUI_MENU__
+#define __GUI_MENU__
 
 //----------------------------------------------------------------
 

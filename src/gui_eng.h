@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_ENG__
-#define __TRJ_GUI_ENG__
+#ifndef __GUI_ENG__
+#define __GUI_ENG__
 
 //----------------------------------------------------------------
 
@@ -584,4 +584,4 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_ENG__ */
+#endif /* __GUI_ENG__ */

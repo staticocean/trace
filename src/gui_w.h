@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_W__
-#define __TRJ_GUI_W__
+#ifndef __GUI_W__
+#define __GUI_W__
 
 //----------------------------------------------------------------
 
@@ -183,6 +183,6 @@ inline void gui_filesave(char *file_path)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_OBJ__ */
+#endif /* __GUI_OBJ__ */
 
 

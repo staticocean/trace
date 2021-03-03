@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_CMD__
-#define __TRJ_GUI_CMD__
+#ifndef __GUI_CMD__
+#define __GUI_CMD__
 
 //----------------------------------------------------------------
 
@@ -62,4 +62,4 @@ void gui_cmd_exec(s_gui_cmd *self);
 //----------------------------------------------------------------
 
 
-#endif /* __TRJ_GUI_CMD__ */
+#endif /* __GUI_CMD__ */

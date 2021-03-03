@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_DATA__
-#define __TRJ_GUI_DATA__
+#ifndef __GUI_DATA__
+#define __GUI_DATA__
 
 //----------------------------------------------------------------
 
@@ -587,4 +587,4 @@ inline void gui_data_view_mat(s_trj_data *self)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_DATA__ */
+#endif /* __GUI_DATA__ */

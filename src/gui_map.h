@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_MAP__
-#define __TRJ_GUI_MAP__
+#ifndef __GUI_MAP__
+#define __GUI_MAP__
 
 //----------------------------------------------------------------
 
@@ -291,4 +291,4 @@ inline void gui_map_view(s_gui_map *self, char* label, ImVec2 size)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_MAP__ */
+#endif /* __GUI_MAP__ */

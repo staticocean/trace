@@ -1,6 +1,6 @@
 
-#ifndef __TRJ_GUI_TRAJ__
-#define __TRJ_GUI_TRAJ__
+#ifndef __GUI_TRAJ__
+#define __GUI_TRAJ__
 
 //----------------------------------------------------------------
 
@@ -1577,4 +1577,4 @@ inline void gui_traj_view_navsat(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-#endif /* __TRJ_GUI_TRAJ__ */
+#endif /* __GUI_TRAJ__ */
