@@ -152,7 +152,7 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 			traj.pos(traj.data, time+time_step, p1);
 
 			vl3d_eng_add_line(&gui->traj_vl3d_eng, (s_vl3d_line) {
-					.color = vl3d_col_l,
+					.color = vl3d_col_legacy,
 					.p0 = { p0[0], p0[1], p0[2] },
 					.p1 = { p1[0], p1[1], p1[2] }
 			});

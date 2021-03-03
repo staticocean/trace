@@ -272,7 +272,7 @@ inline void gui_traj_view_orb(s_trj_traj *self)
 			trj_traj_orb_pos(traj, time, p1);
 			
 			vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
-					.color = vl3d_col_l,
+					.color = vl3d_col_legacy,
 					.p0 = { p0[0], p0[1], p0[2] },
 					.p1 = { p1[0], p1[1], p1[2] },
 			});
@@ -701,10 +701,10 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 			ImVec2 center = transform(&view_top, point_pos);
 			
 			if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-			{ window->DrawList->AddCircleFilled(center, 4, col_text_u32); }
+			{ window->DrawList->AddCircleFilled(center, 4, vl3d_col_legacy); }
 			
 			else
-			{ window->DrawList->AddCircle(center, 4, col_text_u32); }
+			{ window->DrawList->AddCircle(center, 4, vl3d_col_legacy); }
 			
 			char pt_label[255];
 			
@@ -900,7 +900,7 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 					ImVec2 p0_ = ImVec2(p0[2], p0[0]);
 					ImVec2 p1_ = ImVec2(p1[2], p1[0]);
 					
-					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), col_text_u32);
+					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), vl3d_col_legacy);
 				}
 				
 				else
@@ -908,7 +908,7 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 					ImVec2 p0_ = ImVec2(p0[1], p0[0]);
 					ImVec2 p1_ = ImVec2(p1[1], p1[0]);
 					
-					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), col_text_u32);
+					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), vl3d_col_legacy);
 				}
 				
 				time += time_step;
@@ -1224,10 +1224,10 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 			ImVec2 center = transform(&view_bot, point_pos);
 			
 			if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-			{ window->DrawList->AddCircleFilled(center, 4, col_text_u32); }
+			{ window->DrawList->AddCircleFilled(center, 4, vl3d_col_legacy); }
 			
 			else
-			{ window->DrawList->AddCircle(center, 4, col_text_u32); }
+			{ window->DrawList->AddCircle(center, 4, vl3d_col_legacy); }
 			
 			char pt_label[255];
 			
@@ -1281,14 +1281,14 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 					ImVec2 p0_ = ImVec2(time, p0[1]);
 					ImVec2 p1_ = ImVec2(time+time_step, p1[1]);
 					
-					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), col_text_u32);
+					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), vl3d_col_legacy);
 				}
 				else
 				{
 					ImVec2 p0_ = ImVec2(time, p0[2]);
 					ImVec2 p1_ = ImVec2(time+time_step, p1[2]);
 					
-					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), col_text_u32);
+					window->DrawList->AddLine(transform(&view_bot, p0_), transform(&view_bot, p1_), vl3d_col_legacy);
 				}
 				
 				time += time_step;
@@ -1341,13 +1341,13 @@ inline void gui_traj_edit_navsat(s_trj_traj *self)
 	ImGui::SameLine();
 	ImGui::Text(self->desc);
 	
-	ImGui::Text("hash  ");
-	ImGui::SameLine();
-	imgui_hash("##hash", self->hash);
-	
-	ImGui::Text("eng   ");
-	ImGui::SameLine();
-	ImGui::Text("%08X", (uint32_t) traj->eng);
+//	ImGui::Text("hash  ");
+//	ImGui::SameLine();
+//	imgui_hash("##hash", self->hash);
+//
+//	ImGui::Text("eng   ");
+//	ImGui::SameLine();
+//	ImGui::Text("%08X", (uint32_t) traj->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
@@ -1479,7 +1479,7 @@ inline void gui_traj_view_navsat(s_trj_traj *self)
 					if (i == traj->sat_offset)
 					{
 						vl3d_eng_add_line(&vl3d_eng, (s_vl3d_line) {
-								.color = vl3d_col_l,
+								.color = vl3d_col_legacy,
 								.p0 = { p0[0], p0[1], p0[2] },
 								.p1 = { p1[0], p1[1], p1[2] },
 						});

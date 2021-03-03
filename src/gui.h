@@ -550,7 +550,8 @@ inline uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 	//-----------------------------------------------------------------------------
 
 //	ImGui::StyleColorsDark();
-	ImGui::StyleColorsLight();
+//	ImGui::StyleColorsLight();
+	imgui_theme_set();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	
@@ -564,7 +565,7 @@ inline uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 	
 	style_ref.ChildBorderSize = 0.0;
 	style_ref.FrameBorderSize = 0.0;
-	style_ref.PopupBorderSize = 1.0;
+	style_ref.PopupBorderSize = 0.0;
 	style_ref.TabBorderSize = 0.0;
 	style_ref.WindowBorderSize = 0.0;
 	
@@ -987,7 +988,7 @@ inline uint8_t gui_main(s_trj_gui *self)
 				}
 			}
 
-//			static vl3d_text text = (s_vl3d_text) { .p0 = { 0, 0, 0 }, .data = "hello", .color = vl3d_col_l };
+//			static vl3d_text text = (s_vl3d_text) { .p0 = { 0, 0, 0 }, .data = "hello", .color = vl3d_col_legacy };
 //			vl3d_eng_add_text(&vl3d, text);
 
 //			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImGui::ColorConvertU32ToFloat4(0x00));

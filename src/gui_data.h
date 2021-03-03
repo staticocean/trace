@@ -191,7 +191,7 @@ inline void gui_data_view_ram(s_trj_data *self)
 			vl3d_view_load(self, &view, view);
 			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
 			
-			s_vl3d_line line = {.color = vl3d_col_l};
+			s_vl3d_line line = {.color = vl3d_col_legacy};
 			
 			// pos
 			if (data->offset > 10000)
@@ -215,7 +215,7 @@ inline void gui_data_view_ram(s_trj_data *self)
 				}
 			}
 			
-			s_vl3d_trngl trngl = { .spec = 0x01, .color = vl3d_col_l, };
+			s_vl3d_trngl trngl = { .spec = 0x01, .color = vl3d_col_legacy, };
 			
 			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
 			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);

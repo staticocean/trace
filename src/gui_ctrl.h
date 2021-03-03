@@ -191,9 +191,9 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
     vl3d_view_load(self, &view, view);
     vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
 
-    s_vl3d_line  line  = {.color = vl3d_col_l};
+    s_vl3d_line  line  = {.color = vl3d_col_legacy};
     s_vl3d_point point = {
-            .color = vl3d_col_l,
+            .color = vl3d_col_legacy,
             .size = 2.0,
     };
 
