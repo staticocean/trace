@@ -11,6 +11,7 @@
 *.cmake
 *.log
 *.ini
+*.trj
 *.internal
 *.zip
 *.mat
