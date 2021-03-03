@@ -545,13 +545,15 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 					{
 						if (ImPlot::BeginPlot(obj->desc))
 						{
+							int stride = 10;
+							
 							ImPlot::PlotLine("pos_error [m]  ",
 									&obj->log_list[0].time[0], &obj->log_list[0].pos_error,
-									obj->log_offset, 0x00, sizeof(s_trj_obj_data));
+									obj->log_offset / stride, 0x00, stride*sizeof(s_trj_obj_data));
 							
 							ImPlot::PlotLine("rot_error [rad]",
 									&obj->log_list[0].time[0], &obj->log_list[0].rot_error,
-									obj->log_offset, 0x00, sizeof(s_trj_obj_data));
+									obj->log_offset / stride, 0x00, stride*sizeof(s_trj_obj_data));
 							
 							ImPlot::EndPlot();
 						}

@@ -284,13 +284,16 @@ inline void gui_data_view_ram(s_trj_data *self)
 			ImGui::EndTabItem();
 		}
 		
+		int offset = 0x00;
+		int stride = 10*sizeof(vlf_t);
+		
 		if (ImGui::BeginTabItem("details"))
 		{
 			if (ImGui::CollapsingHeader("heading"))
 			{
 				if (ImPlot::BeginPlot("heading"))
 				{
-					ImPlot::PlotLine("heading", data->time, data->heading, data->offset);
+					ImPlot::PlotLine("heading", data->time, data->heading, data->offset / stride, offset, stride*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -299,7 +302,7 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("pitch"))
 				{
-					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset);
+					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset / stride, offset, stride*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -308,7 +311,7 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("roll"))
 				{
-					ImPlot::PlotLine("roll", data->time, data->roll, data->offset);
+					ImPlot::PlotLine("roll", data->time, data->roll, data->offset / stride, offset, stride*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -317,9 +320,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_acc"))
 				{
-					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -328,9 +331,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_grs"))
 				{
-					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -341,14 +344,14 @@ inline void gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_pos lat,lon"))
 					{
-						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 					
 					if (ImPlot::BeginPlot("lla_pos alt"))
 					{
-						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -357,9 +360,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_vel"))
 					{
-						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset, 0, 3 * sizeof(vlf_t));
-						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset, 0, 3 * sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -370,9 +373,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_pos"))
 				{
-					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -381,9 +384,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_vel"))
 				{
-					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -392,9 +395,9 @@ inline void gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_acc"))
 				{
-					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset, 0x00, 3 * sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset, 0x00, 3 * sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -479,7 +482,7 @@ inline void gui_data_view_ramld(s_trj_data *self)
 	{
 		if (ImPlot::BeginPlot("lateral deviation"))
 		{
-			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset);
+			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset / 10, 0, 10*sizeof(vlf_t));
 			ImPlot::EndPlot();
 		}
 	}
