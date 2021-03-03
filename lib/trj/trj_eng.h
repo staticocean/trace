@@ -147,7 +147,7 @@ inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
+inline s_trj_obj* trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
 {
 	s_trj_obj *obj = &self->obj_list[self->obj_count];
 	
@@ -162,7 +162,7 @@ inline uint8_t trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
 	
 	self->obj_count++;
 	
-	return 0x00;
+	return obj;
 }
 
 //----------------------------------------------------------------

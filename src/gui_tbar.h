@@ -9,20 +9,25 @@
 #include <string.h>
 
 #include <softael_lib/vl.h>
-
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
+#include <lib/clip/clip.h>
 
 #include "gui_eng.h"
+#include "gui_env.h"
+#include "gui_cmd.h"
+#include "imgui_custom.h"
 
 //----------------------------------------------------------------
 
 typedef struct gui_tbar
 {
-	int height;
-	
 	s_trj_eng *eng;
 	s_gui_eng *eng_gui;
+	s_gui_env *env;
+	s_gui_cmd *cmd;
+	
+	int height;
 	
 	char file_path[512];
 	
@@ -30,112 +35,172 @@ typedef struct gui_tbar
 
 //----------------------------------------------------------------
 
-inline uint8_t gui_tbar_main(s_gui_tbar *gui)
+inline void gui_tbar_menu_file(s_gui_tbar *tbar)
+{
+	{
+		if (ImGui::MenuItem("Open", "Ctrl+O"))
+		{ __file_browser_open__.Open(); }
+		
+		if (__file_browser_open__.HasSelected())
+		{
+			trj_eng_load(tbar->eng, (char*) __file_browser_open__.GetSelected().string().c_str());
+			__file_browser_open__.ClearSelected();
+		}
+	}
+	
+	{
+		if (ImGui::MenuItem("Save", "Ctrl+S"))
+		{ trj_eng_save(tbar->eng, tbar->file_path); }
+	}
+	
+	{
+		if (ImGui::MenuItem("Save As...", ""))
+		{ __file_browser_save__.Open(); }
+		
+		if (__file_browser_save__.HasSelected())
+		{
+			strcpy(tbar->file_path, __file_browser_save__.GetSelected().string().c_str());
+			__file_browser_save__.ClearSelected();
+			trj_eng_save(tbar->eng, tbar->file_path);
+		}
+	}
+	
+	ImGui::EndMenu();
+	
+	return;
+}
+
+inline void gui_tbar_menu_newobject(s_gui_tbar *tbar)
+{
+	s_trj_traj *traj_static = trj_eng_find_traj(tbar->eng, vl_crc32("default_traj_static"));
+	s_trj_ctrl *ctrl_cpos   = trj_eng_find_ctrl(tbar->eng, vl_crc32("default_ctrl_cpos"  ));
+	s_trj_ctrl *ctrl_crot   = trj_eng_find_ctrl(tbar->eng, vl_crc32("default_ctrl_crot"  ));
+	s_trj_data *data_ram    = trj_eng_find_data(tbar->eng, vl_crc32("default_data_ram"   ));
+	
+	s_trj_obj *obj = trj_eng_add_obj(tbar->eng, (s_trj_obj_init) { .desc = "object" });
+	
+	if (obj && traj_static) { trj_obj_add_traj(obj, *traj_static); }
+	if (obj && ctrl_cpos  ) { trj_obj_add_ctrl(obj, *ctrl_cpos  ); }
+	if (obj && ctrl_crot  ) { trj_obj_add_ctrl(obj, *ctrl_crot  ); }
+	if (obj && data_ram   ) { trj_obj_add_data(obj, *data_ram   ); }
+	
+	if (obj == NULL) { /* TO-DO Create error popup */ }
+	
+	return;
+}
+
+inline void gui_tbar_menu_terminal(s_gui_tbar *tbar)
+{
+	if (ImGui::MenuItem(tbar->cmd->visible ? "Hide" : "Show", "CTRL+P"))
+	{ tbar->cmd->visible = !tbar->cmd->visible; }
+	
+	ImGui::Separator();
+	
+	if (ImGui::MenuItem("Reset", ""))
+	{ gui_cmd_clearlog(tbar->cmd); gui_env_reset(tbar->env); }
+	
+	
+	ImGui::EndMenu();
+	
+	return;
+}
+
+inline void gui_tbar_menu_version(s_gui_tbar *tbar)
+{
+	const char *pn = "SAE-PN-RS0000-00-0000-0000";
+	const char *rn = "SAE-RN-0000-0000-0000-0000";
+	const char *mn = "SAE-MN-0000-0000-0000-0000";
+	const char *sn = "SAE-SN-0000000000000000   ";
+	
+	if (ImGui::MenuItem("Product Number     ", pn, false, true)) { clip::set_text(pn); }
+	if (ImGui::MenuItem("Release Number     ", rn, false, true)) { clip::set_text(rn); }
+	if (ImGui::MenuItem("Manufacturer Number", mn, false, true)) { clip::set_text(mn); }
+	if (ImGui::MenuItem("Serial Number      ", sn, false, true)) { clip::set_text(sn); }
+	
+	ImGui::Separator();
+	
+	ImGui::MenuItem("Click to copy", NULL, false, false);
+	
+	ImGui::EndMenu();
+	
+	return;
+}
+
+inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 {
 	static float64_t time_limit_min = 0.0;
 	static float64_t time_step_min = 0.001;
 	static float64_t time_step_max = 100.0;
 	static uint32_t  time_iter_min = 0x00;
 	
-//	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
-//
-	ImGui::AlignTextToFramePadding();
-//	ImGui::Text("TIME"); ImGui::SameLine();
+	{
+		ImVec2 popup_pos = ImGui::GetCursorScreenPos() + ImVec2(0, ImGui::GetTextLineHeightWithSpacing());
+		
+		if(ImGui::Button("MENU", ImVec2(80,0)))
+		{ ImGui::OpenPopup("gui_tbar_menu"); }
+		
+		ImGui::SetNextWindowPos(popup_pos, ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(200,0), ImGuiCond_Always);
+		
+		ImGui::GetStyle().DisplayWindowPadding = ImVec2(0,0);
+		ImGui::GetStyle().DisplaySafeAreaPadding = ImVec2(0,0);
+		
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(16, 8));
+			
+		if (ImGui::BeginPopup("gui_tbar_menu"))
+		{
+			if (ImGui::MenuItem ("New Object")) { gui_tbar_menu_newobject(tbar); }
+			if (ImGui::BeginMenu("File      ")) { gui_tbar_menu_file     (tbar); }
+			if (ImGui::BeginMenu("Temrinal  ")) { gui_tbar_menu_terminal (tbar); }
+			
+			ImGui::Separator();
+			
+			if (ImGui::BeginMenu("Version   ")) { gui_tbar_menu_version  (tbar); }
+			
+			ImGui::EndPopup();
+		}
+		
+		ImGui::PopStyleVar(1);
+		
+		ImGui::SameLine();
+	}
+	
+	ImGui::SameLine(0,0);
+	{
+		char *file_name = tbar->file_path + strlen(tbar->file_path);
+		while (file_name > tbar->file_path && *(file_name - 1) != '\\' && *(file_name - 1) != '/')
+		{ --file_name; }
+		
+		char file_preview[256];
+		sprintf(file_preview, " FILE: %s", file_name);
+		
+		ImGui::SetNextItemWidth(160);
+		ImGui::InputText("##file_path", file_preview, 256, ImGuiInputTextFlags_ReadOnly);
+		gui_hint(tbar->file_path);
+	}
+	ImGui::SameLine();
 
-//	ImGui::Text("time_limit"); ImGui::SameLine();
+	ImGui::AlignTextToFramePadding();
+
 	ImGui::SetNextItemWidth(100);
-	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &gui->eng->time_limit, 1.0, &time_limit_min, NULL, "TIME:%.0f");
+	ImGui::DragScalar("##time_limit", ImGuiDataType_Double, &tbar->eng->time_limit, 1.0, &time_limit_min, NULL, "TIME: %.0f");
 	gui_hint("Time limit [sec]");
 	ImGui::SameLine(0,0);
 
-//	ImGui::Text("time_step"); ImGui::SameLine();
 	ImGui::SetNextItemWidth(100);
-	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &gui->eng->time_step, 0.001, &time_step_min, &time_step_max, "STEP:%.3f");
+	ImGui::DragScalar("##time_step", ImGuiDataType_Double, &tbar->eng->time_step, 0.001, &time_step_min, &time_step_max, "STEP: %.3f");
 	gui_hint("Time step [sec]");
 	ImGui::SameLine();
 	
-	gui->eng->time_iter = gui->eng->time_limit / gui->eng->time_step;
-
-//	ImGui::Text("time_step"); ImGui::SameLine();
-//	ImGui::SetNextItemWidth(60);
-//	ImGui::DragScalar("##time_iter", ImGuiDataType_U32, &gui->eng->time_iter, 1.0, &time_iter_min, NULL, "I:%d");
-//	ImGui::SameLine();
-
-//	*self->time_limit = *self->time_iter * *self->time_step;
+	tbar->eng->time_iter = tbar->eng->time_limit / tbar->eng->time_step;
 	
-//	ImGui::Text("METHOD");
-//	ImGui::SameLine();
 	ImGui::SetNextItemWidth(180);
-	gui_procsel("##proc", gui->eng);
+	gui_procsel("##proc", tbar->eng);
 	ImGui::SameLine(0,0);
 	
-	if(ImGui::Button("RENDER"))
-	{ gui->eng_gui->state = gui_eng_state_init; }
-
-//	ImGui::SameLine();
-//	ImGui::Dummy(ImVec2(-1, -1));
-
-//	ImGui::PopStyleVar();
-
-//	ImGui::Separator();
-
-	ImGui::SameLine();
-	ImGui::SetNextItemWidth(100);
+	if(ImGui::Button("RENDER", ImVec2(80,0)))
+	{ tbar->eng_gui->state = gui_eng_state_init; }
 	
-	{
-		ImGui::PushID(gui->file_path);
-		
-		ImGui::SetNextItemWidth(160);
-		char *file_name = gui->file_path + strlen(gui->file_path);
-		while (file_name > gui->file_path && *(file_name-1) != '\\' && *(file_name-1) != '/')
-		{ --file_name; }
-		
-		ImGui::InputText("##file_path", file_name, 512, ImGuiInputTextFlags_ReadOnly);
-		if (ImGui::IsItemHovered())
-		{ ImGui::SetTooltip(gui->file_path); }
-		
-		ImGui::SameLine(0.0, 0.0);
-		
-		if(ImGui::Button("SEL", ImVec2(40,0)))
-		{ __file_browser_open__.Open(); }
-		
-		__file_browser_open__.Display();
-		
-		if(__file_browser_open__.HasSelected())
-		{
-			strcpy(gui->file_path, __file_browser_open__.GetSelected().string().c_str());
-			__file_browser_open__.ClearSelected();
-			trj_eng_load(gui->eng, gui->file_path);
-		}
-		
-		ImGui::PopID();
-	}
-	{
-		ImGui::PushID(gui->file_path);
-		
-		ImGui::SameLine(0.0, 0.0);
-		
-		if(ImGui::Button("SAVE", ImVec2(40,0)))
-		{ trj_eng_save(gui->eng, gui->file_path); }
-		
-		ImGui::SameLine(0.0, 0.0);
-		
-		if(ImGui::Button("SAVE AS", ImVec2(60,0)))
-		{ __file_browser_save__.Open(); }
-		
-		__file_browser_save__.Display();
-		
-		if(__file_browser_save__.HasSelected())
-		{
-			strcpy(gui->file_path, __file_browser_save__.GetSelected().string().c_str());
-			__file_browser_save__.ClearSelected();
-			trj_eng_save(gui->eng, gui->file_path);
-		}
-		
-		ImGui::PopID();
-	}
-//			trj_eng_load(self->eng, (char*) __file_browser_open__.GetSelected().string().c_str());
-
 	return 0x00;
 }
 

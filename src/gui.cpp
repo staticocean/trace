@@ -3,13 +3,13 @@
 
 //----------------------------------------------------------------
 
-static 	s_gui_map map;
+//static 	s_gui_map map;
 
 uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 {
-	s_gui_map *temp_map = new s_gui_map();
-	map = *temp_map;
-	free(temp_map);
+//	s_gui_map *temp_map = new s_gui_map();
+//	map = *temp_map;
+//	free(temp_map);
 	
 //	gui_map_load(&map, "res/maps/earth/countries.geojson");
 //	gui_map_load(&map, "res/maps/earth/cities.geojson");
@@ -19,6 +19,8 @@ uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 	
 	self->gui_tbar.eng = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
+	self->gui_tbar.env = &self->gui_env;
+	self->gui_tbar.cmd = &self->gui_cmd;
 	self->gui_tbar.height = 38;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
@@ -519,10 +521,6 @@ uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 		.title = "env",
 	});
 	
-	self->gui_menu.env = &self->gui_env;
-	self->gui_menu.cmd = &self->gui_cmd;
-	self->gui_menu.eng = &self->eng;
-	
 	trj_eng_load(&self->eng, self->gui_tbar.file_path);
 	
 //	gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
@@ -536,7 +534,9 @@ uint8_t gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
-
+	
+	__file_browser_save__.Display();
+	__file_browser_open__.Display();
 
 	#ifdef NDEBUG
 	#else
@@ -562,13 +562,11 @@ uint8_t gui_main(s_trj_gui *self)
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
 	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
-
-	gui_menu_main(&self->gui_menu);
 	
 	{
 		// Toolbar
-		ImGui::SetNextWindowPos((ImVec2) { 0, (float) self->gui_menu.height }, ImGuiCond_Always);
-		ImGui::SetNextWindowSize((ImVec2) { self->w_width, (float) self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(self->w_width, (float) self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
 		gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
@@ -582,8 +580,8 @@ uint8_t gui_main(s_trj_gui *self)
 	
 	{
 		// Object list
-		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
-		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowPos(ImVec2(0, (float) self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(240, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("obj_list", NULL, static_flags);
 		gui_eng_objlist(&self->gui_eng, &self->eng);
 		ImGui::End();
@@ -591,8 +589,8 @@ uint8_t gui_main(s_trj_gui *self)
 	
 	{
 		// Object edit
-		ImGui::SetNextWindowPos((ImVec2) {240, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
-		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowPos(ImVec2(240, (float) self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(240, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("item_edit", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
@@ -658,8 +656,8 @@ uint8_t gui_main(s_trj_gui *self)
 	
 	{
 		// Main view
-		ImGui::SetNextWindowPos ((ImVec2) {240*2, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
-		ImGui::SetNextWindowSize((ImVec2) {self->w_width - 240*2, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
+		ImGui::SetNextWindowPos (ImVec2(240*2, (float) self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(self->w_width - 240*2, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("main_view", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
