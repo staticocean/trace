@@ -26,7 +26,7 @@ extern "C"
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_env
+typedef struct gui_env
 {
 	Picoc env;
 	s_trj_eng *eng;
@@ -52,9 +52,9 @@ typedef struct trj_gui_env
 	void *api_data_config;
 	void *api_data_obj;
 	
-} 	s_trj_gui_env;
+} 	s_gui_env;
 
-typedef struct trj_gui_env_init
+typedef struct gui_env_init
 {
 	s_trj_eng *eng;
 	
@@ -66,13 +66,13 @@ typedef struct trj_gui_env_init
 	void *ctrl_list;
 	void *data_list;
 	
-} 	s_trj_gui_env_init;
+} 	s_gui_env_init;
 
 //----------------------------------------------------------------
 
-void trj_gui_env_init(s_trj_gui_env *self, s_trj_gui_env_init attr);
-void trj_gui_env_reset(s_trj_gui_env *self);
-void trj_gui_env_sreset(s_trj_gui_env *self);
+void gui_env_init(s_gui_env *self, s_gui_env_init attr);
+void gui_env_reset(s_gui_env *self);
+void gui_env_sreset(s_gui_env *self);
 
 //----------------------------------------------------------------
 

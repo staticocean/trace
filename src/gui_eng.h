@@ -22,50 +22,50 @@
 
 //----------------------------------------------------------------
 
-enum trj_gui_eng_type_t
+enum gui_eng_type_t
 {
-	trj_gui_eng_type_obj,
-	trj_gui_eng_type_traj,
-	trj_gui_eng_type_ctrl,
-	trj_gui_eng_type_data,
-	trj_gui_eng_type_proc,
+	gui_eng_type_obj,
+	gui_eng_type_traj,
+	gui_eng_type_ctrl,
+	gui_eng_type_data,
+	gui_eng_type_proc,
 };
 
-enum trj_gui_eng_state_t
+enum gui_eng_state_t
 {
-	trj_gui_eng_state_standby,
-	trj_gui_eng_state_init,
-	trj_gui_eng_state_update,
-	trj_gui_eng_state_proc,
-	trj_gui_eng_state_deinit,
+	gui_eng_state_standby,
+	gui_eng_state_init,
+	gui_eng_state_update,
+	gui_eng_state_proc,
+	gui_eng_state_deinit,
 	
 };
 
-typedef struct trj_gui_eng
+typedef struct gui_eng
 {
-	trj_gui_eng_state_t state;
+	gui_eng_state_t state;
 	
 	void* sel_item;
-	trj_gui_eng_type_t sel_type;
+	gui_eng_type_t sel_type;
 
-	s_trj_gui_obj *obj_list;
+	s_gui_obj *obj_list;
 	
-}	s_trj_gui_eng;
+}	s_gui_eng;
 
-typedef struct trj_gui_eng_init
+typedef struct gui_eng_init
 {
-	s_trj_gui_obj *obj_list;
+	s_gui_obj *obj_list;
 
-} 	s_trj_gui_eng_init;
+} 	s_gui_eng_init;
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
+inline uint8_t gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
 {
-	gui->state = trj_gui_eng_state_standby;
+	gui->state = gui_eng_state_standby;
 	
 	gui->sel_item = NULL;
-	gui->sel_type = trj_gui_eng_type_obj;
+	gui->sel_type = gui_eng_type_obj;
 	gui->obj_list = attr.obj_list;
 	
 	for (int i = 0; i < 255; ++i)
@@ -78,39 +78,39 @@ inline uint8_t trj_gui_eng_init(s_trj_gui_eng *gui, s_trj_gui_eng_init attr)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_eng_sel_obj(s_trj_gui_eng *gui, s_trj_gui_obj *obj)
+inline void gui_eng_sel_obj(s_gui_eng *gui, s_gui_obj *obj)
 {
-	gui->sel_type = trj_gui_eng_type_obj;
+	gui->sel_type = gui_eng_type_obj;
 	gui->sel_item = obj;
 }
 
-inline void trj_gui_eng_sel_traj(s_trj_gui_eng *gui, s_trj_traj *traj)
+inline void gui_eng_sel_traj(s_gui_eng *gui, s_trj_traj *traj)
 {
-	gui->sel_type = trj_gui_eng_type_traj;
+	gui->sel_type = gui_eng_type_traj;
 	gui->sel_item = traj;
 }
 
-inline void trj_gui_eng_sel_ctrl(s_trj_gui_eng *gui, s_trj_ctrl *ctrl)
+inline void gui_eng_sel_ctrl(s_gui_eng *gui, s_trj_ctrl *ctrl)
 {
-	gui->sel_type = trj_gui_eng_type_ctrl;
+	gui->sel_type = gui_eng_type_ctrl;
 	gui->sel_item = ctrl;
 }
 
-//void trj_gui_eng_sel_proc(s_trj_gui_eng *gui, void *proc)
+//void gui_eng_sel_proc(s_gui_eng *gui, void *proc)
 //{
-//	gui->sel_type = trj_gui_eng_type_proc;
+//	gui->sel_type = gui_eng_type_proc;
 //	gui->sel_item = proc;
 //}
 
-inline void trj_gui_eng_sel_data(s_trj_gui_eng *gui, s_trj_data *data)
+inline void gui_eng_sel_data(s_gui_eng *gui, s_trj_data *data)
 {
-	gui->sel_type = trj_gui_eng_type_data;
+	gui->sel_type = gui_eng_type_data;
 	gui->sel_item = data;
 }
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
+inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 {
 	ImGui::PushID(self);
 	
@@ -132,7 +132,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 	{
 		ImGui::PushID(&gui->obj_list[i]);
 		
-		s_trj_gui_obj *obj_gui = &gui->obj_list[i];
+		s_gui_obj *obj_gui = &gui->obj_list[i];
 		s_trj_obj *obj = obj_gui->ref;
 		
 		if (filter.PassFilter(obj->desc))
@@ -157,7 +157,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 				ImGui::EndPopup();
 			}
 			
-			if(ImGui::IsItemClicked()) { trj_gui_eng_sel_obj(gui, obj_gui); }
+			if(ImGui::IsItemClicked()) { gui_eng_sel_obj(gui, obj_gui); }
 			
 			if (node_open)
 			{
@@ -206,7 +206,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].name);
 							
 							if (ImGui::IsItemClicked())
-							{ trj_gui_eng_sel_traj(gui, &obj->traj_list[j]); }
+							{ gui_eng_sel_traj(gui, &obj->traj_list[j]); }
 							
 							if (ImGui::BeginPopupContextItem("traj_menu"))
 							{
@@ -275,7 +275,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].name);
 							
 							if (ImGui::IsItemClicked())
-							{ trj_gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
+							{ gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
 							
 							if (ImGui::BeginPopupContextItem("ctrl_menu"))
 							{
@@ -341,7 +341,7 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].name);
 
 							if (ImGui::IsItemClicked())
-							{ trj_gui_eng_sel_data(gui, &obj->data_list[j]); }
+							{ gui_eng_sel_data(gui, &obj->data_list[j]); }
 //
 							if (ImGui::BeginPopupContextItem("data_menu"))
 							{
@@ -383,20 +383,20 @@ inline uint8_t trj_gui_eng_objlist(s_trj_gui_eng *gui, s_trj_eng *self)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
+inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 {
 	switch (gui->state)
 	{
-		case trj_gui_eng_state_standby:
+		case gui_eng_state_standby:
 		{
 			break;
 		}
 		
-		case trj_gui_eng_state_init:
+		case gui_eng_state_init:
 		{
 			if (self->time_step < 1E-6)
 			{
-				gui->state = trj_gui_eng_state_standby;
+				gui->state = gui_eng_state_standby;
 				return 0x01;
 			}
 			
@@ -415,16 +415,16 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 			
 			trj_eng_log(self);
 			
-			gui->state = trj_gui_eng_state_update;
+			gui->state = gui_eng_state_update;
 			
 			break;
 		}
 		
-		case trj_gui_eng_state_update:
+		case gui_eng_state_update:
 		{
 			if (self->time_step < 1E-6)
 			{
-				gui->state = trj_gui_eng_state_standby;
+				gui->state = gui_eng_state_standby;
 				return 0x01;
 			}
 			
@@ -435,27 +435,27 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 				trj_eng_log(self);
 			}
 			
-			else { gui->state = trj_gui_eng_state_proc; }
+			else { gui->state = gui_eng_state_proc; }
 			
 			break;
 		}
 		
-		case trj_gui_eng_state_proc:
+		case gui_eng_state_proc:
 		{
 			if (self->proc_count < self->update_count)
 			{
 				trj_eng_proc(self);
 			}
-			else { gui->state = trj_gui_eng_state_deinit; }
+			else { gui->state = gui_eng_state_deinit; }
 			
 			break;
 		}
 		
-		case trj_gui_eng_state_deinit:
+		case gui_eng_state_deinit:
 		{
 			// run data render routines
 			trj_eng_render(self);
-			gui->state = trj_gui_eng_state_standby;
+			gui->state = gui_eng_state_standby;
 			
 			break;
 		}
@@ -471,7 +471,7 @@ inline uint8_t trj_gui_eng_updateeng(s_trj_gui_eng *gui, s_trj_eng *self)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
+inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 {
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -482,10 +482,10 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	
 	char window_name[255] = "RENDERING";
 	
-//	if      (gui->state == trj_gui_eng_state_update ) 	{ sprintf(window_name, "RENDERING - CTRL PASS"); }
-//	else if (gui->state == trj_gui_eng_state_proc   ) 	{ sprintf(window_name, "RENDERING - PROC PASS"); }
-//	else if (gui->state == trj_gui_eng_state_deinit ) 	{ sprintf(window_name, "RENDERING - DATA PASS"); }
-//	else if (gui->state == trj_gui_eng_state_standby) 	{ sprintf(window_name, "RENDERING - SUMMARY"); }
+//	if      (gui->state == gui_eng_state_update ) 	{ sprintf(window_name, "RENDERING - CTRL PASS"); }
+//	else if (gui->state == gui_eng_state_proc   ) 	{ sprintf(window_name, "RENDERING - PROC PASS"); }
+//	else if (gui->state == gui_eng_state_deinit ) 	{ sprintf(window_name, "RENDERING - DATA PASS"); }
+//	else if (gui->state == gui_eng_state_standby) 	{ sprintf(window_name, "RENDERING - SUMMARY"); }
 	
 	if (ImGui::BeginPopupModal(window_name, NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
@@ -493,7 +493,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		ImGui::AlignTextToFramePadding();
 		
-		if (gui->state == trj_gui_eng_state_update)
+		if (gui->state == gui_eng_state_update)
 		{
 			ImGui::Text("CTRL PASS %02.0f%%", 100 * self->time[0] / self->time_limit);
 			ImGui::SameLine();
@@ -502,7 +502,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 			ImGui::BufferingBar("##progress", self->time[0] / self->time_limit, ImVec2(-1, 6), bg, col);
 		}
 		
-		if (gui->state == trj_gui_eng_state_proc)
+		if (gui->state == gui_eng_state_proc)
 		{
 			ImGui::Text("PROC PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
 			ImGui::SameLine();
@@ -511,7 +511,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
-		if (gui->state == trj_gui_eng_state_deinit)
+		if (gui->state == gui_eng_state_deinit)
 		{
 			ImGui::Text("DATA PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
 			ImGui::SameLine();
@@ -520,7 +520,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
-		if (gui->state == trj_gui_eng_state_standby)
+		if (gui->state == gui_eng_state_standby)
 		{
 			ImGui::Text("COMPLETE");
 			ImGui::SameLine();
@@ -533,7 +533,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 		
 		ImGui::BeginChild("##scroll_view");
 		{
-			if (gui->state == trj_gui_eng_state_standby)
+			if (gui->state == gui_eng_state_standby)
 			{
 				for (int i = 0; i < self->obj_count; ++i)
 				{
@@ -569,7 +569,7 @@ inline uint8_t trj_gui_eng_updategui(s_trj_gui_eng *gui, s_trj_eng *self)
 	// Always center this window when appearing
 	switch (gui->state)
 	{
-		case trj_gui_eng_state_init:
+		case gui_eng_state_init:
 		{
 			ImGui::OpenPopup(window_name);
 			

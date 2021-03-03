@@ -16,11 +16,11 @@
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_map
+typedef struct gui_map
 {
 	std::vector<s_gjson_obj> obj_list;
 	
-} 	s_trj_gui_map;
+} 	s_gui_map;
 
 //----------------------------------------------------------------
 
@@ -42,7 +42,7 @@ inline ImVec2 __inv_transform__(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-inline uint8_t trj_gui_map_load(s_trj_gui_map *map, char *file_name)
+inline uint8_t gui_map_load(s_gui_map *map, char *file_name)
 {
 	std::ifstream file_stream(file_name);
 	std::string file_data((std::istreambuf_iterator<char>(file_stream)),
@@ -119,7 +119,7 @@ inline uint8_t trj_gui_map_load(s_trj_gui_map *map, char *file_name)
 	return 0x00;
 }
 
-inline void trj_gui_map_view(s_trj_gui_map *self, char* label, ImVec2 size)
+inline void gui_map_view(s_gui_map *self, char* label, ImVec2 size)
 {
 	s_view_data view_top;
 	s_view_data view_bot;

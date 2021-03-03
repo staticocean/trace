@@ -3,13 +3,13 @@
 
 //----------------------------------------------------------------
 
-void trj_gui_cmd_init(s_trj_gui_cmd *self, s_trj_gui_cmd_init attr)
+void gui_cmd_init(s_gui_cmd *self, s_gui_cmd_init attr)
 {
 	self->env = attr.env;
 	self->visible = attr.visible;
 	for (int i = 0; i < sizeof(self->title); ++i) {self->title[i] = attr.title[i]; }
 	
-	trj_gui_cmd_clearlog(self);
+	gui_cmd_clearlog(self);
 	memset(self->in_buff, 0, sizeof(self->in_buff));
 	self->HistoryPos = -1;
 	
@@ -21,7 +21,7 @@ void trj_gui_cmd_init(s_trj_gui_cmd *self, s_trj_gui_cmd_init attr)
 	self->AutoScroll = true;
 	self->ScrollToBottom = false;
 	
-	trj_gui_cmd_addlog(self, "Trajectory interactive c console");
+	gui_cmd_addlog(self, "Trajectory interactive c console");
 }
 	
 // Portable helpers
@@ -30,7 +30,7 @@ static int   Strnicmp(const char* s1, const char* s2, int n) { int d = 0; while 
 static char* Strdup(const char* s)                           { size_t len = strlen(s) + 1; void* buf = malloc(len); IM_ASSERT(buf); return (char*)memcpy(buf, (const void*)s, len); }
 static void  Strtrim(char* s)                                { char* str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
-void trj_gui_cmd_copylog(s_trj_gui_cmd *self)
+void gui_cmd_copylog(s_gui_cmd *self)
 {
 //	for (int i = 0; i < self->Items.Size; i++)
 //	{
@@ -40,7 +40,7 @@ void trj_gui_cmd_copylog(s_trj_gui_cmd *self)
 //	self->Items.clear();
 }
 
-void trj_gui_cmd_clearlog(s_trj_gui_cmd *self)
+void gui_cmd_clearlog(s_gui_cmd *self)
 {
 	for (int i = 0; i < self->Items.Size; i++)
 	{
@@ -50,7 +50,7 @@ void trj_gui_cmd_clearlog(s_trj_gui_cmd *self)
 	self->Items.clear();
 }
 	
-void trj_gui_cmd_addlog(s_trj_gui_cmd *self, const char* fmt, ...)
+void gui_cmd_addlog(s_gui_cmd *self, const char* fmt, ...)
 {
 	// FIXME-OPT
 	char buf[1024];
@@ -62,7 +62,7 @@ void trj_gui_cmd_addlog(s_trj_gui_cmd *self, const char* fmt, ...)
 	self->Items.push_back(Strdup(buf));
 }
 
-int TextEditCallback(s_trj_gui_cmd *self, ImGuiInputTextCallbackData* data)
+int TextEditCallback(s_gui_cmd *self, ImGuiInputTextCallbackData* data)
 {
 	//AddLog("cursor: %d, selection: %d-%d", data->CursorPos, data->SelectionStart, data->SelectionEnd);
 	switch (data->EventFlag)
@@ -91,7 +91,7 @@ int TextEditCallback(s_trj_gui_cmd *self, ImGuiInputTextCallbackData* data)
 			if (candidates.Size == 0)
 			{
 				// No match
-				trj_gui_cmd_addlog(self, "No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
+				gui_cmd_addlog(self, "No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
 			}
 			else if (candidates.Size == 1)
 			{
@@ -126,9 +126,9 @@ int TextEditCallback(s_trj_gui_cmd *self, ImGuiInputTextCallbackData* data)
 				}
 				
 				// List matches
-				trj_gui_cmd_addlog(self, "Possible matches:\n");
+				gui_cmd_addlog(self, "Possible matches:\n");
 				for (int i = 0; i < candidates.Size; i++)
-					trj_gui_cmd_addlog(self, "- %s\n", candidates[i]);
+					gui_cmd_addlog(self, "- %s\n", candidates[i]);
 			}
 			
 			break;
@@ -166,11 +166,11 @@ int TextEditCallback(s_trj_gui_cmd *self, ImGuiInputTextCallbackData* data)
 // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
 static int TextEditCallbackStub(ImGuiInputTextCallbackData* data)
 {
-	s_trj_gui_cmd* self = (s_trj_gui_cmd*) data->UserData;
+	s_gui_cmd* self = (s_gui_cmd*) data->UserData;
 	return TextEditCallback(self, data);
 }
 
-void trj_gui_cmd_render(s_trj_gui_cmd *self)
+void gui_cmd_render(s_gui_cmd *self)
 {
 	// process env output stream
 	{
@@ -183,8 +183,8 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 			fread(self->out_buff, buff_size, 1, self->env->out_s);
 			self->out_buff[buff_size] = '\0';
 			
-			trj_gui_env_sreset(self->env);
-			trj_gui_cmd_addlog(self, "# %s", self->out_buff);
+			gui_env_sreset(self->env);
+			gui_cmd_addlog(self, "# %s", self->out_buff);
 		}
 	}
 
@@ -230,8 +230,8 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
 	if (ImGui::BeginPopupContextWindow())
 	{
-		if (ImGui::Selectable("Copy ")) trj_gui_cmd_copylog(self);
-		if (ImGui::Selectable("Clear")) trj_gui_cmd_clearlog(self);
+		if (ImGui::Selectable("Copy ")) gui_cmd_copylog(self);
+		if (ImGui::Selectable("Clear")) gui_cmd_clearlog(self);
 		
 		ImGui::EndPopup();
 	}
@@ -306,8 +306,8 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 		
 		if (self->in_buff[0])
 		{
-			trj_gui_cmd_exec(self);
-			trj_gui_cmd_addlog(self, "> %s", self->in_buff);
+			gui_cmd_exec(self);
+			gui_cmd_addlog(self, "> %s", self->in_buff);
 		}
 		
 		strcpy(self->in_buff, "");
@@ -327,7 +327,7 @@ void trj_gui_cmd_render(s_trj_gui_cmd *self)
 
 //----------------------------------------------------------------
 
-void trj_gui_cmd_exec(s_trj_gui_cmd *self)
+void gui_cmd_exec(s_gui_cmd *self)
 {
 	Picoc *env = &self->env->env;
 	

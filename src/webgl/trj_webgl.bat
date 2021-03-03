@@ -5,10 +5,10 @@ call "C:\Users\cel\dev\git\public\emsdk\emsdk_env.bat"
 
 cmd /c emcc ^
     ../src/trj_gui.cpp ^
-    ../src/trj_gui_eng.cpp ^
-    ../src/trj_gui_traj.cpp ^
-    ../src/trj_gui_obj.cpp ^
-    ../src/trj_gui_menu.cpp ^
+    ../src/gui_eng.cpp ^
+    ../src/gui_traj.cpp ^
+    ../src/gui_obj.cpp ^
+    ../src/gui_menu.cpp ^
     ../src/trj_webgl.cpp ^
     ../lib/imgui/webgl/imgui_impl_glfw.cpp ^
     ../lib/imgui/webgl/imgui_impl_opengl3.cpp ^

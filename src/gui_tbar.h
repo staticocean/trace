@@ -17,20 +17,20 @@
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_tbar
+typedef struct gui_tbar
 {
 	int height;
 	
 	s_trj_eng *eng;
-	s_trj_gui_eng *eng_gui;
+	s_gui_eng *eng_gui;
 	
 	char file_path[512];
 	
-} 	s_trj_gui_tbar;
+} 	s_gui_tbar;
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_tbar_main(s_trj_gui_tbar *gui)
+inline uint8_t gui_tbar_main(s_gui_tbar *gui)
 {
 	static float64_t time_limit_min = 0.0;
 	static float64_t time_step_min = 0.001;
@@ -62,11 +62,11 @@ inline uint8_t trj_gui_tbar_main(s_trj_gui_tbar *gui)
 //	*self->time_limit = *self->time_iter * *self->time_step;
 	
 	ImGui::SetNextItemWidth(200);
-	trj_gui_procsel("##proc", gui->eng);
+	gui_procsel("##proc", gui->eng);
 	ImGui::SameLine();
 	
 	if(ImGui::Button("RENDER"))
-	{ gui->eng_gui->state = trj_gui_eng_state_init; }
+	{ gui->eng_gui->state = gui_eng_state_init; }
 
 //	ImGui::SameLine();
 //	ImGui::Dummy(ImVec2(-1, -1));

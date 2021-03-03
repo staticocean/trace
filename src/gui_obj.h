@@ -14,7 +14,7 @@
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_obj
+typedef struct gui_obj
 {
 	s_trj_obj *ref;
 	uint8_t hide;
@@ -22,24 +22,24 @@ typedef struct trj_gui_obj
 	s_vl3d_eng traj_vl3d_eng;
 	s_vl3d_obj traj_vl3d_eng_objlist[8000];
 	
-} 	s_trj_gui_obj;
+} 	s_gui_obj;
 
-typedef struct trj_gui_obj_init
+typedef struct gui_obj_init
 {
 	s_trj_obj *ref;
 
-} 	s_trj_gui_obj_init;
+} 	s_gui_obj_init;
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_obj_init(s_trj_gui_obj *gui, s_trj_gui_obj_init attr)
+inline uint8_t gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
 {
 	gui->ref = attr.ref;
 	
 	return 0x00;
 }
 
-inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
+inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 {
 	ImGui::PushID(self);
 	
@@ -149,7 +149,7 @@ inline uint8_t trj_gui_obj_edit(s_trj_gui_obj *gui, s_trj_obj *self)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_obj_view(s_trj_gui_obj *gui, s_trj_obj *self)
+inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 {
 	vl3d_eng_init(&gui->traj_vl3d_eng, (s_vl3d_eng_init) {
 			.obj_list = gui->traj_vl3d_eng_objlist,

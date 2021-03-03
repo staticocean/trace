@@ -46,7 +46,7 @@ enum st
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_edit(s_trj_traj *self)
+inline void gui_traj_edit(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
@@ -64,7 +64,7 @@ inline void trj_gui_traj_edit(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_edit_static(s_trj_traj *self)
+inline void gui_traj_edit_static(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
@@ -86,14 +86,14 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
-	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
@@ -143,7 +143,7 @@ inline void trj_gui_traj_edit_static(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_view_static(s_trj_traj *self)
+inline void gui_traj_view_static(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
@@ -156,7 +156,7 @@ inline void trj_gui_traj_view_static(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_edit_orb(s_trj_traj *self)
+inline void gui_traj_edit_orb(s_trj_traj *self)
 {
 	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
@@ -183,7 +183,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-60);
-	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_switch("##sync_en", (char*[2]) { "SYNC", "FLOAT" }, ImVec2(-1, 0), &traj->sync_en);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
@@ -236,7 +236,7 @@ inline void trj_gui_traj_edit_orb(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_view_orb(s_trj_traj *self)
+inline void gui_traj_view_orb(s_trj_traj *self)
 {
 	s_trj_traj_orb *traj = (s_trj_traj_orb*) self->data;
 	
@@ -289,7 +289,7 @@ inline void trj_gui_traj_view_orb(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_edit_bz(s_trj_traj *self)
+inline void gui_traj_edit_bz(s_trj_traj *self)
 {
 	ImGui::PushID(self);
 	
@@ -317,7 +317,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
@@ -326,7 +326,7 @@ inline void trj_gui_traj_edit_bz(s_trj_traj *self)
 	ImGui::SetNextItemWidth(-40);
 	uint8_t ellp_en = traj->ellp_en;
 	s_trj_ellp *ellp_ref = traj->ellp;
-	trj_gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
+	gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_list, &traj->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &traj->ellp_en);
 	if (traj->ellp == NULL) { traj->ellp_en = 0x00; }
@@ -440,7 +440,7 @@ inline ImVec2 inv_transform(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
+inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size, bool view_res)
 {
 	uint32_t del_index = 0x00;
 	uint8_t del_req = 0x00;
@@ -1326,7 +1326,7 @@ inline void trj_gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
+inline void gui_traj_edit_navsat(s_trj_traj *self)
 {
 	s_trj_traj_navsat *traj = (s_trj_traj_navsat*) self->data;
 	
@@ -1353,7 +1353,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
+	gui_objsel("##ref", traj->eng->obj_count, traj->eng->obj_list, &traj->ref);
 	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -1365,7 +1365,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip("Path to almanac file"); }
 	ImGui::SameLine();
-	trj_gui_fileopen(traj->file_path);
+	gui_fileopen(traj->file_path);
 	
 	ImGui::Text("type  ");
 	ImGui::SameLine();
@@ -1435,7 +1435,7 @@ inline void trj_gui_traj_edit_navsat(s_trj_traj *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_traj_view_navsat(s_trj_traj *self)
+inline void gui_traj_view_navsat(s_trj_traj *self)
 {
 	s_trj_traj_navsat *traj = (s_trj_traj_navsat*) self->data;
 	

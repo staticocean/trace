@@ -27,7 +27,7 @@ extern "C"
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_cmd
+typedef struct gui_cmd
 {
 	char in_buff[2048];
 	char out_buff[2048];
@@ -39,25 +39,25 @@ typedef struct trj_gui_cmd
 	bool AutoScroll;
 	bool ScrollToBottom;
 	
-	s_trj_gui_env *env;
+	s_gui_env *env;
 	bool visible;
 	char title[255];
 	
-}	s_trj_gui_cmd;
+}	s_gui_cmd;
 
-typedef struct trj_gui_cmd_init
+typedef struct gui_cmd_init
 {
-	s_trj_gui_env *env;
+	s_gui_env *env;
 	bool visible;
 	char title[255];
 	
-} 	s_trj_gui_cmd_init;
+} 	s_gui_cmd_init;
 
-void trj_gui_cmd_init(s_trj_gui_cmd *self, s_trj_gui_cmd_init attr);
-void trj_gui_cmd_addlog(s_trj_gui_cmd *self, const char* fmt, ...);
-void trj_gui_cmd_clearlog(s_trj_gui_cmd *self);
-void trj_gui_cmd_render(s_trj_gui_cmd *self);
-void trj_gui_cmd_exec(s_trj_gui_cmd *self);
+void gui_cmd_init(s_gui_cmd *self, s_gui_cmd_init attr);
+void gui_cmd_addlog(s_gui_cmd *self, const char* fmt, ...);
+void gui_cmd_clearlog(s_gui_cmd *self);
+void gui_cmd_render(s_gui_cmd *self);
+void gui_cmd_exec(s_gui_cmd *self);
 
 //----------------------------------------------------------------
 

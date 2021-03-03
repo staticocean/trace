@@ -20,20 +20,20 @@
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui_menu
+typedef struct gui_menu
 {
-	s_trj_gui_env *env;
-	s_trj_gui_cmd *cmd;
+	s_gui_env *env;
+	s_gui_cmd *cmd;
 
 	s_trj_eng *eng;
 	
 	int height;
 	
-} 	s_trj_gui_menu;
+} 	s_gui_menu;
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
+inline uint8_t gui_menu_file(s_gui_menu *self)
 {
 //	ImGui::MenuItem("(demo menu)", NULL, false, false);
 	
@@ -63,7 +63,7 @@ inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 //
 //			if (ImGui::BeginMenu("Recurse.."))
 //			{
-//				trj_gui_menu_file(self);
+//				gui_menu_file(self);
 //				ImGui::EndMenu();
 //			}
 //			ImGui::EndMenu();
@@ -138,7 +138,7 @@ inline uint8_t trj_gui_menu_file(s_trj_gui_menu *self)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
+inline uint8_t gui_menu_main(s_gui_menu *self)
 {
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -149,7 +149,7 @@ inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 		// TODO find workaround to render filebrowser from menu context
 //		if (ImGui::BeginMenu("File"))
 //		{
-//			trj_gui_menu_file(self);
+//			gui_menu_file(self);
 //			ImGui::EndMenu();
 //		}
 		
@@ -177,7 +177,7 @@ inline uint8_t trj_gui_menu_main(s_trj_gui_menu *self)
 			ImGui::Separator();
 			
 			if (ImGui::MenuItem("Reset", ""))
-			{ trj_gui_cmd_clearlog(self->cmd); trj_gui_env_reset(self->env); }
+			{ gui_cmd_clearlog(self->cmd); gui_env_reset(self->env); }
 
 //			ImGui::Separator();
 			

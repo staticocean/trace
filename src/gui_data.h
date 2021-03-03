@@ -16,7 +16,7 @@
 
 //----------------------------------------------------------------
 
-inline void trj_gui_data_edit(s_trj_data *self)
+inline void gui_data_edit(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -34,7 +34,7 @@ inline void trj_gui_data_edit(s_trj_data *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_data_edit_text(s_trj_data *self)
+inline void gui_data_edit_text(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -67,7 +67,7 @@ inline void trj_gui_data_edit_text(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_view_text(s_trj_data *self)
+inline void gui_data_view_text(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -102,7 +102,7 @@ inline void trj_gui_data_view_text(s_trj_data *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_data_edit_ram(s_trj_data *self)
+inline void gui_data_edit_ram(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -134,14 +134,14 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
 	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
-	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
@@ -152,7 +152,7 @@ inline void trj_gui_data_edit_ram(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_view_ram(s_trj_data *self)
+inline void gui_data_view_ram(s_trj_data *self)
 {
 	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
 	
@@ -412,7 +412,7 @@ inline void trj_gui_data_view_ram(s_trj_data *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_data_edit_ramld(s_trj_data *self)
+inline void gui_data_edit_ramld(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -444,14 +444,14 @@ inline void trj_gui_data_edit_ramld(s_trj_data *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
 	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
-	trj_gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
@@ -462,7 +462,7 @@ inline void trj_gui_data_edit_ramld(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_view_ramld(s_trj_data *self)
+inline void gui_data_view_ramld(s_trj_data *self)
 {
 	s_trj_data_ramld *data = (s_trj_data_ramld*) self->data;
 	
@@ -491,7 +491,7 @@ inline void trj_gui_data_view_ramld(s_trj_data *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_data_edit_mat(s_trj_data *self)
+inline void gui_data_edit_mat(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -503,9 +503,9 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	s_trj_data ramld = *self;
 	ramld.data = &data->ramld;
 	
-	trj_gui_data_edit_ram(&ram);
+	gui_data_edit_ram(&ram);
 	// no need to edit ramld coz theris only ellp which we use from mat plugin
-//	trj_gui_data_edit_ramld(&ramld);
+//	gui_data_edit_ramld(&ramld);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -516,7 +516,7 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip("Path to almanac file"); }
 	ImGui::SameLine();
-	trj_gui_filesave(data->file_name);
+	gui_filesave(data->file_name);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -565,7 +565,7 @@ inline void trj_gui_data_edit_mat(s_trj_data *self)
 	return;
 }
 
-inline void trj_gui_data_view_mat(s_trj_data *self)
+inline void gui_data_view_mat(s_trj_data *self)
 {
 	ImGui::PushID(self);
 	
@@ -577,8 +577,8 @@ inline void trj_gui_data_view_mat(s_trj_data *self)
 	s_trj_data ramld = *self;
 	ramld.data = &data->ramld;
 	
-	trj_gui_data_view_ram(&ram);
-	trj_gui_data_view_ramld(&ramld);
+	gui_data_view_ram(&ram);
+	gui_data_view_ramld(&ramld);
 	
 	ImGui::PopID();
 	

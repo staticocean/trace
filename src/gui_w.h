@@ -21,7 +21,7 @@
 
 //----------------------------------------------------------------
 
-inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
+inline void gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
 {
 	if (ImGui::BeginCombo(label, (*obj)->desc, ImGuiComboFlags_NoArrowButton))
 	{
@@ -48,7 +48,7 @@ inline void trj_gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list,
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
+inline void gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
 {
 	bool is_none = *ellp == NULL;
 	
@@ -87,7 +87,7 @@ inline void trj_gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_
 
 //----------------------------------------------------------------
 
-inline void trj_gui_procsel(char *label, s_trj_eng *eng)
+inline void gui_procsel(char *label, s_trj_eng *eng)
 {
 	if (ImGui::BeginCombo(label, eng->proc->desc, ImGuiComboFlags_NoArrowButton))
 	{
@@ -117,7 +117,7 @@ inline void trj_gui_procsel(char *label, s_trj_eng *eng)
 inline ImGui::FileBrowser __file_browser_open__ = ImGui::FileBrowser();
 inline ImGui::FileBrowser __file_browser_save__ = ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
 
-inline void trj_gui_fileopen(char *file_path, float width = -1)
+inline void gui_fileopen(char *file_path, float width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -150,7 +150,7 @@ inline void trj_gui_fileopen(char *file_path, float width = -1)
 	return;
 }
 
-inline void trj_gui_filesave(char *file_path)
+inline void gui_filesave(char *file_path)
 {
 	ImGui::PushID(file_path);
 	

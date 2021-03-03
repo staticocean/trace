@@ -14,7 +14,7 @@
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_edit(s_trj_ctrl *self)
+inline void gui_ctrl_edit(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -30,7 +30,7 @@ inline void trj_gui_ctrl_edit(s_trj_ctrl *self)
 	return;
 }
 
-inline void trj_gui_ctrl_view(s_trj_ctrl *self)
+inline void gui_ctrl_view(s_trj_ctrl *self)
 {
 	ImGui::Text("No view port available.");
 	
@@ -39,7 +39,7 @@ inline void trj_gui_ctrl_view(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
+inline void gui_ctrl_edit_egms(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -66,7 +66,7 @@ inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
 	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -80,7 +80,7 @@ inline void trj_gui_ctrl_edit_egms(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_view_egms(s_trj_ctrl *self)
+inline void gui_ctrl_view_egms(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -92,7 +92,7 @@ inline void trj_gui_ctrl_view_egms(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
+inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -119,7 +119,7 @@ inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	trj_gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
 	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -133,7 +133,7 @@ inline void trj_gui_ctrl_edit_gms(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_view_gms(s_trj_ctrl *self)
+inline void gui_ctrl_view_gms(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -145,7 +145,7 @@ inline void trj_gui_ctrl_view_gms(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
+inline void gui_ctrl_edit_gm(s_trj_ctrl *self)
 {
     s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;
 
@@ -165,7 +165,7 @@ inline void trj_gui_ctrl_edit_gm(s_trj_ctrl *self)
 
 //----------------------------------------------------------------
 
-inline void trj_gui_ctrl_view_gm(s_trj_ctrl *self)
+inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 {
     s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;
 

@@ -53,7 +53,7 @@ void loop()
   gui.w_height = display_h;
   gui.w_width  = display_w;
 		
-  trj_gui_main(&gui);
+  gui_main(&gui);
 
   ImGui::Render();
 
@@ -119,7 +119,7 @@ int init()
   
   resizeCanvas();
 	
-	trj_gui_init(&gui, (s_trj_gui_init_attr) { });
+	gui_init(&gui, (s_gui_init_attr) { });
 	
 	return 0;
 }

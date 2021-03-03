@@ -42,12 +42,12 @@ static char st_init[st_size][64];
 static char st_free[st_size][64];
 static char st_reset[st_size][64];
 static char st_update[st_size][64];
-static s_trj_gui_env *st_env[st_size];
+static s_gui_env *st_env[st_size];
 
 uint8_t __api_ctrl_init__(void **data, void *config)
 {
 	uint32_t offset = (uint32_t) *data;
-	s_trj_gui_env *self = st_env[offset];
+	s_gui_env *self = st_env[offset];
 	
 	char call[255];
 	
@@ -85,7 +85,7 @@ uint8_t __api_ctrl_update__(void *data, void *obj)
 void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 				  struct Value **Param, int NumArgs)
 {
-	s_trj_gui_env *env         = (s_trj_gui_env*) Param[0]->Val->Pointer;
+	s_gui_env *env         = (s_gui_env*) Param[0]->Val->Pointer;
 	uint32_t 	  *ctrl_offset = (uint32_t*)      Param[1]->Val->Pointer;
 	s_trj_ctrl    *ctrl_list   = (s_trj_ctrl*)    Param[2]->Val->Pointer;
 	
@@ -119,7 +119,7 @@ struct LibraryFunction picoc_api_functions[] =
 				{ NULL, NULL }
 		};
 
-void __env_init__(s_trj_gui_env *self)
+void __env_init__(s_gui_env *self)
 {
 	PicocInitialise(&self->env, PICOC_STACK_SIZE);
 	PicocIncludeAllSystemHeaders(&self->env);
@@ -237,13 +237,13 @@ void __env_init__(s_trj_gui_env *self)
 	fflush(stdout);
 }
 
-void trj_gui_env_reset(s_trj_gui_env *self)
+void gui_env_reset(s_gui_env *self)
 {
 	PicocCleanup(&self->env);
 	__env_init__(self);
 }
 
-void trj_gui_env_init(s_trj_gui_env *self, s_trj_gui_env_init attr)
+void gui_env_init(s_gui_env *self, s_gui_env_init attr)
 {
 	self->eng = attr.eng;
 	
@@ -258,7 +258,7 @@ void trj_gui_env_init(s_trj_gui_env *self, s_trj_gui_env_init attr)
 	__env_init__(self);
 }
 
-void trj_gui_env_sreset(s_trj_gui_env *self)
+void gui_env_sreset(s_gui_env *self)
 {
 	fclose(self->out_s);
 	

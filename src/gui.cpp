@@ -3,16 +3,16 @@
 
 //----------------------------------------------------------------
 
-static 	s_trj_gui_map map;
+static 	s_gui_map map;
 
-uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
+uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 {
-	s_trj_gui_map *temp_map = new s_trj_gui_map();
+	s_gui_map *temp_map = new s_gui_map();
 	map = *temp_map;
 	free(temp_map);
 	
-//	trj_gui_map_load(&map, "res/maps/earth/countries.geojson");
-//	trj_gui_map_load(&map, "res/maps/earth/cities.geojson");
+//	gui_map_load(&map, "res/maps/earth/countries.geojson");
+//	gui_map_load(&map, "res/maps/earth/cities.geojson");
 	
 	self->w_height = 720;
 	self->w_width  = 1024;
@@ -22,7 +22,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	self->gui_tbar.height = 38;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
-	trj_gui_eng_init(&self->gui_eng, (s_trj_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
+	gui_eng_init(&self->gui_eng, (s_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
 		
@@ -473,10 +473,10 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 			.update = trj_proc_fps_update_,
 	});
 
-    for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_trj_gui_obj); ++i)
+    for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_gui_obj); ++i)
     {
-        trj_gui_obj_init(&self->st_gui_eng_obj[i],
-                         (s_trj_gui_obj_init) {.ref = &self->eng.obj_list[i]}
+        gui_obj_init(&self->st_gui_eng_obj[i],
+                         (s_gui_obj_init) {.ref = &self->eng.obj_list[i]}
         );
     }
 
@@ -553,7 +553,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	style_ref.TabBorderSize = 0.0;
 	style_ref.WindowBorderSize = 0.0;
 	
-	trj_gui_env_init(&self->gui_env, (s_trj_gui_env_init) {
+	gui_env_init(&self->gui_env, (s_gui_env_init) {
 		.eng = &self->eng,
 		.traj_offset = &self->eng.traj_offset,
 		.ctrl_offset = &self->eng.ctrl_offset,
@@ -564,7 +564,7 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 		.data_list = self->eng.data_list,
 	});
 	
-	trj_gui_cmd_init(&self->gui_cmd, (s_trj_gui_cmd_init)
+	gui_cmd_init(&self->gui_cmd, (s_gui_cmd_init)
 	{
 		.env = &self->gui_env,
 		.visible = false,
@@ -577,14 +577,14 @@ uint8_t trj_gui_init(s_trj_gui *self, s_trj_gui_init attr)
 	
 	trj_eng_load(&self->eng, self->gui_tbar.file_path);
 	
-//	trj_gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
+//	gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
 	
 	return 0x00;
 }
 
 //----------------------------------------------------------------
 
-uint8_t trj_gui_main(s_trj_gui *self)
+uint8_t gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
@@ -608,21 +608,21 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
 	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
 
-	trj_gui_menu_main(&self->gui_menu);
+	gui_menu_main(&self->gui_menu);
 	
 	{
 		// Toolbar
 		ImGui::SetNextWindowPos((ImVec2) { 0, (float) self->gui_menu.height }, ImGuiCond_Always);
 		ImGui::SetNextWindowSize((ImVec2) { self->w_width, (float) self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
-		trj_gui_tbar_main(&self->gui_tbar);
+		gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
 	}
 	
 	{
 		// progress popup
 		// must be after toolbar
-		trj_gui_eng_updategui(&self->gui_eng, &self->eng);
+		gui_eng_updategui(&self->gui_eng, &self->eng);
 	}
 	
 	{
@@ -630,7 +630,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		ImGui::SetNextWindowPos((ImVec2) {0, (float) self->gui_menu.height + (float) self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::SetNextWindowSize((ImVec2) {240, self->w_height - self->gui_menu.height - self->gui_tbar.height }, ImGuiCond_Always);
 		ImGui::Begin("obj_list", NULL, static_flags);
-		trj_gui_eng_objlist(&self->gui_eng, &self->eng);
+		gui_eng_objlist(&self->gui_eng, &self->eng);
 		ImGui::End();
 	}
 	
@@ -644,51 +644,51 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		{
 			switch (self->gui_eng.sel_type)
 			{
-				case trj_gui_eng_type_obj:
+				case gui_eng_type_obj:
 				{
-					s_trj_gui_obj *obj_gui = (s_trj_gui_obj*) self->gui_eng.sel_item;
+					s_gui_obj *obj_gui = (s_gui_obj*) self->gui_eng.sel_item;
 					s_trj_obj *obj = obj_gui->ref;
 					
-					trj_gui_obj_edit(obj_gui, obj);
+					gui_obj_edit(obj_gui, obj);
 					
 					break;
 				}
 				
-				case trj_gui_eng_type_traj:
+				case gui_eng_type_traj:
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
-					trj_gui_traj_edit(traj);
+					gui_traj_edit(traj);
 					
-					if      (traj->hash == traj_hash_static) { trj_gui_traj_edit_static (traj); }
-					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_edit_orb    (traj); }
-					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
-					else if (traj->hash == traj_hash_navsat) { trj_gui_traj_edit_navsat (traj); }
+					if      (traj->hash == traj_hash_static) { gui_traj_edit_static (traj); }
+					else if (traj->hash == traj_hash_orb   ) { gui_traj_edit_orb    (traj); }
+					else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
+					else if (traj->hash == traj_hash_navsat) { gui_traj_edit_navsat (traj); }
 					
 					break;
 				}
 				
-				case trj_gui_eng_type_ctrl:
+				case gui_eng_type_ctrl:
 				{
 					s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
-					trj_gui_ctrl_edit(ctrl);
+					gui_ctrl_edit(ctrl);
 
-                    if      (ctrl->hash == ctrl_hash_gm  ) { trj_gui_ctrl_edit_gm  (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_edit_egms(ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms ) { trj_gui_ctrl_edit_gms (ctrl); }
-//                    else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_edit_bz     (traj); }
+                    if      (ctrl->hash == ctrl_hash_gm  ) { gui_ctrl_edit_gm  (ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms) { gui_ctrl_edit_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms ) { gui_ctrl_edit_gms (ctrl); }
+//                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
 
                     break;
 				}
 				
-				case trj_gui_eng_type_data:
+				case gui_eng_type_data:
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
-					trj_gui_data_edit(data);
+					gui_data_edit(data);
 					
-					if      (data->hash == data_hash_text ) { trj_gui_data_edit_text (data); }
-					else if (data->hash == data_hash_ram  ) { trj_gui_data_edit_ram  (data); }
-					else if (data->hash == data_hash_ramld) { trj_gui_data_edit_ramld(data); }
-					else if (data->hash == data_hash_mat  ) { trj_gui_data_edit_mat  (data); }
+					if      (data->hash == data_hash_text ) { gui_data_edit_text (data); }
+					else if (data->hash == data_hash_ram  ) { gui_data_edit_ram  (data); }
+					else if (data->hash == data_hash_ramld) { gui_data_edit_ramld(data); }
+					else if (data->hash == data_hash_mat  ) { gui_data_edit_mat  (data); }
 					
 					break;
 				}
@@ -711,47 +711,47 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		{
 			switch (self->gui_eng.sel_type)
 			{
-				case trj_gui_eng_type_obj:
+				case gui_eng_type_obj:
 				{
-					s_trj_gui_obj *obj_gui = (s_trj_gui_obj*) self->gui_eng.sel_item;
+					s_gui_obj *obj_gui = (s_gui_obj*) self->gui_eng.sel_item;
 					s_trj_obj *obj = obj_gui->ref;
 					
-//					trj_gui_obj_view(obj_gui, obj);
+//					gui_obj_view(obj_gui, obj);
 					
 					break;
 				}
 				
-				case trj_gui_eng_type_traj:
+				case gui_eng_type_traj:
 				{
 					s_trj_traj *traj = (s_trj_traj*) self->gui_eng.sel_item;
 					
-					if      (traj->hash == traj_hash_static) { trj_gui_traj_view_static (traj); }
-					else if (traj->hash == traj_hash_orb   ) { trj_gui_traj_view_orb    (traj); }
-					else if (traj->hash == traj_hash_bz    ) { trj_gui_traj_view_bz((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
-					else if (traj->hash == traj_hash_navsat) { trj_gui_traj_view_navsat (traj); }
+					if      (traj->hash == traj_hash_static) { gui_traj_view_static (traj); }
+					else if (traj->hash == traj_hash_orb   ) { gui_traj_view_orb    (traj); }
+					else if (traj->hash == traj_hash_bz    ) { gui_traj_view_bz((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
+					else if (traj->hash == traj_hash_navsat) { gui_traj_view_navsat (traj); }
 					
 					break;
 				}
 				
-				case trj_gui_eng_type_ctrl:
+				case gui_eng_type_ctrl:
 				{
                     s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
 
-                    if      (ctrl->hash == ctrl_hash_gm  ) { trj_gui_ctrl_view_gm  (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms) { trj_gui_ctrl_view_egms(ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms ) { trj_gui_ctrl_view_gms (ctrl); }
+                    if      (ctrl->hash == ctrl_hash_gm  ) { gui_ctrl_view_gm  (ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms) { gui_ctrl_view_egms(ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms ) { gui_ctrl_view_gms (ctrl); }
 
 					break;
 				}
 				
-				case trj_gui_eng_type_data:
+				case gui_eng_type_data:
 				{
 					s_trj_data *data = (s_trj_data*) self->gui_eng.sel_item;
 					
-					if      (data->hash == data_hash_text ) { trj_gui_data_view_text  (data); }
-					else if (data->hash == data_hash_ram  ) { trj_gui_data_view_ram   (data); }
-					else if (data->hash == data_hash_ramld) { trj_gui_data_view_ramld (data); }
-					else if (data->hash == data_hash_mat  ) { trj_gui_data_view_mat   (data); }
+					if      (data->hash == data_hash_text ) { gui_data_view_text  (data); }
+					else if (data->hash == data_hash_ram  ) { gui_data_view_ram   (data); }
+					else if (data->hash == data_hash_ramld) { gui_data_view_ramld (data); }
+					else if (data->hash == data_hash_mat  ) { gui_data_view_mat   (data); }
 					
 					break;
 				}
@@ -763,7 +763,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 		else
 		{
 			// default view (can be used for debug)
-//			trj_gui_map_view(&map, "map", ImVec2(-1, -1));
+//			gui_map_view(&map, "map", ImVec2(-1, -1));
 			
 			static s_vl3d_obj  obj_list[20000];
 			static s_vl3d_eng  vl3d;
@@ -988,7 +988,7 @@ uint8_t trj_gui_main(s_trj_gui *self)
 	
 	{
 		// Scripting view
-		trj_gui_cmd_render(&self->gui_cmd);
+		gui_cmd_render(&self->gui_cmd);
 	}
 	
 	bool mw = true;
