@@ -481,59 +481,7 @@ uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
     }
 
     //-----------------------------------------------------------------------------
-
-//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "ref"});
-//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "sun"});
-//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "earth"});
-//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "moon"});
-//	trj_eng_add_obj(&self->eng, (s_trj_obj_init) {.desc = "object"});
-//
-//	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[1]);
-//	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[1]);
-//	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[1]);
-//	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[1]);
-//	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[1]);
-//
-//	trj_obj_add_traj(&self->eng.obj_list[0], self->eng.traj_list[0]);
-//	trj_obj_add_traj(&self->eng.obj_list[1], self->eng.traj_list[0]);
-//	trj_obj_add_traj(&self->eng.obj_list[2], self->eng.traj_list[0]);
-//	trj_obj_add_traj(&self->eng.obj_list[3], self->eng.traj_list[0]);
-//	trj_obj_add_traj(&self->eng.obj_list[4], self->eng.traj_list[0]);
-//
-//	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[1]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[0], self->eng.ctrl_list[3]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[1]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[1], self->eng.ctrl_list[3]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[1]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[2], self->eng.ctrl_list[3]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[1]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[3], self->eng.ctrl_list[3]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[1]);
-//	trj_obj_add_ctrl(&self->eng.obj_list[4], self->eng.ctrl_list[3]);
-//
-//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[0]);
-//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[0]);
-//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[0]);
-//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[0]);
-//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[0]);
-//
-//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[1]);
-//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[1]);
-//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[1]);
-//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[1]);
-//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[1]);
-//
-//	trj_obj_add_data(&self->eng.obj_list[0], self->eng.data_list[2]);
-//	trj_obj_add_data(&self->eng.obj_list[1], self->eng.data_list[2]);
-//	trj_obj_add_data(&self->eng.obj_list[2], self->eng.data_list[2]);
-//	trj_obj_add_data(&self->eng.obj_list[3], self->eng.data_list[2]);
-//	trj_obj_add_data(&self->eng.obj_list[4], self->eng.data_list[2]);
-//
-//	for (uint32_t i = 0; i < self->eng.obj_count; ++i)
-//	{
-//		vl_mid(&self->eng.obj_list[i].rot[0][0]);
-//	}
-//
+	
 	ImGui::StyleColorsDark();
 //	ImGui::StyleColorsLight();
 	
@@ -588,11 +536,18 @@ uint8_t gui_main(s_trj_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
+
+
+	#ifdef NDEBUG
+	#else
 	
-	bool show_demo_window = true;
+		static bool show_demo = true;
+		static bool show_metrics = true;
 	
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+		ImGui::ShowMetricsWindow(&show_metrics);
+//		ImGui::ShowDemoWindow(&show_demo);
+		
+	#endif
 	
 	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
 	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
@@ -990,9 +945,6 @@ uint8_t gui_main(s_trj_gui *self)
 		// Scripting view
 		gui_cmd_render(&self->gui_cmd);
 	}
-	
-	bool mw = true;
-	ImGui::ShowMetricsWindow(&mw);
 	
 	return 0x00;
 }
