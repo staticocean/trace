@@ -10,7 +10,7 @@
 #include <lib/opengl/gl3w.h>
 #include <lib/opengl/glfw3.h>
 
-#include "trj_gui.h"
+#include "gui.h"
 
 //----------------------------------------------------------------
 

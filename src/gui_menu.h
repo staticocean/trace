@@ -15,8 +15,8 @@
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 
-#include "trj_gui_env.h"
-#include "trj_gui_cmd.h"
+#include "gui_env.h"
+#include "gui_cmd.h"
 
 //----------------------------------------------------------------
 

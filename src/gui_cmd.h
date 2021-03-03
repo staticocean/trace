@@ -17,7 +17,7 @@
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
 
-#include "trj_gui_env.h"
+#include "gui_env.h"
 
 extern "C"
 {

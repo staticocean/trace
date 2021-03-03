@@ -10,7 +10,7 @@
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_obj.h>
 
-#include "trj_gui_w.h"
+#include "gui_w.h"
 
 //----------------------------------------------------------------
 

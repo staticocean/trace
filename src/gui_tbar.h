@@ -13,7 +13,7 @@
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 
-#include "trj_gui_eng.h"
+#include "gui_eng.h"
 
 //----------------------------------------------------------------
 

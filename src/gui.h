@@ -26,16 +26,16 @@
 
 #include "imgui_custom.h"
 
-#include "trj_gui_eng.h"
-#include "trj_gui_obj.h"
-#include "trj_gui_map.h"
-#include "trj_gui_menu.h"
-#include "trj_gui_tbar.h"
-#include "trj_gui_traj.h"
-#include "trj_gui_ctrl.h"
-#include "trj_gui_data.h"
-#include "trj_gui_cmd.h"
-#include "trj_gui_env.h"
+#include "gui_eng.h"
+#include "gui_obj.h"
+#include "gui_map.h"
+#include "gui_menu.h"
+#include "gui_tbar.h"
+#include "gui_traj.h"
+#include "gui_ctrl.h"
+#include "gui_data.h"
+#include "gui_cmd.h"
+#include "gui_env.h"
 
 //----------------------------------------------------------------
 

@@ -17,8 +17,8 @@
 #include <lib/trj/trj_ellp.h>
 
 #include "imgui_custom.h"
-#include "trj_gui_obj.h"
-#include "trj_gui_traj.h"
+#include "gui_obj.h"
+#include "gui_traj.h"
 
 //----------------------------------------------------------------
 
