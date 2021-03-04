@@ -39,7 +39,7 @@
 
 //----------------------------------------------------------------
 
-typedef struct trj_gui
+typedef struct gui
 {
 	float32_t w_height;
 	float32_t w_width;
@@ -59,7 +59,7 @@ typedef struct trj_gui
 	s_gui_cmd  gui_cmd;
 	s_gui_env  gui_env;
 	
-} 	s_trj_gui;
+} 	s_gui;
 
 typedef struct gui_init_attr
 {
@@ -71,7 +71,7 @@ typedef struct gui_init_attr
 
 //static 	s_gui_map map;
 
-inline uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
+inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 {
 	// Init Native File Dialog Extended library
 	NFD_Init();
@@ -600,12 +600,13 @@ inline uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 
 //----------------------------------------------------------------
 
-inline uint8_t gui_main(s_trj_gui *self)
+inline uint8_t gui_main(s_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
-	
-	#ifdef NDEBUG
+    
+    
+    #ifdef NDEBUG
 	#else
 	
 	static bool show_demo = true;
@@ -615,7 +616,7 @@ inline uint8_t gui_main(s_trj_gui *self)
 	ImGui::ShowDemoWindow(&show_demo);
 	
 	#endif
-	
+    
 	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
 	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
 	const uint32_t traj_hash_bz     = vl_crc32("default_traj_bz");
@@ -638,7 +639,7 @@ inline uint8_t gui_main(s_trj_gui *self)
 		gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
 	}
-	
+    
 	{
 		// progress popup
 		// must be after toolbar
