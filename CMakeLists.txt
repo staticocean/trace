@@ -26,8 +26,8 @@ include_directories(./lib/clip)
 include_directories(./lib/nfde)
 
 file(GLOB src_main      "./src/*" "./src/win/*")
-file(GLOB src_imgui     "./lib/imgui/*")
-file(GLOB src_opengl    "./lib/opengl/*")
+file(GLOB src_imgui     "./lib/imgui/*" "./lib/imgui/win/*")
+file(GLOB src_glfw      "./lib/glfw/*")
 file(GLOB src_picoc     "./lib/picoc/*" "./lib/picoc/cstdlib/*.*")
 file(GLOB src_tinymat   "./lib/tinymat/*")
 file(GLOB src_fmemopen  "./lib/fmemopen/*")
@@ -40,9 +40,9 @@ list(REMOVE_ITEM ${src_picoc} "lib/picoc/cstdlib/unistd.c")
 list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/library_unix.c")
 list(REMOVE_ITEM ${src_picoc} "lib/picoc/platform/platform_unix.c")
 
-add_executable(trajectory ${src_main} ${src_imgui} ${src_opengl} ${src_picoc} ${src_json11} ${src_tinymat} ${src_fmemopen} ${src_implot} ${src_clip} ${src_nfde})
+add_executable(trajectory ${src_main} ${src_imgui} ${src_glfw} ${src_picoc} ${src_json11} ${src_tinymat} ${src_fmemopen} ${src_implot} ${src_clip} ${src_nfde})
 
 target_link_libraries(trajectory LINK_PUBLIC shlwapi)
 target_link_libraries(trajectory LINK_PUBLIC opengl32)
-target_link_libraries(trajectory LINK_PUBLIC ../lib/opengl/static/glfw3_x64)
+target_link_libraries(trajectory LINK_PUBLIC ../lib/glfw/static/glfw3_x64)
 

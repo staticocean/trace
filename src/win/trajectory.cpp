@@ -14,10 +14,10 @@
 #include <time.h>
 
 #include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_impl_glfw.h>
-#include <lib/imgui/imgui_impl_opengl3.h>
-#include <lib/opengl/gl3w.h>
-#include <lib/opengl/glfw3.h>
+#include <lib/imgui/win/imgui_impl_glfw.h>
+#include <lib/imgui/win/imgui_impl_opengl3.h>
+#include <lib/glfw/gl3w.h>
+#include <lib/glfw/glfw3.h>
 
 #include "gui.h"
 
@@ -71,23 +71,13 @@ int main(int, char**)
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
-
-    // Load Fonts
-    ImFontConfig font_config;
-	font_config.OversampleH = 1;
-	font_config.OversampleV = 1;
-	font_config.PixelSnapH  = 1;
-	
-	io.Fonts->AddFontFromFileTTF("res/fonts/default.ttf", 16);
-	ImFont *font_default = io.Fonts->AddFontFromFileTTF("res/fonts/default.ttf", 16, &font_config, io.Fonts->GetGlyphRangesCyrillic());
-	io.FontDefault = font_default;
-	
-	static s_trj_gui trj_gui;
+		
+	static s_gui gui;
 	static clock_t prev_ts = 0x00;
 	static clock_t curr_ts = 0x00;
 	static clock_t diff_ts = 0x00;
 	
-	gui_init(&trj_gui, s_gui_init {});
+	gui_init(&gui, s_gui_init {});
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -97,7 +87,7 @@ int main(int, char**)
 		curr_ts = clock();
 		diff_ts = curr_ts - prev_ts;
 	
-		gui_eng_updateeng(&trj_gui.gui_eng, &trj_gui.eng);
+		gui_eng_updateeng(&gui.gui_eng, &gui.eng);
 		
 		if ((diff_ts / (double) CLOCKS_PER_SEC) > (1.0 / 60.0))
 		{
@@ -110,10 +100,10 @@ int main(int, char**)
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 			
-			trj_gui.w_height = display_h;
-			trj_gui.w_width = display_w;
+			gui.w_height = display_h;
+			gui.w_width = display_w;
 			
-			gui_main(&trj_gui);
+			gui_main(&gui);
 			
 			// Rendering
 			ImGui::Render();
