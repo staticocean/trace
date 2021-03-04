@@ -261,24 +261,24 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	
 	};
 	
-	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			
-			.desc   = "default_ctrl_upos",
-			.name   = "default_ctrl_upos",
-			
-			.config_size = sizeof(s_trj_ctrl_upos_init),
-			.config = &trj_ctrl_upos_config_,
-			
-			.data_size = sizeof(s_trj_ctrl_upos),
-			.data   = NULL,
-			
-			.init   = trj_ctrl_upos_init_,
-			.free   = trj_ctrl_upos_free_,
-			.save   = trj_ctrl_upos_save_,
-			.load   = trj_ctrl_upos_load_,
-			.reset  = trj_ctrl_upos_reset_,
-			.update = trj_ctrl_upos_update_,
-	});
+//	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+//
+//			.desc   = "default_ctrl_upos",
+//			.name   = "default_ctrl_upos",
+//
+//			.config_size = sizeof(s_trj_ctrl_upos_init),
+//			.config = &trj_ctrl_upos_config_,
+//
+//			.data_size = sizeof(s_trj_ctrl_upos),
+//			.data   = NULL,
+//
+//			.init   = trj_ctrl_upos_init_,
+//			.free   = trj_ctrl_upos_free_,
+//			.save   = trj_ctrl_upos_save_,
+//			.load   = trj_ctrl_upos_load_,
+//			.reset  = trj_ctrl_upos_reset_,
+//			.update = trj_ctrl_upos_update_,
+//	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			
@@ -299,24 +299,24 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.update = trj_ctrl_cpos_update_,
 	});
 	
-	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			
-			.desc   = "default_ctrl_urot",
-			.name   = "default_ctrl_urot",
-			
-			.config_size = sizeof(s_trj_ctrl_urot_init),
-			.config = &trj_ctrl_urot_config_,
-			
-			.data_size = sizeof(s_trj_ctrl_urot),
-			.data   = NULL,
-			
-			.init   = trj_ctrl_urot_init_,
-			.free   = trj_ctrl_urot_free_,
-			.save   = trj_ctrl_urot_save_,
-			.load   = trj_ctrl_urot_load_,
-			.reset  = trj_ctrl_urot_reset_,
-			.update = trj_ctrl_urot_update_,
-	});
+//	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+//
+//			.desc   = "default_ctrl_urot",
+//			.name   = "default_ctrl_urot",
+//
+//			.config_size = sizeof(s_trj_ctrl_urot_init),
+//			.config = &trj_ctrl_urot_config_,
+//
+//			.data_size = sizeof(s_trj_ctrl_urot),
+//			.data   = NULL,
+//
+//			.init   = trj_ctrl_urot_init_,
+//			.free   = trj_ctrl_urot_free_,
+//			.save   = trj_ctrl_urot_save_,
+//			.load   = trj_ctrl_urot_load_,
+//			.reset  = trj_ctrl_urot_reset_,
+//			.update = trj_ctrl_urot_update_,
+//	});
 	
 	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
 			
@@ -385,29 +385,29 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.update = trj_ctrl_gms_update_,
 	});
 	
-	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
-			.order = 12,
-			.file_name = "res/ctrl/gm/egm2008.txt",
-	};
-	
-	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
-			
-			.desc   = "default_ctrl_gm",
-			.name   = "default_ctrl_gm",
-			
-			.config_size = sizeof(s_trj_ctrl_gm_init),
-			.config = &trj_ctrl_gm_config_,
-			
-			.data_size = sizeof(s_trj_ctrl_gm),
-			.data   = NULL,
-			
-			.init   = trj_ctrl_gm_init_,
-			.free   = trj_ctrl_gm_free_,
-			.save   = trj_ctrl_gm_save_,
-			.load   = trj_ctrl_gm_load_,
-			.reset  = trj_ctrl_gm_reset_,
-			.update = trj_ctrl_gm_update_,
-	});
+//	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
+//			.order = 12,
+//			.file_name = "res/ctrl/gm/egm2008.txt",
+//	};
+//
+//	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+//
+//			.desc   = "default_ctrl_gm",
+//			.name   = "default_ctrl_gm",
+//
+//			.config_size = sizeof(s_trj_ctrl_gm_init),
+//			.config = &trj_ctrl_gm_config_,
+//
+//			.data_size = sizeof(s_trj_ctrl_gm),
+//			.data   = NULL,
+//
+//			.init   = trj_ctrl_gm_init_,
+//			.free   = trj_ctrl_gm_free_,
+//			.save   = trj_ctrl_gm_save_,
+//			.load   = trj_ctrl_gm_load_,
+//			.reset  = trj_ctrl_gm_reset_,
+//			.update = trj_ctrl_gm_update_,
+//	});
 	
 	static s_trj_data_text_init trj_data_text_config_ = {
 	
@@ -645,9 +645,11 @@ inline uint8_t gui_main(s_gui *self)
 		// Toolbar
 		ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(self->w_width, (float) self->gui_tbar.height), ImGuiCond_Always);
+//		ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255,255,255,255));
 		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
 		gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
+//		ImGui::PopStyleColor();
 	}
     
 	{

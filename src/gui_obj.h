@@ -52,28 +52,27 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 5));
 	
-	ImGui::Columns(2);
-	
 //	ImGui::Text("hash");
 //	ImGui::NextColumn();
 //	imgui_hash("##hash", self->hash);
 //	ImGui::NextColumn();
 	
+	vlf_t pos_inert_min = 0.0;
+	vlf_t rot_inert_min = 0.0;
+
 	ImGui::Text("pos_inert");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[kg]"); }
-	ImGui::NextColumn();
+	gui_hint("[kg]");
+	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double, &self->pos_inert, 0.1, NULL, NULL, "%.3f");
-	ImGui::NextColumn();
+	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double,
+			&self->pos_inert, 1.0, &pos_inert_min, NULL, "%.3f");
 	
 	ImGui::Text("rot_inert");
-	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[?]"); }
-	ImGui::NextColumn();
+	gui_hint("[kg m2]");
+	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double, &self->rot_inert, 0.1, NULL, NULL, "%.3f");
-	ImGui::NextColumn();
-	
-	ImGui::Columns();
+	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double,
+			&self->rot_inert, 1.0, &rot_inert_min, NULL, "%.3f");
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
