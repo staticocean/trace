@@ -18,7 +18,6 @@
 #include <lib/imgui/mac/imgui_impl_metal.h>
 #include <lib/imgui/mac/imgui_impl_osx.h>
 
-#include "res/fonts/default_font.h"
 #include "src/gui.h"
 
 static s_gui gui;
@@ -51,22 +50,9 @@ static s_gui gui;
     // FIXME: This example doesn't have proper cleanup...
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-
-    
-    ImFontConfig font_config;
-    font_config.OversampleH = 4;
-    font_config.OversampleV = 4;
-    
-    io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF(default_font_compressed_data_base85,
-       18, &font_config, io.Fonts->GetGlyphRangesCyrillic());
-    
+	
     // Setup Renderer backend
     ImGui_ImplMetal_Init(_device);
 

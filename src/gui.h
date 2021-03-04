@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <res/fonts/default_font.h>
+
 #include <lib/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
 #include <lib/nfde/nfd.h>
@@ -552,9 +554,17 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	}
 	
 	//-----------------------------------------------------------------------------
-
-//	ImGui::StyleColorsDark();
-//	ImGui::StyleColorsLight();
+	
+	ImGuiIO& io = ImGui::GetIO();
+	
+	ImFontConfig font_config;
+	font_config.OversampleH = 4;
+	font_config.OversampleV = 4;
+	
+	io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF
+			(default_font_compressed_data_base85,
+					18, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+	
 	imgui_theme_set();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
