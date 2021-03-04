@@ -46,7 +46,7 @@ static NSArray *BuildAllowedFileTypes( const nfdnfilteritem_t *filterList, nfdfi
         {
             if (*p_filterSpec == ',') {
                 // add the extension to the array
-                NSString *filterStr = [[[NSString alloc] initWithBytes:(const void*)p_currentFilterBegin length:(sizeof(nfdnchar_t) * (p_filterSpec - p_currentFilterBegin)) encoding: NSUTF8StringEncoding] autorelease];
+                NSString *filterStr = [[NSString alloc] initWithBytes:(const void*)p_currentFilterBegin length:(sizeof(nfdnchar_t) * (p_filterSpec - p_currentFilterBegin)) encoding: NSUTF8StringEncoding];
                 [buildFilterList addObject:filterStr];
                 p_currentFilterBegin = p_filterSpec+1;
             }
@@ -58,7 +58,7 @@ static NSArray *BuildAllowedFileTypes( const nfdnfilteritem_t *filterList, nfdfi
 
     NSArray *returnArray = [NSArray arrayWithArray:buildFilterList];
 
-    [buildFilterList release];
+//    [buildFilterList release];
     
     assert([returnArray count] != 0);
     
@@ -194,8 +194,8 @@ nfdresult_t NFD_OpenDialogMultipleN( const nfdpathset_t **outPaths,
             
             if ([urls count] > 0) {
                 // have at least one URL, we return this NSArray
-                [urls retain];
-                *outPaths = (const nfdpathset_t*)urls;
+//                [urls retain];
+                *outPaths = (__bridge const nfdpathset_t*) urls;
             }
             result = NFD_OKAY;
         }
@@ -295,14 +295,14 @@ nfdresult_t NFD_PickFolderN( nfdnchar_t **outPath,
 
 nfdresult_t NFD_PathSet_GetCount( const nfdpathset_t *pathSet, nfdpathsetsize_t* count )
 {
-    const NSArray *urls = (const NSArray*)pathSet;
+    const NSArray *urls = (__bridge const NSArray*)pathSet;
     *count = [urls count];
     return NFD_OKAY;
 }
 
 nfdresult_t NFD_PathSet_GetPathN( const nfdpathset_t *pathSet, nfdpathsetsize_t index, nfdnchar_t **outPath )
 {
-    const NSArray *urls = (const NSArray*)pathSet;
+    const NSArray *urls = (__bridge const NSArray*)pathSet;
     const NSURL *url = [urls objectAtIndex:index];
     
     @autoreleasepool {
@@ -324,6 +324,6 @@ nfdresult_t NFD_PathSet_GetPathN( const nfdpathset_t *pathSet, nfdpathsetsize_t 
 }
 
 void NFD_PathSet_Free( const nfdpathset_t *pathSet ) {
-    const NSArray *urls = (const NSArray*)pathSet;
-    [urls release];
+    const NSArray *urls = (__bridge const NSArray*)pathSet;
+//    [urls release];
 }
