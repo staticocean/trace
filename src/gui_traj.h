@@ -2566,7 +2566,7 @@ inline void gui_traj_edit_navsat(s_trj_traj *self)
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip("Path to almanac file"); }
 	ImGui::SameLine();
-	gui_fileopen(traj->file_path);
+	gui_fileopen(traj->file_path, 0x00, NULL);
 	
 	ImGui::Text("type  ");
 	ImGui::SameLine();

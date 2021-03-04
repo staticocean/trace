@@ -1011,10 +1011,6 @@ inline uint8_t gui_main(s_trj_gui *self)
 		gui_cmd_render(&self->gui_cmd);
 	}
 	
-	__file_browser_save__.Display();
-	__file_browser_open__.Display();
-	
-	
 	return 0x00;
 }
 

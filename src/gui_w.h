@@ -17,7 +17,6 @@
 
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/imgui_internal.h>
-#include <lib/imfilebrowser/imfilebrowser.h>
 
 //----------------------------------------------------------------
 
@@ -114,10 +113,7 @@ inline void gui_procsel(char *label, s_trj_eng *eng)
 
 //----------------------------------------------------------------
 
-inline ImGui::FileBrowser __file_browser_open__ = ImGui::FileBrowser();
-inline ImGui::FileBrowser __file_browser_save__ = ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
-
-inline void gui_fileopen(char *file_path, float width = -1)
+inline void gui_fileopen(char *file_path, uint32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -131,18 +127,25 @@ inline void gui_fileopen(char *file_path, float width = -1)
 	ImGui::InputText("##file_path", file_name, 512, ImGuiInputTextFlags_ReadOnly);
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip(file_path); }
-
+	
 	ImGui::SameLine(0.0, 0.0);
 	
 	if(ImGui::Button("SEL", ImVec2(40,0)))
-	{ __file_browser_open__.Open(); }
-	
-	__file_browser_open__.Display();
-	
-	if(__file_browser_open__.HasSelected())
 	{
-		strcpy(file_path, __file_browser_open__.GetSelected().string().c_str());
-		__file_browser_open__.ClearSelected();
+		nfdchar_t *user_path;
+		nfdresult_t result = NFD_OpenDialog(&user_path, filter_ls, filter_sz, file_path);
+		
+		if (result == NFD_OKAY)
+		{
+			strcpy(file_path, user_path);
+			NFD_FreePath(user_path);
+		}
+
+//		else if (result == NFD_CANCEL)
+//		{ puts("User pressed cancel."); }
+
+//		else
+//		{ printf("Error: %s\n", NFD_GetError() ); }
 	}
 	
 	ImGui::PopID();
@@ -150,7 +153,9 @@ inline void gui_fileopen(char *file_path, float width = -1)
 	return;
 }
 
-inline void gui_filesave(char *file_path)
+//----------------------------------------------------------------
+
+inline void gui_filesave(char *file_path, uint32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -166,14 +171,21 @@ inline void gui_filesave(char *file_path)
 	ImGui::SameLine(0.0, 0.0);
 	
 	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvailWidth(),0)))
-	{ __file_browser_save__.Open(); }
-	
-	__file_browser_save__.Display();
-	
-	if(__file_browser_save__.HasSelected())
 	{
-		strcpy(file_path, __file_browser_save__.GetSelected().string().c_str());
-		__file_browser_save__.ClearSelected();
+		nfdchar_t *user_path;
+		nfdresult_t result = NFD_SaveDialog(&user_path, filter_ls, filter_sz, file_path, NULL);
+		
+		if (result == NFD_OKAY)
+		{
+			strcpy(file_path, user_path);
+			NFD_FreePath(user_path);
+		}
+
+//		else if (result == NFD_CANCEL)
+//		{ puts("User pressed cancel."); }
+
+//		else
+//		{ printf("Error: %s\n", NFD_GetError() ); }
 	}
 	
 	ImGui::PopID();

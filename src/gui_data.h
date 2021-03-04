@@ -525,7 +525,7 @@ inline void gui_data_edit_mat(s_trj_data *self)
 	if (ImGui::IsItemHovered())
 	{ ImGui::SetTooltip("Path to almanac file"); }
 	ImGui::SameLine();
-	gui_filesave(data->file_name);
+	gui_filesave(data->file_name, 0x00, NULL);
 	
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
