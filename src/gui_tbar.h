@@ -12,6 +12,7 @@
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/clip/clip.h>
+#include <lib/nfde/nfd.h>
 
 #include "gui_eng.h"
 #include "gui_env.h"
@@ -38,13 +39,49 @@ typedef struct gui_tbar
 inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 {
 	if (ImGui::MenuItem("Open", "Ctrl+O"))
-	{ __file_browser_open__.Open(); }
+	{
+		nfdchar_t *user_path;
+		nfdfilteritem_t filterItem[1] = { { "Trajectory Project", "trj" } };
+		nfdresult_t result = NFD_OpenDialog(&user_path, filterItem, 1, tbar->file_path);
+		
+		if (result == NFD_OKAY)
+		{
+			strcpy(tbar->file_path, user_path);
+			trj_eng_load(tbar->eng, tbar->file_path);
+			
+			NFD_FreePath(user_path);
+		}
+		
+//		else if (result == NFD_CANCEL)
+//		{ puts("User pressed cancel."); }
+
+//		else
+//		{ printf("Error: %s\n", NFD_GetError() ); }
+	}
 
 	if (ImGui::MenuItem("Save", "Ctrl+S"))
 	{ trj_eng_save(tbar->eng, tbar->file_path); }
 
 	if (ImGui::MenuItem("Save As...", ""))
-	{ __file_browser_save__.Open(); }
+	{
+		nfdchar_t *user_path;
+		nfdfilteritem_t filterItem[1] = { { "Trajectory Project", "trj" } };
+		nfdresult_t result = NFD_SaveDialog(&user_path, filterItem, 1, tbar->file_path, "project.trj");
+		
+		if (result == NFD_OKAY)
+		{
+			strcpy(tbar->file_path, user_path);
+			trj_eng_save(tbar->eng, tbar->file_path);
+			
+			NFD_FreePath(user_path);
+		}
+
+//		else if (result == NFD_CANCEL)
+//		{ puts("User pressed cancel."); }
+
+//		else
+//		{ printf("Error: %s\n", NFD_GetError() ); }
+	}
 	
 	ImGui::EndMenu();
 	
@@ -181,24 +218,7 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 	
 	if(ImGui::Button("RENDER", ImVec2(80,0)))
 	{ tbar->eng_gui->state = gui_eng_state_init; }
-	
-	// Process filebrowser state here, because menu/file/open will
-	// not be rendered after you press OK in filebrowser
-	
-	if (__file_browser_open__.HasSelected())
-	{
-		strcpy(tbar->file_path, __file_browser_open__.GetSelected().string().c_str());
-		__file_browser_open__.ClearSelected();
-		trj_eng_load(tbar->eng, tbar->file_path);
-	}
-	
-	if (__file_browser_save__.HasSelected())
-	{
-		strcpy(tbar->file_path, __file_browser_save__.GetSelected().string().c_str());
-		__file_browser_save__.ClearSelected();
-		trj_eng_save(tbar->eng, tbar->file_path);
-	}
-	
+		
 	return 0x00;
 }
 

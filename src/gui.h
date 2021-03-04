@@ -12,6 +12,7 @@
 
 #include <lib/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
+#include <lib/nfde/nfd.h>
 #include <softael_lib/vl.h>
 #include <softael_lib/imgui_theme.h>
 
@@ -72,6 +73,9 @@ typedef struct gui_init_attr
 
 inline uint8_t gui_init(s_trj_gui *self, s_gui_init attr)
 {
+	// Init Native File Dialog Extended library
+	NFD_Init();
+
 //	s_gui_map *temp_map = new s_gui_map();
 //	map = *temp_map;
 //	free(temp_map);
