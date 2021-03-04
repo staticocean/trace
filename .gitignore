@@ -16,6 +16,7 @@
 *.zip
 *.mat
 *.ini
+.DS*
 .idea/
 cmake-build-debug/
 cmake-build-release/
