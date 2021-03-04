@@ -2,7 +2,12 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#ifdef __APPLE__
+#define UNIX_HOST
+#elif defined _WIN32 || defined _WIN64
 #define WIN32
+#endif
+
 
 /* configurable options */
 /* select your host type (or do it in the Makefile):

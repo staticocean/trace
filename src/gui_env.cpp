@@ -46,7 +46,8 @@ static s_gui_env *st_env[st_size];
 
 uint8_t __api_ctrl_init__(void **data, void *config)
 {
-	uint32_t offset = (uint32_t) *data;
+    // TO-DO what the hell is this?
+	uint64_t offset = (uint64_t) *data;
 	s_gui_env *self = st_env[offset];
 	
 	char call[255];
