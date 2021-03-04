@@ -861,7 +861,7 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_traj_bz_pos_local(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
+inline uint8_t trj_traj_bz_pos_raw(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 {
 	uint32_t offset = 0x00;
 	

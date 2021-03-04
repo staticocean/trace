@@ -816,13 +816,74 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 		
 		// restore ImGui cursor position
 		ImGui::SetCursorScreenPos(cursor_pos);
+//
+//		// draw control points and lines
+//		for (int i = 0; i < self->pts_offset; ++i)
+//		{
+//			ImGui::PushID(i);
+//
+//			ImVec2 p;
+//
+//			if (self->ellp_en == 0x00)
+//			{
+//				p = transform(&view_top, ImVec2(
+//						self->pts[i].pos_p[2],
+//						self->pts[i].pos_p[0]));
+//			}
+//
+//			else
+//			{
+//				p = transform(&view_top, ImVec2(
+//						self->pts[i].pos_p[1],
+//						self->pts[i].pos_p[0]));
+//			}
+//
+//			ImVec2 d;
+//
+//			if (self->ellp_en == 0x00)
+//			{
+//				d = transform(&view_top, ImVec2(
+//						self->pts[i].pos_p[2] + self->pts[i].pos_d[2],
+//						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+//			}
+//
+//			else
+//			{
+//				d = transform(&view_top, ImVec2(
+//						self->pts[i].pos_p[1] + self->pts[i].pos_d[1],
+//						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+//			}
+//
+//			//		window->DrawList->AddTriangleFilled(
+//			//				pos_d + ImVec2(-4,0),
+//			//				pos_d + ImVec2(+4,0),
+//			//				pos_d + ImVec2(0,-5.6), col_textdis_u32);
+//
+//			window->DrawList->AddLine(
+//					d + ImVec2(-4, -4),
+//					d + ImVec2(+4, +4),
+//					col_textdis_u32);
+//
+//			window->DrawList->AddLine(
+//					d + ImVec2(+4, -4),
+//					d + ImVec2(-4, +4),
+//					col_textdis_u32);
+//
+//			window->DrawList->AddLine(p, d, col_textdis_u32);
+//
+//			ImGui::PopID();
+//		}
 		
-		// draw control points and lines
+		// draw velocity points and lines
 		for (int i = 0; i < self->pts_offset; ++i)
 		{
 			ImGui::PushID(i);
 			
 			ImVec2 p;
+			
+			vlf_t vel[3];
+			
+			trj_traj_bz_vel(self, self->pts[i].time, vel);
 			
 			if (self->ellp_en == 0x00)
 			{
@@ -843,31 +904,26 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 			if (self->ellp_en == 0x00)
 			{
 				d = transform(&view_top, ImVec2(
-						self->pts[i].pos_p[2] + self->pts[i].pos_d[2],
-						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+						self->pts[i].pos_p[2] + vel[2]*10,
+						self->pts[i].pos_p[0] + vel[0]*10));
 			}
 			
 			else
 			{
 				d = transform(&view_top, ImVec2(
-						self->pts[i].pos_p[1] + self->pts[i].pos_d[1],
-						self->pts[i].pos_p[0] + self->pts[i].pos_d[0]));
+						self->pts[i].pos_p[1] + vel[1]*10,
+						self->pts[i].pos_p[0] + vel[0]*10));
 			}
 			
-			//		window->DrawList->AddTriangleFilled(
-			//				pos_d + ImVec2(-4,0),
-			//				pos_d + ImVec2(+4,0),
-			//				pos_d + ImVec2(0,-5.6), col_textdis_u32);
-			
-			window->DrawList->AddLine(
-					d + ImVec2(-4, -4),
-					d + ImVec2(+4, +4),
-					col_textdis_u32);
-			
-			window->DrawList->AddLine(
-					d + ImVec2(+4, -4),
-					d + ImVec2(-4, +4),
-					col_textdis_u32);
+//			window->DrawList->AddLine(
+//					d + ImVec2(-4, -4),
+//					d + ImVec2(+4, +4),
+//					col_textdis_u32);
+//
+//			window->DrawList->AddLine(
+//					d + ImVec2(+4, -4),
+//					d + ImVec2(-4, +4),
+//					col_textdis_u32);
 			
 			window->DrawList->AddLine(p, d, col_textdis_u32);
 			
@@ -901,6 +957,19 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 					ImVec2 p1_ = ImVec2(p1[2], p1[0]);
 					
 					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), vl3d_col_legacy);
+					
+					if (i % 10 == 0x00)
+					{
+						window->DrawList->AddLine(
+								transform(&view_top, p1_) + ImVec2(-4, -4),
+								transform(&view_top, p1_) + ImVec2(+4, +4),
+								col_textdis_u32);
+						
+						window->DrawList->AddLine(
+								transform(&view_top, p1_) + ImVec2(+4, -4),
+								transform(&view_top, p1_) + ImVec2(-4, +4),
+								col_textdis_u32);
+					}
 				}
 				
 				else
@@ -909,6 +978,19 @@ inline void gui_traj_view_bz(s_trj_traj_bz *self, const char* label, ImVec2 size
 					ImVec2 p1_ = ImVec2(p1[1], p1[0]);
 					
 					window->DrawList->AddLine(transform(&view_top, p0_), transform(&view_top, p1_), vl3d_col_legacy);
+					
+					if (i % 10 == 0x00)
+					{
+						window->DrawList->AddLine(
+								transform(&view_top, p1_) + ImVec2(-4, -4),
+								transform(&view_top, p1_) + ImVec2(+4, +4),
+								col_textdis_u32);
+						
+						window->DrawList->AddLine(
+								transform(&view_top, p1_) + ImVec2(+4, -4),
+								transform(&view_top, p1_) + ImVec2(-4, +4),
+								col_textdis_u32);
+					}
 				}
 				
 				time += time_step;
