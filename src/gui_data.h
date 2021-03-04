@@ -152,15 +152,16 @@ inline void gui_data_edit_ram(s_trj_data *self)
 	return;
 }
 
-inline void gui_data_view_ram(s_trj_data *self)
+inline uint8_t gui_data_view_ram(s_trj_data *self)
 {
 	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
+	uint8_t mode = 0x00;
 	
 	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
 	if (data->offset == 0x00)
 	{
 		ImGui::Text("Object data is not available. \r\nRunning the simulation may fix the problem.");
-		return;
+		return mode;
 	}
 	
 	ImGui::PushID(self);
@@ -169,6 +170,8 @@ inline void gui_data_view_ram(s_trj_data *self)
 	{
 		if (ImGui::BeginTabItem("3D view"))
 		{
+			mode = 0x00;
+			
 			s_vl3d_eng vl3d_eng;
 			
 			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
@@ -289,6 +292,8 @@ inline void gui_data_view_ram(s_trj_data *self)
 		
 		if (ImGui::BeginTabItem("details"))
 		{
+			mode = 0x01;
+			
 			if (ImGui::CollapsingHeader("heading"))
 			{
 				if (ImPlot::BeginPlot("heading"))
@@ -410,7 +415,8 @@ inline void gui_data_view_ram(s_trj_data *self)
 	
 	ImGui::PopID();
 	
-	return;
+	// for using in data_mat
+	return mode;
 }
 
 //----------------------------------------------------------------
@@ -580,8 +586,10 @@ inline void gui_data_view_mat(s_trj_data *self)
 	s_trj_data ramld = *self;
 	ramld.data = &data->ramld;
 	
-	gui_data_view_ram(&ram);
-	gui_data_view_ramld(&ramld);
+	if (gui_data_view_ram(&ram) != 0x00)
+	{
+		gui_data_view_ramld(&ramld);
+	}
 	
 	ImGui::PopID();
 	
