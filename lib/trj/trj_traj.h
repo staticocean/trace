@@ -9,8 +9,8 @@
 
 //----------------------------------------------------------------
 
-#include <softael_lib/vl.h>
-#include <softael_lib/bz.h>
+#include <lib_internal/vl.h>
+#include <lib_internal/bz.h>
 
 #include "trj_api.h"
 #include "trj_ellp.h"

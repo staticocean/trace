@@ -7,7 +7,7 @@
 #include <lib/imgui/imgui.h>
 #include <lib/implot/implot.h>
 
-#include <softael_lib/vl.h>
+#include <lib_internal/vl.h>
 
 #include <lib/trj/trj_api.h>
 #include <lib/trj/trj_eng.h>

@@ -13,7 +13,7 @@
 
 #include <stdlib.h>
 
-#include <softael_lib/vl.h>
+#include <lib_internal/vl.h>
 
 //----------------------------------------------------------------
 

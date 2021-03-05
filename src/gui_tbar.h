@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <softael_lib/vl.h>
+#include <lib_internal/vl.h>
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/clip/clip.h>

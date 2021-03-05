@@ -4,8 +4,8 @@
 
 //----------------------------------------------------------------
 
-#include <softael_lib/vl.h>
-#include <softael_lib/vl3d.h>
+#include <lib_internal/vl.h>
+#include <lib_internal/vl3d.h>
 
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_traj.h>

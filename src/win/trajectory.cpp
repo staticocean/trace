@@ -14,10 +14,10 @@
 #include <time.h>
 
 #include <lib/imgui/imgui.h>
-#include <lib/imgui/win/imgui_impl_glfw.h>
-#include <lib/imgui/win/imgui_impl_opengl3.h>
-#include <lib/glfw/gl3w.h>
-#include <lib/glfw/glfw3.h>
+#include <lib/imgui/backends/imgui_impl_glfw.h>
+#include <lib/imgui/backends/imgui_impl_opengl3.h>
+#include <lib/imgui/backends/gl3w/GL/gl3w.h>
+#include <lib/imgui/backends/glfw/include/GLFW/glfw3.h>
 
 #include "gui.h"
 

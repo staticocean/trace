@@ -15,8 +15,8 @@
 #include <lib/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
 #include <lib/nfde/nfd.h>
-#include <softael_lib/vl.h>
-#include <softael_lib/imgui_theme.h>
+#include <lib_internal/vl.h>
+#include <lib_internal/imgui_theme.h>
 
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>

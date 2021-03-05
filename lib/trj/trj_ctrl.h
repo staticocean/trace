@@ -9,7 +9,7 @@
 
 //----------------------------------------------------------------
 
-#include <softael_lib/vl.h>
+#include <lib_internal/vl.h>
 
 #include "trj_api.h"
 #include "trj_obj.h"
