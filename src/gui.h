@@ -565,7 +565,7 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			(default_font_compressed_data_base85,
 					18, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 	
-	imgui_theme_set();
+    imgui_theme_set();
 	
 	ImGuiStyle& style_ref = ImGui::GetStyle();
 	
