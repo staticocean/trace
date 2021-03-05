@@ -10,21 +10,7 @@
 		8309BDC6253CCCFE0045E2A1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8309BDC5253CCCFE0045E2A1 /* AppKit.framework */; };
 		83BBE9EC20EB471700295997 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9EA20EB471700295997 /* MetalKit.framework */; };
 		83BBE9ED20EB471700295997 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9EB20EB471700295997 /* Metal.framework */; };
-		AE7355EC25F0E5FE008880D5 /* implot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73558625F0E5FE008880D5 /* implot.cpp */; };
-		AE7355ED25F0E5FE008880D5 /* implot_items.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73558725F0E5FE008880D5 /* implot_items.cpp */; };
-		AE7355EE25F0E5FE008880D5 /* implot_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73558825F0E5FE008880D5 /* implot_demo.cpp */; };
-		AE7355EF25F0E5FE008880D5 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73558C25F0E5FE008880D5 /* image.cpp */; };
-		AE7355F125F0E5FE008880D5 /* clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73559125F0E5FE008880D5 /* clip.cpp */; };
-		AE7355F225F0E5FE008880D5 /* clip_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE73559325F0E5FE008880D5 /* clip_osx.mm */; };
-		AE7355F425F0E5FE008880D5 /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73559925F0E5FE008880D5 /* imgui_widgets.cpp */; };
-		AE7355F925F0E5FE008880D5 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE7355A725F0E5FE008880D5 /* imgui_impl_metal.mm */; };
-		AE7355FA25F0E5FE008880D5 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE7355A925F0E5FE008880D5 /* imgui_impl_osx.mm */; };
-		AE7355FB25F0E5FE008880D5 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355AA25F0E5FE008880D5 /* imgui.cpp */; };
-		AE7355FC25F0E5FE008880D5 /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355AD25F0E5FE008880D5 /* imgui_tables.cpp */; };
-		AE7355FD25F0E5FE008880D5 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355AE25F0E5FE008880D5 /* imgui_demo.cpp */; };
-		AE7355FE25F0E5FE008880D5 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355AF25F0E5FE008880D5 /* imgui_draw.cpp */; };
 		AE7355FF25F0E5FE008880D5 /* tinymat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355B225F0E5FE008880D5 /* tinymat.cpp */; };
-		AE73560025F0E5FE008880D5 /* nfd_cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = AE7355B625F0E5FE008880D5 /* nfd_cocoa.m */; };
 		AE73560425F0E5FE008880D5 /* json11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7355CA25F0E5FE008880D5 /* json11.cpp */; };
 		AE73562825F0E806008880D5 /* metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE73562725F0E806008880D5 /* metal.mm */; };
 		AE73564F25F0E814008880D5 /* gui_cmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73562D25F0E814008880D5 /* gui_cmd.cpp */; };
@@ -52,6 +38,20 @@
 		AE7356A825F0E844008880D5 /* picoc_type.c in Sources */ = {isa = PBXBuildFile; fileRef = AE73569525F0E844008880D5 /* picoc_type.c */; };
 		AE7356A925F0E844008880D5 /* picoc_platform.c in Sources */ = {isa = PBXBuildFile; fileRef = AE73569625F0E844008880D5 /* picoc_platform.c */; };
 		AE7356AA25F0E844008880D5 /* picoc_lex.c in Sources */ = {isa = PBXBuildFile; fileRef = AE73569725F0E844008880D5 /* picoc_lex.c */; };
+		AE73581A25F29879008880D5 /* implot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357BA25F29879008880D5 /* implot.cpp */; };
+		AE73581B25F29879008880D5 /* implot_items.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357BB25F29879008880D5 /* implot_items.cpp */; };
+		AE73581C25F29879008880D5 /* implot_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357BC25F29879008880D5 /* implot_demo.cpp */; };
+		AE73581D25F29879008880D5 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357C025F29879008880D5 /* image.cpp */; };
+		AE73581F25F29879008880D5 /* clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357C525F29879008880D5 /* clip.cpp */; };
+		AE73582025F29879008880D5 /* clip_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE7357C725F29879008880D5 /* clip_osx.mm */; };
+		AE73582225F29879008880D5 /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE7357CD25F29879008880D5 /* imgui_widgets.cpp */; };
+		AE73582925F29879008880D5 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE7357E725F29879008880D5 /* imgui_impl_metal.mm */; };
+		AE73583425F29879008880D5 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE7357F625F29879008880D5 /* imgui_impl_osx.mm */; };
+		AE73583D25F29879008880D5 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73580925F29879008880D5 /* imgui.cpp */; };
+		AE73583E25F29879008880D5 /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73580C25F29879008880D5 /* imgui_tables.cpp */; };
+		AE73583F25F29879008880D5 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73580D25F29879008880D5 /* imgui_demo.cpp */; };
+		AE73584025F29879008880D5 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE73580E25F29879008880D5 /* imgui_draw.cpp */; };
+		AE73584125F29879008880D5 /* nfd_cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = AE73581225F29879008880D5 /* nfd_cocoa.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,37 +62,8 @@
 		83BBE9EA20EB471700295997 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		83BBE9EB20EB471700295997 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		83BBE9EE20EB471C00295997 /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
-		AE73558625F0E5FE008880D5 /* implot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot.cpp; sourceTree = "<group>"; };
-		AE73558725F0E5FE008880D5 /* implot_items.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot_items.cpp; sourceTree = "<group>"; };
-		AE73558825F0E5FE008880D5 /* implot_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot_demo.cpp; sourceTree = "<group>"; };
-		AE73558925F0E5FE008880D5 /* implot_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = implot_internal.h; sourceTree = "<group>"; };
-		AE73558A25F0E5FE008880D5 /* implot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = implot.h; sourceTree = "<group>"; };
-		AE73558C25F0E5FE008880D5 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
-		AE73558D25F0E5FE008880D5 /* clip_lock_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_lock_impl.h; sourceTree = "<group>"; };
-		AE73558E25F0E5FE008880D5 /* clip_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_common.h; sourceTree = "<group>"; };
-		AE73558F25F0E5FE008880D5 /* clip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip.h; sourceTree = "<group>"; };
-		AE73559125F0E5FE008880D5 /* clip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clip.cpp; sourceTree = "<group>"; };
-		AE73559325F0E5FE008880D5 /* clip_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = clip_osx.mm; sourceTree = "<group>"; };
-		AE73559625F0E5FE008880D5 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
-		AE73559725F0E5FE008880D5 /* imstb_textedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_textedit.h; sourceTree = "<group>"; };
-		AE73559825F0E5FE008880D5 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
-		AE73559925F0E5FE008880D5 /* imgui_widgets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_widgets.cpp; sourceTree = "<group>"; };
-		AE73559A25F0E5FE008880D5 /* imstb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
-		AE7355A625F0E5FE008880D5 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_osx.h; sourceTree = "<group>"; };
-		AE7355A725F0E5FE008880D5 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_metal.mm; sourceTree = "<group>"; };
-		AE7355A825F0E5FE008880D5 /* imgui_impl_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal.h; sourceTree = "<group>"; };
-		AE7355A925F0E5FE008880D5 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_osx.mm; sourceTree = "<group>"; };
-		AE7355AA25F0E5FE008880D5 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
-		AE7355AB25F0E5FE008880D5 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
-		AE7355AC25F0E5FE008880D5 /* imstb_rectpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
-		AE7355AD25F0E5FE008880D5 /* imgui_tables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_tables.cpp; sourceTree = "<group>"; };
-		AE7355AE25F0E5FE008880D5 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
-		AE7355AF25F0E5FE008880D5 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
 		AE7355B125F0E5FE008880D5 /* tinymat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinymat.h; sourceTree = "<group>"; };
 		AE7355B225F0E5FE008880D5 /* tinymat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinymat.cpp; sourceTree = "<group>"; };
-		AE7355B425F0E5FE008880D5 /* nfd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = nfd.hpp; sourceTree = "<group>"; };
-		AE7355B525F0E5FE008880D5 /* nfd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nfd.h; sourceTree = "<group>"; };
-		AE7355B625F0E5FE008880D5 /* nfd_cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nfd_cocoa.m; sourceTree = "<group>"; };
 		AE7355BD25F0E5FE008880D5 /* trj_proc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trj_proc.h; sourceTree = "<group>"; };
 		AE7355BE25F0E5FE008880D5 /* trj_data_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trj_data_.h; sourceTree = "<group>"; };
 		AE7355BF25F0E5FE008880D5 /* trj_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trj_api.h; sourceTree = "<group>"; };
@@ -154,6 +125,49 @@
 		AE73569525F0E844008880D5 /* picoc_type.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = picoc_type.c; sourceTree = "<group>"; };
 		AE73569625F0E844008880D5 /* picoc_platform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = picoc_platform.c; sourceTree = "<group>"; };
 		AE73569725F0E844008880D5 /* picoc_lex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = picoc_lex.c; sourceTree = "<group>"; };
+		AE73579A25F29879008880D5 /* gjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gjson.h; sourceTree = "<group>"; };
+		AE73579B25F29879008880D5 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		AE73579C25F29879008880D5 /* vl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vl.h; sourceTree = "<group>"; };
+		AE73579D25F29879008880D5 /* sleep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sleep.h; sourceTree = "<group>"; };
+		AE73579E25F29879008880D5 /* task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = task.h; sourceTree = "<group>"; };
+		AE73579F25F29879008880D5 /* softael.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = softael.h; sourceTree = "<group>"; };
+		AE7357A025F29879008880D5 /* imgui_theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_theme.h; sourceTree = "<group>"; };
+		AE7357A225F29879008880D5 /* sic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sic.h; sourceTree = "<group>"; };
+		AE7357A325F29879008880D5 /* __pthread__.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = __pthread__.h; sourceTree = "<group>"; };
+		AE7357A425F29879008880D5 /* vl3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vl3d.h; sourceTree = "<group>"; };
+		AE7357A525F29879008880D5 /* bz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bz.h; sourceTree = "<group>"; };
+		AE7357A625F29879008880D5 /* sda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sda.h; sourceTree = "<group>"; };
+		AE7357A725F29879008880D5 /* ga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ga.h; sourceTree = "<group>"; };
+		AE7357A825F29879008880D5 /* imgui_w.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_w.h; sourceTree = "<group>"; };
+		AE7357BA25F29879008880D5 /* implot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot.cpp; sourceTree = "<group>"; };
+		AE7357BB25F29879008880D5 /* implot_items.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot_items.cpp; sourceTree = "<group>"; };
+		AE7357BC25F29879008880D5 /* implot_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = implot_demo.cpp; sourceTree = "<group>"; };
+		AE7357BD25F29879008880D5 /* implot_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = implot_internal.h; sourceTree = "<group>"; };
+		AE7357BE25F29879008880D5 /* implot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = implot.h; sourceTree = "<group>"; };
+		AE7357C025F29879008880D5 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		AE7357C125F29879008880D5 /* clip_lock_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_lock_impl.h; sourceTree = "<group>"; };
+		AE7357C225F29879008880D5 /* clip_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_common.h; sourceTree = "<group>"; };
+		AE7357C325F29879008880D5 /* clip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip.h; sourceTree = "<group>"; };
+		AE7357C525F29879008880D5 /* clip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clip.cpp; sourceTree = "<group>"; };
+		AE7357C725F29879008880D5 /* clip_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = clip_osx.mm; sourceTree = "<group>"; };
+		AE7357CA25F29879008880D5 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
+		AE7357CB25F29879008880D5 /* imstb_textedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_textedit.h; sourceTree = "<group>"; };
+		AE7357CC25F29879008880D5 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
+		AE7357CD25F29879008880D5 /* imgui_widgets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_widgets.cpp; sourceTree = "<group>"; };
+		AE7357CE25F29879008880D5 /* imstb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
+		AE7357DA25F29879008880D5 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_osx.h; sourceTree = "<group>"; };
+		AE7357E725F29879008880D5 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_metal.mm; sourceTree = "<group>"; };
+		AE7357F625F29879008880D5 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_osx.mm; sourceTree = "<group>"; };
+		AE73580925F29879008880D5 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
+		AE73580A25F29879008880D5 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
+		AE73580B25F29879008880D5 /* imstb_rectpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
+		AE73580C25F29879008880D5 /* imgui_tables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_tables.cpp; sourceTree = "<group>"; };
+		AE73580D25F29879008880D5 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
+		AE73580E25F29879008880D5 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
+		AE73581025F29879008880D5 /* nfd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = nfd.hpp; sourceTree = "<group>"; };
+		AE73581125F29879008880D5 /* nfd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nfd.h; sourceTree = "<group>"; };
+		AE73581225F29879008880D5 /* nfd_cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nfd_cocoa.m; sourceTree = "<group>"; };
+		AE73584D25F298BD008880D5 /* imgui_impl_metal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +187,8 @@
 		8307E7B520E9F9C700473790 = {
 			isa = PBXGroup;
 			children = (
+				AE7357B425F29879008880D5 /* lib_gui */,
+				AE73579925F29879008880D5 /* lib_internal */,
 				AE73565E25F0E819008880D5 /* res */,
 				AE73558425F0E5FE008880D5 /* lib */,
 				AE73562B25F0E814008880D5 /* src */,
@@ -223,71 +239,12 @@
 			isa = PBXGroup;
 			children = (
 				AE73568025F0E844008880D5 /* picoc */,
-				AE73558525F0E5FE008880D5 /* implot */,
-				AE73558B25F0E5FE008880D5 /* clip */,
-				AE73559525F0E5FE008880D5 /* imgui */,
 				AE7355B025F0E5FE008880D5 /* tinymat */,
-				AE7355B325F0E5FE008880D5 /* nfde */,
 				AE7355BC25F0E5FE008880D5 /* trj */,
 				AE7355C825F0E5FE008880D5 /* json11 */,
 			);
 			name = lib;
 			path = ../../lib;
-			sourceTree = "<group>";
-		};
-		AE73558525F0E5FE008880D5 /* implot */ = {
-			isa = PBXGroup;
-			children = (
-				AE73558625F0E5FE008880D5 /* implot.cpp */,
-				AE73558725F0E5FE008880D5 /* implot_items.cpp */,
-				AE73558825F0E5FE008880D5 /* implot_demo.cpp */,
-				AE73558925F0E5FE008880D5 /* implot_internal.h */,
-				AE73558A25F0E5FE008880D5 /* implot.h */,
-			);
-			path = implot;
-			sourceTree = "<group>";
-		};
-		AE73558B25F0E5FE008880D5 /* clip */ = {
-			isa = PBXGroup;
-			children = (
-				AE73558C25F0E5FE008880D5 /* image.cpp */,
-				AE73558D25F0E5FE008880D5 /* clip_lock_impl.h */,
-				AE73558E25F0E5FE008880D5 /* clip_common.h */,
-				AE73558F25F0E5FE008880D5 /* clip.h */,
-				AE73559125F0E5FE008880D5 /* clip.cpp */,
-				AE73559325F0E5FE008880D5 /* clip_osx.mm */,
-			);
-			path = clip;
-			sourceTree = "<group>";
-		};
-		AE73559525F0E5FE008880D5 /* imgui */ = {
-			isa = PBXGroup;
-			children = (
-				AE73559625F0E5FE008880D5 /* imgui.h */,
-				AE73559725F0E5FE008880D5 /* imstb_textedit.h */,
-				AE73559825F0E5FE008880D5 /* imconfig.h */,
-				AE73559925F0E5FE008880D5 /* imgui_widgets.cpp */,
-				AE73559A25F0E5FE008880D5 /* imstb_truetype.h */,
-				AE7355A525F0E5FE008880D5 /* mac */,
-				AE7355AA25F0E5FE008880D5 /* imgui.cpp */,
-				AE7355AB25F0E5FE008880D5 /* imgui_internal.h */,
-				AE7355AC25F0E5FE008880D5 /* imstb_rectpack.h */,
-				AE7355AD25F0E5FE008880D5 /* imgui_tables.cpp */,
-				AE7355AE25F0E5FE008880D5 /* imgui_demo.cpp */,
-				AE7355AF25F0E5FE008880D5 /* imgui_draw.cpp */,
-			);
-			path = imgui;
-			sourceTree = "<group>";
-		};
-		AE7355A525F0E5FE008880D5 /* mac */ = {
-			isa = PBXGroup;
-			children = (
-				AE7355A625F0E5FE008880D5 /* imgui_impl_osx.h */,
-				AE7355A725F0E5FE008880D5 /* imgui_impl_metal.mm */,
-				AE7355A825F0E5FE008880D5 /* imgui_impl_metal.h */,
-				AE7355A925F0E5FE008880D5 /* imgui_impl_osx.mm */,
-			);
-			path = mac;
 			sourceTree = "<group>";
 		};
 		AE7355B025F0E5FE008880D5 /* tinymat */ = {
@@ -297,16 +254,6 @@
 				AE7355B225F0E5FE008880D5 /* tinymat.cpp */,
 			);
 			path = tinymat;
-			sourceTree = "<group>";
-		};
-		AE7355B325F0E5FE008880D5 /* nfde */ = {
-			isa = PBXGroup;
-			children = (
-				AE7355B425F0E5FE008880D5 /* nfd.hpp */,
-				AE7355B525F0E5FE008880D5 /* nfd.h */,
-				AE7355B625F0E5FE008880D5 /* nfd_cocoa.m */,
-			);
-			path = nfde;
 			sourceTree = "<group>";
 		};
 		AE7355BC25F0E5FE008880D5 /* trj */ = {
@@ -443,6 +390,113 @@
 			path = cstdlib;
 			sourceTree = "<group>";
 		};
+		AE73579925F29879008880D5 /* lib_internal */ = {
+			isa = PBXGroup;
+			children = (
+				AE73579A25F29879008880D5 /* gjson.h */,
+				AE73579B25F29879008880D5 /* error.h */,
+				AE73579C25F29879008880D5 /* vl.h */,
+				AE73579D25F29879008880D5 /* sleep.h */,
+				AE73579E25F29879008880D5 /* task.h */,
+				AE73579F25F29879008880D5 /* softael.h */,
+				AE7357A025F29879008880D5 /* imgui_theme.h */,
+				AE7357A225F29879008880D5 /* sic.h */,
+				AE7357A325F29879008880D5 /* __pthread__.h */,
+				AE7357A425F29879008880D5 /* vl3d.h */,
+				AE7357A525F29879008880D5 /* bz.h */,
+				AE7357A625F29879008880D5 /* sda.h */,
+				AE7357A725F29879008880D5 /* ga.h */,
+				AE7357A825F29879008880D5 /* imgui_w.h */,
+			);
+			name = lib_internal;
+			path = ../../lib_internal;
+			sourceTree = "<group>";
+		};
+		AE7357B425F29879008880D5 /* lib_gui */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357B825F29879008880D5 /* lib */,
+			);
+			name = lib_gui;
+			path = ../../lib_gui;
+			sourceTree = "<group>";
+		};
+		AE7357B825F29879008880D5 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357B925F29879008880D5 /* implot */,
+				AE7357BF25F29879008880D5 /* clip */,
+				AE7357C925F29879008880D5 /* imgui */,
+				AE73580F25F29879008880D5 /* nfde */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		AE7357B925F29879008880D5 /* implot */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357BA25F29879008880D5 /* implot.cpp */,
+				AE7357BB25F29879008880D5 /* implot_items.cpp */,
+				AE7357BC25F29879008880D5 /* implot_demo.cpp */,
+				AE7357BD25F29879008880D5 /* implot_internal.h */,
+				AE7357BE25F29879008880D5 /* implot.h */,
+			);
+			path = implot;
+			sourceTree = "<group>";
+		};
+		AE7357BF25F29879008880D5 /* clip */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357C025F29879008880D5 /* image.cpp */,
+				AE7357C125F29879008880D5 /* clip_lock_impl.h */,
+				AE7357C225F29879008880D5 /* clip_common.h */,
+				AE7357C325F29879008880D5 /* clip.h */,
+				AE7357C525F29879008880D5 /* clip.cpp */,
+				AE7357C725F29879008880D5 /* clip_osx.mm */,
+			);
+			path = clip;
+			sourceTree = "<group>";
+		};
+		AE7357C925F29879008880D5 /* imgui */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357CA25F29879008880D5 /* imgui.h */,
+				AE7357CB25F29879008880D5 /* imstb_textedit.h */,
+				AE7357CC25F29879008880D5 /* imconfig.h */,
+				AE7357CD25F29879008880D5 /* imgui_widgets.cpp */,
+				AE7357CE25F29879008880D5 /* imstb_truetype.h */,
+				AE7357CF25F29879008880D5 /* backends */,
+				AE73580925F29879008880D5 /* imgui.cpp */,
+				AE73580A25F29879008880D5 /* imgui_internal.h */,
+				AE73580B25F29879008880D5 /* imstb_rectpack.h */,
+				AE73580C25F29879008880D5 /* imgui_tables.cpp */,
+				AE73580D25F29879008880D5 /* imgui_demo.cpp */,
+				AE73580E25F29879008880D5 /* imgui_draw.cpp */,
+			);
+			path = imgui;
+			sourceTree = "<group>";
+		};
+		AE7357CF25F29879008880D5 /* backends */ = {
+			isa = PBXGroup;
+			children = (
+				AE7357DA25F29879008880D5 /* imgui_impl_osx.h */,
+				AE7357F625F29879008880D5 /* imgui_impl_osx.mm */,
+				AE73584D25F298BD008880D5 /* imgui_impl_metal.h */,
+				AE7357E725F29879008880D5 /* imgui_impl_metal.mm */,
+			);
+			path = backends;
+			sourceTree = "<group>";
+		};
+		AE73580F25F29879008880D5 /* nfde */ = {
+			isa = PBXGroup;
+			children = (
+				AE73581025F29879008880D5 /* nfd.hpp */,
+				AE73581125F29879008880D5 /* nfd.h */,
+				AE73581225F29879008880D5 /* nfd_cocoa.m */,
+			);
+			path = nfde;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -519,45 +573,45 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE73569A25F0E844008880D5 /* picoc_string.c in Sources */,
+				AE73583E25F29879008880D5 /* imgui_tables.cpp in Sources */,
+				AE73584025F29879008880D5 /* imgui_draw.cpp in Sources */,
+				AE73581A25F29879008880D5 /* implot.cpp in Sources */,
 				AE7356A625F0E844008880D5 /* picoc_table.c in Sources */,
-				AE7355FE25F0E5FE008880D5 /* imgui_draw.cpp in Sources */,
-				AE7355FB25F0E5FE008880D5 /* imgui.cpp in Sources */,
 				AE7356A225F0E844008880D5 /* picoc_include.c in Sources */,
-				AE7355FA25F0E5FE008880D5 /* imgui_impl_osx.mm in Sources */,
+				AE73581C25F29879008880D5 /* implot_demo.cpp in Sources */,
+				AE73581F25F29879008880D5 /* clip.cpp in Sources */,
 				AE73569B25F0E844008880D5 /* picoc_ctype.c in Sources */,
+				AE73584125F29879008880D5 /* nfd_cocoa.m in Sources */,
 				AE7355FF25F0E5FE008880D5 /* tinymat.cpp in Sources */,
 				AE73569925F0E844008880D5 /* picoc_math.c in Sources */,
 				AE73565025F0E814008880D5 /* imgui_custom.cpp in Sources */,
 				AE73564F25F0E814008880D5 /* gui_cmd.cpp in Sources */,
 				AE73565A25F0E814008880D5 /* picoc_win.c in Sources */,
 				AE7356A125F0E844008880D5 /* picoc_debug.c in Sources */,
-				AE7355FC25F0E5FE008880D5 /* imgui_tables.cpp in Sources */,
 				AE73569E25F0E844008880D5 /* picoc_stdio.c in Sources */,
+				AE73582925F29879008880D5 /* imgui_impl_metal.mm in Sources */,
+				AE73583425F29879008880D5 /* imgui_impl_osx.mm in Sources */,
 				AE73569825F0E844008880D5 /* picoc_stdlib.c in Sources */,
-				AE7355EF25F0E5FE008880D5 /* image.cpp in Sources */,
+				AE73583F25F29879008880D5 /* imgui_demo.cpp in Sources */,
 				AE7356A525F0E844008880D5 /* picoc_heap.c in Sources */,
 				AE7356A425F0E844008880D5 /* picoc_parse.c in Sources */,
+				AE73583D25F29879008880D5 /* imgui.cpp in Sources */,
 				AE7356A925F0E844008880D5 /* picoc_platform.c in Sources */,
-				AE7355F425F0E5FE008880D5 /* imgui_widgets.cpp in Sources */,
-				AE7355EC25F0E5FE008880D5 /* implot.cpp in Sources */,
-				AE7355F925F0E5FE008880D5 /* imgui_impl_metal.mm in Sources */,
+				AE73581B25F29879008880D5 /* implot_items.cpp in Sources */,
 				AE7356A025F0E844008880D5 /* picoc_clibrary.c in Sources */,
 				AE73569F25F0E844008880D5 /* picoc_errno.c in Sources */,
-				AE7355FD25F0E5FE008880D5 /* imgui_demo.cpp in Sources */,
-				AE73560025F0E5FE008880D5 /* nfd_cocoa.m in Sources */,
 				AE73565C25F0E814008880D5 /* picoc_api.c in Sources */,
 				AE7356AA25F0E844008880D5 /* picoc_lex.c in Sources */,
 				AE73569C25F0E844008880D5 /* picoc_stdbool.c in Sources */,
-				AE7355ED25F0E5FE008880D5 /* implot_items.cpp in Sources */,
 				AE73560425F0E5FE008880D5 /* json11.cpp in Sources */,
 				AE7356A325F0E844008880D5 /* picoc_variable.c in Sources */,
+				AE73582025F29879008880D5 /* clip_osx.mm in Sources */,
+				AE73582225F29879008880D5 /* imgui_widgets.cpp in Sources */,
 				AE7356A725F0E844008880D5 /* picoc_expression.c in Sources */,
-				AE7355F125F0E5FE008880D5 /* clip.cpp in Sources */,
-				AE7355EE25F0E5FE008880D5 /* implot_demo.cpp in Sources */,
 				AE7356A825F0E844008880D5 /* picoc_type.c in Sources */,
 				AE73569D25F0E844008880D5 /* picoc_time.c in Sources */,
+				AE73581D25F29879008880D5 /* image.cpp in Sources */,
 				AE73562825F0E806008880D5 /* metal.mm in Sources */,
-				AE7355F225F0E5FE008880D5 /* clip_osx.mm in Sources */,
 				AE73565B25F0E814008880D5 /* gui_env.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -677,7 +731,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				HEADER_SEARCH_PATHS = "./../../**";
+				HEADER_SEARCH_PATHS = (
+					"../../**",
+					"../../lib_gui/**",
+					"../../lib_internal/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
@@ -695,7 +753,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				HEADER_SEARCH_PATHS = "./../../**";
+				HEADER_SEARCH_PATHS = (
+					"../../**",
+					"../../lib_gui/**",
+					"../../lib_internal/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
