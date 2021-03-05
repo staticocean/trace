@@ -219,6 +219,38 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.rot = trj_traj_bz_rot_,
 	});
 	
+	static s_trj_traj_bz_init trj_traj_bz2_config_ = {
+			
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+			
+			.ellp_en = 0x00,
+			.ellp = NULL,
+			
+			.pts = NULL,
+	};
+	
+	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
+			
+			.desc = "default_traj_bz2",
+			.name = "default_traj_bz2",
+			
+			.config_size = sizeof(s_trj_traj_bz_init),
+			.config = &trj_traj_bz_config_,
+			
+			.data_size = sizeof(s_trj_traj_bz),
+			.data = NULL,
+			
+			.init = trj_traj_bz_init_,
+			.free = trj_traj_bz_free_,
+			.save = trj_traj_bz_save_,
+			.load = trj_traj_bz_load_,
+			.compile = trj_traj_bz_compile_,
+			.info = trj_traj_bz_info_,
+			.pos = trj_traj_bz_pos_,
+			.rot = trj_traj_bz_rot_,
+	});
+	
 	static s_trj_traj_navsat_init trj_traj_navsat_config_ = {
 			.eng = &self->eng,
 			.ref = &self->eng.obj_list[0],
@@ -630,6 +662,7 @@ inline uint8_t gui_main(s_gui *self)
 	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
 	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
 	const uint32_t traj_hash_bz     = vl_crc32("default_traj_bz");
+	const uint32_t traj_hash_bz2    = vl_crc32("default_traj_bz2");
 	const uint32_t traj_hash_navsat = vl_crc32("default_traj_navsat");
 	
 	const uint32_t data_hash_text = vl_crc32("default_data_text");
@@ -695,6 +728,7 @@ inline uint8_t gui_main(s_gui *self)
 					if      (traj->hash == traj_hash_static) { gui_traj_edit_static (traj); }
 					else if (traj->hash == traj_hash_orb   ) { gui_traj_edit_orb    (traj); }
 					else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
+					else if (traj->hash == traj_hash_bz2   ) { gui_traj_edit_bz2    (traj); }
 					else if (traj->hash == traj_hash_navsat) { gui_traj_edit_navsat (traj); }
 					
 					break;
@@ -761,6 +795,7 @@ inline uint8_t gui_main(s_gui *self)
 					if      (traj->hash == traj_hash_static) { gui_traj_view_static (traj); }
 					else if (traj->hash == traj_hash_orb   ) { gui_traj_view_orb    (traj); }
 					else if (traj->hash == traj_hash_bz    ) { gui_traj_view_bz((s_trj_traj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
+					else if (traj->hash == traj_hash_bz2   ) { gui_traj_view_bz2    (traj); }
 					else if (traj->hash == traj_hash_navsat) { gui_traj_view_navsat (traj); }
 					
 					break;
@@ -799,7 +834,7 @@ inline uint8_t gui_main(s_gui *self)
 //			gui_map_view(&map, "map", ImVec2(-1, -1));
 			
 			static s_vl3d_obj  obj_list[20000];
-			static s_vl3d_eng  vl3d;
+			static s_vl3d  vl3d;
 			
 			s_vl3d_view view = {
 					
@@ -824,7 +859,10 @@ inline uint8_t gui_main(s_gui *self)
 			view.grid_mode = 0x02;
 			view.xyz_en = 0x01;
 			
-			vl3d_eng_init(&vl3d, (s_vl3d_eng_init) { .obj_list = obj_list, });
+			vl3d_init(&vl3d, (s_vl3d_attr) {
+				.obj_sz = sizeof(obj_list) / sizeof(s_vl3d_obj),
+				.obj_ls = obj_list,
+			});
 			
 			ImGuiIO io = ImGui::GetIO();
 			
@@ -875,142 +913,142 @@ inline uint8_t gui_main(s_gui *self)
 						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, -z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, -z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, -z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, -z * d});
-						vl3d_eng_add_point(&vl3d, point);
+						vl3d_add_point(&vl3d, point);
 						
 						// 1
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, d*z + d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 2
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, -d*z - d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 3
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, d*z + d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 4
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, -d*z - d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 5
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, d*z + d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 6
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, -d*z - d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 7
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, d*z + d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						// 8
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, -d*z });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 						
 						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
 						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, -d*z - d });
-						vl3d_eng_add_line(&vl3d, line);
+						vl3d_add_line(&vl3d, line);
 					}
 				}
 			}
 
 //			static vl3d_text text = (s_vl3d_text) { .p0 = { 0, 0, 0 }, .data = "hello", .color = vl3d_col_legacy };
-//			vl3d_eng_add_text(&vl3d, text);
+//			vl3d_add_text(&vl3d, text);
 
 //			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImGui::ColorConvertU32ToFloat4(0x00));
 			
-			vl3d_eng_render(&vl3d, &view, "temp", ImVec2(-1, -1));
+			vl3d_render_imgui(&vl3d, &view, "temp", ImVec2(-1, -1));
 			vl3d_view_save(self, &view);
 
 //			ImGui::PopStyleColor();

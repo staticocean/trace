@@ -172,10 +172,6 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 		{
 			mode = 0x00;
 			
-			s_vl3d_eng vl3d_eng;
-			
-			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
-			
 			s_vl3d_view view = {
 					
 					.pos = {0.0, 0.0, 0.0},
@@ -192,7 +188,14 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			};
 			
 			vl3d_view_load(self, &view, view);
-			vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
+			
+			s_vl3d vl3d;
+			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
+			
+			vl3d_init(&vl3d, (s_vl3d_attr) {
+				.obj_sz = data->offset*2 + 4096,
+				.obj_ls = obj_list
+			});
 			
 			s_vl3d_line line = {.color = vl3d_col_legacy};
 			
@@ -205,7 +208,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
 					vl_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
 					
-					vl3d_eng_add_line(&vl3d_eng, line);
+					vl3d_add_line(&vl3d, line);
 				}
 			} else
 			{
@@ -214,7 +217,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl_vcopy(line.p0, &data->ecef_pos[i*3]);
 					vl_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
 					
-					vl3d_eng_add_line(&vl3d_eng, line);
+					vl3d_add_line(&vl3d, line);
 				}
 			}
 			
@@ -223,7 +226,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
 			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
 			//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
-			//		vl3d_eng_add_trngl(&vl3d_eng, trngl);
+			//		vl3d_add_trngl(&vl3d_eng, trngl);
 			
 			// hpr
 			if (data->offset > 20)
@@ -250,7 +253,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					// right
 					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
 					
-					vl3d_eng_add_trngl(&vl3d_eng, trngl);
+					vl3d_add_trngl(&vl3d, trngl);
 				}
 			} else
 			{
@@ -273,13 +276,13 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					// right
 					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
 					
-					vl3d_eng_add_trngl(&vl3d_eng, trngl);
+					vl3d_add_trngl(&vl3d, trngl);
 				}
 			}
 			
-			vl3d_view_grid(&view, &vl3d_eng);
-			vl3d_view_xyz(&view, &vl3d_eng);
-			vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
+			vl3d_view_grid(&view, &vl3d);
+			vl3d_view_xyz(&view, &vl3d);
+			vl3d_render_imgui(&vl3d, &view, "vl3d", ImVec2(-1, -1));
 			vl3d_view_save(self, &view);
 			
 			free(obj_list);

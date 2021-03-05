@@ -169,10 +169,9 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 {
     s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;
 
-    s_vl3d_eng vl3d_eng;
-
-    s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * 10000);
-
+    static s_vl3d vl3d;
+    static s_vl3d_obj obj_list[2*4096];
+    
     s_vl3d_view view = {
     
 			.pos = {0.0, 0.0, 0.0},
@@ -189,7 +188,10 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
     };
 
     vl3d_view_load(self, &view, view);
-    vl3d_eng_init(&vl3d_eng, (s_vl3d_eng_init) {.obj_list = obj_list});
+    vl3d_init(&vl3d, (s_vl3d_attr) {
+			.obj_sz = sizeof(obj_list) / sizeof(s_vl3d_obj),
+			.obj_ls = obj_list
+	});
 
     s_vl3d_line  line  = {.color = vl3d_col_legacy};
     s_vl3d_point point = {
@@ -233,7 +235,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
             point.color = IM_COL32(c, c, c, 255);
             vl_vcopy(point.p0, ecef);
 
-            vl3d_eng_add_point(&vl3d_eng, point);
+            vl3d_add_point(&vl3d, point);
         }
     }
 
@@ -246,7 +248,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            vl_vcopy(line.p0, &data->data_list[i * di].pos[0][0]);
 //            vl_vcopy(line.p1, &data->data_list[(i + 1) * di].pos[0][0]);
 //
-//            vl3d_eng_add_line(&vl3d_eng, line);
+//            vl3d_add_line(&vl3d_eng, line);
 //        }
 //    } else
 //    {
@@ -255,7 +257,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
 //            vl_vcopy(line.p1, &data->data_list[i + 1].pos[0][0]);
 //
-//            vl3d_eng_add_line(&vl3d_eng, line);
+//            vl3d_add_line(&vl3d_eng, line);
 //        }
 //    }
 //
@@ -264,7 +266,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 ////		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
 ////		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
 ////		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
-////		vl3d_eng_add_trngl(&vl3d_eng, trngl);
+////		vl3d_add_trngl(&vl3d_eng, trngl);
 //
 //    // hpr
 //    if (*data->data_offset > 20)
@@ -291,7 +293,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            // right
 //            vl_vsum(trngl.p2, trngl.p2, &rot[6]);
 //
-//            vl3d_eng_add_trngl(&vl3d_eng, trngl);
+//            vl3d_add_trngl(&vl3d_eng, trngl);
 //        }
 //    } else
 //    {
@@ -314,13 +316,13 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            // right
 //            vl_vsum(trngl.p2, trngl.p2, &rot[6]);
 //
-//            vl3d_eng_add_trngl(&vl3d_eng, trngl);
+//            vl3d_add_trngl(&vl3d_eng, trngl);
 //        }
 //    }
 
-    vl3d_view_grid(&view, &vl3d_eng);
-    vl3d_view_xyz(&view, &vl3d_eng);
-    vl3d_eng_render(&vl3d_eng, &view, "temp", ImVec2(-1, -1));
+    vl3d_view_grid(&view, &vl3d);
+    vl3d_view_xyz(&view, &vl3d);
+    vl3d_render_imgui(&vl3d, &view, "vl3d", ImVec2(-1, -1));
     vl3d_view_save(self, &view);
 
     free(obj_list);

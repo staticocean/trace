@@ -19,8 +19,8 @@ typedef struct gui_obj
 	s_trj_obj *ref;
 	uint8_t hide;
 	
-	s_vl3d_eng traj_vl3d_eng;
-	s_vl3d_obj traj_vl3d_eng_objlist[8000];
+	s_vl3d traj_vl3d_eng;
+	s_vl3d_obj traj_vl3d_objlist[8000];
 	
 } 	s_gui_obj;
 
@@ -128,10 +128,11 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 
 inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 {
-	vl3d_eng_init(&gui->traj_vl3d_eng, (s_vl3d_eng_init) {
-			.obj_list = gui->traj_vl3d_eng_objlist,
+	vl3d_init(&gui->traj_vl3d_eng, (s_vl3d_attr) {
+			.obj_sz = sizeof(gui->traj_vl3d_objlist) / sizeof(s_vl3d_obj),
+			.obj_ls = gui->traj_vl3d_objlist
 	});
-
+	
 	for (int i = 0; i < self->traj_offset; ++i)
 	{
 		vlf_t p0[3];
@@ -150,7 +151,7 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 			traj.pos(traj.data, time, p0);
 			traj.pos(traj.data, time+time_step, p1);
 
-			vl3d_eng_add_line(&gui->traj_vl3d_eng, (s_vl3d_line) {
+			vl3d_add_line(&gui->traj_vl3d_eng, (s_vl3d_line) {
 					.color = vl3d_col_legacy,
 					.p0 = { p0[0], p0[1], p0[2] },
 					.p1 = { p1[0], p1[1], p1[2] }
@@ -178,7 +179,7 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 	vl3d_view_load(self, &view, view);
 	vl3d_view_grid(&view, &gui->traj_vl3d_eng);
 	vl3d_view_xyz(&view, &gui->traj_vl3d_eng);
-	vl3d_eng_render(&gui->traj_vl3d_eng, &view, "temp", ImVec2(-1, -1));
+	vl3d_render_imgui(&gui->traj_vl3d_eng, &view, "temp", ImVec2(-1, -1));
 	vl3d_view_save(self, &view);
 	
 	return 0x00;
