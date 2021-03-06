@@ -15,7 +15,6 @@
 
 #include <res/fonts/default_font.h>
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <lib/imgui/imgui.h>
 #include <lib/imgui/mac/imgui_impl_metal.h>
 #include <lib/imgui/mac/imgui_impl_osx.h>

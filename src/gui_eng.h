@@ -8,6 +8,7 @@
 #include <lib/implot/implot.h>
 
 #include <lib_internal/vl.h>
+#include <lib_internal/imgui_w.h>
 
 #include <lib/trj/trj_api.h>
 #include <lib/trj/trj_eng.h>
@@ -16,7 +17,6 @@
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_ellp.h>
 
-#include "imgui_custom.h"
 #include "gui_obj.h"
 #include "gui_traj.h"
 
@@ -508,7 +508,7 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			ImGui::BufferingBar("##progress", self->time[0] / self->time_limit, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", self->time[0] / self->time_limit, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_proc)
@@ -517,7 +517,7 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_deinit)
@@ -526,7 +526,7 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			ImGui::BufferingBar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_standby)

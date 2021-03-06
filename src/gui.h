@@ -17,6 +17,7 @@
 #include <lib/nfde/nfd.h>
 #include <lib_internal/vl.h>
 #include <lib_internal/imgui_theme.h>
+#include <lib_internal/imgui_w.h>
 
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
@@ -26,8 +27,6 @@
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_proc.h>
-
-#include "imgui_custom.h"
 
 #include "gui_eng.h"
 #include "gui_obj.h"

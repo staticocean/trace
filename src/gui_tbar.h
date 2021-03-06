@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include <lib_internal/vl.h>
+#include <lib_internal/imgui_w.h>
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/clip/clip.h>
@@ -17,7 +18,6 @@
 #include "gui_eng.h"
 #include "gui_env.h"
 #include "gui_cmd.h"
-#include "imgui_custom.h"
 
 //----------------------------------------------------------------
 
