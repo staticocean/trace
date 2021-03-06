@@ -16,8 +16,8 @@
 #include <res/fonts/default_font.h>
 
 #include <lib/imgui/imgui.h>
-#include <lib/imgui/mac/imgui_impl_metal.h>
-#include <lib/imgui/mac/imgui_impl_osx.h>
+#include <lib/imgui/backends/imgui_impl_metal.h>
+#include <lib/imgui/backends/imgui_impl_osx.h>
 
 #include "src/gui.h"
 

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8307E7D920E9F9C900473790"
-               BuildableName = "example_apple_metal.app"
+               BuildableName = "trajectory.app"
                BlueprintName = "trajectory"
                ReferencedContainer = "container:trajectory.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8307E7D920E9F9C900473790"
-            BuildableName = "example_apple_metal.app"
+            BuildableName = "trajectory.app"
             BlueprintName = "trajectory"
             ReferencedContainer = "container:trajectory.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8307E7D920E9F9C900473790"
-            BuildableName = "example_apple_metal.app"
+            BuildableName = "trajectory.app"
             BlueprintName = "trajectory"
             ReferencedContainer = "container:trajectory.xcodeproj">
          </BuildableReference>
