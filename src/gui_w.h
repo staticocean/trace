@@ -198,14 +198,14 @@ inline void gui_filesave(char *file_path, uint32_t filter_sz, nfdfilteritem_t *f
 inline void gui_vl3d(s_vl3d *vl3d)
 {
 	s_vl3d_view view = vl3d_view_init();
-	vl3d_view_load(&vl3d, &view, view);
+	vl3d_view_load(vl3d, &view, view);
 
 	s_vl3d_gridline gridline = vl3d_gridline_init(&view);
 	s_vl3d_griddot  griddot  = vl3d_griddot_init (&view);
 	s_vl3d_xyz      xyz      = vl3d_xyz_init     (&view);
 	
 	s_vl3d_tbar tbar = vl3d_tbar_init();
-	vl3d_tbar_load(&vl3d, &tbar, tbar);
+	vl3d_tbar_load(vl3d, &tbar, tbar);
 	
 	gridline.disp = tbar.grid_disp;
 	griddot.pt_disp = tbar.grid_disp;
@@ -220,8 +220,8 @@ inline void gui_vl3d(s_vl3d *vl3d)
 	vl3d_tbar_draw(vl3d, &tbar, &view);
 	vl3d_end();
 	
-	vl3d_view_save(&vl3d, &view);
-	vl3d_tbar_save(&vl3d, &tbar);
+	vl3d_view_save(vl3d, &view);
+	vl3d_tbar_save(vl3d, &tbar);
 }
 
 //----------------------------------------------------------------
