@@ -1088,8 +1088,7 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		vlf_t rot_nwh[9];
 		vl_tnp(rot_nwh, rot_nwh_tnp);
 
-		s_vl_hpr rot_nwh_hpr;
-		vl_hpr(&rot_nwh_hpr, rot_nwh);
+		s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nwh);
 		rot_nwh_hpr.roll = 0.0;
 		vl_rot(rot_nwh, rot_nwh_hpr);
 

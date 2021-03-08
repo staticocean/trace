@@ -351,7 +351,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 
 							if (ImGui::IsItemClicked())
 							{ gui_eng_sel_data(gui, &obj->data_list[j]); }
-//
+							
 							if (ImGui::BeginPopupContextItem("data_menu"))
 							{
 								if (ImGui::Selectable("delete"))

@@ -172,22 +172,6 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
     static s_vl3d vl3d;
     static s_vl3d_obj obj_list[2*4096];
     
-    s_vl3d_view view = {
-    
-			.pos = {0.0, 0.0, 0.0},
-            .scale = 1.0,
-
-            .tbar_en = 0x01,
-		
-			.xyz_en = 0x01,
-			.xyz_scale = 0.25,
-					
-            .grid_mode = 0x01,
-            .grid_pt_size = 2.0,
-            .grid_pt_disp = 2.0,
-    };
-
-    vl3d_view_load(self, &view, view);
     vl3d_init(&vl3d, (s_vl3d_attr) {
 			.obj_sz = sizeof(obj_list) / sizeof(s_vl3d_obj),
 			.obj_ls = obj_list
@@ -320,10 +304,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //        }
 //    }
 
-    vl3d_view_grid(&view, &vl3d);
-    vl3d_view_xyz(&view, &vl3d);
-    vl3d_render_imgui(&vl3d, &view, "vl3d", ImVec2(-1, -1));
-    vl3d_view_save(self, &view);
+	gui_vl3d(&vl3d);
 
     free(obj_list);
 

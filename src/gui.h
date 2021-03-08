@@ -91,7 +91,7 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	self->gui_tbar.eng_gui = &self->gui_eng;
 	self->gui_tbar.env = &self->gui_env;
 	self->gui_tbar.cmd = &self->gui_cmd;
-	self->gui_tbar.height = 38;
+	self->gui_tbar.height = 40;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
 	gui_eng_init(&self->gui_eng, (s_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
@@ -678,7 +678,8 @@ inline uint8_t gui_main(s_gui *self)
 		ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(self->w_width, (float) self->gui_tbar.height), ImGuiCond_Always);
 //		ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255,255,255,255));
-		ImGui::Begin("toolbar", NULL, static_flags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
+		ImGui::Begin("toolbar", NULL, static_flags
+			| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
 		gui_tbar_main(&self->gui_tbar);
 		ImGui::End();
 //		ImGui::PopStyleColor();
@@ -832,37 +833,23 @@ inline uint8_t gui_main(s_gui *self)
 			// default view (can be used for debug)
 //			gui_map_view(&map, "map", ImVec2(-1, -1));
 			
-			static s_vl3d_obj  obj_list[20000];
-			static s_vl3d  vl3d;
+			static s_vl3d_obj  	obj_list[20000];
+			static s_vl3d  		vl3d;
 			
-			s_vl3d_view view = {
-					
-					.pos = { 0.0, 0.0, 0.0 },
-					.scale = 1.0,
-					
-					.tbar_en = 0x01,
-					
-					.xyz_en = 0x01,
-					.xyz_scale = 0.25,
-					
-					.grid_mode = 0x01,
-					.grid_pt_size = 2.0,
-					.grid_pt_disp = 2.0,
-			};
-			
-			vl3d_view_load(self, &view, view);
+			s_vl3d_view view = vl3d_view();
 			
 			view.scale = 1.0;
-			view.grid_pt_disp = 1.0;
-			view.tbar_en = 0x01;
-			view.grid_mode = 0x02;
-			view.xyz_en = 0x01;
+			
+			vl3d_view_load(self, &view, view);
 			
 			vl3d_init(&vl3d, (s_vl3d_attr) {
 				.obj_sz = sizeof(obj_list) / sizeof(s_vl3d_obj),
 				.obj_ls = obj_list,
 			});
 			
+			float64_t pt_disp = 2.0;
+			float64_t pt_size = 2.0;
+
 			ImGuiIO io = ImGui::GetIO();
 			
 			int cnt = 6;
@@ -876,15 +863,14 @@ inline uint8_t gui_main(s_gui *self)
 			
 			vlf_t d = 0.5 * (1.0 + vl_sin(d_)) * (1.0 / view.scale / 4.0);
 			
-			vlf_t pt_norm = vl_gauss1(0.0, 0.0, view.grid_pt_disp);
+			vlf_t pt_norm = vl_gauss1(0.0, 0.0, pt_disp);
 			vlf_t gain;
 			ImVec4 color_v4;
 			
 			s_vl3d_point point;
 			s_vl3d_line  line;
 			
-			s_vl_hpr view_hpr;
-			vl_hpr(&view_hpr, &view.rot[0][0]);
+			s_vl_hpr view_hpr = vl_hpr(&view.rot[0][0]);
 			view_hpr.heading += io.DeltaTime * 0.01;
 			view_hpr.pitch   += io.DeltaTime * 0.02;
 			view_hpr.roll    += io.DeltaTime * 0.03;
@@ -897,146 +883,146 @@ inline uint8_t gui_main(s_gui *self)
 					for (int z = 0; z < cnt; ++z)
 					{
 						gain = vl_sqrt(x * x + y * y + z * z);
-						gain = 0.4 * vl_gauss1(gain * a_state, 0.0, view.grid_pt_disp) / pt_norm;
+						gain = 0.4 * vl_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
 						
 						point.color = ImGui::ColorConvertFloat4ToU32(color_v4);
-						point.size = view.grid_pt_size;
+						point.size = pt_size;
 						
 						gain = vl_sqrt(x * x + y * y + z * z);
-						gain = 0.2 * vl_gauss1(gain * a_state, 0.0, view.grid_pt_disp) / pt_norm;
+						gain = 0.2 * vl_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
 						
 						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, z * d});
+						vl_vcopy(point.p0, vl_vec(x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {x * d, y * d, -z * d});
+						vl_vcopy(point.p0, vl_vec(x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, z * d});
+						vl_vcopy(point.p0, vl_vec(x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {x * d, -y * d, -z * d});
+						vl_vcopy(point.p0, vl_vec(x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, z * d});
+						vl_vcopy(point.p0, vl_vec(-x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, y * d, -z * d});
+						vl_vcopy(point.p0, vl_vec(-x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, z * d});
+						vl_vcopy(point.p0, vl_vec(-x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, (vlf_t[3]) {-x * d, -y * d, -z * d});
+						vl_vcopy(point.p0, vl_vec(-x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
 						// 1
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x + d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, d*z + d });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 2
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, d*y, -d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x + d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y + d, -d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, d*y, -d*z - d });
+						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 3
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x + d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, d*z + d });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 4
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x + d, -d*y, -d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x + d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y - d, -d*z });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { d*x, -d*y, -d*z - d });
+						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 5
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x - d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, d*z + d });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 6
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, d*y, -d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x - d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y + d, -d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, d*y, -d*z - d });
+						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 7
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x - d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, d*z + d });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 8
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x - d, -d*y, -d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x - d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y - d, -d*z });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, (vlf_t[3]) { -d*x, -d*y, -d*z });
-						vl_vcopy(line.p1, (vlf_t[3]) { -d*x, -d*y, -d*z - d });
+						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl_vcopy(line.p1, vl_vec(-d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 					}
 				}
@@ -1047,7 +1033,11 @@ inline uint8_t gui_main(s_gui *self)
 
 //			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImGui::ColorConvertU32ToFloat4(0x00));
 			
-			vl3d_render_imgui(&vl3d, &view, "temp", ImVec2(-1, -1));
+			vl3d_begin(&vl3d);
+			vl3d_view_ctrl3d(&vl3d, &view);
+			vl3d_view_draw(&vl3d, &view);
+			vl3d_end();
+			
 			vl3d_view_save(self, &view);
 
 //			ImGui::PopStyleColor();

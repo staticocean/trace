@@ -162,24 +162,21 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 	}
 
 	s_vl3d_view view = {
-			
-			.pos = { 0.0, 0.0, 0.0 },
 			.scale = 1.0,
-
-			.tbar_en = 0x01,
-			
-			.xyz_en = 0x01,
-			.xyz_scale = 0.25,
-
-			.grid_mode = 0x01,
-			.grid_pt_size = 2.0,
-			.grid_pt_disp = 2.0,
+			.pos = { 0.0, 0.0, 0.0 },
 	};
-
+	
 	vl3d_view_load(self, &view, view);
-	vl3d_view_grid(&view, &gui->traj_vl3d_eng);
-	vl3d_view_xyz(&view, &gui->traj_vl3d_eng);
-	vl3d_render_imgui(&gui->traj_vl3d_eng, &view, "temp", ImVec2(-1, -1));
+	
+	s_vl3d_xyz 		xyz  = vl3d_xyz_init(&view);
+	s_vl3d_gridline grid = vl3d_gridline_init(&view);
+	
+	vl3d_begin(&gui->traj_vl3d_eng);
+	vl3d_view_ctrl3d(&gui->traj_vl3d_eng, &view);
+	vl3d_xyz_draw(&gui->traj_vl3d_eng, &xyz);
+	vl3d_gridline_draw(&gui->traj_vl3d_eng, &grid);
+	vl3d_view_draw(&gui->traj_vl3d_eng, &view);
+	vl3d_end();
 	vl3d_view_save(self, &view);
 	
 	return 0x00;

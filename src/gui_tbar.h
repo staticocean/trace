@@ -51,12 +51,6 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 			
 			NFD_FreePath(user_path);
 		}
-		
-//		else if (result == NFD_CANCEL)
-//		{ puts("User pressed cancel."); }
-
-//		else
-//		{ printf("Error: %s\n", NFD_GetError() ); }
 	}
 
 	if (ImGui::MenuItem("Save", "Ctrl+S"))
@@ -144,6 +138,15 @@ inline void gui_tbar_menu_version(s_gui_tbar *tbar)
 	return;
 }
 
+inline bool gui_tbar_button(const char *label, ImVec2 size = ImVec2(0,0))
+{
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255,255,255,255));
+	bool res = ImGui::Button(label, size);
+	ImGui::PopStyleColor();
+	
+	return res;
+}
+
 inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 {
 	static float64_t time_limit_min = 0.0;
@@ -154,7 +157,7 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 	{
 		ImVec2 popup_pos = ImGui::GetCursorScreenPos() + ImVec2(0, ImGui::GetTextLineHeightWithSpacing());
 		
-		if(ImGui::Button("MENU", ImVec2(80,0)))
+		if(gui_tbar_button("MENU", ImVec2(80,0)))
 		{ ImGui::OpenPopup("gui_tbar_menu"); }
 		
 		ImGui::SetNextWindowPos(popup_pos, ImGuiCond_Always);
@@ -195,6 +198,21 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 		ImGui::SetNextItemWidth(160);
 		ImGui::InputText("##file_path", file_preview, 256, ImGuiInputTextFlags_ReadOnly);
 		gui_hint(tbar->file_path);
+		
+		if (ImGui::IsItemClicked())
+		{
+			nfdchar_t *user_path;
+			nfdfilteritem_t filterItem[1] = { { "Trajectory Project", "trj" } };
+			nfdresult_t result = NFD_OpenDialog(&user_path, filterItem, 1, tbar->file_path);
+			
+			if (result == NFD_OKAY)
+			{
+				strcpy(tbar->file_path, user_path);
+				trj_eng_load(tbar->eng, tbar->file_path);
+				
+				NFD_FreePath(user_path);
+			}
+		}
 	}
 	ImGui::SameLine();
 
@@ -216,9 +234,9 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 	gui_procsel("##proc", tbar->eng);
 	ImGui::SameLine(0,0);
 	
-	if(ImGui::Button("RENDER", ImVec2(80,0)))
+	if(gui_tbar_button("RENDER", ImVec2(80,0)))
 	{ tbar->eng_gui->state = gui_eng_state_init; }
-		
+	
 	return 0x00;
 }
 

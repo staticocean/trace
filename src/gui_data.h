@@ -172,28 +172,14 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 		{
 			mode = 0x00;
 			
-			s_vl3d_view view = {
-					
-					.pos = {0.0, 0.0, 0.0},
-					.scale = 1.0,
-					
-					.tbar_en = 0x01,
-					
-					.xyz_en = 0x01,
-					.xyz_scale = 0.25,
-					
-					.grid_mode = 0x01,
-					.grid_pt_size = 2.0,
-					.grid_pt_disp = 2.0,
-			};
+			static s_vl3d vl3d;
+			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 2*4096));
 			
-			vl3d_view_load(self, &view, view);
-			
-			s_vl3d vl3d;
-			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 4096));
+			s_vl3d_view view = vl3d_view_init();
+			vl3d_view_load(&vl3d, &view, view);
 			
 			vl3d_init(&vl3d, (s_vl3d_attr) {
-				.obj_sz = data->offset*2 + 4096,
+				.obj_sz = data->offset*2 + 2*4096,
 				.obj_ls = obj_list
 			});
 			
@@ -221,7 +207,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				}
 			}
 			
-			s_vl3d_trngl trngl = { .spec = 0x01, .color = vl3d_col_legacy, };
+			s_vl3d_trngl trngl = { .flags = vl3d_obj_flags_spec, .color = vl3d_col_legacy, };
 			
 			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
 			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
@@ -280,10 +266,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				}
 			}
 			
-			vl3d_view_grid(&view, &vl3d);
-			vl3d_view_xyz(&view, &vl3d);
-			vl3d_render_imgui(&vl3d, &view, "vl3d", ImVec2(-1, -1));
-			vl3d_view_save(self, &view);
+			gui_vl3d(&vl3d);
 			
 			free(obj_list);
 			
