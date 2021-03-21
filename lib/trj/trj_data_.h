@@ -132,8 +132,8 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 			TinyMATWriter_writeVectorAsColumn(
 					self->file_data, "roll", ram->roll, ram->offset);
 			
-			TinyMATWriter_writeMatrixND_colmajor(
-					self->file_data, "ctn", ram->ctn, (const int32_t[]) { (int32_t) ram->offset, 3, 3 }, 3);
+			TinyMATWriter_writeMatrixND_rowmajor(
+					self->file_data, "ctn", ram->ctn, (const int32_t[]) { 3, 3, (int32_t) ram->offset }, 3);
 		}
 		
 		// LLA
