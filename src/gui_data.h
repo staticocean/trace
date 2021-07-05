@@ -584,4 +584,60 @@ inline void gui_data_view_mat(s_trj_data *self)
 
 //----------------------------------------------------------------
 
+
+inline void gui_data_edit_bin(s_trj_data *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_data_bin *data = (s_trj_data_bin*) self->data;
+	
+	s_trj_data ram = *self;
+	ram.data = &data->ram;
+	
+	gui_data_edit_ram(&ram);
+	// no need to edit ramld coz theris only ellp which we use from mat plugin
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("file  ");
+	if (ImGui::IsItemHovered())
+	{ ImGui::SetTooltip("Path to output file"); }
+	ImGui::SameLine();
+	gui_filesave(data->file_name, 0x00, NULL);
+	
+	ImGui::Dummy(ImVec2(0, 5));
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 5));
+	
+	ImGui::PopID();
+	
+	// copy data from ram which user can edit
+	// to ramld which user cant edit but we assume it uses same parameters
+	
+	return;
+}
+
+inline void gui_data_view_bin(s_trj_data *self)
+{
+	ImGui::PushID(self);
+	
+	s_trj_data_bin *data = (s_trj_data_bin*) self->data;
+	
+	s_trj_data ram = *self;
+	ram.data = &data->ram;
+	
+	if (gui_data_view_ram(&ram) != 0x00)
+	{
+	}
+	
+	ImGui::PopID();
+	
+	return;
+}
+
+//----------------------------------------------------------------
+
 #endif /* __GUI_DATA__ */

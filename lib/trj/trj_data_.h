@@ -257,4 +257,179 @@ inline uint8_t trj_data_mat_reset_(void *data, void *obj)
 
 //----------------------------------------------------------------
 
+typedef struct trj_data_bin
+{
+	s_trj_data_ram   ram;
+	
+	char file_name[256];
+	
+} 	s_trj_data_bin;
+
+typedef struct trj_data_bin_init
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
+} 	s_trj_data_bin_init;
+
+inline uint8_t trj_data_bin_init(s_trj_data_bin *self, s_trj_data_bin_init attr)
+{
+	sprintf(self->file_name, "file not selected");
+	
+	trj_data_ram_init(&self->ram, (s_trj_data_ram_init) {
+			.eng = attr.eng,
+			.ref = attr.ref,
+	});
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_bin_save(s_trj_data_bin *self, s_trj_data_bin_init *attr, uint8_t **v_file)
+{
+	s_trj_data_ram_init data_ram_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
+	
+	trj_data_ram_save(&self->ram, &data_ram_attr, v_file);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_bin_load(s_trj_data_bin *self, s_trj_data_bin_init *attr, uint8_t **v_file)
+{
+	s_trj_data_ram_init data_ram_attr = {
+			.eng = attr->eng,
+			.ref = attr->ref,
+	};
+	
+	trj_data_ram_load(&self->ram, &data_ram_attr, v_file);
+	
+	return 0x00;
+}
+
+typedef struct __attribute__((packed))  trj_data_bin_block
+{
+	float64_t time;
+	
+	float64_t heading;
+	float64_t pitch;
+	float64_t roll;
+	
+	float64_t lla_pos[3];
+	float64_t lla_vel[3];
+	float64_t lla_acc[3];
+	
+	float64_t ecef_pos[3];
+	float64_t ecef_vel[3];
+	float64_t ecef_acc[3];
+	
+//	float64_t ref_pos[3];
+//	float64_t ref_vel[3];
+//	float64_t ref_acc[3];
+	
+	float64_t tied_acc[3];
+	float64_t tied_grs[3];
+	
+}	s_trj_data_bin_block;
+
+inline uint8_t trj_data_bin_render(s_trj_data_bin *self, s_trj_obj *obj)
+{
+	s_trj_data_ram *ram = &self->ram;
+	
+	trj_data_ram_render(ram, obj);
+	
+	FILE *file_data = fopen(self->file_name, "wb+");
+	
+	uint32_t i;
+	s_trj_data_bin_block block;
+	
+	for (i = 0; i < self->ram.offset; ++i)
+	{
+		block.time = self->ram.time[i];
+		
+		block.heading = self->ram.heading[i];
+		block.pitch   = self->ram.pitch[i];
+		block.roll    = self->ram.roll[i];
+		
+		vl_vcopy(block.lla_pos, &self->ram.lla_pos[i*3]);
+		vl_vcopy(block.lla_vel, &self->ram.lla_vel[i*3]);
+		vl_vcopy(block.lla_acc, &self->ram.lla_acc[i*3]);
+		
+		vl_vcopy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
+		vl_vcopy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
+		vl_vcopy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
+//
+//		vl_vcopy(block.ref_pos, &self->ram.[i*3]);
+//		vl_vcopy(block.ref_vel, &self->ram.lla_vel[i*3]);
+//		vl_vcopy(block.ref_acc, &self->ram.lla_acc[i*3]);
+		
+		vl_vcopy(block.tied_acc, &self->ram.tied_acc[i*3]);
+		vl_vcopy(block.tied_grs, &self->ram.tied_grs[i*3]);
+		
+		fwrite(&block, sizeof(s_trj_data_bin_block), 1, file_data);
+	}
+	
+	fclose(file_data);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_bin_reset(s_trj_data_bin *self, s_trj_obj *obj)
+{
+	trj_data_ram_reset(&self->ram, obj);
+	
+	return 0x00;
+}
+
+//----------------------------------------------------------------
+
+inline uint8_t trj_data_bin_init_ (void **data, void *config)
+{
+	*data = (s_trj_data_mat*) malloc(sizeof(s_trj_data_bin));
+	
+	s_trj_data_bin *data_ = (s_trj_data_bin*) *data;
+	s_trj_data_bin_init *data_init = (s_trj_data_bin_init*) config;
+	
+	return trj_data_bin_init(data_, *data_init);
+}
+
+inline uint8_t trj_data_bin_free_ (void **data)
+{
+	s_trj_data_bin *data_ = (s_trj_data_bin*) *data;
+	
+	return 0x00;
+}
+
+inline uint8_t trj_data_bin_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_data_bin_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_data_bin *data_ = (s_trj_data_bin*) data;
+	s_trj_data_bin_init *attr = (s_trj_data_bin_init*) config;
+	
+	return trj_data_bin_load(data_, attr, v_file);
+}
+
+inline uint8_t trj_data_bin_render_(void *data, void *obj)
+{
+	s_trj_data_bin *data_ = (s_trj_data_bin*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_data_bin_render(data_, obj_);
+}
+
+inline uint8_t trj_data_bin_reset_(void *data, void *obj)
+{
+	s_trj_data_bin *data_ = (s_trj_data_bin*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_data_bin_reset(data_, obj_);
+}
+
+//----------------------------------------------------------------
+
 #endif /* __TRJ_DATA___ */

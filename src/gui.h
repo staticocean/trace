@@ -535,6 +535,30 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.render = trj_data_mat_render_,
 	});
 	
+	static s_trj_data_bin_init trj_data_bin_config_ = {
+			.eng = &self->eng,
+			.ref = &self->eng.obj_list[0],
+	};
+	
+	trj_eng_add_dataapi(&self->eng, (s_trj_data) {
+			
+			.desc   = "default_data_bin",
+			.name   = "default_data_bin",
+			
+			.config_size = sizeof(s_trj_data_bin_init),
+			.config = &trj_data_bin_config_,
+			
+			.data_size = sizeof(s_trj_data_bin),
+			.data   = NULL,
+			
+			.init   = trj_data_bin_init_,
+			.free   = trj_data_bin_free_,
+			.save   = trj_data_bin_save_,
+			.load   = trj_data_bin_load_,
+			.reset  = trj_data_bin_reset_,
+			.render = trj_data_bin_render_,
+	});
+	
 	static s_trj_proc_euler_init trj_proc_euler_config_ = {
 			.temp = 0x00,
 	};
@@ -668,6 +692,7 @@ inline uint8_t gui_main(s_gui *self)
 	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
 	const uint32_t data_hash_ramld= vl_crc32("default_data_ramld");
 	const uint32_t data_hash_mat  = vl_crc32("default_data_mat");
+	const uint32_t data_hash_bin  = vl_crc32("default_data_bin");
 	
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
@@ -756,6 +781,7 @@ inline uint8_t gui_main(s_gui *self)
 					else if (data->hash == data_hash_ram  ) { gui_data_edit_ram  (data); }
 					else if (data->hash == data_hash_ramld) { gui_data_edit_ramld(data); }
 					else if (data->hash == data_hash_mat  ) { gui_data_edit_mat  (data); }
+					else if (data->hash == data_hash_bin  ) { gui_data_edit_bin  (data); }
 					
 					break;
 				}
@@ -820,6 +846,7 @@ inline uint8_t gui_main(s_gui *self)
 					else if (data->hash == data_hash_ram  ) { gui_data_view_ram   (data); }
 					else if (data->hash == data_hash_ramld) { gui_data_view_ramld (data); }
 					else if (data->hash == data_hash_mat  ) { gui_data_view_mat   (data); }
+					else if (data->hash == data_hash_bin  ) { gui_data_view_bin   (data); }
 					
 					break;
 				}
