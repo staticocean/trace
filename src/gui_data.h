@@ -191,8 +191,8 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				for (int di = data->offset / 10000, i = 0;
 					 i < 10000 - 1; ++i)
 				{
-					vl_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
-					vl_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
+					vl3_vcopy(line.p0, &data->ecef_pos[(i * di)*3]);
+					vl3_vcopy(line.p1, &data->ecef_pos[((i + 1) * di)*3]);
 					
 					vl3d_add_line(&vl3d, line);
 				}
@@ -200,8 +200,8 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				for (int i = 0; i < data->offset - 1; ++i)
 				{
-					vl_vcopy(line.p0, &data->ecef_pos[i*3]);
-					vl_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
+					vl3_vcopy(line.p0, &data->ecef_pos[i*3]);
+					vl3_vcopy(line.p1, &data->ecef_pos[(i + 1)*3]);
 					
 					vl3d_add_line(&vl3d, line);
 				}
@@ -220,24 +220,24 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				for (int di = data->offset / 20, i = 0;
 					 i < 20 - 1; ++i)
 				{
-					vl_vcopy(trngl.p0, &data->ecef_pos[i * di * 3]);
-					vl_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
-					vl_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
+					vl3_vcopy(trngl.p0, &data->ecef_pos[i * di * 3]);
+					vl3_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
+					vl3_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 					
 					vlf_t rot[9];
-					vl_tnp(rot, &data->ecef_ctn[i * di * 9]);
-					vl_mmul_s(rot, rot, 0.015 / view.scale);
+					vl3_tnp(rot, &data->ecef_ctn[i * di * 9]);
+					vl3_mmul_s(rot, rot, 0.015 / view.scale);
 					
 					// top middle
 					
-					vl_vmul_s(&rot[0], &rot[0], 3.0);
-					vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+					vl3_vmul_s(&rot[0], &rot[0], 3.0);
+					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 					
 					// left
-					vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+					vl3_vsub(trngl.p1, trngl.p1, &rot[6]);
 					
 					// right
-					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);
 					
 					vl3d_add_trngl(&vl3d, trngl);
 				}
@@ -245,22 +245,22 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				for (int i = 0; i < data->offset - 1; ++i)
 				{
-					vl_vcopy(trngl.p0, &data->ecef_pos[i*3]);
-					vl_vcopy(trngl.p1, &data->ecef_pos[i*3]);
-					vl_vcopy(trngl.p2, &data->ecef_pos[i*3]);
+					vl3_vcopy(trngl.p0, &data->ecef_pos[i*3]);
+					vl3_vcopy(trngl.p1, &data->ecef_pos[i*3]);
+					vl3_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 					
 					vlf_t rot[9];
-					vl_tnp(rot, &data->ecef_ctn[i*9]);
-					vl_mmul_s(rot, rot, 10.0 / view.scale);
+					vl3_tnp(rot, &data->ecef_ctn[i*9]);
+					vl3_mmul_s(rot, rot, 10.0 / view.scale);
 					
 					// top middle
-					vl_vsum(trngl.p0, trngl.p0, &rot[0]);
+					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 					
 					// left
-					vl_vsub(trngl.p1, trngl.p1, &rot[6]);
+					vl3_vsub(trngl.p1, trngl.p1, &rot[6]);
 					
 					// right
-					vl_vsum(trngl.p2, trngl.p2, &rot[6]);
+					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);
 					
 					vl3d_add_trngl(&vl3d, trngl);
 				}
@@ -536,6 +536,11 @@ inline void gui_data_edit_mat(s_trj_data *self)
 	ImGui::Text("tied  ");
 	ImGui::SameLine();
 	imgui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("abs   ");
+    ImGui::SameLine();
+    imgui_bool("##abs", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->abs_en);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("latdev");

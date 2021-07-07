@@ -63,8 +63,8 @@ inline uint8_t trj_traj_static_init(s_trj_traj_static *self, s_trj_traj_static_i
 	if (self->ellp != NULL)
 	{ self->ellp_hash = self->ellp->hash; }
 	
-	vl_vcopy(self->pos, attr.pos);
-	vl_mcopy(self->rot, attr.rot);
+	vl3_vcopy(self->pos, attr.pos);
+	vl3_mcopy(self->rot, attr.rot);
 	
 	return 0x00;
 }
@@ -92,7 +92,7 @@ inline uint8_t trj_traj_static_compile(s_trj_traj_static *self)
 		vlf_t ecef_ctn[9];
 		trj_ellp_ecefrot(self->ellp, self->pos_cache, ecef_ctn);
 		
-		vl_mmul_m(self->rot_cache, ecef_ctn, self->rot);
+		vl3_mmul_m(self->rot_cache, ecef_ctn, self->rot);
 	}
 	
 	return 0x00;
@@ -101,13 +101,13 @@ inline uint8_t trj_traj_static_compile(s_trj_traj_static *self)
 inline uint8_t trj_traj_static_pos(s_trj_traj_static *self, vlf_t time, vlf_t *pos)
 {
 	if (self->ellp_en == 0x00)
-	{ vl_vcopy(pos, self->pos); }
+	{ vl3_vcopy(pos, self->pos); }
 	
 	else
-	{ vl_vcopy(pos, self->pos_cache); }
+	{ vl3_vcopy(pos, self->pos_cache); }
 	
-	vl_mmul_v(pos, &self->ref->rot[0][0], pos);
-	vl_vsum(pos, pos, &self->ref->pos[0][0]);
+	vl3_mmul_v(pos, &self->ref->rot[0][0], pos);
+	vl3_vsum(pos, pos, &self->ref->pos[0][0]);
 	
 	return 0x00;
 }
@@ -115,12 +115,12 @@ inline uint8_t trj_traj_static_pos(s_trj_traj_static *self, vlf_t time, vlf_t *p
 inline uint8_t trj_traj_static_rot(s_trj_traj_static *self, vlf_t time, vlf_t *rot)
 {
 	if (self->ellp_en == 0x00)
-	{ vl_mcopy(rot, self->rot); }
+	{ vl3_mcopy(rot, self->rot); }
 	
 	else
-	{ vl_mcopy(rot, self->rot_cache); }
+	{ vl3_mcopy(rot, self->rot_cache); }
 	
-	vl_mmul_m(rot, &self->ref->rot[0][0], rot);
+	vl3_mmul_m(rot, &self->ref->rot[0][0], rot);
 	
 	return 0x00;
 }
@@ -249,10 +249,10 @@ inline uint8_t trj_traj_orb_init(s_trj_traj_orb *self, s_trj_traj_orb_init attr)
 	self->radius = attr.radius;
 	self->rate   = attr.rate;
 	
-	vl_mcopy(self->tilt, attr.tilt);
+	vl3_mcopy(self->tilt, attr.tilt);
 	
 	self->s_rate = attr.s_rate;
-	vl_mcopy(self->s_tilt, attr.s_tilt);
+	vl3_mcopy(self->s_tilt, attr.s_tilt);
 	
 	return 0x00;
 }
@@ -290,9 +290,9 @@ inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
 			pos_t[1] = 0.0;
 			pos_t[2] = vl_cos(angle) * self->radius;
 			
-			vl_mmul_v(pos_n, self->tilt, pos_t);
+			vl3_mmul_v(pos_n, self->tilt, pos_t);
 			
-			vl_vsum(pos, pos_n, self->ref->pos[0]);
+			vl3_vsum(pos, pos_n, self->ref->pos[0]);
 			
 			return 0x00;
 		}
@@ -307,10 +307,10 @@ inline uint8_t trj_traj_orb_pos(s_trj_traj_orb *self, vlf_t time, vlf_t *pos)
 			pos_t[1] = 0.0;
 			pos_t[2] = vl_cos(angle) * self->radius;
 			
-			vl_mmul_v(pos_n, self->tilt, pos_t);
-			vl_mmul_v(pos, self->ref->rot[0], pos_n);
+			vl3_mmul_v(pos_n, self->tilt, pos_t);
+			vl3_mmul_v(pos, self->ref->rot[0], pos_n);
 			
-			vl_vsum(pos, pos, self->ref->pos[0]);
+			vl3_vsum(pos, pos, self->ref->pos[0]);
 			
 			return 0x00;
 		}
@@ -331,11 +331,11 @@ inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
 			vlf_t rot_t[9];
 			
 			// NEGATIVE HEADING!!! because heading is CW and all angles are CCW
-			vl_rot(rot_t, (s_vl_hpr) {
+			vl3_rot(rot_t, (s_vl_hpr) {
 					.heading = -angle, .pitch = 0.0, .roll = 0.0
 			});
 			
-			vl_mmul_m(rot, self->s_tilt, rot_t);
+			vl3_mmul_m(rot, self->s_tilt, rot_t);
 			
 			return 0x00;
 			
@@ -350,12 +350,12 @@ inline uint8_t trj_traj_orb_rot(s_trj_traj_orb *self, vlf_t time, vlf_t *rot)
 			vlf_t rot_n[9];
 			
 			// NEGATIVE HEADING!!! because heading is CW and all angles are CCW
-			vl_rot(rot_t, (s_vl_hpr) {
+			vl3_rot(rot_t, (s_vl_hpr) {
 					.heading = -angle, .pitch = 0.0, .roll = 0.0
 			});
 			
-			vl_mmul_m(rot_n, self->s_tilt, rot_t);
-			vl_mmul_m(rot, self->ref->rot[0], rot_n);
+			vl3_mmul_m(rot_n, self->s_tilt, rot_t);
+			vl3_mmul_m(rot, self->ref->rot[0], rot_n);
 			
 			return 0x00;
 			
@@ -689,8 +689,8 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 
 		bz4_d2t(&bz4, time, &acc[2]);
 
-		vl_vdiv_v(vel, self->pts[offset].pos_d, self->pts[offset].pos_t);
-		vl_vsumm(vel, vel, acc, time - self->pts[offset].time);
+		vl3_vdiv_v(vel, self->pts[offset].pos_d, self->pts[offset].pos_t);
+		vl3_vsumm(vel, vel, acc, time - self->pts[offset].time);
 	}
 
 	else if (fabs(time-self->pts[offset+1].time) < 1E-9)
@@ -771,8 +771,8 @@ inline uint8_t trj_traj_bz_vel(s_trj_traj_bz *self, vlf_t time, vlf_t *vel)
 
 		bz4_d2t(&bz4, time, &acc[2]);
 
-		vl_vdiv_v(vel, self->pts[offset+1].pos_d, self->pts[offset+1].pos_t);
-		vl_vsumm(vel, vel, acc, time - self->pts[offset+1].time);
+		vl3_vdiv_v(vel, self->pts[offset+1].pos_d, self->pts[offset+1].pos_t);
+		vl3_vsumm(vel, vel, acc, time - self->pts[offset+1].time);
 	}
 
 	else
@@ -886,17 +886,17 @@ inline uint8_t trj_traj_bz_pos_raw(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	if (fabs(time-self->pts[offset].time) < 1E-9)
 	{
 		vlf_t vel[3];
-		vl_vcopy(pos, self->pts[offset].pos_p);
-		vl_vdiv_v(vel, self->pts[offset].pos_d, self->pts[offset].pos_t);
-		vl_vsumm(pos, pos, vel, time - self->pts[offset].time);
+		vl3_vcopy(pos, self->pts[offset].pos_p);
+		vl3_vdiv_v(vel, self->pts[offset].pos_d, self->pts[offset].pos_t);
+		vl3_vsumm(pos, pos, vel, time - self->pts[offset].time);
 	}
 	
 	else if (fabs(time-self->pts[offset+1].time) < 1E-9)
 	{
 		vlf_t vel[3];
-		vl_vcopy(pos, self->pts[offset+1].pos_p);
-		vl_vdiv_v(vel, self->pts[offset+1].pos_d, self->pts[offset+1].pos_t);
-		vl_vsumm(pos, pos, vel, time - self->pts[offset+1].time);
+		vl3_vcopy(pos, self->pts[offset+1].pos_p);
+		vl3_vdiv_v(vel, self->pts[offset+1].pos_d, self->pts[offset+1].pos_t);
+		vl3_vsumm(pos, pos, vel, time - self->pts[offset+1].time);
 	}
 	
 	else
@@ -1031,8 +1031,8 @@ inline uint8_t trj_traj_bz_pos(s_trj_traj_bz *self, vlf_t time, vlf_t *pos)
 	trj_traj_bz_pos_local(self, time, pos);
 	
 	vlf_t pos_[3];
-	vl_mmul_v(pos_, &self->ref->rot[0][0], pos);
-	vl_vsum(pos, pos_, &self->ref->pos[0][0]);
+	vl3_mmul_v(pos_, &self->ref->rot[0][0], pos);
+	vl3_vsum(pos, pos_, &self->ref->pos[0][0]);
 	
 	return 0x00;
 }
@@ -1071,26 +1071,26 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		
 //		vl_mprint(rot_nwh_tnp);
 
-		vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+		vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
 		
 //		vl_mprint(rot_nwh_tnp);
 
 		vlf_t xy[3];
-		vl_vmul_s(xy, x, vl_vdot(x,y));
-		vl_vsub(y, y, xy);
-		vl_vmul_s(y, y, 1.0 / vl_vnorm(y));
+		vl3_vmul_s(xy, x, vl3_vdot(x,y));
+		vl3_vsub(y, y, xy);
+		vl3_vmul_s(y, y, 1.0 / vl3_vnorm(y));
 		
-		vl_cross(z, x, y);
-		vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
+		vl3_cross(z, x, y);
+		vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
 
 //		vl_rnorm(rot_nwh_tnp);
 
 		vlf_t rot_nwh[9];
-		vl_tnp(rot_nwh, rot_nwh_tnp);
+		vl3_tnp(rot_nwh, rot_nwh_tnp);
 
 		s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nwh);
 		rot_nwh_hpr.roll = 0.0;
-		vl_rot(rot_nwh, rot_nwh_hpr);
+		vl3_rot(rot_nwh, rot_nwh_hpr);
 
 //		vl_mprint(rot_nwh);
 //		fflush(stdout);
@@ -1101,11 +1101,11 @@ inline uint8_t trj_traj_bz_rot (s_trj_traj_bz *self, vlf_t time, vlf_t *rot)
 		vlf_t r_ref[9];
 		vlf_t *r_inr = rot;
 		
-		vl_mmul_m(r_ref, ecef_ctn, rot_nwh);
-		vl_mmul_m(r_inr, &self->ref->rot[0][0], r_ref);
+		vl3_mmul_m(r_ref, ecef_ctn, rot_nwh);
+		vl3_mmul_m(r_inr, &self->ref->rot[0][0], r_ref);
 	}
 
-	vl_rnorm(rot);
+	vl3_rnorm(rot);
 
 	return 0x00;
 }
@@ -1290,7 +1290,7 @@ inline uint8_t trj_traj_bz_compile(s_trj_traj_bz *self)
 	
 	vlf_t m_inva[self->pts_offset*2][self->pts_offset*2];
 	
-	vl_inv(self->pts_offset*2, &m_inva[0][0], &m_a[0][0]);
+	vl3_inv(self->pts_offset*2, &m_inva[0][0], &m_a[0][0]);
 	
 	for (i = 0; i < self->pts_offset*2; ++i)
 	{

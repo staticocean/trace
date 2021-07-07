@@ -17,6 +17,8 @@
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_ellp.h>
 
+#include <lib_gui/lib/clip/clip.h>
+
 #include "gui_obj.h"
 #include "gui_traj.h"
 
@@ -149,6 +151,14 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 			
 			if (ImGui::BeginPopupContextItem("obj_options"))
 			{
+                if (ImGui::Selectable("copy"))
+                {
+                }
+
+                if (ImGui::Selectable("paste"))
+                {
+                }
+
 				if (ImGui::Selectable("delete"))
 				{
 					if (gui->sel_item == obj_gui)

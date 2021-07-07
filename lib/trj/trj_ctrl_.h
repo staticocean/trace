@@ -260,7 +260,7 @@ inline uint8_t trj_ctrl_gm_calc(s_trj_ctrl_gm *self, vlf_t *g, vlf_t *ecef)
 	
 	vlf_t el = lla[0];
 	vlf_t az = lla[1];
-	vlf_t r  = vl_vnorm(ecef);
+	vlf_t r  = vl3_vnorm(ecef);
 	
 	vlf_t u = MU / r;
 	vlf_t g_[3];
@@ -308,7 +308,7 @@ inline uint8_t trj_ctrl_gm_calc(s_trj_ctrl_gm *self, vlf_t *g, vlf_t *ecef)
 //
 //    vl_mmul_v(g, rot, g_);
 	
-	vl_vcopy(g, g_);
+	vl3_vcopy(g, g_);
 	
 	return 0x00;
 }

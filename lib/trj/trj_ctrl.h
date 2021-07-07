@@ -725,8 +725,8 @@ inline static void __trj_ctrl_egms_calc__(s_trj_obj *ref, s_trj_obj *obj)
 	
 	vlf_t ecef[3];
 	
-	vl_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
-	vl_mtmul_v(ecef, &ref->rot[0][0], ecef);
+	vl3_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
 	
 	vlf_t lla[3];
 	
@@ -741,19 +741,19 @@ inline static void __trj_ctrl_egms_calc__(s_trj_obj *ref, s_trj_obj *obj)
 			0.0
 	};
 	
-	vl_vmul_s(g_hor, g_hor, -1.0);
+	vl3_vmul_s(g_hor, g_hor, -1.0);
 	
 	vlf_t ecef_ctn[9];
 	trj_ellp_ecefrot(&trj_ellp_pz90, ecef, ecef_ctn);
 	
 	vlf_t g_ecef[3];
-	vl_mmul_v(g_ecef, ecef_ctn, g_hor);
+	vl3_mmul_v(g_ecef, ecef_ctn, g_hor);
 	
 	vlf_t g_inert[3];
-	vl_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
-	vl_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
+	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
+	vl3_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
 	
-	vl_vsum(obj->pos_force, obj->pos_force, g_inert);
+	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
 	
 	return;
 }
@@ -871,21 +871,21 @@ inline void __trj_ctrl_gms_calc__(s_trj_obj *ref, s_trj_obj *obj)
 	const vlf_t g = 6.67428E-11;
 	
 	vlf_t force_magn = 0.0;
-	vlf_t dist2 = vl_vdist2(&ref->pos[0][0], &obj->pos[0][0]);
+	vlf_t dist2 = vl3_vdist2(&ref->pos[0][0], &obj->pos[0][0]);
 	
 	if (dist2 > 1E-16)
 	{ force_magn = g * ref->pos_inert * obj->pos_inert / dist2; }
 	
 	vlf_t force_dir[3];
-	vl_vset(force_dir, 0.0);
+	vl3_vset(force_dir, 0.0);
 	
 	if (dist2 > 1E-16)
 	{
-		vl_vsub(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
-		vl_vmul_s(force_dir, force_dir, force_magn / vl_sqrt(dist2));
+		vl3_vsub(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
+		vl3_vmul_s(force_dir, force_dir, force_magn / vl_sqrt(dist2));
 	}
 	
-	vl_vsum(obj->pos_force, obj->pos_force, force_dir);
+	vl3_vsum(obj->pos_force, obj->pos_force, force_dir);
 	
 	return;
 }

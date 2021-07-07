@@ -258,7 +258,7 @@ inline void gui_traj_view_orb(s_trj_traj *self)
 		{
 			time += time_step;
 			
-			vl_vcopy(p0, p1);
+			vl3_vcopy(p0, p1);
 			trj_traj_orb_pos(traj, time, p1);
 			
 			vl3d_add_line(&vl3d, (s_vl3d_line) {
@@ -330,7 +330,7 @@ inline void gui_traj_edit_bz(s_trj_traj *self)
             for (int i = 0; i < traj->pts_offset; ++i)
             {
                 trj_ellp_ecef(ellp_ref, pos_ecef, traj->pts[i].pos_p);
-                vl_vcopy(traj->pts[i].pos_p, pos_ecef);
+                vl3_vcopy(traj->pts[i].pos_p, pos_ecef);
             }
         }
 
@@ -342,7 +342,7 @@ inline void gui_traj_edit_bz(s_trj_traj *self)
             for (int i = 0; i < traj->pts_offset; ++i)
             {
                 trj_ellp_lla(traj->ellp, pos_lla, traj->pts[i].pos_p);
-                vl_vcopy(traj->pts[i].pos_p, pos_lla);
+                vl3_vcopy(traj->pts[i].pos_p, pos_lla);
             }
         }
 	    
@@ -1449,7 +1449,7 @@ inline void gui_traj_edit_bz2(s_trj_traj *self)
 			for (int i = 0; i < traj->pts_offset; ++i)
 			{
 				trj_ellp_ecef(ellp_ref, pos_ecef, traj->pts[i].pos_p);
-				vl_vcopy(traj->pts[i].pos_p, pos_ecef);
+				vl3_vcopy(traj->pts[i].pos_p, pos_ecef);
 			}
 		}
 		
@@ -1461,7 +1461,7 @@ inline void gui_traj_edit_bz2(s_trj_traj *self)
 			for (int i = 0; i < traj->pts_offset; ++i)
 			{
 				trj_ellp_lla(traj->ellp, pos_lla, traj->pts[i].pos_p);
-				vl_vcopy(traj->pts[i].pos_p, pos_lla);
+				vl3_vcopy(traj->pts[i].pos_p, pos_lla);
 			}
 		}
 		
@@ -1720,7 +1720,7 @@ inline void gui_traj_view_navsat(s_trj_traj *self)
 				{
 					time += time_step;
 
-					vl_vcopy(p0, p1);
+					vl3_vcopy(p0, p1);
 					trj_traj_navsat_pos_local(traj, time, p1, i);
 					
 					if (i == traj->sat_offset)

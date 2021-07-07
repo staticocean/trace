@@ -8,7 +8,7 @@
 #include <lib_internal/vl3d.h>
 #include <lib_internal/imgui_w.h>
 
-#include <lib_gui/lib/nfde/nfd.h>
+#include <nfd.h>
 
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_traj.h>

@@ -24,7 +24,8 @@ typedef struct trj_data_mat
 	s_trj_data_ramld ramld;
 	
 	uint8_t 	hpr_en;
-	uint8_t 	lla_en;
+    uint8_t 	lla_en;
+    uint8_t 	abs_en;
 	uint8_t 	ecef_en;
 	uint8_t 	tied_en;
 	uint8_t 	ld_en;
@@ -55,8 +56,9 @@ inline uint8_t trj_data_mat_init(s_trj_data_mat *self, s_trj_data_mat_init attr)
 		.eng = attr.eng,
 		.ref = attr.ref,
 	});
-	
-	self->tied_en = 0x00;
+
+    self->tied_en = 0x00;
+    self->abs_en = 0x00;
 	self->lla_en  = 0x00;
 	self->hpr_en  = 0x00;
 	self->ecef_en = 0x00;
@@ -163,17 +165,34 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 			TinyMATWriter_writeMatrix2D_rowmajor(
 					self->file_data, "ecef_acc", ram->ecef_acc, 3, ram->offset);
 		}
-		
-		// TIED
-		
-		if (self->tied_en != 0x00)
-		{
-			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "tied_acc", ram->tied_acc, 3, ram->offset);
-			
-			TinyMATWriter_writeMatrix2D_rowmajor(
-					self->file_data, "tied_grs", ram->tied_grs, 3, ram->offset);
-		}
+
+        // TIED
+
+        if (self->tied_en != 0x00)
+        {
+            TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "tied_acc", ram->tied_acc, 3, ram->offset);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "tied_grs", ram->tied_grs, 3, ram->offset);
+        }
+
+        // ABS
+
+        if (self->abs_en != 0x00)
+        {
+            TinyMATWriter_writeMatrixND_rowmajor(
+                    self->file_data, "abs_rot", ram->abs_rot, (const int32_t[]) { 3, 3, (int32_t) ram->offset }, 3);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "abs_pos", ram->abs_pos, 3, ram->offset);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "abs_vel", ram->abs_vel, 3, ram->offset);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "abs_acc", ram->abs_acc, 3, ram->offset);
+        }
 		
 		// LATERAL DEVIATION
 		
@@ -352,20 +371,20 @@ inline uint8_t trj_data_bin_render(s_trj_data_bin *self, s_trj_obj *obj)
 		block.pitch   = self->ram.pitch[i];
 		block.roll    = self->ram.roll[i];
 		
-		vl_vcopy(block.lla_pos, &self->ram.lla_pos[i*3]);
-		vl_vcopy(block.lla_vel, &self->ram.lla_vel[i*3]);
-		vl_vcopy(block.lla_acc, &self->ram.lla_acc[i*3]);
+		vl3_vcopy(block.lla_pos, &self->ram.lla_pos[i*3]);
+		vl3_vcopy(block.lla_vel, &self->ram.lla_vel[i*3]);
+		vl3_vcopy(block.lla_acc, &self->ram.lla_acc[i*3]);
 		
-		vl_vcopy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
-		vl_vcopy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
-		vl_vcopy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
+		vl3_vcopy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
+		vl3_vcopy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
+		vl3_vcopy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
 //
 //		vl_vcopy(block.ref_pos, &self->ram.[i*3]);
 //		vl_vcopy(block.ref_vel, &self->ram.lla_vel[i*3]);
 //		vl_vcopy(block.ref_acc, &self->ram.lla_acc[i*3]);
 		
-		vl_vcopy(block.tied_acc, &self->ram.tied_acc[i*3]);
-		vl_vcopy(block.tied_grs, &self->ram.tied_grs[i*3]);
+		vl3_vcopy(block.tied_acc, &self->ram.tied_acc[i*3]);
+		vl3_vcopy(block.tied_grs, &self->ram.tied_grs[i*3]);
 		
 		fwrite(&block, sizeof(s_trj_data_bin_block), 1, file_data);
 	}

@@ -236,18 +236,18 @@ inline uint8_t trj_ellp_ecefrot(s_trj_ellp *self, vlf_t *ecef, vlf_t *c_tn)
 	y[1] = sin(lla[0]);
 	
 	vlf_t north[3] = { 0.0, self->a, 0.0 };
-	vl_vsub(x, north, ecef);
-	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+	vl3_vsub(x, north, ecef);
+	vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
 	
 	vlf_t xy[3];
-	vl_vmul_s(xy, y, vl_vdot(x, y));
-	vl_vsub(x, x, xy);
-	vl_vmul_s(x, x, 1.0 / vl_vnorm(x));
+	vl3_vmul_s(xy, y, vl3_vdot(x, y));
+	vl3_vsub(x, x, xy);
+	vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
 	
-	vl_cross(z, x, y);
-	vl_vmul_s(z, z, 1.0 / vl_vnorm(z));
+	vl3_cross(z, x, y);
+	vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
 	
-	vl_tnp(c_tn, ctn_tnp);
+	vl3_tnp(c_tn, ctn_tnp);
 	
 	return 0x00;
 }

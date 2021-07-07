@@ -191,10 +191,10 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 
     vlf_t g[3];
     trj_ctrl_gm_calc(ctrl, g, ecef);
-    vlf_t gm = vl_vnorm(g);
+    vlf_t gm = vl3_vnorm(g);
 
     printf("\ng: ");
-    vl_vprint(g);
+    vl3_vprint(g);
     fflush(stdout);
 
     for (int i = 1; i < res; ++i)
@@ -213,11 +213,11 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 
             vlf_t g[3];
             trj_ctrl_gm_calc(ctrl, g, ecef);
-            vlf_t gm = vl_vnorm(g);
+            vlf_t gm = vl3_vnorm(g);
 
             uint8_t c = (gm / 10.0) * 255;
             point.color = IM_COL32(c, c, c, 255);
-            vl_vcopy(point.p0, ecef);
+            vl3_vcopy(point.p0, ecef);
 
             vl3d_add_point(&vl3d, point);
         }

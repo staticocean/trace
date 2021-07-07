@@ -164,8 +164,8 @@ inline uint8_t trj_traj_navsat_pos(s_trj_traj_navsat *self, vlf_t time, vlf_t *p
 	if (self->ref != NULL)
 	{
 		trj_traj_navsat_pos_local(self, time, pos, self->sat_offset);
-		vl_mmul_v(pos, &self->ref->rot[0][0], pos);
-		vl_vsum(pos, pos, &self->ref->pos[0][0]);
+		vl3_mmul_v(pos, &self->ref->rot[0][0], pos);
+		vl3_vsum(pos, pos, &self->ref->pos[0][0]);
 	}
 	
 	return 0x00;
@@ -173,7 +173,7 @@ inline uint8_t trj_traj_navsat_pos(s_trj_traj_navsat *self, vlf_t time, vlf_t *p
 
 inline uint8_t trj_traj_navsat_rot (s_trj_traj_navsat *self, vlf_t time, vlf_t *rot)
 {
-	vl_mid(rot);
+	vl3_mid(rot);
 	
 	return 0x00;
 }

@@ -13,7 +13,7 @@
 #include <lib/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
 #include <lib/clip/clip.h>
-#include <lib/nfde/nfd.h>
+#include <nfd.h>
 
 #include "gui_eng.h"
 #include "gui_env.h"

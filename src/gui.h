@@ -14,7 +14,7 @@
 
 #include <lib/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
-#include <lib/nfde/nfd.h>
+#include <nfd.h>
 #include <lib_internal/vl.h>
 #include <lib_internal/imgui_theme.h>
 #include <lib_internal/imgui_w.h>
@@ -162,8 +162,8 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.s_rate = 0.0,
 	};
 	
-	vl_mid(trj_traj_orb_config_.tilt);
-	vl_mid(trj_traj_orb_config_.s_tilt);
+	vl3_mid(trj_traj_orb_config_.tilt);
+	vl3_mid(trj_traj_orb_config_.s_tilt);
 	
 	trj_eng_add_trajapi(&self->eng, (s_trj_traj) {
 			
@@ -901,7 +901,7 @@ inline uint8_t gui_main(s_gui *self)
 			view_hpr.heading += io.DeltaTime * 0.01;
 			view_hpr.pitch   += io.DeltaTime * 0.02;
 			view_hpr.roll    += io.DeltaTime * 0.03;
-			vl_rot(&view.rot[0][0], view_hpr);
+			vl3_rot(&view.rot[0][0], view_hpr);
 			
 			for (int x = 0; x < cnt; ++x)
 			{
@@ -924,132 +924,132 @@ inline uint8_t gui_main(s_gui *self)
 						
 						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
 						
-						vl_vcopy(point.p0, vl_vec(x * d, y * d, z * d));
+						vl3_vcopy(point.p0, vl_vec(x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(x * d, y * d, -z * d));
+						vl3_vcopy(point.p0, vl_vec(x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(x * d, -y * d, z * d));
+						vl3_vcopy(point.p0, vl_vec(x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(x * d, -y * d, -z * d));
+						vl3_vcopy(point.p0, vl_vec(x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(-x * d, y * d, z * d));
+						vl3_vcopy(point.p0, vl_vec(-x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(-x * d, y * d, -z * d));
+						vl3_vcopy(point.p0, vl_vec(-x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(-x * d, -y * d, z * d));
+						vl3_vcopy(point.p0, vl_vec(-x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl_vcopy(point.p0, vl_vec(-x * d, -y * d, -z * d));
+						vl3_vcopy(point.p0, vl_vec(-x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
 						// 1
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x + d, d*y, d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x + d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, d*y + d, d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, d*y, d*z + d));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 2
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x + d, d*y, -d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x + d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, d*y + d, -d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, d*y, -d*z - d));
+						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 3
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x + d, -d*y, d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x + d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, -d*y - d, d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, -d*y, d*z + d));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 4
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x + d, -d*y, -d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x + d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, -d*y - d, -d*z));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(d*x, -d*y, -d*z - d));
+						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 5
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x - d, d*y, d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x - d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, d*y + d, d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, d*y, d*z + d));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 6
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x - d, d*y, -d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x - d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, d*y + d, -d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, d*y, -d*z - d));
+						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 7
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x - d, -d*y, d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x - d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, -d*y - d, d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, -d*y, d*z + d));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 8
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x - d, -d*y, -d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x - d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, -d*y - d, -d*z));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl_vcopy(line.p1, vl_vec(-d*x, -d*y, -d*z - d));
+						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
+						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 					}
 				}

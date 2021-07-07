@@ -223,8 +223,8 @@ inline uint8_t trj_eng_reset(s_trj_eng *self)
 		// remove all forces coz they are additive
 		// thus all the plugins will add and never set
 		// so we need to zero it manually
-		vl_vset(obj->pos_force, 0.0);
-		vl_vset(obj->rot_force, 0.0);
+		vl3_vset(obj->pos_force, 0.0);
+		vl3_vset(obj->rot_force, 0.0);
 		
 		if (obj->log_list != NULL)
 		{
@@ -270,8 +270,8 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 		// remove all forces coz they are additive
 		// thus all the plugins will add and never set
 		// so we need to zero it manually
-		vl_vset(obj->pos_force, 0.0);
-		vl_vset(obj->rot_force, 0.0);
+		vl3_vset(obj->pos_force, 0.0);
+		vl3_vset(obj->rot_force, 0.0);
 		
 		for (j = 0; j < obj->ctrl_offset; ++j)
 		{
@@ -342,16 +342,16 @@ inline uint8_t trj_eng_log(s_trj_eng *self)
 		data->time[0] = self->time[0];
 		data->time[1] = self->time[1];
 		
-		vl_mcopy(&data->rot[0][0], &obj->rot[0][0]);
-		vl_mcopy(&data->rot[1][0], &obj->rot[1][0]);
-		vl_mcopy(&data->rot[2][0], &obj->rot[2][0]);
+		vl3_mcopy(&data->rot[0][0], &obj->rot[0][0]);
+		vl3_mcopy(&data->rot[1][0], &obj->rot[1][0]);
+		vl3_mcopy(&data->rot[2][0], &obj->rot[2][0]);
 
-		vl_mcopy(&data->pos[0][0], &obj->pos[0][0]);
-		vl_mcopy(&data->pos[1][0], &obj->pos[1][0]);
-		vl_mcopy(&data->pos[2][0], &obj->pos[2][0]);
+		vl3_mcopy(&data->pos[0][0], &obj->pos[0][0]);
+		vl3_mcopy(&data->pos[1][0], &obj->pos[1][0]);
+		vl3_mcopy(&data->pos[2][0], &obj->pos[2][0]);
 		
-		vl_vcopy(data->rot_force, obj->rot_force);
-		vl_vcopy(data->pos_force, obj->pos_force);
+		vl3_vcopy(data->rot_force, obj->rot_force);
+		vl3_vcopy(data->pos_force, obj->pos_force);
 		
 		++obj->log_offset;
 	}
