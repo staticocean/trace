@@ -1,6 +1,6 @@
 [submodule "lib_internal"]
 	path = lib_internal
-	url = https://staticocean@bitbucket.org/staticocean/lib_internal.git
+	url = https://softael@bitbucket.org/softael/lib_internal.git
 [submodule "lib_gui"]
 	path = lib_gui
-	url = https://staticocean@bitbucket.org/staticocean/lib_gui.git
+	url = https://softael@bitbucket.org/softael/lib_gui.git
