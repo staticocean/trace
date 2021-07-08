@@ -185,6 +185,9 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
                     self->file_data, "abs_rot", ram->abs_rot, (const int32_t[]) { 3, 3, (int32_t) ram->offset }, 3);
 
             TinyMATWriter_writeMatrix2D_rowmajor(
+                    self->file_data, "abs_hpr", ram->abs_hpr, 3, ram->offset);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
                     self->file_data, "abs_pos", ram->abs_pos, 3, ram->offset);
 
             TinyMATWriter_writeMatrix2D_rowmajor(

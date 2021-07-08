@@ -201,6 +201,7 @@ typedef struct trj_data_ram
 	vlf_t 		*tied_grs;
 
     vlf_t       *abs_rot;
+    vlf_t       *abs_hpr;
     vlf_t       *abs_pos;
     vlf_t       *abs_vel;
     vlf_t       *abs_acc;
@@ -239,6 +240,7 @@ inline void __trj_data_ram_null__(s_trj_data_ram *self)
     self->tied_grs 	= NULL;
 
     self->abs_rot 	= NULL;
+    self->abs_hpr 	= NULL;
     self->abs_pos 	= NULL;
     self->abs_vel 	= NULL;
     self->abs_acc 	= NULL;
@@ -271,10 +273,11 @@ inline void __trj_data_ram_free__(s_trj_data_ram *self)
     if (self->tied_grs 	!= NULL) free(self->tied_grs 	);
 
     if (self->abs_rot 	!= NULL) free(self->abs_rot 	);
+    if (self->abs_hpr 	!= NULL) free(self->abs_hpr 	);
     if (self->abs_pos 	!= NULL) free(self->abs_pos 	);
     if (self->abs_vel 	!= NULL) free(self->abs_vel 	);
     if (self->abs_acc 	!= NULL) free(self->abs_acc 	);
-	
+//
 	__trj_data_ram_null__(self);
 	
 	return;
@@ -352,6 +355,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
         self->tied_grs 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 
         self->abs_rot 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
+        self->abs_hpr 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
         self->abs_pos 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
         self->abs_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
         self->abs_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
@@ -362,6 +366,10 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 			self->time[i] = log->time[0];
 
             vl3_mcopy(&self->abs_rot[i*9], &log->rot[0][0]);
+            s_vl_hpr abs_hpr = vl_hpr(&self->abs_rot[i*9]);
+            self->abs_hpr[i*3 + 0x00] = abs_hpr.heading;
+            self->abs_hpr[i*3 + 0x01] = abs_hpr.pitch;
+            self->abs_hpr[i*3 + 0x02] = abs_hpr.roll;
             vl3_vcopy(&self->abs_pos[i*3], &log->pos[0][0]);
             vl3_vcopy(&self->abs_vel[i*3], &log->pos[1][0]);
             vl3_vsumm(&self->abs_acc[i*3], &log->pos[2][0], log->pos_force, -1.0 / obj->pos_inert);

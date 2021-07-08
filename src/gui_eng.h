@@ -21,6 +21,7 @@
 
 #include "gui_obj.h"
 #include "gui_traj.h"
+#include "gui_clip.h"
 
 //----------------------------------------------------------------
 
@@ -45,6 +46,7 @@ enum gui_eng_state_t
 
 typedef struct gui_eng
 {
+    s_gui_clip *gui_clip;
 	gui_eng_state_t state;
 	
 	void* sel_item;
@@ -57,6 +59,7 @@ typedef struct gui_eng
 typedef struct gui_eng_init
 {
 	s_gui_obj *obj_list;
+	s_gui_clip *gui_clip;
 
 } 	s_gui_eng_init;
 
@@ -64,6 +67,7 @@ typedef struct gui_eng_init
 
 inline uint8_t gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
 {
+    gui->gui_clip = attr.gui_clip;
 	gui->state = gui_eng_state_standby;
 	
 	gui->sel_item = NULL;
@@ -225,6 +229,9 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 							
 							if (ImGui::BeginPopupContextItem("traj_menu"))
 							{
+                                if (ImGui::Selectable("copy ")) { gui_clip_set_traj(gui->gui_clip, self, &obj->traj_list[j]); }
+                                if (ImGui::Selectable("paste")) { gui_clip_get_traj(gui->gui_clip, self, &obj->traj_list[j]); }
+
 								if (ImGui::Selectable("delete"))
 								{
 									if (gui->sel_item == &obj->traj_list[j])

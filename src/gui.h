@@ -37,6 +37,7 @@
 #include "gui_data.h"
 #include "gui_cmd.h"
 #include "gui_env.h"
+#include "gui_clip.h"
 
 //----------------------------------------------------------------
 
@@ -59,6 +60,7 @@ typedef struct gui
 	s_gui_eng  gui_eng;
 	s_gui_cmd  gui_cmd;
 	s_gui_env  gui_env;
+	s_gui_clip gui_clip;
 	
 } 	s_gui;
 
@@ -74,6 +76,8 @@ typedef struct gui_init_attr
 
 inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 {
+    gui_clip_init(&self->gui_clip, (s_gui_clip_attr) {});
+
 	// Init Native File Dialog Extended library
 	NFD_Init();
 
@@ -94,7 +98,10 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	self->gui_tbar.height = 40;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
-	gui_eng_init(&self->gui_eng, (s_gui_eng_init) { .obj_list = self->st_gui_eng_obj });
+	gui_eng_init(&self->gui_eng, (s_gui_eng_init) {
+	    .obj_list = self->st_gui_eng_obj,
+	    .gui_clip = &self->gui_clip,
+    });
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
 			
