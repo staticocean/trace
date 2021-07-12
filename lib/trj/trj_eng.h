@@ -22,7 +22,7 @@ typedef struct trj_eng_init_attr
 {
 	uint8_t 	*stack;
 	
-	s_trj_proc 	*proc;
+	s_trj_proc 	proc;
 	
 	s_trj_obj  	*obj_list;
 	
@@ -80,11 +80,9 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 	self->proc_list = attr.proc_list;
 	self->proc_offset = 0x00;
 	
-	self->proc = attr.proc;
-	
 	self->update_count = 0x00;
 	self->proc_count   = 0x00;
-	
+
 	return 0x00;
 }
 
@@ -135,12 +133,7 @@ inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 	api.hash = vl_crc32(api.desc);
 	
 	self->proc_list[self->proc_offset] = api;
-	s_trj_proc *proc = &self->proc_list[self->proc_offset];
 	++self->proc_offset;
-	
-	// !!!  IMPORTANT proc is selected by reference in eng api
-	// so it is basically initialized once
-	proc->init(&proc->data, proc->config);
 	
 	return 0x00;
 }
@@ -295,7 +288,7 @@ inline uint8_t trj_eng_proc(s_trj_eng *self)
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		obj = &self->obj_list[i];
-		self->proc->update(self->proc->data, obj, self->proc_count);
+		self->proc.update(self->proc.data, obj, self->proc_count);
 	}
 	
 	++self->proc_count;

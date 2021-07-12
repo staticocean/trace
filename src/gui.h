@@ -92,7 +92,9 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	self->w_height = 720;
 	self->w_width  = 1024;
 
-	gui_conf_init(&self->gui_conf, (s_gui_conf_attr) {});
+	gui_conf_init(&self->gui_conf, (s_gui_conf_attr) {
+	    .eng = &self->eng,
+	});
 
 	self->gui_tbar.eng  = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
@@ -109,7 +111,7 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	
 	trj_eng_init(&self->eng, (s_trj_eng_init) {
 			
-			.proc      = self->st_eng_proc_list,
+			.proc      = self->st_eng_proc_list[0],
 			
 			.obj_list  = self->st_eng_obj_list,
 			
@@ -571,7 +573,13 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	});
 	
 	static s_trj_proc_euler_init trj_proc_euler_config_ = {
-			.temp = 0x00,
+            .rot_tol  = 1E-6,
+            .rot_var  = 1E-6,
+            .rot_step = 1E-6,
+
+            .pos_tol  = 1E-6,
+            .pos_var  = 1E-3,
+            .pos_step = 1E-3,
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
@@ -666,7 +674,12 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 					.visible = false,
 					.title = "env",
 			});
-	
+
+	// !!! INIT DEFAULT PROC before loading
+	// because load will try to free it
+	self->eng.proc = self->eng.proc_list[0];
+    self->eng.proc.init(&self->eng.proc.data, self->eng.proc.config);
+
 	trj_eng_load(&self->eng, self->gui_tbar.file_path);
 
 //	gui_eng_sel_data(&self->gui_eng, &self->eng.obj_list[0].data_list[0]);
@@ -708,26 +721,31 @@ inline uint8_t gui_main(s_gui *self)
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
 	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
-	
-	{
-		// Toolbar
-		ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(self->w_width, (float) self->gui_tbar.height), ImGuiCond_Always);
+
+    {
+        // Toolbar
+        ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(self->w_width, (float) self->gui_tbar.height), ImGuiCond_Always);
 //		ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255,255,255,255));
-		ImGui::Begin("toolbar", NULL, static_flags
-			| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
-		gui_tbar_main(&self->gui_tbar);
-		ImGui::End();
+        ImGui::Begin("toolbar", NULL, static_flags
+                                      | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        gui_tbar_main(&self->gui_tbar);
+        ImGui::End();
 //		ImGui::PopStyleColor();
-	}
-    
+    }
+
 	{
 		// progress popup
 		// must be after toolbar
 		gui_eng_updategui(&self->gui_eng, &self->eng);
 	}
-	
-	{
+
+    {
+        // Settings
+        gui_conf_view(&self->gui_conf);
+    }
+
+    {
 		// Object list
 		ImGui::SetNextWindowPos(ImVec2(0, (float) self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(240, self->w_height - self->gui_tbar.height), ImGuiCond_Always);

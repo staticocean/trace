@@ -90,16 +90,20 @@ inline void gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list
 
 inline void gui_procsel(char *label, s_trj_eng *eng)
 {
-	if (ImGui::BeginCombo(label, eng->proc->desc, ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo(label, eng->proc.desc, ImGuiComboFlags_NoArrowButton))
 	{
 		for (int i = 0; i < eng->proc_offset; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = (eng->proc->hash == eng->proc_list[i].hash);
+			bool is_selected = (eng->proc.hash == eng->proc_list[i].hash);
 			
-			if (ImGui::Selectable(eng->proc_list[i].desc, is_selected))
-			{ eng->proc = &eng->proc_list[i]; }
+			if (ImGui::Selectable(eng->proc_list[i].desc, is_selected) && is_selected == false)
+			{
+			    eng->proc.free(&eng->proc.data);
+                eng->proc = eng->proc_list[i];
+                eng->proc.init(&eng->proc.data, eng->proc.config);
+			}
 			
 			if (is_selected)
 			{ ImGui::SetItemDefaultFocus(); }

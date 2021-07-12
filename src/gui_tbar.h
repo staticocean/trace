@@ -175,11 +175,8 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 			if (ImGui::MenuItem ("New Object")) { gui_tbar_menu_newobject(tbar); }
 			if (ImGui::BeginMenu("File      ")) { gui_tbar_menu_file     (tbar); }
             if (ImGui::BeginMenu("Temrinal  ")) { gui_tbar_menu_terminal (tbar); }
+            if (ImGui::MenuItem ("Settings  ")) { gui_conf_show(tbar->conf); }
 
-            if (ImGui::BeginMenu("Settings  "))
-            {
-            }
-			
 			ImGui::Separator();
 			
 			if (ImGui::BeginMenu("Version   ")) { gui_tbar_menu_version  (tbar); }

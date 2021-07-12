@@ -422,7 +422,7 @@ typedef struct trj_eng
 	vlf_t 		time_step;
 	uint32_t 	time_iter;
 	
-	s_trj_proc 	*proc;
+	s_trj_proc 	proc;
 	
 	uint32_t 	update_count;
 	uint32_t 	proc_count;
@@ -496,19 +496,36 @@ inline s_trj_ctrl* trj_eng_find_ctrl(s_trj_eng *self, uint32_t hash)
 
 inline s_trj_data* trj_eng_find_data(s_trj_eng *self, uint32_t hash)
 {
-	s_trj_data *res = NULL;
-	uint32_t i;
-	
-	for (i = 0; i < self->data_offset; ++i)
-	{
-		if (self->data_list[i].hash == hash)
-		{
-			res = &self->data_list[i];
-			return res;
-		}
-	}
-	
-	return res;
+    s_trj_data *res = NULL;
+    uint32_t i;
+
+    for (i = 0; i < self->data_offset; ++i)
+    {
+        if (self->data_list[i].hash == hash)
+        {
+            res = &self->data_list[i];
+            return res;
+        }
+    }
+
+    return res;
+}
+
+inline s_trj_proc* trj_eng_find_proc(s_trj_eng *self, uint32_t hash)
+{
+    s_trj_proc *res = NULL;
+    uint32_t i;
+
+    for (i = 0; i < self->proc_offset; ++i)
+    {
+        if (self->proc_list[i].hash == hash)
+        {
+            res = &self->proc_list[i];
+            return res;
+        }
+    }
+
+    return res;
 }
 
 inline s_trj_obj* trj_eng_find_obj(s_trj_eng *self, uint32_t hash)
@@ -662,9 +679,18 @@ inline uint8_t trj_proc_save(s_trj_proc *self, s_trj_eng *eng, uint8_t **v_file)
 
 inline uint8_t trj_proc_load(s_trj_proc *self, s_trj_eng *eng, uint8_t **v_file)
 {
-	self->data   = malloc(self->data_size);
+	self->data = malloc(self->data_size);
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
+
+    s_trj_proc *ref_api = trj_eng_find_proc(eng, self->hash);
+
+    self->config  = ref_api->config;
+    self->init    = ref_api->init  ;
+    self->free    = ref_api->free  ;
+    self->save    = ref_api->save  ;
+    self->load    = ref_api->load  ;
+    self->update  = ref_api->update;
 
     self->load(self->data, self->config, v_file);
 
@@ -747,7 +773,9 @@ inline uint8_t trj_eng_save(s_trj_eng *self, char *file_name)
 	v_file += sizeof(s_trj_eng);
 	
 	*v_self = *self;
-	
+
+    trj_proc_save(&self->proc, self, &v_file);
+
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		trj_obj_save(&self->obj_list[i], self, &v_file);
@@ -771,7 +799,9 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 {
 	uint32_t i;
 	uint32_t j;
-	
+
+	self->proc.free(&self->proc.data);
+
 	for (i = 0; i < self->obj_count; ++i)
 	{
 		if (self->obj_list[i].log_list != NULL)
@@ -811,7 +841,10 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
         if (self->time_step < 1E-6) { self->time_step = 1E-6; }
         self->time_iter = self->time_limit / self->time_step;
 
-        for (i = 0; i < self->obj_count; ++i) {
+        trj_proc_load(&self->proc, self, &v_file);
+
+        for (i = 0; i < self->obj_count; ++i)
+        {
             s_trj_obj *obj = &self->obj_list[i];
 
             trj_obj_load(obj, self, &v_file);

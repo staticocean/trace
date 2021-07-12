@@ -23,12 +23,26 @@ typedef struct trj_proc_euler
 	vlf_t rd1[2][9];
 	
 	s_vl_rd1 rd1_data;
+
+    vlf_t rot_tol;
+    vlf_t rot_var;
+    vlf_t rot_step;
+
+    vlf_t pos_tol;
+    vlf_t pos_var;
+    vlf_t pos_step;
 	
 }   s_trj_proc_euler;
 
 typedef struct trj_proc_euler_init
 {
-	uint32_t temp;
+    vlf_t rot_tol;
+    vlf_t rot_var;
+    vlf_t rot_step;
+
+    vlf_t pos_tol;
+    vlf_t pos_var;
+    vlf_t pos_step;
 
 }   s_trj_proc_euler_init;
 
@@ -36,6 +50,15 @@ typedef struct trj_proc_euler_init
 
 inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init attr)
 {
+    // Target position accuracy after integration
+    self->rot_tol  = attr.rot_tol;
+    self->rot_var  = attr.rot_var;
+    self->rot_step = attr.rot_step;
+
+    self->pos_tol  = attr.pos_tol;
+    self->pos_var  = attr.pos_var;
+    self->pos_step = attr.pos_step;
+
 	return 0x00;
 }
 
@@ -144,11 +167,6 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 
     // Correct using gradient descent
     {
-        // Target position accuracy after integration
-        float64_t rtol  = 1E-6;
-        float64_t rvar  = 1E-6;
-        float64_t rstep = 1E-6;
-
         if (offset == 0x00)
         {
             vl3_vcopy(&obj->pos[0][0], &obj->log_list[0].pos[0][0]);
@@ -173,17 +191,17 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
                 s_trj_obj rM[3] = {*obj, *obj, *obj};
                 s_trj_obj rR[3] = {*obj, *obj, *obj};
 
-                __trj_proc_euler_correct_calc__(self, &rL[0], offset, vl_vec(-rvar, 0.0, 0.0), vl_vec_zeros);
-                __trj_proc_euler_correct_calc__(self, &rL[1], offset, vl_vec(0.0, -rvar, 0.0), vl_vec_zeros);
-                __trj_proc_euler_correct_calc__(self, &rL[2], offset, vl_vec(0.0, 0.0, -rvar), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rL[0], offset, vl_vec(-self->rot_var, 0.0, 0.0), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rL[1], offset, vl_vec(0.0, -self->rot_var, 0.0), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rL[2], offset, vl_vec(0.0, 0.0, -self->rot_var), vl_vec_zeros);
 
                 __trj_proc_euler_correct_calc__(self, &rM[0], offset, vl_vec(0.0, 0.0, 0.0), vl_vec_zeros);
                 __trj_proc_euler_correct_calc__(self, &rM[1], offset, vl_vec(0.0, 0.0, 0.0), vl_vec_zeros);
                 __trj_proc_euler_correct_calc__(self, &rM[2], offset, vl_vec(0.0, 0.0, 0.0), vl_vec_zeros);
 
-                __trj_proc_euler_correct_calc__(self, &rR[0], offset, vl_vec(+rvar, 0.0, 0.0), vl_vec_zeros);
-                __trj_proc_euler_correct_calc__(self, &rR[1], offset, vl_vec(0.0, +rvar, 0.0), vl_vec_zeros);
-                __trj_proc_euler_correct_calc__(self, &rR[2], offset, vl_vec(0.0, 0.0, +rvar), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rR[0], offset, vl_vec(+self->rot_var, 0.0, 0.0), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rR[1], offset, vl_vec(0.0, +self->rot_var, 0.0), vl_vec_zeros);
+                __trj_proc_euler_correct_calc__(self, &rR[2], offset, vl_vec(0.0, 0.0, +self->rot_var), vl_vec_zeros);
 
                 // re = rotation error
                 vlf_t reL[3] = {
@@ -217,21 +235,17 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 
                 if (vl3_vnorm(dr) > 1E-24)
                 {
-                    vl3_vmul_s(dr, dr, rstep / vl3_vnorm(dr));
+                    vl3_vmul_s(dr, dr, self->rot_step / vl3_vnorm(dr));
                     vlf_t r_corr[9];
                     vl3_skew(r_corr, dr);
 
                     vl3_msub(&obj->log_list[offset-1].rot[1][0], &obj->log_list[offset-1].rot[1][0], r_corr);
                 }
 
-            } while (rot_error > rtol && counter < 1000);
+            } while (rot_error > self->rot_tol && counter < 1000);
 
             counter = 0x00;
             vlf_t pos_error = 0.0;
-
-            float64_t ptol  = 1E-6;
-            float64_t pvar  = 1E-3;
-            float64_t pstep = 1E-0;
 
             do
             {
@@ -241,17 +255,17 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
                 s_trj_obj pM[3] = {*obj, *obj, *obj};
                 s_trj_obj pR[3] = {*obj, *obj, *obj};
 
-                __trj_proc_euler_correct_calc__(self, &pL[0], offset, vl_vec_zeros, vl_vec(-pvar, 0.0, 0.0));
-                __trj_proc_euler_correct_calc__(self, &pL[1], offset, vl_vec_zeros, vl_vec(0.0, -pvar, 0.0));
-                __trj_proc_euler_correct_calc__(self, &pL[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, -pvar));
+                __trj_proc_euler_correct_calc__(self, &pL[0], offset, vl_vec_zeros, vl_vec(-self->pos_var, 0.0, 0.0));
+                __trj_proc_euler_correct_calc__(self, &pL[1], offset, vl_vec_zeros, vl_vec(0.0, -self->pos_var, 0.0));
+                __trj_proc_euler_correct_calc__(self, &pL[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, -self->pos_var));
 
                 __trj_proc_euler_correct_calc__(self, &pM[0], offset, vl_vec_zeros, vl_vec(0.0, 0.0, 0.0));
                 __trj_proc_euler_correct_calc__(self, &pM[1], offset, vl_vec_zeros, vl_vec(0.0, 0.0, 0.0));
                 __trj_proc_euler_correct_calc__(self, &pM[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, 0.0));
 
-                __trj_proc_euler_correct_calc__(self, &pR[0], offset, vl_vec_zeros, vl_vec(+pvar, 0.0, 0.0));
-                __trj_proc_euler_correct_calc__(self, &pR[1], offset, vl_vec_zeros, vl_vec(0.0, +pvar, 0.0));
-                __trj_proc_euler_correct_calc__(self, &pR[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, +pvar));
+                __trj_proc_euler_correct_calc__(self, &pR[0], offset, vl_vec_zeros, vl_vec(+self->pos_var, 0.0, 0.0));
+                __trj_proc_euler_correct_calc__(self, &pR[1], offset, vl_vec_zeros, vl_vec(0.0, +self->pos_var, 0.0));
+                __trj_proc_euler_correct_calc__(self, &pR[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, +self->pos_var));
 
                 // re = rotation error
                 vlf_t peL[3] = {
@@ -285,11 +299,11 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 
                 if (vl3_vnorm(dp) > 1E-32)
                 {
-                    vl3_vmul_s(dp, dp, pstep / vl3_vnorm(dp));
+                    vl3_vmul_s(dp, dp, self->pos_step / vl3_vnorm(dp));
                     vl3_vsub(&obj->log_list[offset-1].pos[2][0], &obj->log_list[offset-1].pos[2][0], dp);
                 }
 
-            } while (pos_error > ptol && counter < 1000);
+            } while (pos_error > self->pos_tol && counter < 1000);
 
             __trj_proc_euler_correct_calc__(self, obj, offset, vl_vec_zeros, vl_vec_zeros);
         }
@@ -316,12 +330,18 @@ inline uint8_t trj_proc_euler_init_ (void **data, void *config)
 
 inline uint8_t trj_proc_euler_save_(void *data, void *config, uint8_t **v_file)
 {
-	return 0x00;
+    s_trj_proc_euler *proc = (s_trj_proc_euler *) data;
+    s_trj_proc_euler_init *attr = (s_trj_proc_euler_init *) config;
+
+	return trj_proc_euler_save(proc, attr, v_file);
 }
 
 inline uint8_t trj_proc_euler_load_(void *data, void *config, uint8_t **v_file)
 {
-	return 0x00;
+    s_trj_proc_euler *proc = (s_trj_proc_euler *) data;
+    s_trj_proc_euler_init *attr = (s_trj_proc_euler_init *) config;
+
+    return trj_proc_euler_load(proc, attr, v_file);
 }
 
 inline uint8_t trj_proc_euler_free_ (void **data)
