@@ -34,7 +34,7 @@ typedef struct trj_proc_euler
 	
 }   s_trj_proc_euler;
 
-typedef struct trj_proc_euler_init
+typedef struct trj_proc_euler_attr
 {
     vlf_t rot_tol;
     vlf_t rot_var;
@@ -44,11 +44,11 @@ typedef struct trj_proc_euler_init
     vlf_t pos_var;
     vlf_t pos_step;
 
-}   s_trj_proc_euler_init;
+}   s_trj_proc_euler_attr;
 
 //----------------------------------------------------------------
 
-inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init attr)
+inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_attr attr)
 {
     // Target position accuracy after integration
     self->rot_tol  = attr.rot_tol;
@@ -62,12 +62,12 @@ inline uint8_t trj_proc_euler_init(s_trj_proc_euler *self, s_trj_proc_euler_init
 	return 0x00;
 }
 
-inline uint8_t trj_proc_euler_save(s_trj_proc_euler *self, s_trj_proc_euler_init *attr, uint8_t **v_file)
+inline uint8_t trj_proc_euler_save(s_trj_proc_euler *self, s_trj_proc_euler_attr *attr, uint8_t **v_file)
 {
 	return 0x00;
 }
 
-inline uint8_t trj_proc_euler_load(s_trj_proc_euler *self, s_trj_proc_euler_init *attr, uint8_t **v_file)
+inline uint8_t trj_proc_euler_load(s_trj_proc_euler *self, s_trj_proc_euler_attr *attr, uint8_t **v_file)
 {
 	return 0x00;
 }
@@ -323,15 +323,15 @@ inline uint8_t trj_proc_euler_init_ (void **data, void *config)
 	*data = (s_trj_proc_euler*) malloc(sizeof(s_trj_proc_euler));
 	
 	s_trj_proc_euler *proc = (s_trj_proc_euler*) *data;
-	s_trj_proc_euler_init *proc_init = (s_trj_proc_euler_init*) config;
+    s_trj_proc_euler_attr *attr = (s_trj_proc_euler_attr*) config;
 	
-	return trj_proc_euler_init(proc, *proc_init);
+	return trj_proc_euler_init(proc, *attr);
 }
 
 inline uint8_t trj_proc_euler_save_(void *data, void *config, uint8_t **v_file)
 {
-    s_trj_proc_euler *proc = (s_trj_proc_euler *) data;
-    s_trj_proc_euler_init *attr = (s_trj_proc_euler_init *) config;
+    s_trj_proc_euler *proc = (s_trj_proc_euler*) data;
+    s_trj_proc_euler_attr *attr = (s_trj_proc_euler_attr*) config;
 
 	return trj_proc_euler_save(proc, attr, v_file);
 }
@@ -339,7 +339,7 @@ inline uint8_t trj_proc_euler_save_(void *data, void *config, uint8_t **v_file)
 inline uint8_t trj_proc_euler_load_(void *data, void *config, uint8_t **v_file)
 {
     s_trj_proc_euler *proc = (s_trj_proc_euler *) data;
-    s_trj_proc_euler_init *attr = (s_trj_proc_euler_init *) config;
+    s_trj_proc_euler_attr *attr = (s_trj_proc_euler_attr *) config;
 
     return trj_proc_euler_load(proc, attr, v_file);
 }
@@ -522,9 +522,9 @@ inline uint8_t trj_proc_fps_init_ (void **data, void *config)
 	*data = (s_trj_proc_fps*) malloc(sizeof(s_trj_proc_fps));
 	
 	s_trj_proc_fps *proc = (s_trj_proc_fps*) *data;
-	s_trj_proc_fps_init *proc_init = (s_trj_proc_fps_init*) config;
+	s_trj_proc_fps_init *attr = (s_trj_proc_fps_init*) config;
 	
-	return trj_proc_fps_init(proc, *proc_init);
+	return trj_proc_fps_init(proc, *attr);
 }
 
 inline uint8_t trj_proc_fps_save_(void *data, void *config, uint8_t **v_file)

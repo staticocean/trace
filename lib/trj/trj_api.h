@@ -800,30 +800,30 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
 	uint32_t i;
 	uint32_t j;
 
-	self->proc.free(&self->proc.data);
-
-	for (i = 0; i < self->obj_count; ++i)
-	{
-		if (self->obj_list[i].log_list != NULL)
-		{
-			free(self->obj_list[i].log_list);
-			self->obj_list[i].log_list = NULL;
-		}
-		
-		for (j = 0; j < self->obj_list[i].traj_offset; ++j)
-		{ self->obj_list[i].traj_list[j].free(&self->obj_list[i].traj_list[j].data); }
-		
-		for (j = 0; j < self->obj_list[i].ctrl_offset; ++j)
-		{ self->obj_list[i].ctrl_list[j].free(&self->obj_list[i].ctrl_list[j].data); }
-		
-		for (j = 0; j < self->obj_list[i].data_offset; ++j)
-		{ self->obj_list[i].data_list[j].free(&self->obj_list[i].data_list[j].data); }
-	}
-
 	FILE *file_handle = fopen(file_name, "rb");
 
 	if (file_handle != NULL)
 	{
+        self->proc.free(&self->proc.data);
+
+        for (i = 0; i < self->obj_count; ++i)
+        {
+            if (self->obj_list[i].log_list != NULL)
+            {
+                free(self->obj_list[i].log_list);
+                self->obj_list[i].log_list = NULL;
+            }
+
+            for (j = 0; j < self->obj_list[i].traj_offset; ++j)
+            { self->obj_list[i].traj_list[j].free(&self->obj_list[i].traj_list[j].data); }
+
+            for (j = 0; j < self->obj_list[i].ctrl_offset; ++j)
+            { self->obj_list[i].ctrl_list[j].free(&self->obj_list[i].ctrl_list[j].data); }
+
+            for (j = 0; j < self->obj_list[i].data_offset; ++j)
+            { self->obj_list[i].data_list[j].free(&self->obj_list[i].data_list[j].data); }
+        }
+
         uint8_t *__v_file__ = (uint8_t*) malloc(256*1024*1024);
         uint8_t *v_file = __v_file__;
         uint32_t file_size;

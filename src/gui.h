@@ -572,21 +572,22 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.render = trj_data_bin_render_,
 	});
 	
-	static s_trj_proc_euler_init trj_proc_euler_config_ = {
+	static s_trj_proc_euler_attr trj_proc_euler_config_ = {
             .rot_tol  = 1E-6,
             .rot_var  = 1E-6,
             .rot_step = 1E-6,
 
-            .pos_tol  = 1E-6,
+            .pos_tol  = 1E-3,
             .pos_var  = 1E-3,
             .pos_step = 1E-3,
 	};
 	
 	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+
+            .desc   = "default_proc_euler",
+//            .name   = "default_proc_euler",
 			
-			.desc   = "default_proc_euler",
-			
-			.config_size = sizeof(s_trj_proc_euler_init),
+			.config_size = sizeof(s_trj_proc_euler_attr),
 			.config = &trj_proc_euler_config_,
 			
 			.data_size = sizeof(s_trj_proc_euler),
@@ -599,26 +600,26 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.update = trj_proc_euler_update_,
 	});
 	
-	static s_trj_proc_fps_init trj_proc_fps_config_ = {
-			.temp = 0x00,
-	};
-	
-	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
-			
-			.desc   = "default_proc_fps",
-			
-			.config_size = sizeof(s_trj_proc_fps_init),
-			.config = &trj_proc_fps_config_,
-			
-			.data_size = sizeof(s_trj_proc_fps),
-			.data   = NULL,
-			
-			.init   = trj_proc_fps_init_,
-			.free   = trj_proc_fps_free_,
-			.save   = trj_proc_fps_save_,
-			.load   = trj_proc_fps_load_,
-			.update = trj_proc_fps_update_,
-	});
+//	static s_trj_proc_fps_init trj_proc_fps_config_ = {
+//			.temp = 0x00,
+//	};
+//
+//	trj_eng_add_procapi(&self->eng, (s_trj_proc) {
+//
+//			.desc   = "default_proc_fps",
+//
+//			.config_size = sizeof(s_trj_proc_fps_init),
+//			.config = &trj_proc_fps_config_,
+//
+//			.data_size = sizeof(s_trj_proc_fps),
+//			.data   = NULL,
+//
+//			.init   = trj_proc_fps_init_,
+//			.free   = trj_proc_fps_free_,
+//			.save   = trj_proc_fps_save_,
+//			.load   = trj_proc_fps_load_,
+//			.update = trj_proc_fps_update_,
+//	});
 	
 	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_gui_obj); ++i)
 	{
