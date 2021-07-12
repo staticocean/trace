@@ -18,15 +18,17 @@
 #include "gui_eng.h"
 #include "gui_env.h"
 #include "gui_cmd.h"
+#include "gui_conf.h"
 
 //----------------------------------------------------------------
 
 typedef struct gui_tbar
 {
-	s_trj_eng *eng;
-	s_gui_eng *eng_gui;
-	s_gui_env *env;
-	s_gui_cmd *cmd;
+	s_trj_eng   *eng;
+	s_gui_eng   *eng_gui;
+	s_gui_env   *env;
+    s_gui_cmd   *cmd;
+    s_gui_conf  *conf;
 	
 	int height;
 	
@@ -172,7 +174,11 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 		{
 			if (ImGui::MenuItem ("New Object")) { gui_tbar_menu_newobject(tbar); }
 			if (ImGui::BeginMenu("File      ")) { gui_tbar_menu_file     (tbar); }
-			if (ImGui::BeginMenu("Temrinal  ")) { gui_tbar_menu_terminal (tbar); }
+            if (ImGui::BeginMenu("Temrinal  ")) { gui_tbar_menu_terminal (tbar); }
+
+            if (ImGui::BeginMenu("Settings  "))
+            {
+            }
 			
 			ImGui::Separator();
 			

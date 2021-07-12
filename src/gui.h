@@ -61,6 +61,7 @@ typedef struct gui
 	s_gui_cmd  gui_cmd;
 	s_gui_env  gui_env;
 	s_gui_clip gui_clip;
+	s_gui_conf gui_conf;
 	
 } 	s_gui;
 
@@ -90,11 +91,14 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	
 	self->w_height = 720;
 	self->w_width  = 1024;
-	
-	self->gui_tbar.eng = &self->eng;
+
+	gui_conf_init(&self->gui_conf, (s_gui_conf_attr) {});
+
+	self->gui_tbar.eng  = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
-	self->gui_tbar.env = &self->gui_env;
-	self->gui_tbar.cmd = &self->gui_cmd;
+	self->gui_tbar.env  = &self->gui_env;
+    self->gui_tbar.cmd  = &self->gui_cmd;
+    self->gui_tbar.conf = &self->gui_conf;
 	self->gui_tbar.height = 40;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
