@@ -225,7 +225,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 					
 					vlf_t rot[9];
-					vl3_tnp(rot, &data->ecef_ctn[i * di * 9]);
+					vl3_tnp(rot, &data->ecef_rot[i * di * 9]);
 					vl3_mmul_s(rot, rot, 0.015 / view.scale);
 					
 					// top middle
@@ -250,7 +250,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 					
 					vlf_t rot[9];
-					vl3_tnp(rot, &data->ecef_ctn[i*9]);
+					vl3_tnp(rot, &data->ecef_rot[i*9]);
 					vl3_mmul_s(rot, rot, 10.0 / view.scale);
 					
 					// top middle

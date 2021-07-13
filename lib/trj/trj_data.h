@@ -192,7 +192,7 @@ typedef struct trj_data_ram
 	vlf_t 		*lla_vel;
 	vlf_t 		*lla_acc;
 	
-	vlf_t 		*ecef_ctn;
+	vlf_t 		*ecef_rot;
 	vlf_t 		*ecef_pos;
 	vlf_t 		*ecef_vel;
 	vlf_t 		*ecef_acc;
@@ -231,7 +231,7 @@ inline void __trj_data_ram_null__(s_trj_data_ram *self)
 	self->lla_vel 	= NULL;
 	self->lla_acc 	= NULL;
 	
-	self->ecef_ctn	= NULL;
+	self->ecef_rot	= NULL;
 	self->ecef_pos 	= NULL;
 	self->ecef_vel 	= NULL;
 	self->ecef_acc 	= NULL;
@@ -264,7 +264,7 @@ inline void __trj_data_ram_free__(s_trj_data_ram *self)
 	if (self->lla_vel 	!= NULL) free(self->lla_vel 	);
 	if (self->lla_acc 	!= NULL) free(self->lla_acc 	);
 	
-	if (self->ecef_ctn	!= NULL) free(self->ecef_ctn	);
+	if (self->ecef_rot	!= NULL) free(self->ecef_rot	);
 	if (self->ecef_pos 	!= NULL) free(self->ecef_pos 	);
 	if (self->ecef_vel 	!= NULL) free(self->ecef_vel 	);
 	if (self->ecef_acc 	!= NULL) free(self->ecef_acc 	);
@@ -346,7 +346,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 		self->lla_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->lla_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		
-		self->ecef_ctn	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
+		self->ecef_rot	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 9);
 		self->ecef_pos 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->ecef_vel 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
 		self->ecef_acc 	= (vlf_t*) malloc(sizeof(vlf_t) * self->offset * 3);
@@ -384,7 +384,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 				vlf_t ref_cnt[9];
 				
 				vl3_tnp(ref_cnt, &self->ref->log_list[i].rot[0][0]);
-				vl3_mmul_m(&self->ecef_ctn[i*9], ref_cnt, &obj->log_list[i].rot[0][0]);
+				vl3_mmul_m(&self->ecef_rot[i*9], ref_cnt, &obj->log_list[i].rot[0][0]);
 				
 				vl3_vsub(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0], &self->ref->log_list[i].pos[0][0]);
 				vl3_mmul_v(&self->ecef_pos[i*3], ref_cnt, &self->ecef_pos[i*3]);
@@ -396,7 +396,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 			
 			else
 			{
-				vl3_mcopy(&self->ecef_ctn[i*9], &obj->log_list[i].rot[0][0]);
+				vl3_mcopy(&self->ecef_rot[i*9], &obj->log_list[i].rot[0][0]);
 				vl3_vcopy(&self->ecef_pos[i*3], &obj->log_list[i].pos[0][0]);
 				vl3_vcopy(&self->ecef_vel[i*3], &obj->log_list[i].pos[1][0]);
 				vl3_vcopy(&self->ecef_acc[i*3], &obj->log_list[i].pos[2][0]);
@@ -407,7 +407,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 				vlf_t ecef_ctn[9];
 				vlf_t ctn_local[9];
 				trj_ellp_ecefrot(self->ellp, &self->ecef_pos[i*3], ecef_ctn);
-				vl3_mtmul_m(ctn_local, ecef_ctn, &self->ecef_ctn[i*9]);
+				vl3_mtmul_m(ctn_local, ecef_ctn, &self->ecef_rot[i*9]);
 
 				s_vl_hpr hpr = vl_hpr(ctn_local);
 				
@@ -443,7 +443,7 @@ inline uint8_t trj_data_ram_render(s_trj_data_ram *self, s_trj_obj *obj)
 			
 			else
 			{
-				s_vl_hpr hpr = vl_hpr(&self->ecef_ctn[i*9]);
+				s_vl_hpr hpr = vl_hpr(&self->ecef_rot[i*9]);
 				
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;

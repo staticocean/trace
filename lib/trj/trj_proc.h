@@ -233,7 +233,7 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 
                 vl3_vinter(dr, drL, drR, 0.5);
 
-                if (vl3_vnorm(dr) > 1E-24)
+                if (vl3_vnorm(dr) > 1E-16)
                 {
                     vl3_vmul_s(dr, dr, self->rot_step / vl3_vnorm(dr));
                     vlf_t r_corr[9];
@@ -297,7 +297,7 @@ inline uint8_t trj_proc_euler_update(s_trj_proc_euler *self, s_trj_obj *obj, uin
 
                 vl3_vinter(dp, dpL, dpR, 0.5);
 
-                if (vl3_vnorm(dp) > 1E-32)
+                if (vl3_vnorm(dp) > 1E-16)
                 {
                     vl3_vmul_s(dp, dp, self->pos_step / vl3_vnorm(dp));
                     vl3_vsub(&obj->log_list[offset-1].pos[2][0], &obj->log_list[offset-1].pos[2][0], dp);

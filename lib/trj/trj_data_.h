@@ -154,9 +154,12 @@ inline uint8_t trj_data_mat_render(s_trj_data_mat *self, s_trj_obj *obj)
 		
 		// ECEF
 		
-		if (self->lla_en != 0x00)
+		if (self->ecef_en != 0x00)
 		{
-			TinyMATWriter_writeMatrix2D_rowmajor(
+            TinyMATWriter_writeMatrixND_rowmajor(
+                    self->file_data, "ecef_rot", ram->ecef_rot, (const int32_t[]) { 3, 3, (int32_t) ram->offset }, 3);
+
+            TinyMATWriter_writeMatrix2D_rowmajor(
 					self->file_data, "ecef_pos", ram->ecef_pos, 3, ram->offset);
 			
 			TinyMATWriter_writeMatrix2D_rowmajor(
