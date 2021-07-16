@@ -57,27 +57,27 @@ inline void gui_conf_view(s_gui_conf *conf)
 
                 ImGui::Text("proc_rotation_tolerance");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_rotation_tolerance", ImGuiDataType_Double, &proc->rot_tol, 1E-6);
+                ImGui::DragScalar("##proc_rotation_tolerance", ImGuiDataType_Double, &proc->rot_tol, 1E-6, NULL, NULL, "%.9lf");
 
                 ImGui::Text("proc_rotation_variation");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_rotation_variation", ImGuiDataType_Double, &proc->rot_var, 1E-6);
+                ImGui::DragScalar("##proc_rotation_variation", ImGuiDataType_Double, &proc->rot_var, 1E-6, NULL, NULL, "%.9lf");
 
                 ImGui::Text("proc_rotation_step     ");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_rotation_step", ImGuiDataType_Double, &proc->rot_step, 1E-6);
+                ImGui::DragScalar("##proc_rotation_step", ImGuiDataType_Double, &proc->rot_step, 1E-6, NULL, NULL, "%.9lf");
 
                 ImGui::Text("proc_position_tolerance");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_position_tolerance", ImGuiDataType_Double, &proc->pos_tol, 1E-6);
+                ImGui::DragScalar("##proc_position_tolerance", ImGuiDataType_Double, &proc->pos_tol, 1E-6, NULL, NULL, "%.9lf");
 
                 ImGui::Text("proc_position_variation");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_position_variation", ImGuiDataType_Double, &proc->pos_var, 1E-6);
+                ImGui::DragScalar("##proc_position_variation", ImGuiDataType_Double, &proc->pos_var, 1E-6, NULL, NULL, "%.9lf");
 
                 ImGui::Text("proc_position_step     ");
                 ImGui::SameLine();
-                ImGui::DragScalar("##proc_position_step", ImGuiDataType_Double, &proc->pos_step, 1E-6);
+                ImGui::DragScalar("##proc_position_step", ImGuiDataType_Double, &proc->pos_step, 1E-6, NULL, NULL, "%.9lf");
             }
 
             ImGui::EndChild();
