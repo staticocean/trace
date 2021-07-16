@@ -24,13 +24,31 @@
 
 inline void gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
 {
+    // to prevent corrupted data accessing wrong mem address
+    // first check if an object belongs to the list
+
+    uint8_t obj_exists = 0x00;
+
+    for (int i = 0; i < obj_count; ++i)
+    {
+        if (*obj == &obj_list[i])
+        {
+            obj_exists = 0x01;
+        }
+    }
+
+    if (obj_exists == 0x00 || *obj == NULL)
+    {
+        *obj = &obj_list[0];
+    }
+
 	if (ImGui::BeginCombo(label, (*obj)->desc, ImGuiComboFlags_NoArrowButton))
 	{
 		for (int i = 0; i < obj_count; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = ((*obj)->hash == obj_list[i].hash);
+			bool is_selected = ((*obj) == &obj_list[i]);
 			
 			if (ImGui::Selectable(obj_list[i].desc, is_selected))
 			{ *obj = &obj_list[i]; }
