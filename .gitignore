@@ -17,10 +17,11 @@
 *.mat
 *.ini
 .DS*
-.idea/
-cmake-build-debug/
-cmake-build-release/
-cmake-build-default/
+.idea/**
+cmake-build-debug/**
+cmake-build-release/**
+cmake-build-default/**
+release/**
 
 ## User settings
 xcuserdata/
@@ -44,3 +45,4 @@ DerivedData/
 
 ## Gcc Patch
 /*.gcno
+
