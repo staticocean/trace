@@ -377,6 +377,202 @@ inline uint8_t trj_ctrl_gm_update_(void *data, void *obj)
 
 //----------------------------------------------------------------
 
+typedef struct trj_ctrl_varot
+{
+    s_trj_eng 	*eng;
+    s_trj_obj 	*ref;
+    uint32_t 	ref_hash;
+
+    uint8_t 	ellp_en;
+    s_trj_ellp 	*ellp;
+    uint32_t 	ellp_hash;
+
+}   s_trj_ctrl_varot;
+
+typedef struct trj_ctrl_varot_attr
+{
+    s_trj_eng *eng;
+    s_trj_obj *ref;
+
+}   s_trj_ctrl_varot_attr;
+
+//----------------------------------------------------------------
+
+inline uint8_t trj_ctrl_varot_init(s_trj_ctrl_varot *self, s_trj_ctrl_varot_attr attr)
+{
+    self->eng = attr.eng;
+
+    self->ref = attr.ref;
+    if (self->ref != NULL)
+    { self->ref_hash = self->ref->hash; }
+
+    self->ellp_en = 0x00;
+    self->ellp = NULL;
+
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_save(s_trj_ctrl_varot *self, s_trj_ctrl_varot_attr *attr, uint8_t **v_file)
+{
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_load(s_trj_ctrl_varot *self, s_trj_ctrl_varot_attr *attr, uint8_t **v_file)
+{
+    self->eng = attr->eng;
+
+    self->ref  = trj_eng_find_obj (self->eng, self->ref_hash);
+    self->ellp = trj_eng_find_ellp(self->eng, self->ellp_hash);
+
+    if (self->ref == NULL)
+    {
+        self->ref_hash = 0x00;
+    }
+
+    if (self->ellp == NULL)
+    {
+        self->ellp_hash = 0x00;
+        self->ellp_en = 0x00;
+    }
+
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_reset(s_trj_ctrl_varot *self, s_trj_obj *obj)
+{
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_update(s_trj_ctrl_varot *self, s_trj_obj *obj)
+{
+    vlf_t local_pos_0[3];
+    vlf_t local_pos_1[3];
+    vlf_t local_dpos[3];
+
+    if (obj->log_offset > 0x00)
+    {
+        vl3_vsub(local_pos_0,
+                 &obj->log_list[obj->log_offset-1].pos[0][0],
+                        &self->ref->log_list[self->ref->log_offset-1].pos[0][0]);
+
+        vl3_mtmul_v(local_pos_0,
+                    &self->ref->log_list[self->ref->log_offset-1].rot[0][0], local_pos_0);
+
+        vl3_vsub(local_pos_1, &obj->pos[0][0], &self->ref->pos[0][0]);
+        vl3_mtmul_v(local_pos_1, &self->ref->rot[0][0], local_pos_1);
+
+        vl3_vsub(local_dpos, local_pos_1, local_pos_0);
+
+        if (vl3_vnorm(local_dpos) > 1E-3)
+        {
+            vl3_vmul_s(local_dpos, local_dpos, 1.0 / vl3_vnorm(local_dpos));
+
+            if (self->ellp_en != 0x00)
+            {
+                vlf_t ecef_rot[9];
+                vlf_t nhw_dpos[3];
+
+                // Get local ctn matrix (hor->ecef)
+                trj_ellp_ecefrot(self->ellp, local_pos_1, ecef_rot);
+                // Get velocity in hor CS
+                vl3_mtmul_v(nhw_dpos, ecef_rot, local_dpos);
+
+                vlf_t rot_nwh_tnp[9] = {
+                        nhw_dpos[0], nhw_dpos[1], nhw_dpos[2],
+                        0.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        };
+
+                vlf_t *x = &rot_nwh_tnp[0];
+                vlf_t *y = &rot_nwh_tnp[3];
+                vlf_t *z = &rot_nwh_tnp[6];
+
+                vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
+
+                vlf_t xy[3];
+                vl3_vmul_s(xy, x, vl3_vdot(x,y));
+                vl3_vsub(y, y, xy);
+                vl3_vmul_s(y, y, 1.0 / vl3_vnorm(y));
+
+                vl3_cross(z, x, y);
+                vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
+
+                vlf_t rot_nhw[9];
+                vl3_tnp(rot_nhw, rot_nwh_tnp);
+
+                s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nhw);
+                rot_nwh_hpr.roll = 0.0;
+                vl3_rot(rot_nhw, rot_nwh_hpr);
+
+                vlf_t r_ref[9];
+                vl3_mmul_m(r_ref, ecef_rot, rot_nhw);
+                vl3_mmul_m(&obj->rot[0][0], &self->ref->rot[0][0], r_ref);
+
+                vl3_rnorm(&obj->rot[0][0]);
+
+                if (obj->log_offset == 0x01)
+                {
+                    vl3_mcopy(&obj->log_list[obj->log_offset-1].rot[0][0], &obj->rot[0][0]);
+                }
+            }
+        }
+    }
+
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_init_(void **data, void *config)
+{
+    *data = (s_trj_ctrl_varot*) malloc(sizeof(s_trj_ctrl_varot));
+
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) *data;
+    s_trj_ctrl_varot_attr *attr = (s_trj_ctrl_varot_attr*) config;
+
+    return trj_ctrl_varot_init(ctrl, *attr);
+}
+
+inline uint8_t trj_ctrl_varot_free_(void **data)
+{
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) *data;
+    free(ctrl);
+
+    return 0x00;
+}
+
+inline uint8_t trj_ctrl_varot_save_(void *data, void *config, uint8_t **v_file)
+{
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) data;
+    s_trj_ctrl_varot_attr *attr = (s_trj_ctrl_varot_attr*) config;
+
+    return trj_ctrl_varot_save(ctrl, attr, v_file);
+}
+
+inline uint8_t trj_ctrl_varot_load_(void *data, void *config, uint8_t **v_file)
+{
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) data;
+    s_trj_ctrl_varot_attr *attr = (s_trj_ctrl_varot_attr*) config;
+
+    return trj_ctrl_varot_load(ctrl, attr, v_file);
+}
+
+inline uint8_t trj_ctrl_varot_reset_(void *data, void *obj)
+{
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) data;
+    s_trj_obj *obj_ = (s_trj_obj*) obj;
+
+    return trj_ctrl_varot_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_varot_update_(void *data, void *obj)
+{
+    s_trj_ctrl_varot *ctrl = (s_trj_ctrl_varot*) data;
+    s_trj_obj *obj_ = (s_trj_obj*) obj;
+
+    return trj_ctrl_varot_update(ctrl, obj_);
+}
+
+//----------------------------------------------------------------
+
 #endif /* __INS_CTRL__ */
 
 

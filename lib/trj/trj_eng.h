@@ -271,6 +271,23 @@ inline uint8_t trj_eng_update(s_trj_eng *self, vlf_t d_time)
 			obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
 		}
 	}
+
+//	for (i = 0; i < self->obj_count; ++i)
+//	{
+//	    vl3_vsub(&obj->pos[1][0], &obj->pos[0][0], &obj->log_list[obj->log_offset-1] = &self->obj_list[i];
+//
+//	    // remove all forces coz they are additive
+//	    // thus all the plugins will add and never set
+//	    // so we need to zero it manually
+//	    vl3_vset(obj->pos_force, 0.0);
+//	    vl3_vset(obj->rot_force, 0.0);
+//
+//	    for (j = 0; j < obj->ctrl_offset; ++j)
+//	    {
+//	        obj->ctrl_list[j].update(obj->ctrl_list[j].data, obj);
+//	    }
+//	}
+
 	
 	++self->update_count;
 	

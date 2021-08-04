@@ -428,6 +428,30 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.reset  = trj_ctrl_gms_reset_,
 			.update = trj_ctrl_gms_update_,
 	});
+
+	static s_trj_ctrl_varot_attr trj_ctrl_varot_config_ = {
+	        .eng = &self->eng,
+	        .ref = self->eng.obj_list,
+	        };
+
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+
+	    .desc   = "default_ctrl_varot",
+	    .name   = "default_ctrl_varot",
+
+	    .config_size = sizeof(s_trj_ctrl_varot_attr),
+	    .config = &trj_ctrl_varot_config_,
+
+	    .data_size = sizeof(s_trj_ctrl_varot),
+	    .data   = NULL,
+
+	    .init   = trj_ctrl_varot_init_,
+	    .free   = trj_ctrl_varot_free_,
+	    .save   = trj_ctrl_varot_save_,
+	    .load   = trj_ctrl_varot_load_,
+	    .reset  = trj_ctrl_varot_reset_,
+	    .update = trj_ctrl_varot_update_,
+	    });
 	
 //	static s_trj_ctrl_gm_init trj_ctrl_gm_config_ = {
 //			.order = 12,
@@ -722,6 +746,7 @@ inline uint8_t gui_main(s_gui *self)
 	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
 	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
+	const uint32_t ctrl_hash_varot= vl_crc32("default_ctrl_varot");
 
     {
         // Toolbar
@@ -794,9 +819,10 @@ inline uint8_t gui_main(s_gui *self)
 					s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
 					gui_ctrl_edit(ctrl);
 					
-					if      (ctrl->hash == ctrl_hash_gm  ) { gui_ctrl_edit_gm  (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms) { gui_ctrl_edit_egms(ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms ) { gui_ctrl_edit_gms (ctrl); }
+					if      (ctrl->hash == ctrl_hash_gm   ) { gui_ctrl_edit_gm   (ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms ) { gui_ctrl_edit_egms (ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms  ) { gui_ctrl_edit_gms  (ctrl); }
+					else if (ctrl->hash == ctrl_hash_varot) { gui_ctrl_edit_varot(ctrl); }
 //                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
 					
 					break;

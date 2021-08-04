@@ -131,8 +131,6 @@ inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
 	return;
 }
 
-//----------------------------------------------------------------
-
 inline void gui_ctrl_view_gms(s_trj_ctrl *self)
 {
 	ImGui::PushID(self);
@@ -141,6 +139,60 @@ inline void gui_ctrl_view_gms(s_trj_ctrl *self)
 	ImGui::PopID();
 	
 	return;
+}
+
+//----------------------------------------------------------------
+
+inline void gui_ctrl_edit_varot(s_trj_ctrl *self)
+{
+    ImGui::PushID(self);
+
+    s_trj_ctrl_varot *data = (s_trj_ctrl_varot*) self->data;
+
+    // !!! UPDATE HASHES !!!
+    // if ref name was changed we must recalc hash
+    // to retain save/load and gui objsel functionality
+    if (data->ref  != NULL) { data->ref_hash  = data->ref->hash ; }
+    if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+
+    ImGui::Text("desc  ");
+    ImGui::SameLine();
+    ImGui::Text(self->desc);
+
+    ImGui::Dummy(ImVec2(0, 5));
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0, 5));
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("ref   ");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+    gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+    if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("ellp  ");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(-40);
+    gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+    ImGui::SameLine(0.0, 0.0);
+    imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
+    if (data->ellp == NULL) { data->ellp_en = 0x00; }
+    if (data->ellp != NULL) { data->ellp_hash = data->ellp->hash; }
+
+    ImGui::PopID();
+
+    return;
+}
+
+inline void gui_ctrl_view_varot(s_trj_ctrl *self)
+{
+    ImGui::PushID(self);
+
+
+    ImGui::PopID();
+
+    return;
 }
 
 //----------------------------------------------------------------
