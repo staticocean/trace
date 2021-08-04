@@ -155,12 +155,23 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 			
 			if (ImGui::BeginPopupContextItem("obj_options"))
 			{
-                if (ImGui::Selectable("copy"))
-                {
-                }
+                // if (ImGui::Selectable("copy"))
+                // {
+                // }
 
-                if (ImGui::Selectable("paste"))
+                // if (ImGui::Selectable("paste"))
+                // {
+                // }
+
+                if (ImGui::Selectable("duplicate"))
                 {
+                    s_trj_obj_init obj_attr;
+                    sprintf(obj_attr.desc, "%s [D]", obj->desc);
+
+                    s_trj_obj *obj_copy = trj_eng_add_obj(self, obj_attr);
+
+
+                    trj_obj_copy(self, obj_copy, obj);
                 }
 
 				if (ImGui::Selectable("delete"))

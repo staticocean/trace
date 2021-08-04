@@ -47,7 +47,7 @@ inline void gui_conf_view(s_gui_conf *conf)
         ImGui::Begin("SETTINGS", &conf->isopen,
                  ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-        if (ImGui::BeginChild("##scroll_view"));
+        if (ImGui::BeginChild("##scroll_view"))
         {
             static uint32_t default_proc_euler = vl_crc32("default_proc_euler");
 

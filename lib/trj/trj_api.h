@@ -599,6 +599,24 @@ inline uint8_t trj_traj_load(s_trj_traj *self, s_trj_eng *eng, uint8_t **v_file)
 	return 0x00;
 }
 
+inline void trj_traj_copy(s_trj_eng *eng, s_trj_traj *dest, s_trj_traj *src)
+{
+    uint8_t *data_ref = (uint8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
+    uint8_t *data_ptr = data_ref;
+
+    trj_traj_save (src , eng, &data_ptr);
+
+    // Reset pointer
+    data_ptr = data_ref;
+
+    *dest = *src;
+    trj_traj_load (dest, eng, &data_ptr);
+
+    free(data_ref);
+
+    return;
+}
+
 //----------------------------------------------------------------
 
 inline uint8_t trj_ctrl_save(s_trj_ctrl *self, s_trj_eng *eng, uint8_t **v_file)
@@ -632,6 +650,24 @@ inline uint8_t trj_ctrl_load(s_trj_ctrl *self, s_trj_eng *eng, uint8_t **v_file)
 	return 0x00;
 }
 
+inline void trj_ctrl_copy(s_trj_eng *eng, s_trj_ctrl *dest, s_trj_ctrl *src)
+{
+    uint8_t *data_ref = (uint8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
+    uint8_t *data_ptr = data_ref;
+
+    trj_ctrl_save (src , eng, &data_ptr);
+
+    // Reset pointer
+    data_ptr = data_ref;
+
+    *dest = *src;
+    trj_ctrl_load (dest, eng, &data_ptr);
+
+    free(data_ref);
+
+    return;
+}
+
 //----------------------------------------------------------------
 
 inline uint8_t trj_data_save(s_trj_data *self, s_trj_eng *eng, uint8_t **v_file)
@@ -663,6 +699,24 @@ inline uint8_t trj_data_load(s_trj_data *self, s_trj_eng *eng, uint8_t **v_file)
 	self->load(self->data, self->config, v_file);
 	
 	return 0x00;
+}
+
+inline void trj_data_copy(s_trj_eng *eng, s_trj_data *dest, s_trj_data *src)
+{
+    uint8_t *data_ref = (uint8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
+    uint8_t *data_ptr = data_ref;
+
+    trj_data_save (src , eng, &data_ptr);
+
+    // Reset pointer
+    data_ptr = data_ref;
+
+    *dest = *src;
+    trj_data_load (dest, eng, &data_ptr);
+
+    free(data_ref);
+
+    return;
 }
 
 //----------------------------------------------------------------
@@ -758,6 +812,37 @@ inline void trj_obj_load(s_trj_obj *self, s_trj_eng *eng, uint8_t **v_file)
 	}
 	
 	return;
+}
+
+inline void trj_obj_copy(s_trj_eng *eng, s_trj_obj *dest, s_trj_obj *src)
+{
+    uint32_t i;
+
+    // Prevent GUI glitches in case of task switch
+    dest->traj_offset = 0x00;
+    dest->ctrl_offset = 0x00;
+    dest->data_offset = 0x00;
+
+    for (i = 0; i < src->traj_offset; ++i)
+    {
+        trj_traj_copy(eng, &dest->traj_list[i], &src->traj_list[i]);
+    }
+
+    for (i = 0; i < src->ctrl_offset; ++i)
+    {
+        trj_ctrl_copy(eng, &dest->ctrl_list[i], &src->ctrl_list[i]);
+    }
+
+    for (i = 0; i < src->data_offset; ++i)
+    {
+        trj_data_copy(eng, &dest->data_list[i], &src->data_list[i]);
+    }
+
+    dest->traj_offset = src->traj_offset;
+    dest->ctrl_offset = src->ctrl_offset;
+    dest->data_offset = src->data_offset;
+
+    return;
 }
 
 //----------------------------------------------------------------
