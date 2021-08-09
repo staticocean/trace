@@ -16,8 +16,6 @@
 
 typedef struct gui_clip
 {
-    clip::lock      lock;
-
     clip::format    format_traj;
 
 }   s_gui_clip;
@@ -46,7 +44,8 @@ void gui_clip_set_traj (s_gui_clip *clip, s_trj_eng *eng, s_trj_traj *traj)
 
     uint32_t traj_data_size = (uint32_t) (traj_data - __traj_data__);
 
-    clip->lock.set_data(clip->format_traj, (const char*) __traj_data__, traj_data_size);
+    clip::lock lock;
+    lock.set_data(clip->format_traj, (const char*) __traj_data__, traj_data_size);
 
     return;
 }
@@ -55,11 +54,12 @@ void gui_clip_get_traj (s_gui_clip *clip, s_trj_eng *eng, s_trj_traj *traj)
 {
     uint8_t __traj_data__[256 * 1024];
     uint8_t *traj_data = __traj_data__;
-    uint32_t traj_data_size = clip->lock.get_data_length(clip->format_traj);
+    clip::lock lock;
+    uint32_t traj_data_size = lock.get_data_length(clip->format_traj);
 
     if (traj_data_size > 0x00)
     {
-        clip->lock.get_data(clip->format_traj, (char*) __traj_data__, traj_data_size);
+        lock.get_data(clip->format_traj, (char*) __traj_data__, traj_data_size);
         traj->free(&traj->data);
         trj_traj_load(traj, eng, &traj_data);
     }
