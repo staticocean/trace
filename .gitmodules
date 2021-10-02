@@ -1,0 +1,6 @@
+[submodule "libcommon"]
+	path = libcommon
+	url = https://github.com/softael/libcommon.git
+[submodule "libgui"]
+	path = libgui
+	url = https://github.com/softael/libgui.git

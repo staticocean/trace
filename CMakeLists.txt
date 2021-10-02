@@ -19,7 +19,15 @@ include_directories(./lib/trj)
 include_directories(./lib/picoc)
 include_directories(./lib/json11)
 
-file(GLOB src_main      ./src/* ./src/win/*)
+if (UNIX)
+    file(GLOB src_main      ./src/* ./src/unix/*)
+endif (UNIX)
+if (WIN32)
+    file(GLOB src_main      ./src/* ./src/win/*)
+endif (WIN32)
+
+
+
 file(GLOB src_picoc     ./lib/picoc/* ./lib/picoc/cstdlib/*)
 file(GLOB src_tinymat   ./lib/tinymat/*)
 file(GLOB src_fmemopen  ./lib/fmemopen/*)
@@ -31,6 +39,6 @@ list(REMOVE_ITEM ${src_picoc} lib/picoc/platform/platform_unix.c)
 
 add_executable(trajectory ${src_main} ${src_picoc} ${src_json11} ${src_tinymat} ${src_fmemopen})
 
-add_subdirectory(lib_gui)
-target_link_libraries(trajectory LINK_PUBLIC lib_gui)
+add_subdirectory(libgui)
+target_link_libraries(trajectory LINK_PUBLIC libgui)
 

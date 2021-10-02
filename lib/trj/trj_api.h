@@ -13,7 +13,7 @@
 
 #include <stdlib.h>
 
-#include <lib_internal/vl.h>
+#include <libcommon/vl.h>
 
 //----------------------------------------------------------------
 
@@ -304,7 +304,7 @@ typedef struct trj_obj
 
 inline uint8_t trj_obj_add_traj(s_trj_obj *self, s_trj_traj traj_api)
 {
-	traj_api.hash = vl_crc32(traj_api.desc);
+	traj_api.hash = crc32_iso_str(traj_api.desc);
 	
 	s_trj_traj *api = &self->traj_list[self->traj_offset];
 	self->traj_offset += 0x01;
@@ -339,7 +339,7 @@ inline uint8_t trj_obj_del_traj(s_trj_obj *self, s_trj_traj *api)
 
 inline uint8_t trj_obj_add_ctrl(s_trj_obj *self, s_trj_ctrl ctrl_api)
 {
-	ctrl_api.hash = vl_crc32(ctrl_api.desc);
+	ctrl_api.hash = crc32_iso_str(ctrl_api.desc);
 	
 	s_trj_ctrl *api = &self->ctrl_list[self->ctrl_offset];
 	self->ctrl_offset += 0x01;
@@ -374,7 +374,7 @@ inline uint8_t trj_obj_del_ctrl(s_trj_obj *self, s_trj_ctrl *api)
 
 inline uint8_t trj_obj_add_data(s_trj_obj *self, s_trj_data data_api)
 {
-	data_api.hash = vl_crc32(data_api.desc);
+	data_api.hash = crc32_iso_str(data_api.desc);
 	
 	s_trj_data *api = &self->data_list[self->data_offset];
 	self->data_offset += 0x01;
@@ -937,7 +937,7 @@ inline uint8_t trj_eng_load(s_trj_eng *self, char *file_name)
             obj->time = self->time;
             obj->log_list = NULL;
             obj->log_offset = 0x00;
-            obj->hash = vl_crc32(obj->desc);
+            obj->hash = crc32_iso_str(obj->desc);
         }
 
         free(__v_file__);

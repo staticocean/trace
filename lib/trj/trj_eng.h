@@ -11,7 +11,8 @@
 
 #include <string.h>
 
-#include <lib_internal/vl.h>
+#include <libcommon/vl.h>
+#include <libcommon/crc.h>
 
 #include "trj_api.h"
 #include "trj_obj.h"
@@ -90,7 +91,7 @@ inline uint8_t trj_eng_init(s_trj_eng *self, s_trj_eng_init attr)
 
 inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
 {
-	api.hash = vl_crc32(api.desc);
+	api.hash = crc32_iso_str(api.desc);
 	
 	self->ellp_list[self->ellp_offset] = api;
 	++self->ellp_offset;
@@ -100,7 +101,7 @@ inline uint8_t trj_eng_add_ellpapi(s_trj_eng *self, s_trj_ellp api)
 
 inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
 {
-	api.hash = vl_crc32(api.desc);
+	api.hash = crc32_iso_str(api.desc);
 	
 	self->traj_list[self->traj_offset] = api;
 	++self->traj_offset;
@@ -110,7 +111,7 @@ inline uint8_t trj_eng_add_trajapi(s_trj_eng *self, s_trj_traj api)
 
 inline uint8_t trj_eng_add_ctrlapi(s_trj_eng *self, s_trj_ctrl api)
 {
-	api.hash = vl_crc32(api.desc);
+	api.hash = crc32_iso_str(api.desc);
 	
 	self->ctrl_list[self->ctrl_offset] = api;
 	++self->ctrl_offset;
@@ -120,7 +121,7 @@ inline uint8_t trj_eng_add_ctrlapi(s_trj_eng *self, s_trj_ctrl api)
 
 inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 {
-	api.hash = vl_crc32(api.desc);
+	api.hash = crc32_iso_str(api.desc);
 	
 	self->data_list[self->data_offset] = api;
 	++self->data_offset;
@@ -130,7 +131,7 @@ inline uint8_t trj_eng_add_dataapi(s_trj_eng *self, s_trj_data api)
 
 inline uint8_t trj_eng_add_procapi(s_trj_eng *self, s_trj_proc api)
 {
-	api.hash = vl_crc32(api.desc);
+	api.hash = crc32_iso_str(api.desc);
 	
 	self->proc_list[self->proc_offset] = api;
 	++self->proc_offset;
@@ -146,7 +147,7 @@ inline s_trj_obj* trj_eng_add_obj(s_trj_eng *self, s_trj_obj_init attr)
 	
 	trj_obj_init(obj, attr);
 	
-	obj->hash 		= vl_crc32(obj->desc);
+	obj->hash 		= crc32_iso_str(obj->desc);
 	obj->time 		= self->time;
 	obj->log_list   = NULL;
 	obj->log_offset = 0x00;

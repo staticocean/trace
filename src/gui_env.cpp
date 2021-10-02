@@ -91,13 +91,13 @@ void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 	s_trj_ctrl    *ctrl_list   = (s_trj_ctrl*)    Param[2]->Val->Pointer;
 	
 	memcpy(ctrl_list[*ctrl_offset].desc, Param[3]->Val->Pointer, 32);
-	ctrl_list[*ctrl_offset].hash = vl_crc32(ctrl_list[*ctrl_offset].desc);
-	ctrl_list[*ctrl_offset].data   = (void*) st_offset;
-	ctrl_list[*ctrl_offset].config = Param[4]->Val->Pointer;
-	ctrl_list[*ctrl_offset].init   = __api_ctrl_init__;
-	ctrl_list[*ctrl_offset].free   = __api_ctrl_free__;
-	ctrl_list[*ctrl_offset].reset  = __api_ctrl_reset__;
-	ctrl_list[*ctrl_offset].update = __api_ctrl_update__;
+	ctrl_list[*ctrl_offset].hash    = crc32_iso_str(ctrl_list[*ctrl_offset].desc);
+	ctrl_list[*ctrl_offset].data    = (void*) st_offset;
+	ctrl_list[*ctrl_offset].config  = Param[4]->Val->Pointer;
+	ctrl_list[*ctrl_offset].init    = __api_ctrl_init__;
+	ctrl_list[*ctrl_offset].free    = __api_ctrl_free__;
+	ctrl_list[*ctrl_offset].reset   = __api_ctrl_reset__;
+	ctrl_list[*ctrl_offset].update  = __api_ctrl_update__;
 	
 	st_env[st_offset] = env;
 	memcpy(&st_init[st_offset][0]  , Param[5]->Val->Pointer, 64);

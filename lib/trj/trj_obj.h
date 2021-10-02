@@ -9,7 +9,7 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
+#include <libcommon/vl.h>
 
 #include "trj_api.h"
 
@@ -85,7 +85,7 @@ inline uint8_t trj_obj_init(s_trj_obj *self, s_trj_obj_init attr)
 	uint32_t i;
 	
 	strcpy(self->desc, attr.desc);
-	self->hash = vl_crc32(self->desc);
+	self->hash = crc32_iso_str(self->desc);
 	
 	return 0x00;
 }
