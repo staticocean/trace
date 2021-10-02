@@ -8,11 +8,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <lib_internal/vl.h>
-#include <lib_internal/imgui_w.h>
-#include <lib/imgui/imgui.h>
+#include <libcommon/vl.h>
+#include <libcommon/imgui_w.h>
+#include <libgui/imgui/imgui.h>
 #include <lib/trj/trj_eng.h>
-#include <lib/clip/clip.h>
+#include <libgui/clip/clip.h>
 #include <nfd.h>
 
 #include "gui_eng.h"
@@ -86,10 +86,10 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 
 inline void gui_tbar_menu_newobject(s_gui_tbar *tbar)
 {
-	s_trj_traj *traj_static = trj_eng_find_traj(tbar->eng, vl_crc32("default_traj_static"));
-	s_trj_ctrl *ctrl_cpos   = trj_eng_find_ctrl(tbar->eng, vl_crc32("default_ctrl_cpos"  ));
-	s_trj_ctrl *ctrl_crot   = trj_eng_find_ctrl(tbar->eng, vl_crc32("default_ctrl_crot"  ));
-	s_trj_data *data_ram    = trj_eng_find_data(tbar->eng, vl_crc32("default_data_ram"   ));
+	s_trj_traj *traj_static = trj_eng_find_traj(tbar->eng, crc32_iso_str("default_traj_static"));
+	s_trj_ctrl *ctrl_cpos   = trj_eng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_cpos"  ));
+	s_trj_ctrl *ctrl_crot   = trj_eng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_crot"  ));
+	s_trj_data *data_ram    = trj_eng_find_data(tbar->eng, crc32_iso_str("default_data_ram"   ));
 	
 	s_trj_obj *obj = trj_eng_add_obj(tbar->eng, (s_trj_obj_init) { .desc = "object" });
 	

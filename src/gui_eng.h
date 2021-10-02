@@ -4,11 +4,11 @@
 
 //----------------------------------------------------------------
 
-#include <lib/imgui/imgui.h>
-#include <lib/implot/implot.h>
+#include <libgui/imgui/imgui.h>
+#include <libgui/implot/implot.h>
 
-#include <lib_internal/vl.h>
-#include <lib_internal/imgui_w.h>
+#include <libcommon/vl.h>
+#include <libcommon/imgui_w.h>
 
 #include <lib/trj/trj_api.h>
 #include <lib/trj/trj_eng.h>
@@ -17,7 +17,7 @@
 #include <lib/trj/trj_data.h>
 #include <lib/trj/trj_ellp.h>
 
-#include <lib_gui/lib/clip/clip.h>
+#include <libgui/clip/clip.h>
 
 #include "gui_obj.h"
 #include "gui_traj.h"

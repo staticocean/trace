@@ -4,10 +4,10 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
+#include <libcommon/vl.h>
 
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+#include <libgui/imgui/imgui.h>
+#include <libgui/imgui/imgui_internal.h>
 #include <lib/trj/trj_obj.h>
 #include <lib/trj/trj_ctrl.h>
 #include <lib/trj/trj_ctrl_.h>

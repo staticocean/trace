@@ -9,7 +9,7 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
+#include <libcommon/vl.h>
 
 #include "trj_api.h"
 
@@ -71,7 +71,7 @@ inline void trj_ellp_init(s_trj_ellp *ellp)
 	ellp->ll		= ellp->l * ellp->l;
 	ellp->invcbrt2	= 1.0 / (vl_pow(2.0, 1.0 / 3.0));
 	
-	ellp->hash 		= vl_crc32(ellp->desc);
+	ellp->hash 		= crc32_iso_str(ellp->desc);
 	
 	return;
 }

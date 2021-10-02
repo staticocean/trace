@@ -9,8 +9,8 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
-#include <lib_internal/bz.h>
+#include <libcommon/vl.h>
+#include <libcommon/bz.h>
 
 #include "trj_api.h"
 #include "trj_ellp.h"
@@ -516,7 +516,7 @@ inline uint8_t trj_traj_bz_init(s_trj_traj_bz *self, s_trj_traj_bz_init attr)
 	self->ellp_en = attr.ellp_en;
 	self->ellp = attr.ellp;
 	if (self->ellp != NULL)
-	{ self->ellp_hash = vl_crc32(self->ellp->desc); }
+	{ self->ellp_hash = crc32_iso_str(self->ellp->desc); }
 	
 //	vl_vset(self->p_bias, 0.0);
 //	vl_vset(self->p_gain, 1.0);

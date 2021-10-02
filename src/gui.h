@@ -12,12 +12,12 @@
 
 #include <res/fonts/default_font.h>
 
-#include <lib/imgui/imgui.h>
+#include <libgui/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
 #include <nfd.h>
-#include <lib_internal/vl.h>
-#include <lib_internal/imgui_theme.h>
-#include <lib_internal/imgui_w.h>
+#include <libcommon/vl.h>
+#include <libcommon/imgui_theme.h>
+#include <libcommon/imgui_w.h>
 
 #include <lib/trj/trj_eng.h>
 #include <lib/trj/trj_obj.h>
@@ -731,22 +731,22 @@ inline uint8_t gui_main(s_gui *self)
 	
 	#endif
     
-	const uint32_t traj_hash_static = vl_crc32("default_traj_static");
-	const uint32_t traj_hash_orb    = vl_crc32("default_traj_orb");
-	const uint32_t traj_hash_bz     = vl_crc32("default_traj_bz");
-	const uint32_t traj_hash_bz2    = vl_crc32("default_traj_bz2");
-	const uint32_t traj_hash_navsat = vl_crc32("default_traj_navsat");
+	const uint32_t traj_hash_static = crc32_iso_str("default_traj_static");
+	const uint32_t traj_hash_orb    = crc32_iso_str("default_traj_orb");
+	const uint32_t traj_hash_bz     = crc32_iso_str("default_traj_bz");
+	const uint32_t traj_hash_bz2    = crc32_iso_str("default_traj_bz2");
+	const uint32_t traj_hash_navsat = crc32_iso_str("default_traj_navsat");
 	
-	const uint32_t data_hash_text = vl_crc32("default_data_text");
-	const uint32_t data_hash_ram  = vl_crc32("default_data_ram");
-	const uint32_t data_hash_ramld= vl_crc32("default_data_ramld");
-	const uint32_t data_hash_mat  = vl_crc32("default_data_mat");
-	const uint32_t data_hash_bin  = vl_crc32("default_data_bin");
+	const uint32_t data_hash_text 	= crc32_iso_str("default_data_text");
+	const uint32_t data_hash_ram  	= crc32_iso_str("default_data_ram");
+	const uint32_t data_hash_ramld	= crc32_iso_str("default_data_ramld");
+	const uint32_t data_hash_mat  	= crc32_iso_str("default_data_mat");
+	const uint32_t data_hash_bin  	= crc32_iso_str("default_data_bin");
 	
-	const uint32_t ctrl_hash_gm   = vl_crc32("default_ctrl_gm");
-	const uint32_t ctrl_hash_egms = vl_crc32("default_ctrl_egms");
-	const uint32_t ctrl_hash_gms  = vl_crc32("default_ctrl_gms");
-	const uint32_t ctrl_hash_varot= vl_crc32("default_ctrl_varot");
+	const uint32_t ctrl_hash_gm   	= crc32_iso_str("default_ctrl_gm");
+	const uint32_t ctrl_hash_egms 	= crc32_iso_str("default_ctrl_egms");
+	const uint32_t ctrl_hash_gms  	= crc32_iso_str("default_ctrl_gms");
+	const uint32_t ctrl_hash_varot	= crc32_iso_str("default_ctrl_varot");
 
     {
         // Toolbar

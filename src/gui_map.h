@@ -6,12 +6,12 @@
 
 #include <fstream>
 
-#include <lib_internal/vl.h>
-#include <lib_internal/vl3d.h>
-#include <lib_internal/gjson.h>
+#include <libcommon/vl.h>
+#include <libcommon/vl3d.h>
+#include <libcommon/gjson.h>
 
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+#include <libgui/imgui/imgui.h>
+#include <libgui/imgui/imgui_internal.h>
 #include <lib/json11/json11.hpp>
 
 //----------------------------------------------------------------

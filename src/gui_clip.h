@@ -4,13 +4,13 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
-#include <lib_internal/vl3d.h>
+#include <libcommon/vl.h>
+#include <libcommon/vl3d.h>
 
-#include <lib/imgui/imgui.h>
+#include <libgui/imgui/imgui.h>
 #include <lib/trj/trj_obj.h>
 
-#include <lib_gui/lib/clip/clip.h>
+#include <libgui/clip/clip.h>
 
 //----------------------------------------------------------------
 

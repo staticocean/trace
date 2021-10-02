@@ -9,11 +9,10 @@
 
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-
 #include <stdlib.h>
 
 #include <libcommon/vl.h>
+#include <libcommon/crc.h>
 
 //----------------------------------------------------------------
 
@@ -578,6 +577,7 @@ inline uint8_t trj_traj_load(s_trj_traj *self, s_trj_eng *eng, uint8_t **v_file)
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
 	
+	self->hash = crc32_iso_str(self->desc);
 	s_trj_traj *ref_api = trj_eng_find_traj(eng, self->hash);
 	
 	self->config  = ref_api->config;
@@ -635,6 +635,7 @@ inline uint8_t trj_ctrl_load(s_trj_ctrl *self, s_trj_eng *eng, uint8_t **v_file)
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
 	
+	self->hash = crc32_iso_str(self->desc);
 	s_trj_ctrl *ref_api = trj_eng_find_ctrl(eng, self->hash);
 	
 	self->config  = ref_api->config;
@@ -686,6 +687,7 @@ inline uint8_t trj_data_load(s_trj_data *self, s_trj_eng *eng, uint8_t **v_file)
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
 	
+	self->hash = crc32_iso_str(self->desc);
 	s_trj_data *ref_api = trj_eng_find_data(eng, self->hash);
 	
 	self->config  = ref_api->config;

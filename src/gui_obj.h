@@ -4,10 +4,10 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
-#include <lib_internal/vl3d.h>
+#include <libcommon/vl.h>
+#include <libcommon/vl3d.h>
 
-#include <lib/imgui/imgui.h>
+#include <libgui/imgui/imgui.h>
 #include <lib/trj/trj_obj.h>
 
 #include "gui_w.h"
@@ -46,7 +46,7 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::InputText("##desc", self->desc, 255);
 	// !!! UPDATE HASH !!!
-	self->hash = vl_crc32(self->desc);
+	self->hash = crc32_iso_str(self->desc);
 
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();

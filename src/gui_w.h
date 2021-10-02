@@ -4,9 +4,9 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
-#include <lib_internal/vl3d.h>
-#include <lib_internal/imgui_w.h>
+#include <libcommon/vl.h>
+#include <libcommon/vl3d.h>
+#include <libcommon/imgui_w.h>
 
 #include <nfd.h>
 
@@ -17,8 +17,8 @@
 #include <lib/trj/trj_proc.h>
 #include <lib/trj/trj_eng.h>
 
-#include <lib/imgui/imgui.h>
-#include <lib/imgui/imgui_internal.h>
+#include <libgui/imgui/imgui.h>
+#include <libgui/imgui/imgui_internal.h>
 
 //----------------------------------------------------------------
 

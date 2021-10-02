@@ -4,10 +4,10 @@
 
 //----------------------------------------------------------------
 
-#include <lib_internal/vl.h>
-#include <lib_internal/vl3d.h>
+#include <libcommon/vl.h>
+#include <libcommon/vl3d.h>
 
-#include <lib/imgui/imgui.h>
+#include <libgui/imgui/imgui.h>
 
 //----------------------------------------------------------------
 
@@ -49,7 +49,7 @@ inline void gui_conf_view(s_gui_conf *conf)
 
         if (ImGui::BeginChild("##scroll_view"))
         {
-            static uint32_t default_proc_euler = vl_crc32("default_proc_euler");
+            static uint32_t default_proc_euler = crc32_iso_str("default_proc_euler");
 
             if (conf->eng->proc.hash == default_proc_euler)
             {
