@@ -739,6 +739,7 @@ inline uint8_t trj_proc_load(s_trj_proc *self, s_trj_eng *eng, uint8_t **v_file)
 	memcpy(self->data, *v_file, self->data_size);
 	*v_file += self->data_size;
 
+	self->hash = crc32_iso_str(self->desc);
     s_trj_proc *ref_api = trj_eng_find_proc(eng, self->hash);
 
     self->config  = ref_api->config;
