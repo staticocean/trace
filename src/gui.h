@@ -127,9 +127,11 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 	
 	trj_ellp_init(&trj_ellp_wgs84);
 	trj_ellp_init(&trj_ellp_pz90);
+	trj_ellp_init(&trj_ellp_pz90_11);
 	
 	trj_eng_add_ellpapi(&self->eng, trj_ellp_wgs84);
 	trj_eng_add_ellpapi(&self->eng, trj_ellp_pz90);
+	trj_eng_add_ellpapi(&self->eng, trj_ellp_pz90_11);
 	
 	static s_trj_traj_static_init trj_traj_static_config_ = {
 			.eng = &self->eng,
@@ -404,6 +406,31 @@ inline uint8_t gui_init(s_gui *self, s_gui_init attr)
 			.reset  = trj_ctrl_egms_reset_,
 			.update = trj_ctrl_egms_update_,
 	});
+	
+	static s_trj_ctrl_egmsnpo_init trj_ctrl_egmsnpo_config_ = {
+			.eng = &self->eng,
+			.ref = self->eng.obj_list,
+			};
+	
+	trj_eng_add_ctrlapi(&self->eng, (s_trj_ctrl) {
+		
+		.desc   = "default_ctrl_egmsnpo",
+		.name   = "default_ctrl_egmsnpo",
+		
+		.config_size = sizeof(s_trj_ctrl_egmsnpo_init),
+		.config = &trj_ctrl_egmsnpo_config_,
+		
+		.data_size = sizeof(s_trj_ctrl_egmsnpo),
+		.data   = NULL,
+		
+		.init   = trj_ctrl_egmsnpo_init_,
+		.free   = trj_ctrl_egmsnpo_free_,
+		.save   = trj_ctrl_egmsnpo_save_,
+		.load   = trj_ctrl_egmsnpo_load_,
+		.reset  = trj_ctrl_egmsnpo_reset_,
+		.update = trj_ctrl_egmsnpo_update_,
+		});
+	
 	
 	static s_trj_ctrl_gms_init trj_ctrl_gms_config_ = {
 			.eng = &self->eng,
@@ -745,6 +772,7 @@ inline uint8_t gui_main(s_gui *self)
 	
 	const uint32_t ctrl_hash_gm   	= crc32_iso_str("default_ctrl_gm");
 	const uint32_t ctrl_hash_egms 	= crc32_iso_str("default_ctrl_egms");
+	const uint32_t ctrl_hash_egmsnpo= crc32_iso_str("default_ctrl_egmsnpo");
 	const uint32_t ctrl_hash_gms  	= crc32_iso_str("default_ctrl_gms");
 	const uint32_t ctrl_hash_varot	= crc32_iso_str("default_ctrl_varot");
 
@@ -819,10 +847,11 @@ inline uint8_t gui_main(s_gui *self)
 					s_trj_ctrl *ctrl = (s_trj_ctrl*) self->gui_eng.sel_item;
 					gui_ctrl_edit(ctrl);
 					
-					if      (ctrl->hash == ctrl_hash_gm   ) { gui_ctrl_edit_gm   (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms ) { gui_ctrl_edit_egms (ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms  ) { gui_ctrl_edit_gms  (ctrl); }
-					else if (ctrl->hash == ctrl_hash_varot) { gui_ctrl_edit_varot(ctrl); }
+					if      (ctrl->hash == ctrl_hash_gm     ) { gui_ctrl_edit_gm     (ctrl); }
+					else if (ctrl->hash == ctrl_hash_egms   ) { gui_ctrl_edit_egms   (ctrl); }
+					else if (ctrl->hash == ctrl_hash_egmsnpo) { gui_ctrl_edit_egmsnpo(ctrl); }
+					else if (ctrl->hash == ctrl_hash_gms    ) { gui_ctrl_edit_gms    (ctrl); }
+					else if (ctrl->hash == ctrl_hash_varot  ) { gui_ctrl_edit_varot  (ctrl); }
 //                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
 					
 					break;

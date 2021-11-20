@@ -823,6 +823,163 @@ inline uint8_t trj_ctrl_egms_update_(void *data, void *obj)
 
 //----------------------------------------------------------------
 
+typedef struct trj_ctrl_egmsnpo
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	uint32_t ref_hash;
+	
+}   s_trj_ctrl_egmsnpo;
+
+
+typedef struct trj_ctrl_egmsnpo_init
+{
+	s_trj_eng *eng;
+	s_trj_obj *ref;
+	
+}   s_trj_ctrl_egmsnpo_init;
+
+inline uint8_t trj_ctrl_egmsnpo_init (s_trj_ctrl_egmsnpo *self, s_trj_ctrl_egmsnpo_init attr)
+{
+	self->eng = attr.eng;
+	self->ref = attr.ref;
+	
+	if (self->ref != NULL) { self->ref_hash = self->ref->hash; }
+	else { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egmsnpo_save (s_trj_ctrl_egmsnpo *self, s_trj_ctrl_egmsnpo_init *attr, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egmsnpo_load(s_trj_ctrl_egmsnpo *self, s_trj_ctrl_egmsnpo_init *attr, uint8_t **v_file)
+{
+	self->eng = attr->eng;
+	
+	self->ref = trj_eng_find_obj (self->eng, self->ref_hash);
+	
+	if (self->ref == NULL) { self->ref_hash = 0x00; }
+	
+	return 0x00;
+}
+
+inline static void __trj_ctrl_egmsnpo_calc__(s_trj_obj *ref, s_trj_obj *obj)
+{
+	const vlf_t mu = 398600.44E+9;
+	const vlf_t e = 2.633267E+25;
+	
+//	R = norm(ecef) + alt_mem;
+//	gr = - mu/R^2 - e/R^4 * (1-3*sin(lat_mem)^2);
+//	gm = - e/R^4 * sin(2*lat_mem);
+//	gh = -gr;
+//	gn = -gm;
+//
+//	acc_e = 0  - centr_acc(3);
+//	acc_n = gn - centr_acc(1);
+//	acc_h = gh - centr_acc(2);
+	
+	vlf_t ecef[3];
+	
+	vl3_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
+	
+	vlf_t lla[3];
+	
+	trj_ellp_lla(&trj_ellp_pz90_11, lla, ecef);
+	
+	vlf_t r = vl3_vnorm(ecef);
+	vlf_t gr = -mu / (r*r) - e / (r*r*r*r) * (1-3*sin(lla[0])*sin(lla[0]));
+	vlf_t gm = -e / (r*r*r*r) * sin(2*lla[0]);
+	vlf_t gh = -gr;
+	vlf_t gn = -gm;
+	
+	vlf_t g_hor[3] = {
+			gn, gh, 0.0
+	};
+	
+	vl3_vmul_s(g_hor, g_hor, -1.0);
+	
+	vlf_t ecef_ctn[9];
+	trj_ellp_ecefrot(&trj_ellp_pz90, ecef, ecef_ctn);
+	
+	vlf_t g_ecef[3];
+	vl3_mmul_v(g_ecef, ecef_ctn, g_hor);
+	
+	vlf_t g_inert[3];
+	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
+	vl3_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
+	
+	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
+}
+
+inline uint8_t trj_ctrl_egmsnpo_reset(s_trj_ctrl_egmsnpo *self, s_trj_obj *obj)
+{
+	__trj_ctrl_egmsnpo_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egmsnpo_update(s_trj_ctrl_egmsnpo *self, s_trj_obj *obj)
+{
+	__trj_ctrl_egmsnpo_calc__(self->ref, obj);
+	
+	return 0x00;
+}
+
+//----------------------------------------------------------------
+
+inline uint8_t trj_ctrl_egmsnpo_init_(void **data, void *config)
+{
+	*data = (s_trj_ctrl_egmsnpo*) malloc(sizeof(s_trj_ctrl_egmsnpo));
+	
+	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) *data;
+	s_trj_ctrl_egmsnpo_init *init = (s_trj_ctrl_egmsnpo_init*) config;
+	
+	return trj_ctrl_egmsnpo_init(ctrl, *init);
+}
+
+inline uint8_t trj_ctrl_egmsnpo_free_(void **data)
+{
+	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) *data;
+	free(ctrl);
+	
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egmsnpo_save_(void *data, void *config, uint8_t **v_file)
+{
+	return 0x00;
+}
+
+inline uint8_t trj_ctrl_egmsnpo_load_(void *data, void *config, uint8_t **v_file)
+{
+	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) data;
+	s_trj_ctrl_egmsnpo_init *attr = (s_trj_ctrl_egmsnpo_init*) config;
+	
+	return trj_ctrl_egmsnpo_load(ctrl, attr, v_file);
+}
+
+inline uint8_t trj_ctrl_egmsnpo_reset_(void *data, void *obj)
+{
+	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_egmsnpo_reset(ctrl, obj_);
+}
+
+inline uint8_t trj_ctrl_egmsnpo_update_(void *data, void *obj)
+{
+	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) data;
+	s_trj_obj *obj_ = (s_trj_obj*) obj;
+	
+	return trj_ctrl_egmsnpo_update(ctrl, obj_);
+}
+
+//----------------------------------------------------------------
+
 typedef struct trj_ctrl_gms
 {
 	s_trj_eng *eng;
