@@ -50,7 +50,27 @@ static s_trj_ellp trj_ellp_pz90 = {
 		
 		.a 		=  6378136,
 		.f  	=  3.35280374301947673491022158624e-0003,
-};
+		};
+
+#endif
+
+
+#ifdef __TRJ_ENV__
+
+static s_trj_ellp trj_ellp_pz90_11;
+trj_ellp_wgs84.desc   	= "pz90_11";
+trj_ellp_wgs84.a 		=  6378136;
+trj_ellp_wgs84.f  		=  0.0033528037345079697573169141833205;
+
+#else
+
+static s_trj_ellp trj_ellp_pz90_11 = {
+		
+		.desc   = "pz90_11",
+		
+		.a 		=  6378136,
+		.f  	=  0.0033528037345079697573169141833205,
+		};
 
 #endif
 
