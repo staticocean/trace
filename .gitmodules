@@ -1,0 +1,3 @@
+[submodule "lib/sftlgui"]
+	path = lib/sftlgui
+	url = https://github.com/softael/sftlgui.git
