@@ -2,7 +2,7 @@
 #ifndef __GUI_TBAR__
 #define __GUI_TBAR__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +11,7 @@
 #include <libcommon/vl.h>
 #include <libcommon/imgui_w.h>
 #include <libgui/imgui/imgui.h>
-#include <lib/trj/trj_eng.h>
+#include <lib/trj/trceng.h>
 #include <libgui/clip/clip.h>
 #include <nfd.h>
 
@@ -20,11 +20,11 @@
 #include "gui_cmd.h"
 #include "gui_conf.h"
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_tbar
 {
-	s_trj_eng   *eng;
+	s_trceng   *eng;
 	s_gui_eng   *eng_gui;
 	s_gui_env   *env;
     s_gui_cmd   *cmd;
@@ -36,7 +36,7 @@ typedef struct gui_tbar
 	
 } 	s_gui_tbar;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 {
@@ -49,14 +49,14 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 		if (result == NFD_OKAY)
 		{
 			strcpy(tbar->file_path, user_path);
-			trj_eng_load(tbar->eng, tbar->file_path);
+			trceng_load(tbar->eng, tbar->file_path);
 			
 			NFD_FreePath(user_path);
 		}
 	}
 
 	if (ImGui::MenuItem("Save", "Ctrl+S"))
-	{ trj_eng_save(tbar->eng, tbar->file_path); }
+	{ trceng_save(tbar->eng, tbar->file_path); }
 
 	if (ImGui::MenuItem("Save As...", ""))
 	{
@@ -67,7 +67,7 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 		if (result == NFD_OKAY)
 		{
 			strcpy(tbar->file_path, user_path);
-			trj_eng_save(tbar->eng, tbar->file_path);
+			trceng_save(tbar->eng, tbar->file_path);
 			
 			NFD_FreePath(user_path);
 		}
@@ -86,17 +86,17 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 
 inline void gui_tbar_menu_newobject(s_gui_tbar *tbar)
 {
-	s_trj_traj *traj_static = trj_eng_find_traj(tbar->eng, crc32_iso_str("default_traj_static"));
-	s_trj_ctrl *ctrl_cpos   = trj_eng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_cpos"  ));
-	s_trj_ctrl *ctrl_crot   = trj_eng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_crot"  ));
-	s_trj_data *data_ram    = trj_eng_find_data(tbar->eng, crc32_iso_str("default_data_ram"   ));
+	s_trctraj *traj_static = trceng_find_traj(tbar->eng, crc32_iso_str("default_traj_static"));
+	s_trcctrl *ctrl_cpos   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_cpos"  ));
+	s_trcctrl *ctrl_crot   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_crot"  ));
+	s_trcdata *data_ram    = trceng_find_data(tbar->eng, crc32_iso_str("default_data_ram"   ));
 	
-	s_trj_obj *obj = trj_eng_add_obj(tbar->eng, (s_trj_obj_init) { .desc = "object" });
+	s_trcobj *obj = trceng_add_obj(tbar->eng, (s_trcobj_init) { .desc = "object" });
 	
-	if (obj && traj_static) { trj_obj_add_traj(obj, *traj_static); }
-	if (obj && ctrl_cpos  ) { trj_obj_add_ctrl(obj, *ctrl_cpos  ); }
-	if (obj && ctrl_crot  ) { trj_obj_add_ctrl(obj, *ctrl_crot  ); }
-	if (obj && data_ram   ) { trj_obj_add_data(obj, *data_ram   ); }
+	if (obj && traj_static) { trcobj_add_traj(obj, *traj_static); }
+	if (obj && ctrl_cpos  ) { trcobj_add_ctrl(obj, *ctrl_cpos  ); }
+	if (obj && ctrl_crot  ) { trcobj_add_ctrl(obj, *ctrl_crot  ); }
+	if (obj && data_ram   ) { trcobj_add_data(obj, *data_ram   ); }
 	
 	if (obj == NULL) { /* TO-DO Create error popup */ }
 	
@@ -149,12 +149,12 @@ inline bool gui_tbar_button(const char *label, ImVec2 size = ImVec2(0,0))
 	return res;
 }
 
-inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
+inline u8_t gui_tbar_main(s_gui_tbar *tbar)
 {
-	static float64_t time_limit_min = 0.0;
-	static float64_t time_step_min = 0.001;
-	static float64_t time_step_max = 100.0;
-	static uint32_t  time_iter_min = 0x00;
+	static f64_t time_limit_min = 0.0;
+	static f64_t time_step_min = 0.001;
+	static f64_t time_step_max = 100.0;
+	static u32_t  time_iter_min = 0x00;
 	
 	{
 		ImVec2 popup_pos = ImGui::GetCursorScreenPos() + ImVec2(0, ImGui::GetTextLineHeightWithSpacing());
@@ -211,7 +211,7 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 			if (result == NFD_OKAY)
 			{
 				strcpy(tbar->file_path, user_path);
-				trj_eng_load(tbar->eng, tbar->file_path);
+				trceng_load(tbar->eng, tbar->file_path);
 				
 				NFD_FreePath(user_path);
 			}
@@ -243,7 +243,7 @@ inline uint8_t gui_tbar_main(s_gui_tbar *tbar)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_TBAR__ */
 

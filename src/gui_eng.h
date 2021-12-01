@@ -2,7 +2,7 @@
 #ifndef __GUI_ENG__
 #define __GUI_ENG__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/implot/implot.h>
@@ -10,12 +10,12 @@
 #include <libcommon/vl.h>
 #include <libcommon/imgui_w.h>
 
-#include <lib/trj/trj_api.h>
-#include <lib/trj/trj_eng.h>
-#include <lib/trj/trj_traj.h>
-#include <lib/trj/trj_ctrl.h>
-#include <lib/trj/trj_data.h>
-#include <lib/trj/trj_ellp.h>
+#include <lib/trj/trc_api.h>
+#include <lib/trj/trceng.h>
+#include <lib/trj/trctraj.h>
+#include <lib/trj/trcctrl.h>
+#include <lib/trj/trcdata.h>
+#include <lib/trj/trcellp.h>
 
 #include <libgui/clip/clip.h>
 
@@ -23,7 +23,7 @@
 #include "gui_traj.h"
 #include "gui_clip.h"
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 enum gui_eng_type_t
 {
@@ -52,37 +52,37 @@ typedef struct gui_eng
 	void* sel_item;
 	gui_eng_type_t sel_type;
 
-	s_gui_obj *obj_list;
+	s_gui_obj *obj_ls;
 	
 }	s_gui_eng;
 
 typedef struct gui_eng_init
 {
-	s_gui_obj *obj_list;
+	s_gui_obj *obj_ls;
 	s_gui_clip *gui_clip;
 
 } 	s_gui_eng_init;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
+inline u8_t gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
 {
     gui->gui_clip = attr.gui_clip;
 	gui->state = gui_eng_state_standby;
 	
 	gui->sel_item = NULL;
 	gui->sel_type = gui_eng_type_obj;
-	gui->obj_list = attr.obj_list;
+	gui->obj_ls = attr.obj_ls;
 	
 	for (int i = 0; i < 255; ++i)
 	{
-		gui->obj_list[i].hide = 0x00;
+		gui->obj_ls[i].hide = 0x00;
 	}
 	
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 inline void gui_eng_sel_obj(s_gui_eng *gui, s_gui_obj *obj)
 {
@@ -90,13 +90,13 @@ inline void gui_eng_sel_obj(s_gui_eng *gui, s_gui_obj *obj)
 	gui->sel_item = obj;
 }
 
-inline void gui_eng_sel_traj(s_gui_eng *gui, s_trj_traj *traj)
+inline void gui_eng_sel_traj(s_gui_eng *gui, s_trctraj *traj)
 {
 	gui->sel_type = gui_eng_type_traj;
 	gui->sel_item = traj;
 }
 
-inline void gui_eng_sel_ctrl(s_gui_eng *gui, s_trj_ctrl *ctrl)
+inline void gui_eng_sel_ctrl(s_gui_eng *gui, s_trcctrl *ctrl)
 {
 	gui->sel_type = gui_eng_type_ctrl;
 	gui->sel_item = ctrl;
@@ -108,15 +108,15 @@ inline void gui_eng_sel_ctrl(s_gui_eng *gui, s_trj_ctrl *ctrl)
 //	gui->sel_item = proc;
 //}
 
-inline void gui_eng_sel_data(s_gui_eng *gui, s_trj_data *data)
+inline void gui_eng_sel_data(s_gui_eng *gui, s_trcdata *data)
 {
 	gui->sel_type = gui_eng_type_data;
 	gui->sel_item = data;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
+inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 {
 	ImGui::PushID(self);
 	
@@ -136,16 +136,16 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10);
 //	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
 	
-	for (int i = 0; i < self->obj_count; i++)
+	for (int i = 0; i < self->obj_sz; i++)
 	{
-		ImGui::PushID(&gui->obj_list[i]);
+		ImGui::PushID(&gui->obj_ls[i]);
 		
-		s_gui_obj *obj_gui = &gui->obj_list[i];
-		s_trj_obj *obj = obj_gui->ref;
+		s_gui_obj *obj_gui = &gui->obj_ls[i];
+		s_trcobj *obj = obj_gui->ref;
 		
 		if (filter.PassFilter(obj->desc))
 		{
-			bool node_sel = gui->sel_item == &gui->obj_list[i];
+			bool node_sel = gui->sel_item == &gui->obj_ls[i];
 			
 			ImGui::AlignTextToFramePadding();
 			bool node_open = ImGui::TreeNodeEx((void*) i,
@@ -165,13 +165,13 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 
                 if (ImGui::Selectable("duplicate"))
                 {
-                    s_trj_obj_init obj_attr;
+                    s_trcobj_init obj_attr;
                     sprintf(obj_attr.desc, "%s [D]", obj->desc);
 
-                    s_trj_obj *obj_copy = trj_eng_add_obj(self, obj_attr);
+                    s_trcobj *obj_copy = trceng_add_obj(self, obj_attr);
 
 
-                    trj_obj_copy(self, obj_copy, obj);
+                    trcobj_copy(self, obj_copy, obj);
                 }
 
 				if (ImGui::Selectable("delete"))
@@ -179,7 +179,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					if (gui->sel_item == obj_gui)
 					{ gui->sel_item = NULL; }
 					
-					trj_eng_del_obj(self, i);
+					trceng_del_obj(self, i);
 				}
 				
 				ImGui::EndPopup();
@@ -193,7 +193,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					ImGui::AlignTextToFramePadding();
 					bool traj_open = ImGui::TreeNodeEx("traj");
 					
-					if (self->traj_offset > 0x00)
+					if (self->traj_sz > 0x00)
 					{
 						ImGui::SameLine();
 						
@@ -202,14 +202,14 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 						
 						if (ImGui::BeginPopup("add_traj_popup"))
 						{
-							for (int j = 0; j < self->traj_offset; ++j)
+							for (int j = 0; j < self->traj_sz; ++j)
 							{
-								ImGui::PushID(&self->traj_list[j]);
-								ImGui::Selectable(self->traj_list[j].desc);
+								ImGui::PushID(&self->traj_ls[j]);
+								ImGui::Selectable(self->traj_ls[j].desc);
 								
 								if (ImGui::IsItemClicked())
 								{
-									trj_obj_add_traj(obj, self->traj_list[j]);
+									trcobj_add_traj(obj, self->traj_ls[j]);
 								}
 								
 								ImGui::PopID();
@@ -221,34 +221,34 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					
 					if (traj_open)
 					{
-						if (obj->traj_offset == 0x00)
+						if (obj->traj_sz == 0x00)
 						{ ImGui::Text("[no items]"); }
 						
-						for (int j = 0; j < obj->traj_offset; ++j)
+						for (int j = 0; j < obj->traj_sz; ++j)
 						{
-							ImGui::PushID(&obj->traj_list[j]);
+							ImGui::PushID(&obj->traj_ls[j]);
 							
-							bool traj_sel = gui->sel_item == &obj->traj_list[j];
+							bool traj_sel = gui->sel_item == &obj->traj_ls[j];
 							
 							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->traj_list[j].name,
+							ImGui::TreeNodeEx(obj->traj_ls[j].name,
 											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->traj_list[j].name);
+											  | ImGuiTreeNodeFlags_Leaf, obj->traj_ls[j].name);
 							
 							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_traj(gui, &obj->traj_list[j]); }
+							{ gui_eng_sel_traj(gui, &obj->traj_ls[j]); }
 							
 							if (ImGui::BeginPopupContextItem("traj_menu"))
 							{
-                                if (ImGui::Selectable("copy ")) { gui_clip_set_traj(gui->gui_clip, self, &obj->traj_list[j]); }
-                                if (ImGui::Selectable("paste")) { gui_clip_get_traj(gui->gui_clip, self, &obj->traj_list[j]); }
+                                if (ImGui::Selectable("copy ")) { gui_clip_set_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
+                                if (ImGui::Selectable("paste")) { gui_clip_get_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
 
 								if (ImGui::Selectable("delete"))
 								{
-									if (gui->sel_item == &obj->traj_list[j])
+									if (gui->sel_item == &obj->traj_ls[j])
 									{ gui->sel_item = NULL; }
 									
-									trj_obj_del_traj(obj, &obj->traj_list[j]);
+									trcobj_del_traj(obj, &obj->traj_ls[j]);
 								}
 								
 								ImGui::EndPopup();
@@ -267,7 +267,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					ImGui::AlignTextToFramePadding();
 					bool ctrl_open = ImGui::TreeNodeEx("ctrl");
 					
-					if (self->ctrl_offset > 0x00)
+					if (self->ctrl_sz > 0x00)
 					{
 						ImGui::SameLine();
 						
@@ -276,14 +276,14 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 						
 						if (ImGui::BeginPopup("add_ctrl_popup"))
 						{
-							for (int j = 0; j < self->ctrl_offset; ++j)
+							for (int j = 0; j < self->ctrl_sz; ++j)
 							{
-								ImGui::PushID(&self->ctrl_list[j]);
-								ImGui::Selectable(self->ctrl_list[j].desc);
+								ImGui::PushID(&self->ctrl_ls[j]);
+								ImGui::Selectable(self->ctrl_ls[j].desc);
 								
 								if (ImGui::IsItemClicked())
 								{
-									trj_obj_add_ctrl(obj, self->ctrl_list[j]);
+									trcobj_add_ctrl(obj, self->ctrl_ls[j]);
 								}
 								
 								ImGui::PopID();
@@ -295,31 +295,31 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 					
 					if (ctrl_open)
 					{
-						if (obj->ctrl_offset == 0x00)
+						if (obj->ctrl_sz == 0x00)
 						{ ImGui::Text("[no items]"); }
 						
-						for (int j = 0; j < obj->ctrl_offset; ++j)
+						for (int j = 0; j < obj->ctrl_sz; ++j)
 						{
-							ImGui::PushID(&obj->ctrl_list[j]);
+							ImGui::PushID(&obj->ctrl_ls[j]);
 							
-							bool ctrl_sel = gui->sel_item == &obj->ctrl_list[j];
+							bool ctrl_sel = gui->sel_item == &obj->ctrl_ls[j];
 							
 							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->ctrl_list[j].name,
+							ImGui::TreeNodeEx(obj->ctrl_ls[j].name,
 											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_list[j].name);
+											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_ls[j].name);
 							
 							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_ctrl(gui, &obj->ctrl_list[j]); }
+							{ gui_eng_sel_ctrl(gui, &obj->ctrl_ls[j]); }
 							
 							if (ImGui::BeginPopupContextItem("ctrl_menu"))
 							{
 								if (ImGui::Selectable("delete"))
 								{
-									if (gui->sel_item == &obj->ctrl_list[j])
+									if (gui->sel_item == &obj->ctrl_ls[j])
 									{ gui->sel_item = NULL; }
 									
-									trj_obj_del_ctrl(obj, &obj->ctrl_list[j]);
+									trcobj_del_ctrl(obj, &obj->ctrl_ls[j]);
 								}
 								
 								ImGui::EndPopup();
@@ -352,7 +352,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 								ImGui::Selectable(self->data_list[j].desc);
 
 								if (ImGui::IsItemClicked())
-								{ trj_obj_add_data(obj, self->data_list[j]); }
+								{ trcobj_add_data(obj, self->data_list[j]); }
 
 								ImGui::PopID();
 							}
@@ -387,7 +387,7 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 									if (gui->sel_item == &obj->data_list[j])
 									{ gui->sel_item = NULL; }
 
-									trj_obj_del_data(obj, &obj->data_list[j]);
+									trcobj_del_data(obj, &obj->data_list[j]);
 								}
 
 								ImGui::EndPopup();
@@ -418,9 +418,9 @@ inline uint8_t gui_eng_objlist(s_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
+inline u8_t gui_eng_updateeng(s_gui_eng *gui, s_trceng *self)
 {
 	switch (gui->state)
 	{
@@ -437,20 +437,20 @@ inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 				return 0x01;
 			}
 			
-			trj_eng_reset(self);
+			trceng_reset(self);
 			
 			self->time_iter = self->time_limit / self->time_step;
 			
-			for (int i = 0; i < self->obj_count; ++i)
+			for (int i = 0; i < self->obj_sz; ++i)
 			{
-				if (self->obj_list[i].log_list != NULL)
-				{ free(self->obj_list[i].log_list); }
+				if (self->obj_ls[i].log_ls != NULL)
+				{ free(self->obj_ls[i].log_ls); }
 				
-				self->obj_list[i].log_list = (s_trj_obj_data*) malloc(sizeof(s_trj_obj_data) * (self->time_iter+1));
-				self->obj_list[i].log_offset = 0x00;
+				self->obj_ls[i].log_ls = (s_trcobj_data*) malloc(sizeof(s_trcobj_data) * (self->time_iter+1));
+				self->obj_ls[i].log_sz = 0x00;
 			}
 			
-			trj_eng_log(self);
+			trceng_log(self);
 			
 			gui->state = gui_eng_state_update;
 			
@@ -468,8 +468,8 @@ inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 			// prevent overflowing buffers and time_limit
 			if ((self->time[0]+self->time_step) < (self->time_limit+1E-9))
 			{
-				trj_eng_update(self, self->time_step);
-				trj_eng_log(self);
+				trceng_update(self, self->time_step);
+				trceng_log(self);
 			}
 			
 			else { gui->state = gui_eng_state_proc; }
@@ -481,7 +481,7 @@ inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 		{
 			if (self->proc_count < self->update_count)
 			{
-				trj_eng_proc(self);
+				trceng_proc(self);
 			}
 			else { gui->state = gui_eng_state_deinit; }
 			
@@ -491,7 +491,7 @@ inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 		case gui_eng_state_deinit:
 		{
 			// run data render routines
-			trj_eng_render(self);
+			trceng_render(self);
 			gui->state = gui_eng_state_standby;
 			
 			break;
@@ -506,9 +506,9 @@ inline uint8_t gui_eng_updateeng(s_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
+inline u8_t gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
 {
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -541,20 +541,20 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 		
 		if (gui->state == gui_eng_state_proc)
 		{
-			ImGui::Text("PROC PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
+			ImGui::Text("PROC PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			imgui_loadbar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_deinit)
 		{
-			ImGui::Text("DATA PASS %02.0f%%", 100 * (vlf_t) self->proc_count / self->update_count);
+			ImGui::Text("DATA PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			imgui_loadbar("##progress", (vlf_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_standby)
@@ -572,9 +572,9 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 		{
 			if (gui->state == gui_eng_state_standby)
 			{
-				for (int i = 0; i < self->obj_count; ++i)
+				for (int i = 0; i < self->obj_sz; ++i)
 				{
-					s_trj_obj *obj = &self->obj_list[i];
+					s_trcobj *obj = &self->obj_ls[i];
 					
 					ImGui::PushID(obj);
 					
@@ -585,12 +585,12 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 							int stride = 10;
 							
 							ImPlot::PlotLine("pos_error [m]  ",
-									&obj->log_list[0].time[0], &obj->log_list[0].pos_error,
-									obj->log_offset / stride, 0x00, stride*sizeof(s_trj_obj_data));
+									&obj->log_ls[0].time[0], &obj->log_ls[0].pos_error,
+									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
 							
 							ImPlot::PlotLine("rot_error [rad]",
-									&obj->log_list[0].time[0], &obj->log_list[0].rot_error,
-									obj->log_offset / stride, 0x00, stride*sizeof(s_trj_obj_data));
+									&obj->log_ls[0].time[0], &obj->log_ls[0].rot_error,
+									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
 							
 							ImPlot::EndPlot();
 						}
@@ -621,6 +621,6 @@ inline uint8_t gui_eng_updategui(s_gui_eng *gui, s_trj_eng *self)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_ENG__ */

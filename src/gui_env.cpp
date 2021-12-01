@@ -1,7 +1,7 @@
 
 #include "gui_env.h"
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //dummy lib
 struct LibraryFunction __null_api__[] = { {NULL, NULL} };
@@ -15,36 +15,36 @@ void picoc_api_speedtest  (struct ParseState *Parser, struct Value *ReturnValue,
 	for (volatile int i = 0; i < 10000000; ++i) { volatile int a; a = i * i; }
 }
 
-void trj_traj_pos(struct ParseState *Parser, struct Value *ReturnValue,
+void trctraj_pos(struct ParseState *Parser, struct Value *ReturnValue,
 				  struct Value **Param, int NumArgs)
 {
-	s_trj_traj *traj = (s_trj_traj*) Param[0]->Val->Pointer;
-	vlf_t time = (vlf_t) Param[1]->Val->FP;
-	vlf_t *pos = (vlf_t*) Param[2]->Val->Pointer;
+	s_trctraj *traj = (s_trctraj*) Param[0]->Val->Pointer;
+	f64_t time = (f64_t) Param[1]->Val->FP;
+	f64_t *pos = (f64_t*) Param[2]->Val->Pointer;
 	
 	traj->pos(traj->data, time, pos);
 }
 
-void trj_traj_rot(struct ParseState *Parser, struct Value *ReturnValue,
+void trctraj_rot(struct ParseState *Parser, struct Value *ReturnValue,
 				  struct Value **Param, int NumArgs)
 {
-	s_trj_traj *traj = (s_trj_traj*) Param[0]->Val->Pointer;
-	vlf_t time = (vlf_t) Param[1]->Val->FP;
-	vlf_t *rot = (vlf_t*) Param[2]->Val->Pointer;
+	s_trctraj *traj = (s_trctraj*) Param[0]->Val->Pointer;
+	f64_t time = (f64_t) Param[1]->Val->FP;
+	f64_t *rot = (f64_t*) Param[2]->Val->Pointer;
 	
 	traj->rot(traj->data, time, rot);
 }
 
-static const uint32_t st_size = 255;
-static uint32_t st_offset = 0x00;
-static uint32_t st_id[st_size];
+static const u32_t st_size = 255;
+static u32_t st_offset = 0x00;
+static u32_t st_id[st_size];
 static char st_init[st_size][64];
 static char st_free[st_size][64];
 static char st_reset[st_size][64];
 static char st_update[st_size][64];
 static s_gui_env *st_env[st_size];
 
-uint8_t __api_ctrl_init__(void **data, void *config)
+u8_t __api_ctrl_init__(void **data, void *config)
 {
     // TO-DO what the hell is this?
 	uint64_t offset = (uint64_t) *data;
@@ -61,43 +61,43 @@ uint8_t __api_ctrl_init__(void **data, void *config)
 	
 	else
 	{
-		PicocParse(&self->env, "trj_env", call, strlen(call),
+		PicocParse(&self->env, "trc_env", call, strlen(call),
 				   true, false, false, true);
 	}
 	
 	return 0x00;
 }
 
-uint8_t __api_ctrl_free__(void **data)
+u8_t __api_ctrl_free__(void **data)
 {
 	return 0x00;
 }
 
-uint8_t __api_ctrl_reset__(void *data, void *obj)
+u8_t __api_ctrl_reset__(void *data, void *obj)
 {
 	return 0x00;
 }
 
-uint8_t __api_ctrl_update__(void *data, void *obj)
+u8_t __api_ctrl_update__(void *data, void *obj)
 {
 	return 0x00;
 }
 
-void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
+void trceng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 				  struct Value **Param, int NumArgs)
 {
 	s_gui_env *env         = (s_gui_env*) Param[0]->Val->Pointer;
-	uint32_t 	  *ctrl_offset = (uint32_t*)      Param[1]->Val->Pointer;
-	s_trj_ctrl    *ctrl_list   = (s_trj_ctrl*)    Param[2]->Val->Pointer;
+	u32_t 	  *ctrl_sz = (u32_t*)      Param[1]->Val->Pointer;
+	s_trcctrl    *ctrl_ls   = (s_trcctrl*)    Param[2]->Val->Pointer;
 	
-	memcpy(ctrl_list[*ctrl_offset].desc, Param[3]->Val->Pointer, 32);
-	ctrl_list[*ctrl_offset].hash    = crc32_iso_str(ctrl_list[*ctrl_offset].desc);
-	ctrl_list[*ctrl_offset].data    = (void*) st_offset;
-	ctrl_list[*ctrl_offset].config  = Param[4]->Val->Pointer;
-	ctrl_list[*ctrl_offset].init    = __api_ctrl_init__;
-	ctrl_list[*ctrl_offset].free    = __api_ctrl_free__;
-	ctrl_list[*ctrl_offset].reset   = __api_ctrl_reset__;
-	ctrl_list[*ctrl_offset].update  = __api_ctrl_update__;
+	memcpy(ctrl_ls[*ctrl_sz].desc, Param[3]->Val->Pointer, 32);
+	ctrl_ls[*ctrl_sz].hash    = crc32_iso_str(ctrl_ls[*ctrl_sz].desc);
+	ctrl_ls[*ctrl_sz].data    = (void*) st_offset;
+	ctrl_ls[*ctrl_sz].config  = Param[4]->Val->Pointer;
+	ctrl_ls[*ctrl_sz].init    = __api_ctrl_init__;
+	ctrl_ls[*ctrl_sz].free    = __api_ctrl_free__;
+	ctrl_ls[*ctrl_sz].reset   = __api_ctrl_reset__;
+	ctrl_ls[*ctrl_sz].update  = __api_ctrl_update__;
 	
 	st_env[st_offset] = env;
 	memcpy(&st_init[st_offset][0]  , Param[5]->Val->Pointer, 64);
@@ -105,7 +105,7 @@ void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 	memcpy(&st_reset[st_offset][0] , Param[7]->Val->Pointer, 64);
 	memcpy(&st_update[st_offset][0], Param[8]->Val->Pointer, 64);
 	
-	(*ctrl_offset)++;
+	(*ctrl_sz)++;
 	st_offset++;
 }
 
@@ -114,9 +114,9 @@ void trj_eng_add_ctrlapi(struct ParseState *Parser, struct Value *ReturnValue,
 struct LibraryFunction picoc_api_functions[] =
 		{
 				{ picoc_api_speedtest, "void api_speedtest(void);" },
-				{ trj_traj_pos, "void trj_traj_pos(s_trj_traj *traj, vlf_t time, vlf_t *pos);" },
-				{ trj_traj_rot, "void trj_traj_rot(s_trj_traj *traj, vlf_t time, vlf_t *rot);" },
-				{ trj_eng_add_ctrlapi, "void trj_eng_add_ctrlapi(void *env, void *ctrl_offset, void *ctrl_list, char *desc, void *config, char *init, char *free, char *reset, char *update);" },
+				{ trctraj_pos, "void trctraj_pos(s_trctraj *traj, f64_t time, f64_t *pos);" },
+				{ trctraj_rot, "void trctraj_rot(s_trctraj *traj, f64_t time, f64_t *rot);" },
+				{ trceng_add_ctrlapi, "void trceng_add_ctrlapi(void *env, void *ctrl_sz, void *ctrl_ls, char *desc, void *config, char *init, char *free, char *reset, char *update);" },
 				{ NULL, NULL }
 		};
 
@@ -130,9 +130,9 @@ void __env_init__(s_gui_env *self)
 	
 	self->env.CStdOut = self->out_s;
 	
-	char env_define[] = "#define __TRJ_ENV__";
+	char env_define[] = "#define __TRCENV__";
 	
-	PicocParse(&self->env, "trj_env", env_define, strlen(env_define),
+	PicocParse(&self->env, "trc_env", env_define, strlen(env_define),
 			   true, false, false, true);
 	
 //	VariableDefinePlatformVar(&self->env, NULL, "__api_traj_data_ref__"	, self->env.VoidPtrType, (union AnyValue *) &self->api_traj_data_ref, 0x01);
@@ -153,10 +153,10 @@ void __env_init__(s_gui_env *self)
 	VariableDefinePlatformVar(&self->env, NULL, "__eng__"		, self->env.VoidPtrType, (union AnyValue *) &self->eng, 0x01);
 	VariableDefinePlatformVar(&self->env, NULL, "__env__"		, self->env.VoidPtrType, (union AnyValue *) &self, 0x00);
 	
-	VariableDefinePlatformVar(&self->env, NULL, "__traj_offset__", self->env.VoidPtrType, (union AnyValue *) &self->traj_offset, 0x00);
-	VariableDefinePlatformVar(&self->env, NULL, "__traj_list__"  , self->env.VoidPtrType, (union AnyValue *) &self->traj_list, 0x00);
-	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_offset__", self->env.VoidPtrType, (union AnyValue *) &self->ctrl_offset, 0x00);
-	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_list__"  , self->env.VoidPtrType, (union AnyValue *) &self->ctrl_list, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__traj_sz__", self->env.VoidPtrType, (union AnyValue *) &self->traj_sz, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__traj_ls__"  , self->env.VoidPtrType, (union AnyValue *) &self->traj_ls, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_sz__", self->env.VoidPtrType, (union AnyValue *) &self->ctrl_sz, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_ls__"  , self->env.VoidPtrType, (union AnyValue *) &self->ctrl_ls, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__data_offset__", self->env.VoidPtrType, (union AnyValue *) &self->data_offset, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__data_list__"  , self->env.VoidPtrType, (union AnyValue *) &self->data_list, 0x00);
 	
@@ -186,13 +186,13 @@ void __env_init__(s_gui_env *self)
 			
 			else
 			{
-				uint32_t plugin_size;
-				uint8_t *plugin_data;
+				u32_t plugin_size;
+				u8_t *plugin_data;
 				
 				fseek (plugin_file, 0x00, SEEK_END);
 				
 				plugin_size = ftell (plugin_file);
-				plugin_data = (uint8_t*) malloc(plugin_size+1);
+				plugin_data = (u8_t*) malloc(plugin_size+1);
 				
 				rewind (plugin_file);
 				
@@ -208,7 +208,7 @@ void __env_init__(s_gui_env *self)
 				
 				plugin_data[plugin_size] = '\0';
 				
-				uint32_t offset = strlen(plugin_path) - 1;
+				u32_t offset = strlen(plugin_path) - 1;
 				while ((offset > 0x00) && (plugin_path[offset] != '/')) { --offset; }
 				
 				if (PicocPlatformSetExitPoint(&self->env))
@@ -248,12 +248,12 @@ void gui_env_init(s_gui_env *self, s_gui_env_init attr)
 {
 	self->eng = attr.eng;
 	
-	self->traj_offset = attr.traj_offset;
-	self->ctrl_offset = attr.ctrl_offset;
+	self->traj_sz = attr.traj_sz;
+	self->ctrl_sz = attr.ctrl_sz;
 	self->data_offset = attr.data_offset;
 	
-	self->traj_list = attr.traj_list;
-	self->ctrl_list = attr.ctrl_list;
+	self->traj_ls = attr.traj_ls;
+	self->ctrl_ls = attr.ctrl_ls;
 	self->data_list = attr.data_list;
 	
 	__env_init__(self);
@@ -267,7 +267,7 @@ void gui_env_sreset(s_gui_env *self)
 	rewind(self->out_s);
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 

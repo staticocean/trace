@@ -2,7 +2,7 @@
 #ifndef __GUI_MAP__
 #define __GUI_MAP__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <fstream>
 
@@ -14,15 +14,15 @@
 #include <libgui/imgui/imgui_internal.h>
 #include <lib/json11/json11.hpp>
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_map
 {
-	std::vector<s_gjson_obj> obj_list;
+	std::vector<s_gjson_obj> obj_ls;
 	
 } 	s_gui_map;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 inline ImVec2 __transform__(s_view_data *view, ImVec2 pos)
 {
@@ -42,7 +42,7 @@ inline ImVec2 __inv_transform__(s_view_data *view, ImVec2 pos)
 	return ImVec2(x, y);
 }
 
-inline uint8_t gui_map_load(s_gui_map *map, char *file_name)
+inline u8_t gui_map_load(s_gui_map *map, char *file_name)
 {
 	std::ifstream file_stream(file_name);
 	std::string file_data((std::istreambuf_iterator<char>(file_stream)),
@@ -58,8 +58,8 @@ inline uint8_t gui_map_load(s_gui_map *map, char *file_name)
 
 	for (int i = 0; i < json["features"].array_items().size(); ++i)
 	{
-		map->obj_list.push_back((s_gjson_obj) {});
-		s_gjson_obj *obj = &map->obj_list.back();
+		map->obj_ls.push_back((s_gjson_obj) {});
+		s_gjson_obj *obj = &map->obj_ls.back();
 		
 		json11::Json prop = json["features"][i]["properties"];
 		json11::Json geom = json["features"][i]["geometry"];
@@ -93,16 +93,16 @@ inline uint8_t gui_map_load(s_gui_map *map, char *file_name)
 		}
 	}
 	
-//	for (int i = 0; i < map->obj_list.size(); ++i)
+//	for (int i = 0; i < map->obj_ls.size(); ++i)
 //	{
-//		printf("[name][%s]\r\n", map->obj_list[i].name);
-//		printf("[size][%d]\r\n", map->obj_list[i].poly.pt_list.size());
+//		printf("[name][%s]\r\n", map->obj_ls[i].name);
+//		printf("[size][%d]\r\n", map->obj_ls[i].poly.pt_list.size());
 //
-//		for (int j = 0; j < map->obj_list[i].poly.pt_list.size(); ++j)
+//		for (int j = 0; j < map->obj_ls[i].poly.pt_list.size(); ++j)
 //		{
 //			printf("[pt][%f][%f] \r\n",
-//					map->obj_list[i].poly.pt_list[j].vec[0],
-//				   	map->obj_list[i].poly.pt_list[j].vec[1]
+//					map->obj_ls[i].poly.pt_list[j].vec[0],
+//				   	map->obj_ls[i].poly.pt_list[j].vec[1]
 //				   	);
 //		}
 //	}
@@ -216,7 +216,7 @@ inline void gui_map_view(s_gui_map *self, char* label, ImVec2 size)
 		// draw grid TODO:: replace with rectangles coz they are drawn faster on GPUs
 		{
 			char axis_label[64];
-			int32_t exp;
+			s32_t exp;
 			
 			frexp(view_top.width / 5, &exp);
 			float step_x = (float) ldexp(1.0, exp);
@@ -256,17 +256,17 @@ inline void gui_map_view(s_gui_map *self, char* label, ImVec2 size)
 		}
 		
 		// draw trajectory
-		for (int i = 0; i < self->obj_list.size(); ++i)
+		for (int i = 0; i < self->obj_ls.size(); ++i)
 		{
-			uint32_t size = self->obj_list[i].poly.pt_list.size();
+			u32_t size = self->obj_ls[i].poly.pt_list.size();
 			
 			for (int j = 0; j < size; ++j)
 			{
-				ImVec2 p0 = ImVec2(	self->obj_list[i].poly.pt_list[j % size].vec[0],
-									self->obj_list[i].poly.pt_list[j % size].vec[1]);
+				ImVec2 p0 = ImVec2(	self->obj_ls[i].poly.pt_list[j % size].vec[0],
+									self->obj_ls[i].poly.pt_list[j % size].vec[1]);
 				
-				ImVec2 p1 = ImVec2(	self->obj_list[i].poly.pt_list[(j+1) % size].vec[0],
-									   self->obj_list[i].poly.pt_list[(j+1) % size].vec[1]);
+				ImVec2 p1 = ImVec2(	self->obj_ls[i].poly.pt_list[(j+1) % size].vec[0],
+									   self->obj_ls[i].poly.pt_list[(j+1) % size].vec[1]);
 				
 				window->DrawList->AddLine(__transform__(&view_top, p0), __transform__(&view_top, p1), col_text_u32);
 			}
@@ -289,6 +289,6 @@ inline void gui_map_view(s_gui_map *self, char* label, ImVec2 size)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_MAP__ */

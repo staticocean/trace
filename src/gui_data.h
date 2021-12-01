@@ -2,7 +2,7 @@
 #ifndef __GUI_DATA__
 #define __GUI_DATA__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libcommon/vl.h>
 #include <libcommon/vl3d.h>
@@ -10,13 +10,13 @@
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>
 #include <libgui/implot/implot.h>
-#include <lib/trj/trj_obj.h>
-#include <lib/trj/trj_data.h>
-#include <lib/trj/trj_data_.h>
+#include <lib/trj/trcobj.h>
+#include <lib/trj/trcdata.h>
+#include <lib/trj/trcdata_.h>
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_data_edit(s_trj_data *self)
+inline void gui_data_edit(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
@@ -32,13 +32,13 @@ inline void gui_data_edit(s_trj_data *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_data_edit_text(s_trj_data *self)
+inline void gui_data_edit_text(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_text *data = (s_trj_data_text*) self->data;
+	s_trcdata_text *data = (s_trcdata_text*) self->data;
 	
 	ImGui::Text("desc  ");
 	ImGui::SameLine();
@@ -67,11 +67,11 @@ inline void gui_data_edit_text(s_trj_data *self)
 	return;
 }
 
-inline void gui_data_view_text(s_trj_data *self)
+inline void gui_data_view_text(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_text *data = (s_trj_data_text*) self->data;
+	s_trcdata_text *data = (s_trcdata_text*) self->data;
 	
 	if (data->file_data == NULL || data->file_data == 0x00)
 	{
@@ -100,13 +100,13 @@ inline void gui_data_view_text(s_trj_data *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_data_edit_ram(s_trj_data *self)
+inline void gui_data_edit_ram(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
+	s_trcdata_ram *data = (s_trcdata_ram*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -128,20 +128,20 @@ inline void gui_data_edit_ram(s_trj_data *self)
 	
 //	ImGui::Text("eng   ");
 //	ImGui::SameLine();
-//	ImGui::Text("%08X", (uint32_t) data->eng);
+//	ImGui::Text("%08X", (u32_t) data->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
 	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
-	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_ls, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
@@ -152,10 +152,10 @@ inline void gui_data_edit_ram(s_trj_data *self)
 	return;
 }
 
-inline uint8_t gui_data_view_ram(s_trj_data *self)
+inline u8_t gui_data_view_ram(s_trcdata *self)
 {
-	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
-	uint8_t mode = 0x00;
+	s_trcdata_ram *data = (s_trcdata_ram*) self->data;
+	u8_t mode = 0x00;
 	
 	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
 	if (data->offset == 0x00)
@@ -173,14 +173,14 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			mode = 0x00;
 			
 			static s_vl3d vl3d;
-			s_vl3d_obj *obj_list = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 2*4096));
+			s_vl3d_obj *obj_ls = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 2*4096));
 			
 			s_vl3d_view view = vl3d_view_init();
 			vl3d_view_load(&vl3d, &view, view);
 			
 			vl3d_init(&vl3d, (s_vl3d_attr) {
 				.obj_sz = data->offset*2 + 2*4096,
-				.obj_ls = obj_list
+				.obj_ls = obj_ls
 			});
 			
 			s_vl3d_line line = {.color = vl3d_col_legacy};
@@ -224,7 +224,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl3_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 					
-					vlf_t rot[9];
+					f64_t rot[9];
 					vl3_tnp(rot, &data->ecef_rot[i * di * 9]);
 					vl3_mmul_s(rot, rot, 0.015 / view.scale);
 					
@@ -249,7 +249,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 					vl3_vcopy(trngl.p1, &data->ecef_pos[i*3]);
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 					
-					vlf_t rot[9];
+					f64_t rot[9];
 					vl3_tnp(rot, &data->ecef_rot[i*9]);
 					vl3_mmul_s(rot, rot, 10.0 / view.scale);
 					
@@ -268,13 +268,13 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			
 			gui_vl3d(&vl3d);
 			
-			free(obj_list);
+			free(obj_ls);
 			
 			ImGui::EndTabItem();
 		}
 		
 		int offset = 0x00;
-		int stride = 10*sizeof(vlf_t);
+		int stride = 10*sizeof(f64_t);
 		
 		if (ImGui::BeginTabItem("details"))
 		{
@@ -284,7 +284,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("heading"))
 				{
-					ImPlot::PlotLine("heading", data->time, data->heading, data->offset / stride, offset, stride*sizeof(vlf_t));
+					ImPlot::PlotLine("heading", data->time, data->heading, data->offset / stride, offset, stride*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -293,7 +293,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("pitch"))
 				{
-					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset / stride, offset, stride*sizeof(vlf_t));
+					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset / stride, offset, stride*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -302,7 +302,7 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("roll"))
 				{
-					ImPlot::PlotLine("roll", data->time, data->roll, data->offset / stride, offset, stride*sizeof(vlf_t));
+					ImPlot::PlotLine("roll", data->time, data->roll, data->offset / stride, offset, stride*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -311,9 +311,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_acc"))
 				{
-					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -322,9 +322,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("tied_grs"))
 				{
-					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -335,14 +335,14 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_pos lat,lon"))
 					{
-						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 						ImPlot::EndPlot();
 					}
 					
 					if (ImPlot::BeginPlot("lla_pos alt"))
 					{
-						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -351,9 +351,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 				{
 					if (ImPlot::BeginPlot("lla_vel"))
 					{
-						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 						ImPlot::EndPlot();
 					}
 				}
@@ -364,9 +364,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_pos"))
 				{
-					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -375,9 +375,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_vel"))
 				{
-					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -386,9 +386,9 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 			{
 				if (ImPlot::BeginPlot("ecef_acc"))
 				{
-					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
-					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset / stride, offset, stride * 3*sizeof(vlf_t));
+					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
 					ImPlot::EndPlot();
 				}
 			}
@@ -405,13 +405,13 @@ inline uint8_t gui_data_view_ram(s_trj_data *self)
 	return mode;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_data_edit_ramld(s_trj_data *self)
+inline void gui_data_edit_ramld(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_ram *data = (s_trj_data_ram*) self->data;
+	s_trcdata_ram *data = (s_trcdata_ram*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -433,20 +433,20 @@ inline void gui_data_edit_ramld(s_trj_data *self)
 	
 //	ImGui::Text("eng   ");
 //	ImGui::SameLine();
-//	ImGui::Text("%08X", (uint32_t) data->eng);
+//	ImGui::Text("%08X", (u32_t) data->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+	gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
 	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ellp  ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(-40);
-	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+	gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_ls, &data->ellp);
 	ImGui::SameLine(0.0, 0.0);
 	imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
 	if (data->ellp == NULL) { data->ellp_en = 0x00; }
@@ -457,9 +457,9 @@ inline void gui_data_edit_ramld(s_trj_data *self)
 	return;
 }
 
-inline void gui_data_view_ramld(s_trj_data *self)
+inline void gui_data_view_ramld(s_trcdata *self)
 {
-	s_trj_data_ramld *data = (s_trj_data_ramld*) self->data;
+	s_trcdata_ramld *data = (s_trcdata_ramld*) self->data;
 	
 	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
 	if (data->offset == 0x00)
@@ -474,7 +474,7 @@ inline void gui_data_view_ramld(s_trj_data *self)
 	{
 		if (ImPlot::BeginPlot("lateral deviation"))
 		{
-			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset / 10, 0, 10*sizeof(vlf_t));
+			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset / 10, 0, 10*sizeof(f64_t));
 			ImPlot::EndPlot();
 		}
 	}
@@ -484,18 +484,18 @@ inline void gui_data_view_ramld(s_trj_data *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_data_edit_mat(s_trj_data *self)
+inline void gui_data_edit_mat(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+	s_trcdata_mat *data = (s_trcdata_mat*) self->data;
 	
-	s_trj_data ram = *self;
+	s_trcdata ram = *self;
 	ram.data = &data->ram;
 	
-	s_trj_data ramld = *self;
+	s_trcdata ramld = *self;
 	ramld.data = &data->ramld;
 	
 	gui_data_edit_ram(&ram);
@@ -565,16 +565,16 @@ inline void gui_data_edit_mat(s_trj_data *self)
 	return;
 }
 
-inline void gui_data_view_mat(s_trj_data *self)
+inline void gui_data_view_mat(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_mat *data = (s_trj_data_mat*) self->data;
+	s_trcdata_mat *data = (s_trcdata_mat*) self->data;
 	
-	s_trj_data ram = *self;
+	s_trcdata ram = *self;
 	ram.data = &data->ram;
 	
-	s_trj_data ramld = *self;
+	s_trcdata ramld = *self;
 	ramld.data = &data->ramld;
 	
 	if (gui_data_view_ram(&ram) != 0x00)
@@ -587,16 +587,16 @@ inline void gui_data_view_mat(s_trj_data *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
-inline void gui_data_edit_bin(s_trj_data *self)
+inline void gui_data_edit_bin(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_bin *data = (s_trj_data_bin*) self->data;
+	s_trcdata_bin *data = (s_trcdata_bin*) self->data;
 	
-	s_trj_data ram = *self;
+	s_trcdata ram = *self;
 	ram.data = &data->ram;
 	
 	gui_data_edit_ram(&ram);
@@ -625,13 +625,13 @@ inline void gui_data_edit_bin(s_trj_data *self)
 	return;
 }
 
-inline void gui_data_view_bin(s_trj_data *self)
+inline void gui_data_view_bin(s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_data_bin *data = (s_trj_data_bin*) self->data;
+	s_trcdata_bin *data = (s_trcdata_bin*) self->data;
 	
-	s_trj_data ram = *self;
+	s_trcdata ram = *self;
 	ram.data = &data->ram;
 	
 	if (gui_data_view_ram(&ram) != 0x00)
@@ -643,6 +643,6 @@ inline void gui_data_view_bin(s_trj_data *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_DATA__ */

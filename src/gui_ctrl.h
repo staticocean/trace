@@ -2,19 +2,19 @@
 #ifndef __GUI_CTRL__
 #define __GUI_CTRL__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libcommon/vl.h>
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>
-#include <lib/trj/trj_obj.h>
-#include <lib/trj/trj_ctrl.h>
-#include <lib/trj/trj_ctrl_.h>
+#include <lib/trj/trcobj.h>
+#include <lib/trj/trcctrl.h>
+#include <lib/trj/trcctrl_.h>
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit(s_trj_ctrl *self)
+inline void gui_ctrl_edit(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -30,20 +30,20 @@ inline void gui_ctrl_edit(s_trj_ctrl *self)
 	return;
 }
 
-inline void gui_ctrl_view(s_trj_ctrl *self)
+inline void gui_ctrl_view(s_trcctrl *self)
 {
 	ImGui::Text("No view port available.");
 	
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit_egms(s_trj_ctrl *self)
+inline void gui_ctrl_edit_egms(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_ctrl_egms *ctrl = (s_trj_ctrl_egms*) self->data;
+	s_trcctrl_egms *ctrl = (s_trcctrl_egms*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -60,13 +60,13 @@ inline void gui_ctrl_edit_egms(s_trj_ctrl *self)
 //
 //	ImGui::Text("eng   ");
 //	ImGui::SameLine();
-//	ImGui::Text("%08X", (uint32_t) ctrl->eng);
+//	ImGui::Text("%08X", (u32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -78,9 +78,9 @@ inline void gui_ctrl_edit_egms(s_trj_ctrl *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_view_egms(s_trj_ctrl *self)
+inline void gui_ctrl_view_egms(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -91,13 +91,13 @@ inline void gui_ctrl_view_egms(s_trj_ctrl *self)
 }
 
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit_egmsnpo(s_trj_ctrl *self)
+inline void gui_ctrl_edit_egmsnpo(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_ctrl_egmsnpo *ctrl = (s_trj_ctrl_egmsnpo*) self->data;
+	s_trcctrl_egmsnpo *ctrl = (s_trcctrl_egmsnpo*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -114,13 +114,13 @@ inline void gui_ctrl_edit_egmsnpo(s_trj_ctrl *self)
 	//
 	//	ImGui::Text("eng   ");
 	//	ImGui::SameLine();
-	//	ImGui::Text("%08X", (uint32_t) ctrl->eng);
+	//	ImGui::Text("%08X", (u32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -132,9 +132,9 @@ inline void gui_ctrl_edit_egmsnpo(s_trj_ctrl *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_view_egmsnpo(s_trj_ctrl *self)
+inline void gui_ctrl_view_egmsnpo(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -144,13 +144,13 @@ inline void gui_ctrl_view_egmsnpo(s_trj_ctrl *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
+inline void gui_ctrl_edit_gms(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
-	s_trj_ctrl_gms *ctrl = (s_trj_ctrl_gms*) self->data;
+	s_trcctrl_gms *ctrl = (s_trcctrl_gms*) self->data;
 	
 	// !!! UPDATE HASHES !!!
 	// if ref name was changed we must recalc hash
@@ -167,13 +167,13 @@ inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
 //
 //	ImGui::Text("eng   ");
 //	ImGui::SameLine();
-//	ImGui::Text("%08X", (uint32_t) ctrl->eng);
+//	ImGui::Text("%08X", (u32_t) ctrl->eng);
 	
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("ref   ");
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-	gui_objsel("##ref", ctrl->eng->obj_count, ctrl->eng->obj_list, &ctrl->ref);
+	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -185,7 +185,7 @@ inline void gui_ctrl_edit_gms(s_trj_ctrl *self)
 	return;
 }
 
-inline void gui_ctrl_view_gms(s_trj_ctrl *self)
+inline void gui_ctrl_view_gms(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
@@ -195,13 +195,13 @@ inline void gui_ctrl_view_gms(s_trj_ctrl *self)
 	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit_varot(s_trj_ctrl *self)
+inline void gui_ctrl_edit_varot(s_trcctrl *self)
 {
     ImGui::PushID(self);
 
-    s_trj_ctrl_varot *data = (s_trj_ctrl_varot*) self->data;
+    s_trcctrl_varot *data = (s_trcctrl_varot*) self->data;
 
     // !!! UPDATE HASHES !!!
     // if ref name was changed we must recalc hash
@@ -221,14 +221,14 @@ inline void gui_ctrl_edit_varot(s_trj_ctrl *self)
     ImGui::Text("ref   ");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-    gui_objsel("##ref", data->eng->obj_count, data->eng->obj_list, &data->ref);
+    gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
     if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("ellp  ");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(-40);
-    gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_list, &data->ellp);
+    gui_ellpsel("##ellp", data->eng->ellp_offset, data->eng->ellp_ls, &data->ellp);
     ImGui::SameLine(0.0, 0.0);
     imgui_bool("##ellp_en", ImVec2(-1, 0), &data->ellp_en);
     if (data->ellp == NULL) { data->ellp_en = 0x00; }
@@ -239,7 +239,7 @@ inline void gui_ctrl_edit_varot(s_trj_ctrl *self)
     return;
 }
 
-inline void gui_ctrl_view_varot(s_trj_ctrl *self)
+inline void gui_ctrl_view_varot(s_trcctrl *self)
 {
     ImGui::PushID(self);
 
@@ -249,11 +249,11 @@ inline void gui_ctrl_view_varot(s_trj_ctrl *self)
     return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_edit_gm(s_trj_ctrl *self)
+inline void gui_ctrl_edit_gm(s_trcctrl *self)
 {
-    s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;
+    s_trcctrl_gm *ctrl = (s_trcctrl_gm*) self->data;
 
     ImGui::Text("file  ");
     ImGui::SameLine();
@@ -269,18 +269,18 @@ inline void gui_ctrl_edit_gm(s_trj_ctrl *self)
     return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ctrl_view_gm(s_trj_ctrl *self)
+inline void gui_ctrl_view_gm(s_trcctrl *self)
 {
-    s_trj_ctrl_gm *ctrl = (s_trj_ctrl_gm*) self->data;
+    s_trcctrl_gm *ctrl = (s_trcctrl_gm*) self->data;
 
     static s_vl3d vl3d;
-    static s_vl3d_obj obj_list[2*4096];
+    static s_vl3d_obj obj_ls[2*4096];
     
     vl3d_init(&vl3d, (s_vl3d_attr) {
-			.obj_sz = sizeof(obj_list) / sizeof(s_vl3d_obj),
-			.obj_ls = obj_list
+			.obj_sz = sizeof(obj_ls) / sizeof(s_vl3d_obj),
+			.obj_ls = obj_ls
 	});
 
     s_vl3d_line  line  = {.color = vl3d_col_legacy};
@@ -291,13 +291,13 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 
     int res = 25;
 
-    vlf_t ecef[3];
-    vlf_t lla[3] = { 0.0, 0.0, 0.0 };
-    trj_ellp_ecef(&trj_ellp_wgs84, ecef, lla);
+    f64_t ecef[3];
+    f64_t lla[3] = { 0.0, 0.0, 0.0 };
+    trcellp_ecef(&trcellp_wgs84, ecef, lla);
 
-    vlf_t g[3];
-    trj_ctrl_gm_calc(ctrl, g, ecef);
-    vlf_t gm = vl3_vnorm(g);
+    f64_t g[3];
+    trcctrl_gm_calc(ctrl, g, ecef);
+    f64_t gm = vl3_vnorm(g);
 
     printf("\ng: ");
     vl3_vprint(g);
@@ -307,21 +307,21 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
     {
         for (int j = 0; j < 2*res; ++j)
         {
-            vlf_t ecef[3];
+            f64_t ecef[3];
 
-            vlf_t lla[3] = {
-                    vl_pi * (vlf_t) i / res - 0.5*vl_pi,
-                    vl_2pi * (vlf_t) j / (2*res) - vl_pi,
+            f64_t lla[3] = {
+                    vl_pi * (f64_t) i / res - 0.5*vl_pi,
+                    vl_2pi * (f64_t) j / (2*res) - vl_pi,
                     0.0
             };
 
-            trj_ellp_ecef(&trj_ellp_wgs84, ecef, lla);
+            trcellp_ecef(&trcellp_wgs84, ecef, lla);
 
-            vlf_t g[3];
-            trj_ctrl_gm_calc(ctrl, g, ecef);
-            vlf_t gm = vl3_vnorm(g);
+            f64_t g[3];
+            trcctrl_gm_calc(ctrl, g, ecef);
+            f64_t gm = vl3_vnorm(g);
 
-            uint8_t c = (gm / 10.0) * 255;
+            u8_t c = (gm / 10.0) * 255;
             point.color = IM_COL32(c, c, c, 255);
             vl3_vcopy(point.p0, ecef);
 
@@ -368,7 +368,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            vl_vcopy(trngl.p1, &data->data_list[i * di].pos[0][0]);
 //            vl_vcopy(trngl.p2, &data->data_list[i * di].pos[0][0]);
 //
-//            vlf_t rot[9];
+//            f64_t rot[9];
 //            vl_tnp(rot, &data->data_list[i * di].rot[0][0]);
 //            vl_mmul_s(rot, rot, 0.025 / view.scale);
 //
@@ -393,7 +393,7 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 //            vl_vcopy(trngl.p1, &data->data_list[i].pos[0][0]);
 //            vl_vcopy(trngl.p2, &data->data_list[i].pos[0][0]);
 //
-//            vlf_t rot[9];
+//            f64_t rot[9];
 //            vl_tnp(rot, &data->data_list[i].rot[0][0]);
 //            vl_mmul_s(rot, rot, 10.0 / view.scale);
 //
@@ -412,11 +412,11 @@ inline void gui_ctrl_view_gm(s_trj_ctrl *self)
 
 	gui_vl3d(&vl3d);
 
-    free(obj_list);
+    free(obj_ls);
 
     return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_CTRL__ */

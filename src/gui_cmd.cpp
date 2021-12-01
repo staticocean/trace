@@ -1,7 +1,7 @@
 
 #include "gui_cmd.h"
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void gui_cmd_init(s_gui_cmd *self, s_gui_cmd_init attr)
 {
@@ -174,7 +174,7 @@ void gui_cmd_render(s_gui_cmd *self)
 {
 	// process env output stream
 	{
-		uint32_t buff_size = ftell(self->env->out_s);
+		u32_t buff_size = ftell(self->env->out_s);
 		
 		if (buff_size > 0)
 		{
@@ -325,7 +325,7 @@ void gui_cmd_render(s_gui_cmd *self)
 	ImGui::PopStyleColor();
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void gui_cmd_exec(s_gui_cmd *self)
 {
@@ -343,4 +343,4 @@ void gui_cmd_exec(s_gui_cmd *self)
 	}
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------

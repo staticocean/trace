@@ -2,30 +2,30 @@
 #ifndef __GUI_CONF__
 #define __GUI_CONF__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libcommon/vl.h>
 #include <libcommon/vl3d.h>
 
 #include <libgui/imgui/imgui.h>
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_conf
 {
     bool isopen;
 
-    s_trj_eng  *eng;
+    s_trceng  *eng;
 
 } 	s_gui_conf;
 
 typedef struct gui_conf_attr
 {
-    s_trj_eng  *eng;
+    s_trceng  *eng;
 
 } 	s_gui_conf_attr;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 inline void gui_conf_init(s_gui_conf *conf, s_gui_conf_attr attr)
 {
@@ -49,11 +49,11 @@ inline void gui_conf_view(s_gui_conf *conf)
 
         if (ImGui::BeginChild("##scroll_view"))
         {
-            static uint32_t default_proc_euler = crc32_iso_str("default_proc_euler");
+            static u32_t default_proc_euler = crc32_iso_str("default_proc_euler");
 
             if (conf->eng->proc.hash == default_proc_euler)
             {
-                s_trj_proc_euler *proc = (s_trj_proc_euler*) conf->eng->proc.data;
+                s_trcproc_euler *proc = (s_trcproc_euler*) conf->eng->proc.data;
 
                 ImGui::Text("proc_rotation_tolerance");
                 ImGui::SameLine();
@@ -103,6 +103,6 @@ inline void gui_conf_hide(s_gui_conf *conf)
     return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_CONF__ */

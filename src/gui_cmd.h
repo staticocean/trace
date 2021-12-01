@@ -2,9 +2,9 @@
 #ifndef __GUI_CMD__
 #define __GUI_CMD__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,8 +13,8 @@
 #include <libcommon/vl.h>
 
 #include <libgui/imgui/imgui.h>
-#include <lib/trj/trj_eng.h>
-#include <lib/trj/trj_obj.h>
+#include <lib/trj/trceng.h>
+#include <lib/trj/trcobj.h>
 
 #include "gui_env.h"
 
@@ -24,7 +24,7 @@ extern "C"
 	#include <lib/picoc/picoc.h>
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_cmd
 {
@@ -58,7 +58,7 @@ void gui_cmd_clearlog(s_gui_cmd *self);
 void gui_cmd_render(s_gui_cmd *self);
 void gui_cmd_exec(s_gui_cmd *self);
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 #endif /* __GUI_CMD__ */

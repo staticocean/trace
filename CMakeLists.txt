@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(trajectory)
+project(trace)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
@@ -13,32 +13,36 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 add_compile_definitions(IMGUI_DEFINE_MATH_OPERATORS)
 
-include_directories(.)
-include_directories(./src)
-include_directories(./lib/trj)
-include_directories(./lib/picoc)
-include_directories(./lib/json11)
+include_directories(lib/)
+include_directories(src/)
 
 if (UNIX)
-    file(GLOB src_main      ./src/* ./src/unix/*)
+
+    file(GLOB src_main      src/* src/unix/*)
+
 endif (UNIX)
+
 if (WIN32)
-    file(GLOB src_main      ./src/* ./src/win/*)
+
+    file(GLOB src_main      src/* src/win/*)
+
 endif (WIN32)
 
-
-
 file(GLOB src_picoc     ./lib/picoc/* ./lib/picoc/cstdlib/*)
-file(GLOB src_tinymat   ./lib/tinymat/*)
-file(GLOB src_fmemopen  ./lib/fmemopen/*)
-file(GLOB src_json11    ./lib/json11/*)
 
 list(REMOVE_ITEM ${src_picoc} lib/picoc/cstdlib/unistd.c)
 list(REMOVE_ITEM ${src_picoc} lib/picoc/platform/library_unix.c)
 list(REMOVE_ITEM ${src_picoc} lib/picoc/platform/platform_unix.c)
 
-add_executable(trajectory ${src_main} ${src_picoc} ${src_json11} ${src_tinymat} ${src_fmemopen})
+add_executable(trajectory ${src_main} ${src_picoc})
 
-add_subdirectory(libgui)
-target_link_libraries(trajectory LINK_PUBLIC libgui)
+add_subdirectory(lib/sftlgui)
+add_subdirectory(lib/fmemopen)
+add_subdirectory(lib/json11)
+add_subdirectory(lib/tinymat)
+
+target_link_libraries(trace LINK_PUBLIC sftlgui)
+target_link_libraries(trace LINK_PUBLIC fmemopen)
+target_link_libraries(trace LINK_PUBLIC json11)
+target_link_libraries(trace LINK_PUBLIC tinymat)
 

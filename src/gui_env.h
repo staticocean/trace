@@ -2,11 +2,11 @@
 #ifndef __GUI_ENV_H__
 #define __GUI_ENV_H__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #define PICOC_STACK_SIZE (32*1024*1024)
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,8 +14,8 @@
 
 #include <libcommon/vl.h>
 
-#include <lib/trj/trj_eng.h>
-#include <lib/trj/trj_obj.h>
+#include <lib/trj/trceng.h>
+#include <lib/trj/trcobj.h>
 
 extern "C"
 {
@@ -24,22 +24,22 @@ extern "C"
 	#include <lib/picoc/picoc_interpreter.h>
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_env
 {
 	Picoc env;
-	s_trj_eng *eng;
+	s_trceng *eng;
 	
-	uint8_t out_s_data[1024*1024];
+	u8_t out_s_data[1024*1024];
 	FILE *out_s;
 	
-	void *traj_offset;
-	void *ctrl_offset;
+	void *traj_sz;
+	void *ctrl_sz;
 	void *data_offset;
 	
-	void *traj_list;
-	void *ctrl_list;
+	void *traj_ls;
+	void *ctrl_ls;
 	void *data_list;
 	
 	void **api_ctrl_data_ref;
@@ -56,25 +56,25 @@ typedef struct gui_env
 
 typedef struct gui_env_init
 {
-	s_trj_eng *eng;
+	s_trceng *eng;
 	
-	void *traj_offset;
-	void *ctrl_offset;
+	void *traj_sz;
+	void *ctrl_sz;
 	void *data_offset;
 	
-	void *traj_list;
-	void *ctrl_list;
+	void *traj_ls;
+	void *ctrl_ls;
 	void *data_list;
 	
 } 	s_gui_env_init;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void gui_env_init(s_gui_env *self, s_gui_env_init attr);
 void gui_env_reset(s_gui_env *self);
 void gui_env_sreset(s_gui_env *self);
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_ENV_H__ */
 

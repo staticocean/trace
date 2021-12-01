@@ -5,13 +5,13 @@
 #include <lib/picoc/picoc.h>
 #include <lib/picoc/picoc_interpreter.h>
 
-#include <lib/trj/trj_api.h>
-#include <lib/trj/trj_obj.h>
-#include <lib/trj/trj_traj.h>
-#include <lib/trj/trj_ctrl.h>
-#include <lib/trj/trj_proc.h>
-//#include <lib/trj/trj_data.h>
-#include <lib/trj/trj_eng.h>
+#include <lib/trj/trc_api.h>
+#include <lib/trj/trcobj.h>
+#include <lib/trj/trctraj.h>
+#include <lib/trj/trcctrl.h>
+#include <lib/trj/trcproc.h>
+//#include <lib/trj/trcdata.h>
+#include <lib/trj/trceng.h>
 
 #endif /* __PICOC_API_H__ */
 

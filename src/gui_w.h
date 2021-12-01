@@ -2,7 +2,7 @@
 #ifndef __GUI_W__
 #define __GUI_W__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libcommon/vl.h>
 #include <libcommon/vl3d.h>
@@ -10,28 +10,28 @@
 
 #include <nfd.h>
 
-#include <lib/trj/trj_obj.h>
-#include <lib/trj/trj_traj.h>
-#include <lib/trj/trj_ctrl.h>
-#include <lib/trj/trj_data.h>
-#include <lib/trj/trj_proc.h>
-#include <lib/trj/trj_eng.h>
+#include <lib/trj/trcobj.h>
+#include <lib/trj/trctraj.h>
+#include <lib/trj/trcctrl.h>
+#include <lib/trj/trcdata.h>
+#include <lib/trj/trcproc.h>
+#include <lib/trj/trceng.h>
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_trj_obj **obj)
+void gui_objsel (char *label, u32_t obj_sz, s_trcobj *obj_ls, s_trcobj **obj)
 {
     // to prevent corrupted data accessing wrong mem address
     // first check if an object belongs to the list
 
-    uint8_t obj_exists = 0x00;
+    u8_t obj_exists = 0x00;
 
-    for (int i = 0; i < obj_count; ++i)
+    for (int i = 0; i < obj_sz; ++i)
     {
-        if (*obj == &obj_list[i])
+        if (*obj == &obj_ls[i])
         {
             obj_exists = 0x01;
         }
@@ -39,19 +39,19 @@ inline void gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_t
 
     if (obj_exists == 0x00 || *obj == NULL)
     {
-        *obj = &obj_list[0];
+        *obj = &obj_ls[0];
     }
 
 	if (ImGui::BeginCombo(label, (*obj)->desc, ImGuiComboFlags_NoArrowButton))
 	{
-		for (int i = 0; i < obj_count; ++i)
+		for (int i = 0; i < obj_sz; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = ((*obj) == &obj_list[i]);
+			bool is_selected = ((*obj) == &obj_ls[i]);
 			
-			if (ImGui::Selectable(obj_list[i].desc, is_selected))
-			{ *obj = &obj_list[i]; }
+			if (ImGui::Selectable(obj_ls[i].desc, is_selected))
+			{ *obj = &obj_ls[i]; }
 			
 			if (is_selected)
 			{ ImGui::SetItemDefaultFocus(); }
@@ -61,13 +61,11 @@ inline void gui_objsel(char *label, uint32_t obj_count, s_trj_obj *obj_list, s_t
 		
 		ImGui::EndCombo();
 	}
-	
-	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list, s_trj_ellp **ellp)
+void gui_ellpsel (char *label, u32_t ellp_offset, s_trcellp *ellp_ls, s_trcellp **ellp)
 {
 	bool is_none = *ellp == NULL;
 	
@@ -87,11 +85,11 @@ inline void gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list
 			
 			bool is_selected = false;
 			
-			if (!is_none && ((*ellp)->hash == ellp_list[i].hash))
+			if (!is_none && ((*ellp)->hash == ellp_ls[i].hash))
 			{ is_selected = true; }
 			
-			if (ImGui::Selectable(ellp_list[i].desc, is_selected))
-			{ *ellp = &ellp_list[i]; }
+			if (ImGui::Selectable(ellp_ls[i].desc, is_selected))
+			{ *ellp = &ellp_ls[i]; }
 			
 			if (is_selected) { ImGui::SetItemDefaultFocus(); }
 			
@@ -100,26 +98,24 @@ inline void gui_ellpsel(char *label, uint32_t ellp_offset, s_trj_ellp *ellp_list
 		
 		ImGui::EndCombo();
 	}
-	
-	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_procsel(char *label, s_trj_eng *eng)
+void gui_procsel (char *label, s_trceng *eng)
 {
 	if (ImGui::BeginCombo(label, eng->proc.desc, ImGuiComboFlags_NoArrowButton))
 	{
-		for (int i = 0; i < eng->proc_offset; ++i)
+		for (int i = 0; i < eng->proc_sz; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = (eng->proc.hash == eng->proc_list[i].hash);
+			bool is_selected = (eng->proc.hash == eng->proc_ls[i].hash);
 			
-			if (ImGui::Selectable(eng->proc_list[i].desc, is_selected) && is_selected == false)
+			if (ImGui::Selectable(eng->proc_ls[i].desc, is_selected) && is_selected == false)
 			{
 			    eng->proc.free(&eng->proc.data);
-                eng->proc = eng->proc_list[i];
+                eng->proc = eng->proc_ls[i];
                 eng->proc.init(&eng->proc.data, eng->proc.config);
 			}
 			
@@ -131,13 +127,11 @@ inline void gui_procsel(char *label, s_trj_eng *eng)
 		
 		ImGui::EndCombo();
 	}
-	
-	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_fileopen(char *file_path, uint32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
+void gui_fileopen (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -173,13 +167,11 @@ inline void gui_fileopen(char *file_path, uint32_t filter_sz, nfdfilteritem_t *f
 	}
 	
 	ImGui::PopID();
-	
-	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_filesave(char *file_path, uint32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
+void gui_filesave (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -213,13 +205,11 @@ inline void gui_filesave(char *file_path, uint32_t filter_sz, nfdfilteritem_t *f
 	}
 	
 	ImGui::PopID();
-	
-	return;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline void gui_vl3d(s_vl3d *vl3d)
+void gui_vl3d (s_vl3d *vl3d)
 {
 	s_vl3d_view view = vl3d_view_init();
 	vl3d_view_load(vl3d, &view, view);
@@ -248,7 +238,7 @@ inline void gui_vl3d(s_vl3d *vl3d)
 	vl3d_tbar_save(vl3d, &tbar);
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_OBJ__ */
 

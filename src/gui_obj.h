@@ -2,22 +2,22 @@
 #ifndef __GUI_OBJ__
 #define __GUI_OBJ__
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <libcommon/vl.h>
 #include <libcommon/vl3d.h>
 
 #include <libgui/imgui/imgui.h>
-#include <lib/trj/trj_obj.h>
+#include <lib/trj/trcobj.h>
 
 #include "gui_w.h"
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 typedef struct gui_obj
 {
-	s_trj_obj *ref;
-	uint8_t hide;
+	s_trcobj *ref;
+	u8_t hide;
 	
 	s_vl3d traj_vl3d_eng;
 	s_vl3d_obj traj_vl3d_objlist[8000];
@@ -26,20 +26,20 @@ typedef struct gui_obj
 
 typedef struct gui_obj_init
 {
-	s_trj_obj *ref;
+	s_trcobj *ref;
 
 } 	s_gui_obj_init;
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
+inline u8_t gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
 {
 	gui->ref = attr.ref;
 	
 	return 0x00;
 }
 
-inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
+inline u8_t gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 {
 	ImGui::PushID(self);
 	
@@ -57,8 +57,8 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 //	imgui_hash("##hash", self->hash);
 //	ImGui::NextColumn();
 	
-	vlf_t pos_inert_min = 0.0;
-	vlf_t rot_inert_min = 0.0;
+	f64_t pos_inert_min = 0.0;
+	f64_t rot_inert_min = 0.0;
 
 	ImGui::Text("pos_inert");
 	gui_hint("[kg]");
@@ -102,8 +102,8 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 //	ImGui::Separator();
 //	ImGui::Dummy(ImVec2(0, 5));
 //
-//	vlf_t min = -1.0;
-//	vlf_t max = +1.0;
+//	f64_t min = -1.0;
+//	f64_t max = +1.0;
 //
 //	ImGui::Text("ROT");
 //	ImGui::SameLine();
@@ -124,27 +124,27 @@ inline uint8_t gui_obj_edit(s_gui_obj *gui, s_trj_obj *self)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
+inline u8_t gui_obj_view(s_gui_obj *gui, s_trcobj *self)
 {
 	vl3d_init(&gui->traj_vl3d_eng, (s_vl3d_attr) {
 			.obj_sz = sizeof(gui->traj_vl3d_objlist) / sizeof(s_vl3d_obj),
 			.obj_ls = gui->traj_vl3d_objlist
 	});
 	
-	for (int i = 0; i < self->traj_offset; ++i)
+	for (int i = 0; i < self->traj_sz; ++i)
 	{
-		vlf_t p0[3];
-		vlf_t p1[3];
+		f64_t p0[3];
+		f64_t p1[3];
 
-		s_trj_traj traj = self->traj_list[i];
-		s_trj_traj_info traj_info;
+		s_trctraj traj = self->traj_ls[i];
+		s_trctraj_info traj_info;
 
 		traj.info(traj.data, &traj_info);
 
-		vlf_t time = traj_info.preview_time[0];
-		vlf_t time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
+		f64_t time = traj_info.preview_time[0];
+		f64_t time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
 
 		for (int t = 0; t < 1000-1; ++t)
 		{
@@ -182,6 +182,6 @@ inline uint8_t gui_obj_view(s_gui_obj *gui, s_trj_obj *self)
 	return 0x00;
 }
 
-//----------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #endif /* __GUI_OBJ__ */
