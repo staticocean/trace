@@ -28,16 +28,18 @@ if (WIN32)
 
 endif (WIN32)
 
+#file(GLOB src_tinymat   ./lib/tinymat/*)
+file(GLOB src_fmemopen  ./lib/fmemopen/*)
+#file(GLOB src_json11    ./lib/json11/*)
 file(GLOB src_picoc     ./lib/picoc/* ./lib/picoc/cstdlib/*)
 
 list(REMOVE_ITEM ${src_picoc} lib/picoc/cstdlib/unistd.c)
 list(REMOVE_ITEM ${src_picoc} lib/picoc/platform/library_unix.c)
 list(REMOVE_ITEM ${src_picoc} lib/picoc/platform/platform_unix.c)
 
-add_executable(trajectory ${src_main} ${src_picoc})
+add_executable(trajectory ${src_main} ${src_picoc} ${src_fmemopen})
 
 add_subdirectory(lib/sftlgui)
-add_subdirectory(lib/fmemopen)
 add_subdirectory(lib/json11)
 add_subdirectory(lib/tinymat)
 
