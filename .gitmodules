@@ -4,3 +4,6 @@
 [submodule "lib/tinymat"]
 	path = lib/tinymat
 	url = https://github.com/jkriege2/TinyMAT.git
+[submodule "lib/fmemopen"]
+	path = lib/fmemopen
+	url = https://github.com/Arryboom/fmemopen_windows.git
