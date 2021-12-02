@@ -106,86 +106,6 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
 	return 0x00;
 }
 
-//------------------------------------------------------------------------------
-
-s_trcellp* trceng_find_ellp (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->ellp_offset; ++i)
-	{
-		if (eng->ellp_ls[i].hash == hash)
-		{
-			return &eng->ellp_ls[i];
-		}
-	}
-	
-	return NULL;
-}
-
-s_trctraj* trceng_find_traj (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->traj_sz; ++i)
-	{
-		if (eng->traj_ls[i].hash == hash)
-		{
-			return &eng->traj_ls[i];
-		}
-	}
-	
-	return NULL;
-}
-
-s_trcctrl* trceng_find_ctrl (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->ctrl_sz; ++i)
-	{
-		if (eng->ctrl_ls[i].hash == hash)
-		{
-			return &eng->ctrl_ls[i];
-		}
-	}
-	
-	return NULL;
-}
-
-s_trcdata* trceng_find_data (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->data_offset; ++i)
-	{
-		if (eng->data_list[i].hash == hash)
-		{
-			return &eng->data_list[i];
-		}
-	}
-
-	return NULL;
-}
-
-s_trcproc* trceng_find_proc (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->proc_sz; ++i)
-	{
-		if (eng->proc_ls[i].hash == hash)
-		{
-			return &eng->proc_ls[i];
-		}
-	}
-
-	return NULL;
-}
-
-s_trcobj* trceng_find_obj (s_trceng *eng, u32_t hash)
-{
-	for (s32_t i = 0; i < eng->obj_sz; ++i)
-	{
-		if (eng->obj_ls[i].hash == hash)
-		{
-			return &eng->obj_ls[i];
-		}
-	}
-	
-	return NULL;
-}
-
 inline s32_t trceng_obj_index (s_trceng *eng, s_trcobj *obj)
 {
 	return (u32_t) ((intptr_t) eng->obj_ls - (intptr_t) obj)
@@ -217,6 +137,8 @@ s8_t trceng_ellp_add (s_trceng *eng, s_trcellp *ellp)
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
 s8_t trceng_traj_add (s_trceng *eng, s_trctraj *traj)
 {
 	traj->hash = crc32_iso_str(traj->desc);
@@ -226,6 +148,8 @@ s8_t trceng_traj_add (s_trceng *eng, s_trctraj *traj)
 	
 	return 0x00;
 }
+
+//------------------------------------------------------------------------------
 
 s8_t trceng_ctrl_add (s_trceng *eng, s_trcctrl *ctrl)
 {
@@ -237,6 +161,8 @@ s8_t trceng_ctrl_add (s_trceng *eng, s_trcctrl *ctrl)
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
 s8_t trceng_data_add (s_trceng *eng, s_trcdata *data)
 {
 	data->hash = crc32_iso_str(data->desc);
@@ -246,6 +172,8 @@ s8_t trceng_data_add (s_trceng *eng, s_trcdata *data)
 	
 	return 0x00;
 }
+
+//------------------------------------------------------------------------------
 
 s8_t trceng_proc_add (s_trceng *eng, s_trcproc *proc)
 {

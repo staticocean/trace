@@ -220,7 +220,7 @@ s8_t trcellp_lla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_glla(s_trcellp *ellp, f64_t *lla, f64_t *ecef)
+s8_t trcellp_glla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
 {
     trcellp_lla(ellp, lla, ecef);
 

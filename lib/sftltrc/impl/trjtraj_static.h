@@ -20,8 +20,6 @@ typedef struct trctraj_static
 {
 	s_trctraj 		super;
 	
-	s_trceng 		*eng;
-	
 	s_trcobj 		*ref;
 	u32_t 			ref_hash;
 	
@@ -38,8 +36,6 @@ typedef struct trctraj_static
 
 typedef struct trctraj_static_init
 {
-	s_trceng 	*eng;
-	
 	s_trcobj 	*ref;
 	
 	u8_t 	ellp_en;
@@ -52,7 +48,8 @@ typedef struct trctraj_static_init
 
 //------------------------------------------------------------------------------
 
-inline u8_t trctraj_static_init(s_trctraj_static *self, s_trctraj_static_init attr)
+inline
+s8_t trctraj_static_init (s_trctraj_static *self, s_trctraj_static_init attr)
 {
 	self->eng = attr.eng;
 	
@@ -70,12 +67,14 @@ inline u8_t trctraj_static_init(s_trctraj_static *self, s_trctraj_static_init at
 	return 0x00;
 }
 
-inline u8_t trctraj_static_save(s_trctraj_static *self, s_trctraj_static_init *attr, u8_t **v_file)
+static
+s8_t trctraj_static_save(s_trctraj_static *self, s_trctraj_static_init *attr, u8_t **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trctraj_static_load(s_trctraj_static *self, s_trctraj_static_init *attr, u8_t **v_file)
+static
+s8_t trctraj_static_load (s_trctraj *traj, s_trctraj_static_init *attr, u8_t **v_file)
 {
 	self->eng = attr->eng;
 	self->ref = trceng_find_obj(self->eng, self->ref_hash);
@@ -84,7 +83,8 @@ inline u8_t trctraj_static_load(s_trctraj_static *self, s_trctraj_static_init *a
 	return 0x00;
 }
 
-inline u8_t trctraj_static_compile(s_trctraj_static *self)
+static
+s8_t trctraj_static_compile (s_trctraj *traj)
 {
 	if (self->ellp_en != 0x00)
 	{
@@ -99,7 +99,8 @@ inline u8_t trctraj_static_compile(s_trctraj_static *self)
 	return 0x00;
 }
 
-inline u8_t trctraj_static_pos(s_trctraj_static *self, f64_t time, f64_t *pos)
+static
+s8_t trctraj_static_pos (s_trctraj *traj, f64_t time, f64_t *pos)
 {
 	if (self->ellp_en == 0x00)
 	{ vl3_vcopy(pos, self->pos); }
@@ -113,7 +114,8 @@ inline u8_t trctraj_static_pos(s_trctraj_static *self, f64_t time, f64_t *pos)
 	return 0x00;
 }
 
-inline u8_t trctraj_static_rot(s_trctraj_static *self, f64_t time, f64_t *rot)
+static
+s8_t trctraj_static_rot (s_trctraj *traj, f64_t time, f64_t *rot)
 {
 	if (self->ellp_en == 0x00)
 	{ vl3_mcopy(rot, self->rot); }
@@ -128,67 +130,17 @@ inline u8_t trctraj_static_rot(s_trctraj_static *self, f64_t time, f64_t *rot)
 
 //------------------------------------------------------------------------------
 
-// API
-//u8_t (*init) 		(void *data, void *config)
-//u8_t (*free) 		(void *data);
-//u8_t (*compile) 	(void *data);
-//u8_t (*rot) 		(void *data, f64_t time, f64_t *pos);
-//u8_t (*pos) 		(void *data, f64_t time, f64_t *rot);
-
 inline u8_t trctraj_static_init_ (void **data, void *config)
 {
 	*data = (s_trctraj_static*) malloc(sizeof(s_trctraj_static));
 	
-	s_trctraj_static *traj = (s_trctraj_static*) *data;
-	s_trctraj_static_init *attr = (s_trctraj_static_init*) config;
-	
-	return trctraj_static_init(traj, *attr);
 }
 
 inline u8_t trctraj_static_free_ (void **data)
 {
-	s_trctraj_static *traj = (s_trctraj_static*) *data;
-	
 	free(traj);
 	
 	return 0x00;
-}
-
-inline u8_t trctraj_static_save_ (void *data, void *config, u8_t **v_file)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	s_trctraj_static_init *attr = (s_trctraj_static_init*) config;
-	
-	return trctraj_static_save(traj, attr, v_file);
-}
-
-inline u8_t trctraj_static_load_ (void *data, void *config, u8_t **v_file)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	s_trctraj_static_init *attr = (s_trctraj_static_init*) config;
-	
-	return trctraj_static_load(traj, attr, v_file);
-}
-
-inline u8_t trctraj_static_compile_(void *data)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	
-	return trctraj_static_compile(traj);
-}
-
-inline u8_t trctraj_static_pos_(void *data, f64_t time, f64_t *pos)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	
-	return trctraj_static_pos(traj, time, pos);
-}
-
-inline u8_t trctraj_static_rot_(void *data, f64_t time, f64_t *rot)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	
-	return trctraj_static_rot(traj, time, rot);
 }
 
 inline u8_t trctraj_static_info_(void *data, s_trctraj_info *info)

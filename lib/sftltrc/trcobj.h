@@ -9,9 +9,10 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
+#include <sftlstd/types.h>
+#include <sftlstd/env.h>
 
-#include <sftltrc/trcapi.h>
+#include <sftltrc/trcptr.h>
 
 //------------------------------------------------------------------------------
 
@@ -33,7 +34,6 @@ typedef struct trcobj_data
 typedef struct trcobj
 {
 	char 			desc[32];
-	u32_t 			hash;
 	
 	f64_t 			*time;
 	
@@ -75,10 +75,8 @@ void trcobj_traj_add (s_trcobj *obj, s_trctraj *traj)
 
 //------------------------------------------------------------------------------
 
-void trcobj_traj_del (s_trcobj *self, s_trctraj *api)
+void trcobj_traj_del (s_trcobj *obj, s_trctraj *traj)
 {
-	s32_t offset = 0x00;
-	
 	api->free(&api->data);
 	
 	if (self->traj_sz == 0x00) { return 0x00; }
@@ -113,7 +111,7 @@ s8_t trcobj_ctrl_add (s_trcobj *obj, s_trcctrl *ctrl)
 
 //------------------------------------------------------------------------------
 
-s8_t trcobj_ctrl_del (s_trcobj *self, s_trcctrl *api)
+s8_t trcobj_ctrl_del (s_trcobj *obj, s_trcctrl *ctrl)
 {
 	s32_t offset = 0x00;
 	

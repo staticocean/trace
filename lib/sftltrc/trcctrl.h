@@ -45,42 +45,48 @@ typedef struct trcctrl_intf
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_free (s_trcctrl **ctrl)
+inline
+s8_t trcctrl_free (s_trcctrl **ctrl)
 {
 	return ((s_trcctrl_intf*) (*ctrl)->intf)->init(ctrl);
 }
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_free (s_trcctrl **ctrl)
+inline
+s8_t trcctrl_free (s_trcctrl **ctrl)
 {
 	return ((s_trcctrl_intf*) (*ctrl)->intf)->free(ctrl);
 }
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_pack (s_trcctrl *ctrl, s_trcspl *spl)
+inline
+s8_t trcctrl_pack (s_trcctrl *ctrl, s_trcspl *spl)
 {
 	return ((s_trcctrl_intf*) ctrl->intf)->pack(ctrl);
 }
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_unpack (s_trcctrl *ctrl, s_trcspl *spl)
+inline
+s8_t trcctrl_unpack (s_trcctrl *ctrl, s_trcspl *spl)
 {
 	return ((s_trcctrl_intf*) ctrl->intf)->unpack(ctrl);
 }
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_save (s_trcctrl *ctrl, u8_t **v_file)
+inline
+s8_t trcctrl_save (s_trcctrl *ctrl, u8_t **v_file)
 {
 	return ((s_trcctrl_intf*) ctrl->intf)->save(ctrl, v_file);
 }
 
 //------------------------------------------------------------------------------
 
-inline s8_t trcctrl_load (s_trcctrl *ctrl, u8_t **v_file)
+inline
+s8_t trcctrl_load (s_trcctrl *ctrl, u8_t **v_file)
 {
 	return ((s_trcctrl_intf*) ctrl->intf)->load(ctrl, v_file);
 }
