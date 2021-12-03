@@ -1,3 +1,5 @@
+# trace 
+![](https://tokei.rs/b1/github/softael/trace)
 
 Project is currently in pre-alpha state.
 
