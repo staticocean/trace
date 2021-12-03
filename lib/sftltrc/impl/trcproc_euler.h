@@ -2,7 +2,7 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// TRCAPI - TRaCe
+// trcproc_euler - trace
 
 #ifndef __TRCPROC_EULER__
 #define __TRCPROC_EULER__

@@ -2,7 +2,7 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// TRCAPI - TRaCe
+// trcdata_ramld - trace
 
 #ifndef __TRCDATA_RAMLD__
 #define __TRCDATA_RAMLD__

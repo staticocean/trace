@@ -2,7 +2,7 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// TRCAPI - TRaCe Savable Pointer List
+// trcspl - saveble pointer list
 
 #ifndef __TRCSPL__
 #define __TRCSPL__

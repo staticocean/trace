@@ -2,7 +2,7 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// TRCAPI - TRaCe
+// trctraj_navstat - trace
 
 #ifndef __TRCTRAJ___
 #define __TRCTRAJ___

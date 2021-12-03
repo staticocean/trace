@@ -1,4 +1,7 @@
 
+// 2021 Softael LLC.
+// Created by staticocean on 11/11/2021
+
 #ifndef __GUI_CMD__
 #define __GUI_CMD__
 

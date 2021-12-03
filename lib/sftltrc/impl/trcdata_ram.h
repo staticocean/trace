@@ -2,7 +2,7 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// TRCAPI - TRaCe
+// trcdata_ram - trace
 
 #ifndef __TRCDATA_RAM__
 #define __TRCDATA_RAM__
