@@ -54,7 +54,7 @@ typedef struct gui
 	s_trcellp st_eng_ellp_ls[255];
 	s_trctraj st_eng_traj_ls[255];
 	s_trcctrl st_eng_ctrl_ls[255];
-	s_trcdata st_eng_data_list[255];
+	s_trcdata st_eng_data_ls[255];
 	s_trcproc st_eng_proc_ls[255];
 	
 	s_gui_obj st_gui_eng_obj[255];
@@ -121,7 +121,7 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 			.ellp_ls = self->st_eng_ellp_ls,
 			.traj_ls = self->st_eng_traj_ls,
 			.ctrl_ls = self->st_eng_ctrl_ls,
-			.data_list = self->st_eng_data_list,
+			.data_ls = self->st_eng_data_ls,
 			.proc_ls = self->st_eng_proc_ls,
 			
 			.time_limit = 3600.0,
@@ -716,11 +716,11 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 			.eng = &self->eng,
 			.traj_sz = &self->eng.traj_sz,
 			.ctrl_sz = &self->eng.ctrl_sz,
-			.data_offset = &self->eng.data_offset,
+			.data_sz = &self->eng.data_sz,
 			
 			.traj_ls = self->eng.traj_ls,
 			.ctrl_ls = self->eng.ctrl_ls,
-			.data_list = self->eng.data_list,
+			.data_ls = self->eng.data_ls,
 	});
 	
 	gui_cmd_init(&self->gui_cmd, (s_gui_cmd_init)
@@ -737,7 +737,7 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 
 	trceng_load(&self->eng, self->gui_tbar.file_path);
 
-//	gui_eng_sel_data(&self->gui_eng, &self->eng.obj_ls[0].data_list[0]);
+//	gui_eng_sel_data(&self->gui_eng, &self->eng.obj_ls[0].data_ls[0]);
 	
 	return 0x00;
 }

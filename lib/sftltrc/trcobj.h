@@ -78,21 +78,21 @@ void trcobj_traj_add (s_trcobj *obj, s_trctraj *traj)
 
 void trcobj_traj_del (s_trcobj *obj, s_trctraj *traj)
 {
+	s32_t offset;
+	
 	api->free(&api->data);
 	
-	if (self->traj_sz == 0x00) { return 0x00; }
+	if (obj->traj_sz == 0x00) { return 0x00; }
 	
-	for (s32_t i = 0; i < self->traj_sz-1; ++i)
+	for (s32_t i = 0; i < obj->traj_sz-1; ++i)
 	{
-		if (&self->traj_ls[i] == api)
+		if (&obj->traj_ls[i] == api)
 		{ offset = 0x01; }
 		
-		self->traj_ls[i] = self->traj_ls[i+offset];
+		obj->traj_ls[i] = obj->traj_ls[i+offset];
 	}
 	
-	self->traj_sz -= 0x01;
-	
-	return 0x00;
+	obj->traj_sz -= 0x01;
 }
 
 //------------------------------------------------------------------------------
@@ -139,8 +139,8 @@ s8_t trcobj_data_add (s_trcobj *self, s_trcdata data_api)
 {
 	data_api.hash = crc32_iso_str(data_api.desc);
 	
-	s_trcdata *api = &self->data_list[self->data_offset];
-	self->data_offset += 0x01;
+	s_trcdata *api = &self->data_ls[self->data_sz];
+	self->data_sz += 0x01;
 	
 	*api = data_api;
 	api->init(&api->data, api->config);
@@ -157,17 +157,17 @@ s8_t trcobj_data_del (s_trcobj *self, s_trcdata *api)
 	
 	api->free(&api->data);
 	
-	if (self->data_offset == 0x00) { return 0x00; }
+	if (self->data_sz == 0x00) { return 0x00; }
 	
-	for (s32_t i = 0; i < self->data_offset-1; ++i)
+	for (s32_t i = 0; i < self->data_sz-1; ++i)
 	{
-		if (&self->data_list[i] == api)
+		if (&self->data_ls[i] == api)
 		{ offset = 0x01; }
 		
-		self->data_list[i] = self->data_list[i+offset];
+		self->data_ls[i] = self->data_ls[i+offset];
 	}
 	
-	self->data_offset -= 0x01;
+	self->data_sz -= 0x01;
 	
 	return 0x00;
 }
@@ -179,7 +179,7 @@ void trcobj_save (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
 	s_trcobj *v_self = (s_trcobj*) *v_file;
 	*v_file += sizeof(s_trcobj);
 	
-	*v_self = *self;
+	*v_self = *obj;
 	
 	v_self->time       = NULL;
 	v_self->log_ls   = NULL;
@@ -187,19 +187,19 @@ void trcobj_save (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
 	
 	// support custom widget save/load
 	
-	for (s32_t i = 0; i < self->traj_sz; ++i)
+	for (s32_t i = 0; i < obj->traj_sz; ++i)
 	{
 		trctraj_save (&obj->traj_ls[i], eng, v_file);
 	}
 	
-	for (s32_t i = 0; i < self->ctrl_sz; ++i)
+	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
 	{
 		trcctrl_save (&obj->ctrl_ls[i], eng, v_file);
 	}
 	
-	for (s32_t i = 0; i < self->data_offset; ++i)
+	for (s32_t i = 0; i < obj->data_sz; ++i)
 	{
-		trcdata_save (&obj->data_list[i], eng, v_file);
+		trcdata_save (&obj->data_ls[i], eng, v_file);
 	}
 }
 
@@ -208,22 +208,22 @@ void trcobj_load (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
 	s_trcobj *v_self = (s_trcobj*) *v_file;
 	*v_file += sizeof(s_trcobj);
 	
-	*self = *v_self;
+	*obj = *v_self;
 	
 	// support custom widget save/load
-	for (s32_t i = 0; i < self->traj_sz; ++i)
+	for (s32_t i = 0; i < obj->traj_sz; ++i)
 	{
 		trctraj_load(&obj->traj_ls[i], eng, v_file);
 	}
 	
-	for (s32_t i = 0; i < self->ctrl_sz; ++i)
+	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
 	{
 		trcctrl_load(&obj->ctrl_ls[i], eng, v_file);
 	}
 	
-	for (s32_t i = 0; i < self->data_offset; ++i)
+	for (s32_t i = 0; i < obj->data_sz; ++i)
 	{
-		trcdata_load(&obj->data_list[i], eng, v_file);
+		trcdata_load(&obj->data_ls[i], eng, v_file);
 	}
 }
 
@@ -232,7 +232,7 @@ void trcobj_copy (s_trceng *eng, s_trcobj *dest, s_trcobj *src)
 	// Prevent GUI glitches in case of task switch
 	dest->traj_sz = 0x00;
 	dest->ctrl_sz = 0x00;
-	dest->data_offset = 0x00;
+	dest->data_sz = 0x00;
 
 	for (s32_t i = 0; i < src->traj_sz; ++i)
 	{
@@ -244,14 +244,14 @@ void trcobj_copy (s_trceng *eng, s_trcobj *dest, s_trcobj *src)
 		trcctrl_copy(eng, &dest->ctrl_ls[i], &src->ctrl_ls[i]);
 	}
 
-	for (s32_t i = 0; i < src->data_offset; ++i)
+	for (s32_t i = 0; i < src->data_sz; ++i)
 	{
-		trcdata_copy(eng, &dest->data_list[i], &src->data_list[i]);
+		trcdata_copy(eng, &dest->data_ls[i], &src->data_ls[i]);
 	}
 
 	dest->traj_sz = src->traj_sz;
 	dest->ctrl_sz = src->ctrl_sz;
-	dest->data_offset = src->data_offset;
+	dest->data_sz = src->data_sz;
 }
 
 //------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ void trcobj_print(s_trcobj *obj)
 //	printf("ref         [%s] \r\n", obj->ref->name);
 	printf("traj_sz [%d] \r\n", obj->traj_sz);
 	printf("ctrl_sz [%d] \r\n", obj->ctrl_sz);
-	printf("data_offset [%d] \r\n", obj->data_offset);
+	printf("data_sz [%d] \r\n", obj->data_sz);
 	
 	printf(vl_lsep);
 	printf("traj_ls \r\n");
@@ -316,7 +316,7 @@ s8_t trcobj_init (s_trcobj *obj, s_trcobj_init attr)
 {
 	obj->traj_sz = 0x00;
 	obj->ctrl_sz = 0x00;
-	obj->data_offset = 0x00;
+	obj->data_sz = 0x00;
 	
 	obj->log_ls = NULL;
 	obj->log_sz = 0x00;

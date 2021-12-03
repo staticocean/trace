@@ -231,10 +231,10 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 			{
 				f64_t ref_cnt[9];
 				
-				vl3_tnp(ref_cnt, &self->ref->log_ls[i].rot[0][0]);
+				vl3m_tnp(ref_cnt, &self->ref->log_ls[i].rot[0][0]);
 				vl3_mmul_m(&self->ecef_rot[i*9], ref_cnt, &obj->log_ls[i].rot[0][0]);
 				
-				vl3_vsub(&self->ecef_pos[i*3], &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
+				vl3v_subv(&self->ecef_pos[i*3], &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
 				vl3_mmul_v(&self->ecef_pos[i*3], ref_cnt, &self->ecef_pos[i*3]);
 				
 				vl3_mmul_v(&self->ecef_vel[i*3], ref_cnt, &obj->log_ls[i].pos[1][0]);
@@ -269,16 +269,16 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 				f64_t ecef_ctn_[9];
 				f64_t ecef_pos_[3];
 
-				vl3_vsub(ecef_pos_, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
+				vl3v_subv(ecef_pos_, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
 				vl3_mtmul_v(ecef_pos_, &self->ref->log_ls[i].rot[0][0], ecef_pos_);
 				trcellp_ecefrot(self->ellp, ecef_pos_, ecef_ctn_);
 				
-				vl3_vsub(&self->lla_vel[i*3], &obj->log_ls[i].pos[1][0], &self->ref->log_ls[i].pos[1][0]);
+				vl3v_subv(&self->lla_vel[i*3], &obj->log_ls[i].pos[1][0], &self->ref->log_ls[i].pos[1][0]);
 				f64_t rel_pos[3];
-				vl3_vsub(rel_pos, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
+				vl3v_subv(rel_pos, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
 				f64_t ang_vel[3];
 				vl3_mmul_v(ang_vel, &self->ref->log_ls[i].rot[1][0], rel_pos);
-				vl3_vsub(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
+				vl3v_subv(&self->lla_vel[i*3], &self->lla_vel[i*3], ang_vel);
 
 				vl3_mtmul_v(&self->lla_vel[i*3], &self->ref->log_ls[i].rot[0][0], &self->lla_vel[i*3]);
 				vl3_mtmul_v(&self->lla_vel[i*3], ecef_ctn_, &self->lla_vel[i*3]);
@@ -298,7 +298,7 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 				self->roll[i] 		= hpr.roll;
 			}
 			
-			vl3_vmul_s(&self->tied_acc[i*3], log->pos_force, -1.0 / obj->pos_inert);
+			vl3v_muls(&self->tied_acc[i*3], log->pos_force, -1.0 / obj->pos_inert);
 			vl3_vsum(&self->tied_acc[i*3], &self->tied_acc[i*3], &log->pos[2][0]);
 			vl3_mtmul_v(&self->tied_acc[i*3], &log->rot[0][0], &self->tied_acc[i*3]);
 			

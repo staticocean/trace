@@ -14,6 +14,7 @@
 #include <sftlstd/vl.h>
 
 #include <sftltrc/trcproc.h>
+#include <sftltrc/trcspl.h>
 
 //------------------------------------------------------------------------------
 // Five point stnecil

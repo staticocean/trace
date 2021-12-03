@@ -20,14 +20,14 @@ typedef struct trcdata_intf
 {
 	char 				desc[32];
 	
-	s8_t (*init) 		(void **data);
-	s8_t (*free) 		(void **data);
-	s8_t (*pack) 		(void  *data, s_trcspl *spl);
-	s8_t (*unpack) 		(void  *data, s_trcspl *spl);
-	s8_t (*save) 		(void  *data, u8_t **v_file);
-	s8_t (*load) 		(void  *data, u8_t **v_file);
-	s8_t (*reset) 		(void  *data, s_trcobj *obj);
-	s8_t (*render) 		(void  *data, s_trcobj *obj);
+	s8_t (*init) 		(void *data);
+	s8_t (*free) 		(void *data);
+	s8_t (*pack) 		(void *data, s_trcspl *spl);
+	s8_t (*unpack) 		(void *data, s_trcspl *spl);
+	s8_t (*save) 		(void *data, u8_t **v_file);
+	s8_t (*load) 		(void *data, u8_t **v_file);
+	s8_t (*reset) 		(void *data, s_trcobj *obj);
+	s8_t (*render) 		(void *data, s_trcobj *obj);
 	
 } 	s_trcdata_intf;
 

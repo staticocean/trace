@@ -129,8 +129,8 @@ inline u8_t trcdata_ramld_render(s_trcdata_ramld *self, s_trcobj *obj)
 		
 		if (self->ref != NULL)
 		{
-			vl3_vsub(ecef_f, &obj->log_ls[0].pos[0][0], &self->ref->log_ls[0].pos[0][0]);
-			vl3_vsub(ecef_l, &obj->log_ls[self->ref->log_sz-1].pos[0][0], &self->ref->log_ls[self->ref->log_sz-1].pos[0][0]);
+			vl3v_subv(ecef_f, &obj->log_ls[0].pos[0][0], &self->ref->log_ls[0].pos[0][0]);
+			vl3v_subv(ecef_l, &obj->log_ls[self->ref->log_sz-1].pos[0][0], &self->ref->log_ls[self->ref->log_sz-1].pos[0][0]);
 			vl3_mtmul_v(ecef_f, &self->ref->log_ls[0].rot[0][0], ecef_f);
 			vl3_mtmul_v(ecef_l, &self->ref->log_ls[self->ref->log_sz-1].rot[0][0], ecef_l);
 		}
@@ -149,33 +149,33 @@ inline u8_t trcdata_ramld_render(s_trcdata_ramld *self, s_trcobj *obj)
 			
 			if (self->ref != NULL && self->ellp != NULL && self->ellp_en != 0x00)
 			{
-				vl3_vsub(ecef, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
+				vl3v_subv(ecef, &obj->log_ls[i].pos[0][0], &self->ref->log_ls[i].pos[0][0]);
 				vl3_mtmul_v(ecef, &self->ref->log_ls[i].rot[0][0], ecef);
 				
 				f64_t trje[3];
-				vl3_vsub(trje, ecef_l, ecef_f);
-				vl3_vmul_s(trje, trje, 1.0 / vl3_vnorm(trje));
+				vl3v_subv(trje, ecef_l, ecef_f);
+				vl3v_muls(trje, trje, 1.0 / vl3v_norm(trje));
 				
 				f64_t ort[3];
-				vl3_vsub(ort, ecef, ecef_f);
+				vl3v_subv(ort, ecef, ecef_f);
 				
-				f64_t path = vl3_vdot(ort, trje);
+				f64_t path = vl3v_dot(ort, trje);
 				vl3_vsumm(ort, ort, trje, -path);
 				
 				f64_t ref_pos[3];
-				vl3_vsub(ref_pos, ecef, ort);
+				vl3v_subv(ref_pos, ecef, ort);
 				
-				vl3_vmul_s(ecef, ecef, 1.0 / vl3_vnorm(ecef));
-				vl3_vmul_s(ort, ort, 1.0 / vl3_vnorm(ort));
-				vl3_vmul_s(ref_pos, ref_pos, 1.0 / vl3_vnorm(ref_pos));
+				vl3v_muls(ecef, ecef, 1.0 / vl3v_norm(ecef));
+				vl3v_muls(ort, ort, 1.0 / vl3v_norm(ort));
+				vl3v_muls(ref_pos, ref_pos, 1.0 / vl3v_norm(ref_pos));
 				
-				f64_t arc_cos = vl3_vdot(ref_pos, ecef);
+				f64_t arc_cos = vl3v_dot(ref_pos, ecef);
 				f64_t arc = acos(arc_cos);
 				
 				f64_t right_e[3];
-				vl3_cross(right_e, ecef, trje);
+				vl3v_cross(right_e, ecef, trje);
 				
-				if (vl3_vdot(ort, right_e) < 0.0) { arc = -arc; }
+				if (vl3v_dot(ort, right_e) < 0.0) { arc = -arc; }
 				
 				self->ld[i] = arc * self->ellp->a;
 			}

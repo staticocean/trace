@@ -212,9 +212,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 			
 			s_vl3d_trngl trngl = { .flags = vl3d_obj_flags_spec, .color = vl3d_col_legacy, };
 			
-			//		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
-			//		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
-			//		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
+			//		vl_vcopy(trngl.p0, &data->data_ls[0].pos[0][0]);
+			//		vl_vcopy(trngl.p1, &data->data_ls[*data->data_sz / 2].pos[0][0]);
+			//		vl_vcopy(trngl.p2, &data->data_ls[*data->data_sz - 1].pos[0][0]);
 			//		vl3d_add_trngl(&vl3d_eng, trngl);
 			
 			// hpr
@@ -228,16 +228,16 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 					
 					f64_t rot[9];
-					vl3_tnp(rot, &data->ecef_rot[i * di * 9]);
+					vl3m_tnp(rot, &data->ecef_rot[i * di * 9]);
 					vl3_mmul_s(rot, rot, 0.015 / view.scale);
 					
 					// top middle
 					
-					vl3_vmul_s(&rot[0], &rot[0], 3.0);
+					vl3v_muls(&rot[0], &rot[0], 3.0);
 					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 					
 					// left
-					vl3_vsub(trngl.p1, trngl.p1, &rot[6]);
+					vl3v_subv(trngl.p1, trngl.p1, &rot[6]);
 					
 					// right
 					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);
@@ -253,14 +253,14 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 					vl3_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 					
 					f64_t rot[9];
-					vl3_tnp(rot, &data->ecef_rot[i*9]);
+					vl3m_tnp(rot, &data->ecef_rot[i*9]);
 					vl3_mmul_s(rot, rot, 10.0 / view.scale);
 					
 					// top middle
 					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 					
 					// left
-					vl3_vsub(trngl.p1, trngl.p1, &rot[6]);
+					vl3v_subv(trngl.p1, trngl.p1, &rot[6]);
 					
 					// right
 					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);

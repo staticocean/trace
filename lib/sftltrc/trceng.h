@@ -425,7 +425,7 @@ s8_t trceng_update(s_trceng *self, f64_t d_time)
 
 //	for (s32_t i = 0; i < self->obj_sz; ++i)
 //	{
-//	    vl3_vsub(&obj->pos[1][0], &obj->pos[0][0], &obj->log_ls[obj->log_sz-1] = &self->obj_ls[i];
+//	    vl3v_subv(&obj->pos[1][0], &obj->pos[0][0], &obj->log_ls[obj->log_sz-1] = &self->obj_ls[i];
 //
 //	    // remove all forces coz they are additive
 //	    // thus all the plugins will add and never set

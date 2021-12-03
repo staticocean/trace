@@ -300,7 +300,7 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 
     f64_t g[3];
     trcctrl_gm_calc(ctrl, g, ecef);
-    f64_t gm = vl3_vnorm(g);
+    f64_t gm = vl3v_norm(g);
 
     printf("\ng: ");
     vl3_vprint(g);
@@ -322,7 +322,7 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 
             f64_t g[3];
             trcctrl_gm_calc(ctrl, g, ecef);
-            f64_t gm = vl3_vnorm(g);
+            f64_t gm = vl3v_norm(g);
 
             u8_t c = (gm / 10.0) * 255;
             point.color = IM_COL32(c, c, c, 255);
@@ -333,22 +333,22 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
     }
 
 //    // pos
-//    if (*data->data_offset > 10000)
+//    if (*data->data_sz > 10000)
 //    {
-//        for (int di = *data->data_offset / 10000, i = 0;
+//        for (int di = *data->data_sz / 10000, i = 0;
 //             i < 10000 - 1; ++i)
 //        {
-//            vl_vcopy(line.p0, &data->data_list[i * di].pos[0][0]);
-//            vl_vcopy(line.p1, &data->data_list[(i + 1) * di].pos[0][0]);
+//            vl_vcopy(line.p0, &data->data_ls[i * di].pos[0][0]);
+//            vl_vcopy(line.p1, &data->data_ls[(i + 1) * di].pos[0][0]);
 //
 //            vl3d_add_line(&vl3d_eng, line);
 //        }
 //    } else
 //    {
-//        for (int i = 0; i < *data->data_offset - 1; ++i)
+//        for (int i = 0; i < *data->data_sz - 1; ++i)
 //        {
-//            vl_vcopy(line.p0, &data->data_list[i].pos[0][0]);
-//            vl_vcopy(line.p1, &data->data_list[i + 1].pos[0][0]);
+//            vl_vcopy(line.p0, &data->data_ls[i].pos[0][0]);
+//            vl_vcopy(line.p1, &data->data_ls[i + 1].pos[0][0]);
 //
 //            vl3d_add_line(&vl3d_eng, line);
 //        }
@@ -356,23 +356,23 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //
 //    s_vl3d_trngl trngl = {.color = vl3d_col_l, .spec = 0x01 };
 //
-////		vl_vcopy(trngl.p0, &data->data_list[0].pos[0][0]);
-////		vl_vcopy(trngl.p1, &data->data_list[*data->data_offset / 2].pos[0][0]);
-////		vl_vcopy(trngl.p2, &data->data_list[*data->data_offset - 1].pos[0][0]);
+////		vl_vcopy(trngl.p0, &data->data_ls[0].pos[0][0]);
+////		vl_vcopy(trngl.p1, &data->data_ls[*data->data_sz / 2].pos[0][0]);
+////		vl_vcopy(trngl.p2, &data->data_ls[*data->data_sz - 1].pos[0][0]);
 ////		vl3d_add_trngl(&vl3d_eng, trngl);
 //
 //    // hpr
-//    if (*data->data_offset > 20)
+//    if (*data->data_sz > 20)
 //    {
-//        for (int di = *data->data_offset / 20, i = 0;
+//        for (int di = *data->data_sz / 20, i = 0;
 //             i < 20 - 1; ++i)
 //        {
-//            vl_vcopy(trngl.p0, &data->data_list[i * di].pos[0][0]);
-//            vl_vcopy(trngl.p1, &data->data_list[i * di].pos[0][0]);
-//            vl_vcopy(trngl.p2, &data->data_list[i * di].pos[0][0]);
+//            vl_vcopy(trngl.p0, &data->data_ls[i * di].pos[0][0]);
+//            vl_vcopy(trngl.p1, &data->data_ls[i * di].pos[0][0]);
+//            vl_vcopy(trngl.p2, &data->data_ls[i * di].pos[0][0]);
 //
 //            f64_t rot[9];
-//            vl_tnp(rot, &data->data_list[i * di].rot[0][0]);
+//            vl_tnp(rot, &data->data_ls[i * di].rot[0][0]);
 //            vl_mmul_s(rot, rot, 0.025 / view.scale);
 //
 //            // top middle
@@ -390,14 +390,14 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //        }
 //    } else
 //    {
-//        for (int i = 0; i < *data->data_offset - 1; ++i)
+//        for (int i = 0; i < *data->data_sz - 1; ++i)
 //        {
-//            vl_vcopy(trngl.p0, &data->data_list[i].pos[0][0]);
-//            vl_vcopy(trngl.p1, &data->data_list[i].pos[0][0]);
-//            vl_vcopy(trngl.p2, &data->data_list[i].pos[0][0]);
+//            vl_vcopy(trngl.p0, &data->data_ls[i].pos[0][0]);
+//            vl_vcopy(trngl.p1, &data->data_ls[i].pos[0][0]);
+//            vl_vcopy(trngl.p2, &data->data_ls[i].pos[0][0]);
 //
 //            f64_t rot[9];
-//            vl_tnp(rot, &data->data_list[i].rot[0][0]);
+//            vl_tnp(rot, &data->data_ls[i].rot[0][0]);
 //            vl_mmul_s(rot, rot, 10.0 / view.scale);
 //
 //            // top middle

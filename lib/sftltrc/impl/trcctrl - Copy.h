@@ -726,7 +726,7 @@ inline static void __trcctrl_egms_calc__(s_trcobj *ref, s_trcobj *obj)
 	
 	f64_t ecef[3];
 	
-	vl3_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vl3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
 	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
 	
 	f64_t lla[3];
@@ -742,7 +742,7 @@ inline static void __trcctrl_egms_calc__(s_trcobj *ref, s_trcobj *obj)
 			0.0
 	};
 	
-	vl3_vmul_s(g_hor, g_hor, -1.0);
+	vl3v_muls(g_hor, g_hor, -1.0);
 	
 	f64_t ecef_ctn[9];
 	trcellp_ecefrot(&trcellp_pz90, ecef, ecef_ctn);
@@ -752,7 +752,7 @@ inline static void __trcctrl_egms_calc__(s_trcobj *ref, s_trcobj *obj)
 	
 	f64_t g_inert[3];
 	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
-	vl3_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
+	vl3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
 	
@@ -884,14 +884,14 @@ inline static void __trcctrl_egmsnpo_calc__(s_trcobj *ref, s_trcobj *obj)
 	
 	f64_t ecef[3];
 	
-	vl3_vsub(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vl3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
 	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
 	
 	f64_t lla[3];
 	
 	trcellp_lla(&trcellp_pz90_11, lla, ecef);
 	
-	f64_t r = vl3_vnorm(ecef);
+	f64_t r = vl3v_norm(ecef);
 	f64_t gr = -mu / (r*r) - e / (r*r*r*r) * (1-3*sin(lla[0])*sin(lla[0]));
 	f64_t gm = -e / (r*r*r*r) * sin(2*lla[0]);
 	f64_t gh = -gr;
@@ -901,7 +901,7 @@ inline static void __trcctrl_egmsnpo_calc__(s_trcobj *ref, s_trcobj *obj)
 			gn, gh, 0.0
 	};
 	
-	vl3_vmul_s(g_hor, g_hor, -1.0);
+	vl3v_muls(g_hor, g_hor, -1.0);
 	
 	f64_t ecef_ctn[9];
 	trcellp_ecefrot(&trcellp_pz90, ecef, ecef_ctn);
@@ -911,7 +911,7 @@ inline static void __trcctrl_egmsnpo_calc__(s_trcobj *ref, s_trcobj *obj)
 	
 	f64_t g_inert[3];
 	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
-	vl3_vmul_s(g_inert, g_inert, 1.0 * obj->pos_inert);
+	vl3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
 }
@@ -1077,8 +1077,8 @@ inline void __trcctrl_gms_calc__(s_trcobj *ref, s_trcobj *obj)
 	
 	if (dist2 > 1E-16)
 	{
-		vl3_vsub(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
-		vl3_vmul_s(force_dir, force_dir, force_magn / vl_sqrt(dist2));
+		vl3v_subv(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
+		vl3v_muls(force_dir, force_dir, force_magn / vl_sqrt(dist2));
 	}
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, force_dir);

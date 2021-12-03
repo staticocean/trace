@@ -39,11 +39,11 @@ typedef struct gui_env
 	
 	void *traj_sz;
 	void *ctrl_sz;
-	void *data_offset;
+	void *data_sz;
 	
 	void *traj_ls;
 	void *ctrl_ls;
-	void *data_list;
+	void *data_ls;
 	
 	void **api_ctrl_data_ref;
 	void *api_ctrl_data;
@@ -63,11 +63,11 @@ typedef struct gui_env_init
 	
 	void *traj_sz;
 	void *ctrl_sz;
-	void *data_offset;
+	void *data_sz;
 	
 	void *traj_ls;
 	void *ctrl_ls;
-	void *data_list;
+	void *data_ls;
 	
 } 	s_gui_env_init;
 

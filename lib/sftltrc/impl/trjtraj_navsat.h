@@ -9,7 +9,13 @@
 
 //------------------------------------------------------------------------------
 
+#include <sftlstd/types.h>
+#include <sftlstd/env.h>
 #include <sftlstd/vl.h>
+
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trcspl.h>
+#include <sftltrc/trcellp.h>
 
 //------------------------------------------------------------------------------
 
@@ -57,8 +63,8 @@ typedef struct trctraj_navsat
 	char 		file_path[512];
 	trctraj_navsat_filetype_t file_type;
 	
-	u32_t 	data_offset;
-	s_trctraj_navsat_data data_list[64];
+	u32_t 	data_sz;
+	s_trctraj_navsat_data data_ls[64];
 	
 	int      	resolution;
 	int     	sat_offset;
@@ -92,7 +98,7 @@ inline u8_t trctraj_navsat_init(s_trctraj_navsat *self, s_trctraj_navsat_init at
 	if (self->ref != NULL)
 	{ self->ref_hash = self->ref->hash; }
 	
-	self->data_offset = 0x00;
+	self->data_sz = 0x00;
 	self->sat_offset = 0x00;
 	self->resolution = 100;
 	self->file_type = trctraj_navsat_filetype_none;
@@ -116,7 +122,7 @@ inline u8_t trctraj_navsat_load(s_trctraj_navsat *self, s_trctraj_navsat_init *a
 	{ self->ref_hash = 0x00; }
 
 	// damaged plugin data
-	if (self->data_offset > 63 || self->data_offset < 0) { self->data_offset = 0x00; }
+	if (self->data_sz > 63 || self->data_sz < 0) { self->data_sz = 0x00; }
 	if (self->sat_offset  > 63 || self->sat_offset  < 0) { self->sat_offset  = 0x00; }
 	
 	return 0x00;
@@ -127,7 +133,7 @@ inline u8_t trctraj_navsat_pos_local(s_trctraj_navsat *self, f64_t time, f64_t *
 	const f64_t omge = 7.2921151467E-6;
 	
 	u32_t i;
-	s_trctraj_navsat_data *data = &self->data_list[satnum];
+	s_trctraj_navsat_data *data = &self->data_ls[satnum];
 	
 	int ref_week = self->ref_week;
 	f64_t ref_sec  = self->ref_sec + time;
@@ -198,7 +204,7 @@ inline u8_t trctraj_navsat_parseagp(s_trctraj_navsat *self)
 //			   && fscanf(file_data, "%s %s %s %s %s %s \n", l2, l2, l2, l2, l2, l2) != EOF)
 //		{
 		
-		self->data_offset = 0x00;
+		self->data_sz = 0x00;
 
 		while (fgets(l0, sizeof(l0), file_data)
 		   	&& fgets(l1, sizeof(l1), file_data)
@@ -207,33 +213,33 @@ inline u8_t trctraj_navsat_parseagp(s_trctraj_navsat *self)
 //			printf("%s", l0);
 			
 			sscanf(l1, "%d %d %d %d %d %d %d %lf %lf %lf %lf",
-				   &self->data_list[self->data_offset].satnum,
-				   &self->data_list[self->data_offset].health,
-				   &self->data_list[self->data_offset].week,
-				   &self->data_list[self->data_offset].tow,
-				   &self->data_list[self->data_offset].day,
-				   &self->data_list[self->data_offset].month,
-				   &self->data_list[self->data_offset].year,
-				   &self->data_list[self->data_offset].atime,
-				   &self->data_list[self->data_offset].tcorr,
-				   &self->data_list[self->data_offset].dtcorr,
-				   &self->data_list[self->data_offset].domg);
+				   &self->data_ls[self->data_sz].satnum,
+				   &self->data_ls[self->data_sz].health,
+				   &self->data_ls[self->data_sz].week,
+				   &self->data_ls[self->data_sz].tow,
+				   &self->data_ls[self->data_sz].day,
+				   &self->data_ls[self->data_sz].month,
+				   &self->data_ls[self->data_sz].year,
+				   &self->data_ls[self->data_sz].atime,
+				   &self->data_ls[self->data_sz].tcorr,
+				   &self->data_ls[self->data_sz].dtcorr,
+				   &self->data_ls[self->data_sz].domg);
 			
 			sscanf(l2, "%lf %lf %lf %lf %lf %lf",
-				   &self->data_list[self->data_offset].omg0,
-				   &self->data_list[self->data_offset].i,
-				   &self->data_list[self->data_offset].w,
-				   &self->data_list[self->data_offset].e,
-				   &self->data_list[self->data_offset].sqrta,
-				   &self->data_list[self->data_offset].m0);
+				   &self->data_ls[self->data_sz].omg0,
+				   &self->data_ls[self->data_sz].i,
+				   &self->data_ls[self->data_sz].w,
+				   &self->data_ls[self->data_sz].e,
+				   &self->data_ls[self->data_sz].sqrta,
+				   &self->data_ls[self->data_sz].m0);
 			
-			self->data_list[self->data_offset].domg *= vl_pi;
-			self->data_list[self->data_offset].omg0 *= vl_pi;
-			self->data_list[self->data_offset].i *= vl_pi;
-			self->data_list[self->data_offset].w *= vl_pi;
-			self->data_list[self->data_offset].m0 *= vl_pi;
+			self->data_ls[self->data_sz].domg *= vl_pi;
+			self->data_ls[self->data_sz].omg0 *= vl_pi;
+			self->data_ls[self->data_sz].i *= vl_pi;
+			self->data_ls[self->data_sz].w *= vl_pi;
+			self->data_ls[self->data_sz].m0 *= vl_pi;
 			
-			++self->data_offset;
+			++self->data_sz;
 		}
 		
 		fclose (file_data);
@@ -280,9 +286,9 @@ inline u8_t trctraj_navsat_compile(s_trctraj_navsat *self)
 		default: break;
 	}
 	
-	for (s32_t i = 0; i < self->data_offset; ++i)
+	for (s32_t i = 0; i < self->data_sz; ++i)
 	{
-		s_trctraj_navsat_data *data = &self->data_list[i];
+		s_trctraj_navsat_data *data = &self->data_ls[i];
 		
 		data->a = data->sqrta * data->sqrta;
 		data->ee = data->e * data->e;

@@ -160,8 +160,8 @@ void __env_init__(s_gui_env *self)
 	VariableDefinePlatformVar(&self->env, NULL, "__traj_ls__"  , self->env.VoidPtrType, (union AnyValue *) &self->traj_ls, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_sz__", self->env.VoidPtrType, (union AnyValue *) &self->ctrl_sz, 0x00);
 	VariableDefinePlatformVar(&self->env, NULL, "__ctrl_ls__"  , self->env.VoidPtrType, (union AnyValue *) &self->ctrl_ls, 0x00);
-	VariableDefinePlatformVar(&self->env, NULL, "__data_offset__", self->env.VoidPtrType, (union AnyValue *) &self->data_offset, 0x00);
-	VariableDefinePlatformVar(&self->env, NULL, "__data_list__"  , self->env.VoidPtrType, (union AnyValue *) &self->data_list, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__data_sz__", self->env.VoidPtrType, (union AnyValue *) &self->data_sz, 0x00);
+	VariableDefinePlatformVar(&self->env, NULL, "__data_ls__"  , self->env.VoidPtrType, (union AnyValue *) &self->data_ls, 0x00);
 	
 	IncludeRegister(&self->env, "api.h", &picoc_api_init, &picoc_api_functions[0], NULL);
 	
@@ -253,11 +253,11 @@ void gui_env_init(s_gui_env *self, s_gui_env_init attr)
 	
 	self->traj_sz = attr.traj_sz;
 	self->ctrl_sz = attr.ctrl_sz;
-	self->data_offset = attr.data_offset;
+	self->data_sz = attr.data_sz;
 	
 	self->traj_ls = attr.traj_ls;
 	self->ctrl_ls = attr.ctrl_ls;
-	self->data_list = attr.data_list;
+	self->data_ls = attr.data_ls;
 	
 	__env_init__(self);
 }

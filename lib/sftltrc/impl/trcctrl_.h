@@ -34,7 +34,7 @@ typedef struct trcctrl_gm
 	char file_name[256];
 	
 	u32_t  data_size;
-	__s_trcctrl_gm_k__ *data_list;
+	__s_trcctrl_gm_k__ *data_ls;
 	
 }   s_trcctrl_gm;
 
@@ -98,7 +98,7 @@ inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 		}
 		
 		self->data_size = line_count;
-		self->data_list = (__s_trcctrl_gm_k__*) malloc(sizeof(__s_trcctrl_gm_k__) * line_count);
+		self->data_ls = (__s_trcctrl_gm_k__*) malloc(sizeof(__s_trcctrl_gm_k__) * line_count);
 		
 		line_count = 0x00;
 		__s_trcctrl_gm_k__ temp;
@@ -111,7 +111,7 @@ inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 			sscanf(buff, "%d %d %lf %lf %lf %lf %*s",
 				   &temp.n, &temp.m, &temp.C, &temp.S, &temp.dC, &temp.dS);
 			
-			self->data_list[line_count] = temp;
+			self->data_ls[line_count] = temp;
 			
 			++line_count;
 		}
@@ -125,7 +125,7 @@ inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 
 inline u8_t trcctrl_gm_save(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **v_file)
 {
-	memcpy(*v_file, self->data_list, self->data_size * sizeof(__s_trcctrl_gm_k__));
+	memcpy(*v_file, self->data_ls, self->data_size * sizeof(__s_trcctrl_gm_k__));
 	*v_file += self->data_size * sizeof(__s_trcctrl_gm_k__);
 	
 	return 0x00;
@@ -133,8 +133,8 @@ inline u8_t trcctrl_gm_save(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **
 
 inline u8_t trcctrl_gm_load(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **v_file)
 {
-	self->data_list = (__s_trcctrl_gm_k__*) malloc(self->data_size * sizeof(__s_trcctrl_gm_k__));
-	memcpy(self->data_list, *v_file, self->data_size * sizeof(__s_trcctrl_gm_k__));
+	self->data_ls = (__s_trcctrl_gm_k__*) malloc(self->data_size * sizeof(__s_trcctrl_gm_k__));
+	memcpy(self->data_ls, *v_file, self->data_size * sizeof(__s_trcctrl_gm_k__));
 	*v_file += self->data_size * sizeof(__s_trcctrl_gm_k__);
 	
 	return 0x00;
@@ -260,7 +260,7 @@ inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
 	
 	f64_t el = lla[0];
 	f64_t az = lla[1];
-	f64_t r  = vl3_vnorm(ecef);
+	f64_t r  = vl3v_norm(ecef);
 	
 	f64_t u = MU / r;
 	f64_t g_[3];
@@ -283,7 +283,7 @@ inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
 	
 	for (s32_t i = 0; i < N_-3; ++i)
 	{
-		__s_trcctrl_gm_k__ *k = &self->data_list[i];
+		__s_trcctrl_gm_k__ *k = &self->data_ls[i];
 		
 		u32_t n = k->n;
 		u32_t m = k->m;
@@ -332,10 +332,10 @@ inline u8_t trcctrl_gm_free_(void **data)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) *data;
 	
-	if (ctrl->data_list != NULL)
+	if (ctrl->data_ls != NULL)
 	{
-		free(ctrl->data_list);
-		ctrl->data_list = NULL;
+		free(ctrl->data_ls);
+		ctrl->data_ls = NULL;
 	}
 	
 	free(ctrl);
@@ -451,21 +451,21 @@ inline u8_t trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
 
     if (obj->log_sz > 0x00)
     {
-        vl3_vsub(local_pos_0,
+        vl3v_subv(local_pos_0,
                  &obj->log_ls[obj->log_sz-1].pos[0][0],
                         &self->ref->log_ls[self->ref->log_sz-1].pos[0][0]);
 
         vl3_mtmul_v(local_pos_0,
                     &self->ref->log_ls[self->ref->log_sz-1].rot[0][0], local_pos_0);
 
-        vl3_vsub(local_pos_1, &obj->pos[0][0], &self->ref->pos[0][0]);
+        vl3v_subv(local_pos_1, &obj->pos[0][0], &self->ref->pos[0][0]);
         vl3_mtmul_v(local_pos_1, &self->ref->rot[0][0], local_pos_1);
 
-        vl3_vsub(local_dpos, local_pos_1, local_pos_0);
+        vl3v_subv(local_dpos, local_pos_1, local_pos_0);
 
-        if (vl3_vnorm(local_dpos) > 1E-3)
+        if (vl3v_norm(local_dpos) > 1E-3)
         {
-            vl3_vmul_s(local_dpos, local_dpos, 1.0 / vl3_vnorm(local_dpos));
+            vl3v_muls(local_dpos, local_dpos, 1.0 / vl3v_norm(local_dpos));
 
             if (self->ellp_en != 0x00)
             {
@@ -487,18 +487,18 @@ inline u8_t trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
                 f64_t *y = &rot_nwh_tnp[3];
                 f64_t *z = &rot_nwh_tnp[6];
 
-                vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
+                vl3v_muls(x, x, 1.0 / vl3v_norm(x));
 
                 f64_t xy[3];
-                vl3_vmul_s(xy, x, vl3_vdot(x,y));
-                vl3_vsub(y, y, xy);
-                vl3_vmul_s(y, y, 1.0 / vl3_vnorm(y));
+                vl3v_muls(xy, x, vl3v_dot(x,y));
+                vl3v_subv(y, y, xy);
+                vl3v_muls(y, y, 1.0 / vl3v_norm(y));
 
-                vl3_cross(z, x, y);
-                vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
+                vl3v_cross(z, x, y);
+                vl3v_muls(z, z, 1.0 / vl3v_norm(z));
 
                 f64_t rot_nhw[9];
-                vl3_tnp(rot_nhw, rot_nwh_tnp);
+                vl3m_tnp(rot_nhw, rot_nwh_tnp);
 
                 s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nhw);
                 rot_nwh_hpr.roll = 0.0;

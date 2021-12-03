@@ -340,7 +340,7 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 					ImGui::AlignTextToFramePadding();
 					bool data_open = ImGui::TreeNodeEx("data");
 
-					if (self->data_offset > 0x00)
+					if (self->data_sz > 0x00)
 					{
 						ImGui::SameLine();
 
@@ -349,13 +349,13 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 
 						if (ImGui::BeginPopup("add_data_popup"))
 						{
-							for (int j = 0; j < self->data_offset; ++j)
+							for (int j = 0; j < self->data_sz; ++j)
 							{
-								ImGui::PushID(&self->data_list[j]);
-								ImGui::Selectable(self->data_list[j].desc);
+								ImGui::PushID(&self->data_ls[j]);
+								ImGui::Selectable(self->data_ls[j].desc);
 
 								if (ImGui::IsItemClicked())
-								{ trcobj_add_data(obj, self->data_list[j]); }
+								{ trcobj_add_data(obj, self->data_ls[j]); }
 
 								ImGui::PopID();
 							}
@@ -366,31 +366,31 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 
 					if (data_open)
 					{
-						if (obj->data_offset == 0x00)
+						if (obj->data_sz == 0x00)
 						{ ImGui::Text("[no items]"); }
 
-						for (int j = 0; j < obj->data_offset; ++j)
+						for (int j = 0; j < obj->data_sz; ++j)
 						{
-							ImGui::PushID(&obj->data_list[j]);
+							ImGui::PushID(&obj->data_ls[j]);
 
-							bool data_sel = gui->sel_item == &obj->data_list[j];
+							bool data_sel = gui->sel_item == &obj->data_ls[j];
 							
 							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->data_list[j].name,
+							ImGui::TreeNodeEx(obj->data_ls[j].name,
 											  (data_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->data_list[j].name);
+											  | ImGuiTreeNodeFlags_Leaf, obj->data_ls[j].name);
 
 							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_data(gui, &obj->data_list[j]); }
+							{ gui_eng_sel_data(gui, &obj->data_ls[j]); }
 							
 							if (ImGui::BeginPopupContextItem("data_menu"))
 							{
 								if (ImGui::Selectable("delete"))
 								{
-									if (gui->sel_item == &obj->data_list[j])
+									if (gui->sel_item == &obj->data_ls[j])
 									{ gui->sel_item = NULL; }
 
-									trcobj_del_data(obj, &obj->data_list[j]);
+									trcobj_del_data(obj, &obj->data_ls[j]);
 								}
 
 								ImGui::EndPopup();

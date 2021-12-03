@@ -9,9 +9,9 @@
 
 //------------------------------------------------------------------------------
 
+#include <sftlstd/types.h>
+#include <sftlstd/env.h>
 #include <sftlstd/vl.h>
-
-#include "trcapi.h"
 
 //------------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ static s_trcellp trcellp_pz90_11 = {
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_init (s_trcellp *ellp)
+void trcellp_init (s_trcellp *ellp)
 {
 	ellp->b         = ellp->a * (1 - ellp->f);
 	ellp->ee		= 1 - ellp->b*ellp->b / (ellp->a*ellp->a );
@@ -89,7 +89,7 @@ s8_t trcellp_init (s_trcellp *ellp)
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_ecef (s_trcellp *ellp, f64_t *ecef, f64_t *lla)
+void trcellp_ecef (s_trcellp *ellp, f64_t *ecef, f64_t *lla)
 {
 	f64_t n = ellp->a / vl_sqrt(1 - ellp->ee * vl_sin(lla[0]) * vl_sin(lla[0]));
 	
@@ -246,19 +246,19 @@ s8_t trcellp_ecefrot (s_trcellp *ellp, f64_t *ecef, f64_t *c_tn)
 	y[2] = -sin(lla[1]) * cos(lla[0]);
 	y[1] =  sin(lla[0]);
 	
-	f64_t north[3] = { 0.0, self->a, 0.0 };
-	vl3_vsub(x, north, ecef);
-	vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
+	f64_t north[3] = { 0.0, ellp->a, 0.0 };
+	vl3v_subv(x, north, ecef);
+	vl3v_muls(x, x, 1.0 / vl3v_norm(x));
 	
 	f64_t xy[3];
-	vl3_vmul_s(xy, y, vl3_vdot(x, y));
-	vl3_vsub(x, x, xy);
-	vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
+	vl3v_muls(xy, y, vl3v_dot(x, y));
+	vl3v_subv(x, x, xy);
+	vl3v_muls(x, x, 1.0 / vl3v_norm(x));
 	
-	vl3_cross(z, x, y);
-	vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
+	vl3v_cross(z, x, y);
+	vl3v_muls(z, z, 1.0 / vl3v_norm(z));
 	
-	vl3_tnp(c_tn, ctn_tnp);
+	vl3m_tnp(c_tn, ctn_tnp);
 	
 	return 0x00;
 }
@@ -268,10 +268,10 @@ s8_t trcellp_ecefrot (s_trcellp *ellp, f64_t *ecef, f64_t *c_tn)
 void trcellp_nwhvel (s_trcellp *ellp, f64_t *lla, f64_t *vel, f64_t *nwh)
 {
 	f64_t sin_lat = vl_sin(lla[0]);
-	f64_t temp = 1 - self->ee * sin_lat*sin_lat;
+	f64_t temp = 1 - ellp->ee * sin_lat*sin_lat;
 	
-	f64_t M = self->a * ellp->p1mee / vl_pow(temp, 1.5);
-	f64_t N = self->a / vl_pow(temp, 0.5);
+	f64_t M = ellp->a * ellp->p1mee / vl_pow(temp, 1.5);
+	f64_t N = ellp->a / vl_pow(temp, 0.5);
 	
 	nwh[0] = vel[0] * M;
 	nwh[1] = vel[1] * N * vl_cos(lla[0]);

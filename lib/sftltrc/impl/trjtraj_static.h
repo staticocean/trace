@@ -9,9 +9,12 @@
 
 //------------------------------------------------------------------------------
 
+#include <sftlstd/types.h>
+#include <sftlstd/env.h>
 #include <sftlstd/vl.h>
 
 #include <sftltrc/trctraj.h>
+#include <sftltrc/trcspl.h>
 #include <sftltrc/trcellp.h>
 
 //------------------------------------------------------------------------------
@@ -34,54 +37,93 @@ typedef struct trctraj_static
 	
 } 	s_trctraj_static;
 
-typedef struct trctraj_static_init
+typedef struct trctraj_static_attr
 {
-	s_trcobj 	*ref;
+	s_trcobj 		*ref;
 	
-	u8_t 	ellp_en;
-	s_trcellp  *ellp;
+	u8_t 			ellp_en;
+	s_trcellp  		*ellp;
 	
-	f64_t 		pos[3];
-	f64_t 		rot[9];
+	f64_t 			pos[3];
+	f64_t 			rot[9];
 	
-} 	s_trctraj_static_init;
+} 	s_trctraj_static_attr;
 
 //------------------------------------------------------------------------------
 
-inline
-s8_t trctraj_static_init (s_trctraj_static *self, s_trctraj_static_init attr)
+static
+s8_t __trctraj_static_init__ (void *__traj__, s_trctraj_static_init *__attr__)
 {
-	self->eng = attr.eng;
+	*__traj__ = malloc(sizeof(s_trctraj_static));
+
+	s_trctraj_static 	  *traj = (s_trctraj_static*     ) *__traj__;
+	s_trctraj_static_attr *attr = (s_trctraj_static_attr*) __attr__;
+
+	traj->eng = attr->eng;
 	
-	self->ref = attr.ref;
-	self->ref_hash = self->ref->hash;
+	traj->ref = attr->ref;
+	traj->ref_hash = traj->ref->hash;
 	
-	self->ellp_en = attr.ellp_en;
-	self->ellp = attr.ellp;
-	if (self->ellp != NULL)
-	{ self->ellp_hash = self->ellp->hash; }
+	traj->ellp_en = attr->ellp_en;
+	traj->ellp = attr->ellp;
+	if (traj->ellp != NULL)
+	{ traj->ellp_hash = self->ellp->hash; }
 	
-	vl3_vcopy(self->pos, attr.pos);
-	vl3_mcopy(self->rot, attr.rot);
+	vl3_vcopy(traj->pos, attr->pos);
+	vl3_mcopy(traj->rot, attr->rot);
 	
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
 static
-s8_t trctraj_static_save(s_trctraj_static *self, s_trctraj_static_init *attr, u8_t **v_file)
+s8_t __trctraj_static_free__ (void *__traj__)
+{
+	free(*__traj__);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trctraj_static_pack__ (void *__traj__, u8_t **v_file)
 {
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
 static
-s8_t trctraj_static_load (s_trctraj *traj, s_trctraj_static_init *attr, u8_t **v_file)
+s8_t __trctraj_static_unpack__ (void *__traj__, s_trcspl **v_file)
 {
-	self->eng = attr->eng;
-	self->ref = trceng_find_obj(self->eng, self->ref_hash);
-	self->ellp = trceng_find_ellp(self->eng, self->ellp_hash);
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trctraj_static_save__ (void *__traj__, u8_t **v_file)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trctraj_static_load__ (void *__traj__, u8_t **v_file)
+{
+	s_trctraj_static *traj = (s_trctraj_static*) __traj__;
+	
+	//	traj->eng = attr->eng;
+	//	traj->ref = trceng_find_obj(traj->eng, traj->ref_hash);
+	//	traj->ellp = trceng_find_ellp(traj->eng, traj->ellp_hash);
 	
 	return 0x00;
 }
+
+//------------------------------------------------------------------------------
 
 static
 s8_t trctraj_static_compile (s_trctraj *traj)
@@ -99,6 +141,8 @@ s8_t trctraj_static_compile (s_trctraj *traj)
 	return 0x00;
 }
 
+//------------------------------------------------------------------------------
+
 static
 s8_t trctraj_static_pos (s_trctraj *traj, f64_t time, f64_t *pos)
 {
@@ -113,6 +157,8 @@ s8_t trctraj_static_pos (s_trctraj *traj, f64_t time, f64_t *pos)
 	
 	return 0x00;
 }
+
+//------------------------------------------------------------------------------
 
 static
 s8_t trctraj_static_rot (s_trctraj *traj, f64_t time, f64_t *rot)
@@ -130,27 +176,10 @@ s8_t trctraj_static_rot (s_trctraj *traj, f64_t time, f64_t *rot)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trctraj_static_init_ (void **data, void *config)
+s8_t trctraj_static_init (void *data, void *attr)
 {
-	*data = (s_trctraj_static*) malloc(sizeof(s_trctraj_static));
-	
-}
 
-inline u8_t trctraj_static_free_ (void **data)
-{
-	free(traj);
 	
-	return 0x00;
-}
-
-inline u8_t trctraj_static_info_(void *data, s_trctraj_info *info)
-{
-	s_trctraj_static *traj = (s_trctraj_static*) data;
-	
-	info->preview_time[0] = 0.0;
-	info->preview_time[1] = 1.0;
-	
-	return 0x00;
 }
 
 //------------------------------------------------------------------------------

@@ -12,9 +12,9 @@
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
 #include <sftlstd/vl.h>
-#include <sftlstd/bz.h>
 
 #include <sftltrc/trctraj.h>
+#include <sftltrc/trcspl.h>
 #include <sftltrc/trcellp.h>
 
 //------------------------------------------------------------------------------

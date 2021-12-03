@@ -9,11 +9,14 @@
 
 //------------------------------------------------------------------------------
 
+#include <sftlstd/types.h>
+#include <sftlstd/env.h>
 #include <sftlstd/vl.h>
 #include <sftlstd/bz.h>
 
-#include "trc_api.h"
-#include "trcellp.h"
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trcspl.h>
+#include <sftltrc/trcellp.h>
 
 //------------------------------------------------------------------------------
 
@@ -670,22 +673,22 @@ inline u8_t trctraj_bz_rot (s_trctraj_bz *self, f64_t time, f64_t *rot)
 		
 //		vl_mprint(rot_nwh_tnp);
 
-		vl3_vmul_s(x, x, 1.0 / vl3_vnorm(x));
+		vl3v_muls(x, x, 1.0 / vl3v_norm(x));
 		
 //		vl_mprint(rot_nwh_tnp);
 
 		f64_t xy[3];
-		vl3_vmul_s(xy, x, vl3_vdot(x,y));
-		vl3_vsub(y, y, xy);
-		vl3_vmul_s(y, y, 1.0 / vl3_vnorm(y));
+		vl3v_muls(xy, x, vl3v_dot(x,y));
+		vl3v_subv(y, y, xy);
+		vl3v_muls(y, y, 1.0 / vl3v_norm(y));
 		
-		vl3_cross(z, x, y);
-		vl3_vmul_s(z, z, 1.0 / vl3_vnorm(z));
+		vl3v_cross(z, x, y);
+		vl3v_muls(z, z, 1.0 / vl3v_norm(z));
 
 //		vl_rnorm(rot_nwh_tnp);
 
 		f64_t rot_nwh[9];
-		vl3_tnp(rot_nwh, rot_nwh_tnp);
+		vl3m_tnp(rot_nwh, rot_nwh_tnp);
 
 		s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nwh);
 		rot_nwh_hpr.roll = 0.0;

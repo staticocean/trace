@@ -1642,22 +1642,22 @@ inline void gui_traj_edit_navsat(s_trctraj *self)
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 	ImGui::SliderInt("##resolution", &traj->resolution, 1, 1000);
 	
-	if (traj->data_offset > 0x00)
+	if (traj->data_sz > 0x00)
 	{
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("satnum");
 		ImGui::SameLine();
 		
 		char satnum[32];
-		sprintf(satnum, "SAT %d", traj->data_list[traj->sat_offset].satnum);
+		sprintf(satnum, "SAT %d", traj->data_ls[traj->sat_offset].satnum);
 		
 		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 		if (ImGui::BeginCombo("##satnum", satnum, ImGuiComboFlags_None))
 		{
-			for (int i = 0; i < traj->data_offset; ++i)
+			for (int i = 0; i < traj->data_sz; ++i)
 			{
 				const bool is_selected = (i == traj->sat_offset);
-				sprintf(satnum, "SAT %d", traj->data_list[i].satnum);
+				sprintf(satnum, "SAT %d", traj->data_ls[i].satnum);
 				if (ImGui::Selectable(satnum, is_selected))
 				{ traj->sat_offset = i; }
 				
@@ -1705,7 +1705,7 @@ inline void gui_traj_view_navsat(s_trctraj *self)
 				.obj_ls = obj_ls,
 			});
 			
-			for (int i = 0; i < traj->data_offset; ++i)
+			for (int i = 0; i < traj->data_sz; ++i)
 			{
 				f64_t time = 0.0;
 				f64_t time_limit = 3600*12;
@@ -1783,28 +1783,28 @@ inline void gui_traj_view_navsat(s_trctraj *self)
 				
 				ImGui::TableHeadersRow();
 				
-				for (int row = 0; row < traj->data_offset; row++)
+				for (int row = 0; row < traj->data_sz; row++)
 				{
 					ImGui::TableNextRow();
 					
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].satnum);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].health);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].week);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].tow);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].day);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].month);
-					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_list[row].year);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].atime);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].tcorr);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].dtcorr);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].domg);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].satnum);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].health);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].week);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].tow);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].day);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].month);
+					ImGui::TableNextColumn(); ImGui::Text("%d" , traj->data_ls[row].year);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].atime);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].tcorr);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].dtcorr);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].domg);
 					
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].omg0);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].i);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].w);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].e);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].sqrta);
-					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_list[row].m0);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].omg0);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].i);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].w);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].e);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].sqrta);
+					ImGui::TableNextColumn(); ImGui::Text("%lf", traj->data_ls[row].m0);
 				}
 				ImGui::EndTable();
 			}

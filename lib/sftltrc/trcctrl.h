@@ -20,14 +20,14 @@ typedef struct trcctrl_intf
 {
 	char 				desc[32];
 	
-	s8_t (*init) 		(void **ctrl);
-	s8_t (*free) 		(void **ctrl);
-	s8_t (*pack) 		(void  *ctrl, s_trcspl *spl);
-	s8_t (*unpack) 		(void  *ctrl, s_trcspl *spl);
-	s8_t (*save) 		(void  *ctrl, u8_t **v_file);
-	s8_t (*load) 		(void  *ctrl, u8_t **v_file);
-	s8_t (*reset) 		(void  *ctrl, s_trcobj *obj);
-	s8_t (*update) 		(void  *ctrl, s_trcobj *obj);
+	s8_t (*init) 		(void *ctrl);
+	s8_t (*free) 		(void *ctrl);
+	s8_t (*pack) 		(void *ctrl, s_trcspl *spl);
+	s8_t (*unpack) 		(void *ctrl, s_trcspl *spl);
+	s8_t (*save) 		(void *ctrl, u8_t **v_file);
+	s8_t (*load) 		(void *ctrl, u8_t **v_file);
+	s8_t (*reset) 		(void *ctrl, s_trcobj *obj);
+	s8_t (*update) 		(void *ctrl, s_trcobj *obj);
 	
 } 	s_trcctrl_intf;
 
@@ -66,7 +66,7 @@ s8_t trcctrl_free (s_trcctrl **ctrl)
 inline
 s8_t trcctrl_pack (s_trcctrl *ctrl, s_trcspl *spl)
 {
-	return ctrl->intf->pack(ctrl);
+	return ctrl->intf->pack(ctrl, spl);
 }
 
 //------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ s8_t trcctrl_pack (s_trcctrl *ctrl, s_trcspl *spl)
 inline
 s8_t trcctrl_unpack (s_trcctrl *ctrl, s_trcspl *spl)
 {
-	return ctrl->intf->unpack(ctrl);
+	return ctrl->intf->unpack(ctrl, spl);
 }
 
 //------------------------------------------------------------------------------

@@ -14,6 +14,7 @@
 #include <sftlstd/vl.h>
 
 #include <sftltrc/trcproc.h>
+#include <sftltrc/trcspl.h>
 
 //------------------------------------------------------------------------------
 
@@ -230,14 +231,14 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
                 f64_t drR[3];
                 f64_t dr[3];
 
-                vl3_vsub(drL, reM, reL);
-                vl3_vsub(drR, reR, reM);
+                vl3v_subv(drL, reM, reL);
+                vl3v_subv(drR, reR, reM);
 
                 vl3_vinter(dr, drL, drR, 0.5);
 
-                if (vl3_vnorm(dr) > 1E-16)
+                if (vl3v_norm(dr) > 1E-16)
                 {
-                    vl3_vmul_s(dr, dr, rot_error * self->rot_step / vl3_vnorm(dr));
+                    vl3v_muls(dr, dr, rot_error * self->rot_step / vl3v_norm(dr));
                     f64_t r_corr[9];
                     vl3_skew(r_corr, dr);
 
@@ -294,15 +295,15 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
                 f64_t dpR[3];
                 f64_t dp[3];
 
-                vl3_vsub(dpL, peM, peL);
-                vl3_vsub(dpR, peR, peM);
+                vl3v_subv(dpL, peM, peL);
+                vl3v_subv(dpR, peR, peM);
 
                 vl3_vinter(dp, dpL, dpR, 0.5);
 
-                if (vl3_vnorm(dp) > 1E-16)
+                if (vl3v_norm(dp) > 1E-16)
                 {
-                    vl3_vmul_s(dp, dp, pos_error * self->pos_step / vl3_vnorm(dp));
-                    vl3_vsub(&obj->log_ls[offset-1].pos[2][0], &obj->log_ls[offset-1].pos[2][0], dp);
+                    vl3v_muls(dp, dp, pos_error * self->pos_step / vl3v_norm(dp));
+                    vl3v_subv(&obj->log_ls[offset-1].pos[2][0], &obj->log_ls[offset-1].pos[2][0], dp);
                 }
 
             } while (pos_error > self->pos_tol && counter < 1000);
