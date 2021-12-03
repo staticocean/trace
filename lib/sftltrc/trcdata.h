@@ -16,39 +16,41 @@
 
 //------------------------------------------------------------------------------
 
+typedef struct trcdata_intf
+{
+	char 				desc[32];
+	
+	s8_t (*init) 		(void **data);
+	s8_t (*free) 		(void **data);
+	s8_t (*pack) 		(void  *data, s_trcspl *spl);
+	s8_t (*unpack) 		(void  *data, s_trcspl *spl);
+	s8_t (*save) 		(void  *data, u8_t **v_file);
+	s8_t (*load) 		(void  *data, u8_t **v_file);
+	s8_t (*reset) 		(void  *data, s_trcobj *obj);
+	s8_t (*render) 		(void  *data, s_trcobj *obj);
+	
+} 	s_trcdata_intf;
+
+//------------------------------------------------------------------------------
+
 typedef struct trcdata
 {
 	union
 	{
-		void 			*intf;
-		s_trcspl_ptr 	intf_splptr;
+		s_trcdata_intf *intf;
+		s_trcspl_ptr 	intf_spl_ptr;
 	};
 	
 	char 				name[32];
 	
 } 	s_trcdata;
 
-typedef struct trcdata_intf
-{
-	char 				desc[32];
-	
-	s8_t (*init) 		(s_trcdata **data);
-	s8_t (*free) 		(s_trcdata **data);
-	s8_t (*pack) 		(s_trcdata  *data, s_trcspl *spl);
-	s8_t (*unpack) 		(s_trcdata  *data, s_trcspl *spl);
-	s8_t (*save) 		(s_trcdata  *data, u8_t **v_file);
-	s8_t (*load) 		(s_trcdata  *data, u8_t **v_file);
-	s8_t (*reset) 		(s_trcdata  *data, s_trcobj *obj);
-	s8_t (*render) 		(s_trcdata  *data, s_trcobj *obj);
-	
-} 	s_trcdata_intf;
-
 //------------------------------------------------------------------------------
 
 inline
 s8_t trcdata_init (s_trcdata **data)
 {
-	return ((s_trcdata_intf*) (*data)->intf)->init(data);
+	return (*data)->intf->init(data);
 }
 
 //------------------------------------------------------------------------------
@@ -56,7 +58,7 @@ s8_t trcdata_init (s_trcdata **data)
 inline
 s8_t trcdata_free (s_trcdata **data)
 {
-	return ((s_trcdata_intf*) (*data)->intf)->free(data);
+	return (*data)->intf->free(data);
 }
 
 //------------------------------------------------------------------------------
@@ -64,7 +66,7 @@ s8_t trcdata_free (s_trcdata **data)
 inline
 s8_t trcdata_pack (s_trcdata *data, s_trcspl *spl)
 {
-	return ((s_trcdata_intf*) data->intf)->pack(data, spl);
+	return data->intf->pack(data, spl);
 }
 
 //------------------------------------------------------------------------------
@@ -72,7 +74,7 @@ s8_t trcdata_pack (s_trcdata *data, s_trcspl *spl)
 inline
 s8_t trcdata_unpack (s_trcdata *data, s_trcspl *spl)
 {
-	return ((s_trcdata_intf*) data->intf)->unpack(data, spl);
+	return data->intf->unpack(data, spl);
 }
 
 //------------------------------------------------------------------------------
@@ -80,7 +82,7 @@ s8_t trcdata_unpack (s_trcdata *data, s_trcspl *spl)
 inline
 s8_t trcdata_save (s_trcdata *data, u8_t **v_file)
 {
-	return ((s_trcdata_intf*) data->intf)->save(data, v_file);
+	return data->intf->save(data, v_file);
 }
 
 //------------------------------------------------------------------------------
@@ -88,7 +90,7 @@ s8_t trcdata_save (s_trcdata *data, u8_t **v_file)
 inline
 s8_t trcdata_load (s_trcdata *data, u8_t **v_file)
 {
-	return ((s_trcdata_intf*) data->intf)->load(data, v_file);
+	return data->intf->load(data, v_file);
 }
 
 //------------------------------------------------------------------------------
@@ -96,7 +98,7 @@ s8_t trcdata_load (s_trcdata *data, u8_t **v_file)
 inline
 s8_t trcdata_reset (s_trcdata *data, s_trcobj *obj)
 {
-	return ((s_trcdata_intf*) data->intf)->reset(data, obj);
+	return data->intf->reset(data, obj);
 }
 
 //------------------------------------------------------------------------------
@@ -104,7 +106,7 @@ s8_t trcdata_reset (s_trcdata *data, s_trcobj *obj)
 inline
 s8_t trcdata_render (s_trcdata *data, s_trcobj *obj)
 {
-	return ((s_trcdata_intf*) data->intf)->render(data, obj);
+	return data->intf->render(data, obj);
 }
 
 //------------------------------------------------------------------------------

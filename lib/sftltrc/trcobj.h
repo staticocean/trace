@@ -12,7 +12,8 @@
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
 
-#include <sftltrc/trcptr.h>
+#include <sftltrc/trcspl.h>
+#include <sftltrc/trcspl.h>
 
 //------------------------------------------------------------------------------
 

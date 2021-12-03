@@ -7,24 +7,23 @@
 
 //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <libcommon/vl.h>
+#include <sftlgui/imgui/imgui.h>
 
-#include <libgui/imgui/imgui.h>
-#include <lib/trj/trceng.h>
-#include <lib/trj/trcobj.h>
+#include <sftlstd/vl.h>
+
+#include <sftltrc/trceng.h>
+#include <sftltrc/trcobj.h>
 
 #include "gui_env.h"
 
 extern "C"
 {
-	#include <lib/fmemopen/fmemopen.h>
-	#include <lib/picoc/picoc.h>
+	#include <fmemopen/libfmemopen.h>
+	#include <picoc/picoc.h>
 }
 
 //------------------------------------------------------------------------------

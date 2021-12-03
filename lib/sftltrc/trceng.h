@@ -14,7 +14,11 @@
 #include <sftlstd/vl.h>
 #include <sftlstd/crc.h>
 
-#include <sftltrc/trcapi.h>
+#include <sftltrc/trcellp.h>
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trcctrl.h>
+#include <sftltrc/trcdata.h>
+#include <sftltrc/trcproc.h>
 #include <sftltrc/trcobj.h>
 
 //------------------------------------------------------------------------------
