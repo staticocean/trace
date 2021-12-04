@@ -7,13 +7,13 @@
 
 //------------------------------------------------------------------------------
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>
-#include <lib/trj/trcobj.h>
-#include <lib/trj/trcctrl.h>
-#include <lib/trj/trcctrl_.h>
+#include <sftltrc/trcobj.h>
+#include <sftltrc/trcctrl.h>
+#include <sftltrc/trcctrl_.h>
 
 //------------------------------------------------------------------------------
 

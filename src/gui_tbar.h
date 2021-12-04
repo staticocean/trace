@@ -11,10 +11,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/imgui_w.h>
 #include <libgui/imgui/imgui.h>
-#include <lib/trj/trceng.h>
+#include <sftltrc/trceng.h>
 #include <libgui/clip/clip.h>
 #include <nfd.h>
 

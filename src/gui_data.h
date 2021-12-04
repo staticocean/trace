@@ -7,15 +7,15 @@
 
 //------------------------------------------------------------------------------
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/vl3d.h>
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>
 #include <libgui/implot/implot.h>
-#include <lib/trj/trcobj.h>
-#include <lib/trj/trcdata.h>
-#include <lib/trj/trcdata_.h>
+#include <sftltrc/trcobj.h>
+#include <sftltrc/trcdata.h>
+#include <sftltrc/trcdata_.h>
 
 //------------------------------------------------------------------------------
 

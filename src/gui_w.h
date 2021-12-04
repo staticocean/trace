@@ -7,18 +7,18 @@
 
 //------------------------------------------------------------------------------
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/vl3d.h>
 #include <libcommon/imgui_w.h>
 
 #include <nfd.h>
 
-#include <lib/trj/trcobj.h>
-#include <lib/trj/trctraj.h>
-#include <lib/trj/trcctrl.h>
-#include <lib/trj/trcdata.h>
-#include <lib/trj/trcproc.h>
-#include <lib/trj/trceng.h>
+#include <sftltrc/trcobj.h>
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trcctrl.h>
+#include <sftltrc/trcdata.h>
+#include <sftltrc/trcproc.h>
+#include <sftltrc/trceng.h>
 
 #include <libgui/imgui/imgui.h>
 #include <libgui/imgui/imgui_internal.h>

@@ -18,18 +18,18 @@
 #include <libgui/imgui/imgui.h>
 #include <lib/picoc/picoc.h>
 #include <nfd.h>
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/imgui_theme.h>
 #include <libcommon/imgui_w.h>
 
-#include <lib/trj/trceng.h>
-#include <lib/trj/trcobj.h>
-#include <lib/trj/trcellp.h>
-#include <lib/trj/trctraj.h>
-#include <lib/trj/trctraj_.h>
-#include <lib/trj/trcctrl.h>
-#include <lib/trj/trcdata.h>
-#include <lib/trj/trcproc.h>
+#include <sftltrc/trceng.h>
+#include <sftltrc/trcobj.h>
+#include <sftltrc/trcellp.h>
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trctraj_.h>
+#include <sftltrc/trcctrl.h>
+#include <sftltrc/trcdata.h>
+#include <sftltrc/trcproc.h>
 
 #include "gui_eng.h"
 #include "gui_obj.h"

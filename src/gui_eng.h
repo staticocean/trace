@@ -10,15 +10,15 @@
 #include <libgui/imgui/imgui.h>
 #include <libgui/implot/implot.h>
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/imgui_w.h>
 
-#include <lib/trj/trc_api.h>
-#include <lib/trj/trceng.h>
-#include <lib/trj/trctraj.h>
-#include <lib/trj/trcctrl.h>
-#include <lib/trj/trcdata.h>
-#include <lib/trj/trcellp.h>
+#include <sftltrc/trc_api.h>
+#include <sftltrc/trceng.h>
+#include <sftltrc/trctraj.h>
+#include <sftltrc/trcctrl.h>
+#include <sftltrc/trcdata.h>
+#include <sftltrc/trcellp.h>
 
 #include <libgui/clip/clip.h>
 

@@ -7,11 +7,11 @@
 
 //------------------------------------------------------------------------------
 
-#include <libcommon/vl.h>
+#include <sftlstd/vl.h>
 #include <libcommon/vl3d.h>
 
 #include <libgui/imgui/imgui.h>
-#include <lib/trj/trcobj.h>
+#include <sftltrc/trcobj.h>
 
 #include "gui_w.h"
 
