@@ -13,13 +13,35 @@
 #include <sftlstd/env.h>
 #include <sftlstd/vl.h>
 
+#include <sftltrc/trcspl.h>
+
+//------------------------------------------------------------------------------
+
+typedef struct trcellp_intf
+{
+	char 				guid[32];
+	
+	s32_t				data_sz;
+	s32_t 				attr_sz;
+	
+	s8_t (*init) 		(void *ellp, void *attr);
+	s8_t (*free) 		(void *ellp);
+	s8_t (*pack) 		(void *ellp, s_trcspl *spl);
+	s8_t (*unpack) 		(void *ellp, s_trcspl *spl);
+	s8_t (*save) 		(void *ellp, u8_t **v_file);
+	s8_t (*load) 		(void *ellp, u8_t **v_file);
+	s8_t (*lla) 		(void *ellp, f64_t *lla, f64_t *ecef);
+	s8_t (*glla) 		(void *ellp, f64_t *lla, f64_t *ecef);
+	s8_t (*ecef) 		(void *ellp, f64_t *ecef, f64_t *lla);
+	s8_t (*ecefrot) 	(void *ellp, f64_t *ecef, f64_t *c_tn);
+	s8_t (*nwhvel)		(void *ellp, f64_t *lla, f64_t *vel, f64_t *nwh);
+	
+}	s_trcellp_intf;
+
 //------------------------------------------------------------------------------
 
 typedef struct trcellp
 {
-	char 			desc[32];
-	u32_t 			hash;
-	
 	f64_t 			a;
 	f64_t 			b;
 	f64_t 			c;
@@ -46,6 +68,54 @@ typedef struct trcellp_attr
 	f64_t 			f;
 
 }	s_trcellp_attr;
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_init (s_trcctrl *ctrl, void *attr)
+{
+	return ctrl->intf->init(ctrl, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_free (s_trcctrl *ctrl)
+{
+	return ctrl->intf->free(ctrl);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_pack (s_trcctrl *ctrl, s_trcspl *spl)
+{
+	return ctrl->intf->pack(ctrl, spl);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_unpack (s_trcctrl *ctrl, s_trcspl *spl)
+{
+	return ctrl->intf->unpack(ctrl, spl);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_save (s_trcctrl *ctrl, u8_t **v_file)
+{
+	return ctrl->intf->save(ctrl, v_file);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s8_t trcellp_load (s_trcctrl *ctrl, u8_t **v_file)
+{
+	return ctrl->intf->load(ctrl, v_file);
+}
 
 //------------------------------------------------------------------------------
 

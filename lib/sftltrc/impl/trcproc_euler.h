@@ -107,7 +107,7 @@ inline void __trcproc_euler_correct_calc__(s_trcproc_euler *self, s_trcobj *obj,
 
     vl3_vsumm(&obj->pos[1][0], &obj->pos[1][0], inert_acc, obj->log_ls[offset].time[1]);
 
-    vl3_vcopy(&obj->pos[2][0], inert_acc);
+    vl3v_copy(&obj->pos[2][0], inert_acc);
 
     return;
 }
@@ -126,12 +126,12 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
         // assume fixed step for now
         f64_t h = obj->log_ls[0x01].time[1];
 
-        if (offset >= 0x01) { vl3_vcopy(&self->pos[0][0], &l0->pos[0][0]); }
+        if (offset >= 0x01) { vl3v_copy(&self->pos[0][0], &l0->pos[0][0]); }
         else  				{ vl3_vinter(&self->pos[0][0], &l1->pos[0][0], &l2->pos[0][0], -1.0); }
 
-        vl3_vcopy(&self->pos[1][0], &l1->pos[0][0]);
+        vl3v_copy(&self->pos[1][0], &l1->pos[0][0]);
 
-        if (offset <= obj->log_sz-2) { vl3_vcopy(&self->pos[2][0], &l2->pos[0][0]); }
+        if (offset <= obj->log_sz-2) { vl3v_copy(&self->pos[2][0], &l2->pos[0][0]); }
         else  							 { vl3_vinter(&self->pos[2][0], &l1->pos[0][0], &l0->pos[0][0], -1.0); }
 
         vl3_vset(vel, 0.0);
@@ -145,18 +145,18 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
 
         //handle last and first
         //acc
-        if (offset == 0x01) { vl3_vcopy(&l0->pos[2][0], &l1->pos[2][0]); }
-        if (offset == obj->log_sz-1) { vl3_vcopy(&l1->pos[2][0], &l0->pos[2][0]); }
+        if (offset == 0x01) { vl3v_copy(&l0->pos[2][0], &l1->pos[2][0]); }
+        if (offset == obj->log_sz-1) { vl3v_copy(&l1->pos[2][0], &l0->pos[2][0]); }
 
 
         f64_t *rot = &l1->rot[1][0];
 
-        if (offset >= 0x01) { vl3_mcopy(&self->rot[0][0], &l0->rot[0][0]); }
+        if (offset >= 0x01) { vl3m_copy(&self->rot[0][0], &l0->rot[0][0]); }
         else  				{ vl3_rinter(&self->rot[0][0], &l1->rot[0][0], &l2->rot[0][0], -1.0); }
 
-        vl3_mcopy(&self->rot[1][0], &l1->rot[0][0]);
+        vl3m_copy(&self->rot[1][0], &l1->rot[0][0]);
 
-        if (offset <= obj->log_sz-2) { vl3_mcopy(&self->rot[2][0], &l2->rot[0][0]); }
+        if (offset <= obj->log_sz-2) { vl3m_copy(&self->rot[2][0], &l2->rot[0][0]); }
         else  							 { vl3_rinter(&self->rot[2][0], &l1->rot[0][0], &l0->rot[0][0], -1.0); }
 
     //	vl_rd1f(&self->rd1_data, &self->rd1[0][0], &self->rot[0][0], &self->rot[1][0]);
@@ -172,13 +172,13 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
     {
         if (offset == 0x00)
         {
-            vl3_vcopy(&obj->pos[0][0], &obj->log_ls[0].pos[0][0]);
-            vl3_vcopy(&obj->pos[1][0], &obj->log_ls[0].pos[1][0]);
-            vl3_vcopy(&obj->pos[2][0], &obj->log_ls[0].pos[2][0]);
+            vl3v_copy(&obj->pos[0][0], &obj->log_ls[0].pos[0][0]);
+            vl3v_copy(&obj->pos[1][0], &obj->log_ls[0].pos[1][0]);
+            vl3v_copy(&obj->pos[2][0], &obj->log_ls[0].pos[2][0]);
 
-            vl3_mcopy(&obj->rot[0][0], &obj->log_ls[0].rot[0][0]);
-            vl3_mcopy(&obj->rot[1][0], &obj->log_ls[0].rot[1][0]);
-            vl3_mcopy(&obj->rot[2][0], &obj->log_ls[0].rot[2][0]);
+            vl3m_copy(&obj->rot[0][0], &obj->log_ls[0].rot[0][0]);
+            vl3m_copy(&obj->rot[1][0], &obj->log_ls[0].rot[1][0]);
+            vl3m_copy(&obj->rot[2][0], &obj->log_ls[0].rot[2][0]);
         }
 
         else

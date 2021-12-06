@@ -213,13 +213,13 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 			s_trcobj_data *log = &obj->log_ls[i];
 			self->time[i] = log->time[0];
 
-            vl3_mcopy(&self->abs_rot[i*9], &log->rot[0][0]);
+            vl3m_copy(&self->abs_rot[i*9], &log->rot[0][0]);
             s_vl_hpr abs_hpr = vl_hpr(&self->abs_rot[i*9]);
             self->abs_hpr[i*3 + 0x00] = abs_hpr.heading;
             self->abs_hpr[i*3 + 0x01] = abs_hpr.pitch;
             self->abs_hpr[i*3 + 0x02] = abs_hpr.roll;
-            vl3_vcopy(&self->abs_pos[i*3], &log->pos[0][0]);
-            vl3_vcopy(&self->abs_vel[i*3], &log->pos[1][0]);
+            vl3v_copy(&self->abs_pos[i*3], &log->pos[0][0]);
+            vl3v_copy(&self->abs_vel[i*3], &log->pos[1][0]);
             vl3_vsumm(&self->abs_acc[i*3], &log->pos[2][0], log->pos_force, -1.0 / obj->pos_inert);
 			
 			// support for implot strange api
@@ -244,10 +244,10 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 			
 			else
 			{
-				vl3_mcopy(&self->ecef_rot[i*9], &obj->log_ls[i].rot[0][0]);
-				vl3_vcopy(&self->ecef_pos[i*3], &obj->log_ls[i].pos[0][0]);
-				vl3_vcopy(&self->ecef_vel[i*3], &obj->log_ls[i].pos[1][0]);
-				vl3_vcopy(&self->ecef_acc[i*3], &obj->log_ls[i].pos[2][0]);
+				vl3m_copy(&self->ecef_rot[i*9], &obj->log_ls[i].rot[0][0]);
+				vl3v_copy(&self->ecef_pos[i*3], &obj->log_ls[i].pos[0][0]);
+				vl3v_copy(&self->ecef_vel[i*3], &obj->log_ls[i].pos[1][0]);
+				vl3v_copy(&self->ecef_acc[i*3], &obj->log_ls[i].pos[2][0]);
 			}
 			
 			if (self->ellp != NULL && self->ref != NULL)
@@ -259,7 +259,7 @@ inline u8_t trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
 
 				s_vl_hpr hpr = vl_hpr(ctn_local);
 				
-				vl3_mcopy(&self->ctn[i*9], ctn_local);
+				vl3m_copy(&self->ctn[i*9], ctn_local);
 				self->heading[i] 	= hpr.heading;
 				self->pitch[i] 		= hpr.pitch;
 				self->roll[i] 		= hpr.roll;

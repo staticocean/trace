@@ -308,7 +308,7 @@ inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
 //
 //    vl_mmul_v(g, rot, g_);
 	
-	vl3_vcopy(g, g_);
+	vl3v_copy(g, g_);
 	
 	return 0x00;
 }
@@ -512,7 +512,7 @@ inline u8_t trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
 
                 if (obj->log_sz == 0x01)
                 {
-                    vl3_mcopy(&obj->log_ls[obj->log_sz-1].rot[0][0], &obj->rot[0][0]);
+                    vl3m_copy(&obj->log_ls[obj->log_sz-1].rot[0][0], &obj->rot[0][0]);
                 }
             }
         }

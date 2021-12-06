@@ -18,9 +18,12 @@
 
 typedef struct trctraj_intf
 {
-	char 				desc[32];
+	char 				guid[32];
 	
-	s8_t (*init) 		(void *traj);
+	s32_t				data_sz;
+	s32_t 				attr_sz;
+	
+	s8_t (*init) 		(void *traj, void *attr);
 	s8_t (*free) 		(void *traj);
 	s8_t (*pack) 		(void *traj, s_trcspl *spl);
 	s8_t (*unpack) 		(void *traj, s_trcspl *spl);
@@ -48,20 +51,28 @@ typedef struct trctraj
 	
 } 	s_trctraj;
 
+typedef struct trctraj_attr
+{
+	char 				name[32];
+	
+} 	s_trctraj_attr;
+
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_init (s_trctraj **traj)
+s8_t trctraj_init (s_trctraj *traj, s_trctraj_attr *attr)
 {
-	return (*traj)->intf->init(traj);
+	memcpy(traj->name, attr->name, sizeof(traj->name));
+	
+	return traj->intf->init(traj, attr);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_free (s_trctraj **traj)
+s8_t trctraj_free (s_trctraj *traj)
 {
-	return (*traj)->intf->free(traj);
+	return traj->intf->free(traj);
 }
 
 //------------------------------------------------------------------------------

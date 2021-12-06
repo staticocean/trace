@@ -182,7 +182,7 @@ inline u8_t trcdata_ramld_render(s_trcdata_ramld *self, s_trcobj *obj)
 			
 			else
 			{
-				vl3_vcopy(ecef, &obj->log_ls[i].pos[0][0]);
+				vl3v_copy(ecef, &obj->log_ls[i].pos[0][0]);
 			}
 		}
 	}

@@ -18,9 +18,12 @@
 
 typedef struct trcdata_intf
 {
-	char 				desc[32];
+	char 				guid[32];
 	
-	s8_t (*init) 		(void *data);
+	s32_t				data_sz;
+	s32_t 				attr_sz;
+	
+	s8_t (*init) 		(void *data, void *attr);
 	s8_t (*free) 		(void *data);
 	s8_t (*pack) 		(void *data, s_trcspl *spl);
 	s8_t (*unpack) 		(void *data, s_trcspl *spl);
@@ -48,17 +51,17 @@ typedef struct trcdata
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_init (s_trcdata **data)
+s8_t trcdata_init (s_trcdata *data, void *attr)
 {
-	return (*data)->intf->init(data);
+	return data->intf->init(data, attr);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_free (s_trcdata **data)
+s8_t trcdata_free (s_trcdata *data)
 {
-	return (*data)->intf->free(data);
+	return data->intf->free(data);
 }
 
 //------------------------------------------------------------------------------

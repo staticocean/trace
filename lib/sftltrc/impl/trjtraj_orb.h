@@ -67,10 +67,10 @@ inline u8_t trctraj_orb_init(s_trctraj_orb *self, s_trctraj_orb_init attr)
 	self->radius = attr.radius;
 	self->rate   = attr.rate;
 	
-	vl3_mcopy(self->tilt, attr.tilt);
+	vl3m_copy(self->tilt, attr.tilt);
 	
 	self->s_rate = attr.s_rate;
-	vl3_mcopy(self->s_tilt, attr.s_tilt);
+	vl3m_copy(self->s_tilt, attr.s_tilt);
 	
 	return 0x00;
 }

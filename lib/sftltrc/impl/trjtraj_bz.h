@@ -459,12 +459,12 @@ inline u8_t trctraj_bz_pos_raw(s_trctraj_bz *self, f64_t time, f64_t *pos)
 
     if (time < self->pts[0x00].time + 1E-9)
     {
-        vl3_vcopy(pos, self->pts[0x00].pos_p);
+        vl3v_copy(pos, self->pts[0x00].pos_p);
     }
 
     else if (time > self->pts[self->pts_offset-1].time - 1E-9)
     {
-        vl3_vcopy(pos, self->pts[self->pts_offset-1].pos_p);
+        vl3v_copy(pos, self->pts[self->pts_offset-1].pos_p);
     }
 
     else
@@ -487,7 +487,7 @@ inline u8_t trctraj_bz_pos_raw(s_trctraj_bz *self, f64_t time, f64_t *pos)
         if (fabs(time-self->pts[offset].time) < 1E-9)
         {
             f64_t vel[3];
-            vl3_vcopy(pos, self->pts[offset].pos_p);
+            vl3v_copy(pos, self->pts[offset].pos_p);
             vl3_vdiv_v(vel, self->pts[offset].pos_d, self->pts[offset].pos_t);
             vl3_vsumm(pos, pos, vel, time - self->pts[offset].time);
         }
@@ -495,7 +495,7 @@ inline u8_t trctraj_bz_pos_raw(s_trctraj_bz *self, f64_t time, f64_t *pos)
         else if (fabs(time-self->pts[offset+1].time) < 1E-9)
         {
             f64_t vel[3];
-            vl3_vcopy(pos, self->pts[offset+1].pos_p);
+            vl3v_copy(pos, self->pts[offset+1].pos_p);
             vl3_vdiv_v(vel, self->pts[offset+1].pos_d, self->pts[offset+1].pos_t);
             vl3_vsumm(pos, pos, vel, time - self->pts[offset+1].time);
         }

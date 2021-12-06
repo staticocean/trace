@@ -110,7 +110,10 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
 	return 0x00;
 }
 
-inline s32_t trceng_obj_index (s_trceng *eng, s_trcobj *obj)
+//------------------------------------------------------------------------------
+
+inline
+s32_t trceng_obj_index (s_trceng *eng, s_trcobj *obj)
 {
 	return (u32_t) ((intptr_t) eng->obj_ls - (intptr_t) obj)
 	/ sizeof(s_trcobj);
@@ -489,16 +492,16 @@ s8_t trceng_log (s_trceng *eng)
 		data->time[0] = eng->time[0];
 		data->time[1] = eng->time[1];
 		
-		vl3_mcopy(&data->rot[0][0], &obj->rot[0][0]);
-		vl3_mcopy(&data->rot[1][0], &obj->rot[1][0]);
-		vl3_mcopy(&data->rot[2][0], &obj->rot[2][0]);
+		vl3m_copy(&data->rot[0][0], &obj->rot[0][0]);
+		vl3m_copy(&data->rot[1][0], &obj->rot[1][0]);
+		vl3m_copy(&data->rot[2][0], &obj->rot[2][0]);
 
-		vl3_mcopy(&data->pos[0][0], &obj->pos[0][0]);
-		vl3_mcopy(&data->pos[1][0], &obj->pos[1][0]);
-		vl3_mcopy(&data->pos[2][0], &obj->pos[2][0]);
+		vl3m_copy(&data->pos[0][0], &obj->pos[0][0]);
+		vl3m_copy(&data->pos[1][0], &obj->pos[1][0]);
+		vl3m_copy(&data->pos[2][0], &obj->pos[2][0]);
 		
-		vl3_vcopy(data->rot_force, obj->rot_force);
-		vl3_vcopy(data->pos_force, obj->pos_force);
+		vl3v_copy(data->rot_force, obj->rot_force);
+		vl3v_copy(data->pos_force, obj->pos_force);
 		
 		obj->log_sz++;
 	}

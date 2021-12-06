@@ -19,9 +19,12 @@
 
 typedef struct trcproc_intf
 {
-	char 				desc[32];
+	char 				guid[32];
 	
-	s8_t (*init) 		(void *proc);
+	s32_t				data_sz;
+	s32_t 				attr_sz;
+	
+	s8_t (*init) 		(void *proc, void *attr);
 	s8_t (*free) 		(void *proc);
 	s8_t (*pack) 		(void *proc, s_trcspl *spl);
 	s8_t (*unpack) 		(void *proc, s_trcspl *spl);
@@ -43,20 +46,26 @@ typedef struct trcproc
 	
 } 	s_trcproc;
 
+typedef struct trcproc_attr
+{
+	s32_t temp;
+	
+} 	s_trcproc_attr;
+
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_init (s_trcproc **proc)
+s8_t trcproc_init (s_trcproc *proc, s_trcproc_attr *attr)
 {
-	return (*proc)->intf->init(proc);
+	return proc->intf->init(proc, attr);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_free (s_trcproc **proc)
+s8_t trcproc_free (s_trcproc *proc)
 {
-	return (*proc)->intf->init(proc);
+	return proc->intf->free(proc);
 }
 
 //------------------------------------------------------------------------------

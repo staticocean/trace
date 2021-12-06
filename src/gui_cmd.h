@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sftlgui/imgui/imgui.h>
+#include <imgui/imgui.h>
 
 #include <sftlstd/vl.h>
 

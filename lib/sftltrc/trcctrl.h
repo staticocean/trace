@@ -18,9 +18,12 @@
 
 typedef struct trcctrl_intf
 {
-	char 				desc[32];
+	char 				guid[32];
 	
-	s8_t (*init) 		(void *ctrl);
+	s32_t				data_sz;
+	s32_t 				attr_sz;
+	
+	s8_t (*init) 		(void *ctrl, void *attr);
 	s8_t (*free) 		(void *ctrl);
 	s8_t (*pack) 		(void *ctrl, s_trcspl *spl);
 	s8_t (*unpack) 		(void *ctrl, s_trcspl *spl);
@@ -48,17 +51,17 @@ typedef struct trcctrl
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_init (s_trcctrl **ctrl)
+s8_t trcctrl_init (s_trcctrl *ctrl, void *attr)
 {
-	return (*ctrl)->intf->init(ctrl);
+	return ctrl->intf->init(ctrl, attr);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_free (s_trcctrl **ctrl)
+s8_t trcctrl_free (s_trcctrl *ctrl)
 {
-	return (*ctrl)->intf->free(ctrl);
+	return ctrl->intf->free(ctrl);
 }
 
 //------------------------------------------------------------------------------
@@ -106,7 +109,7 @@ s8_t trcctrl_reset (s_trcctrl *ctrl, s_trcobj *obj)
 inline
 s8_t trcctrl_update (s_trcctrl *ctrl, s_trcobj *obj)
 {
-	return ctrl->intf->update(ctrl);
+	return ctrl->intf->update(ctrl, obj);
 }
 
 //------------------------------------------------------------------------------

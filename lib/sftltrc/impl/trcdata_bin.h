@@ -111,20 +111,20 @@ inline u8_t trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
 		block.pitch   = self->ram.pitch[i];
 		block.roll    = self->ram.roll[i];
 		
-		vl3_vcopy(block.lla_pos, &self->ram.lla_pos[i*3]);
-		vl3_vcopy(block.lla_vel, &self->ram.lla_vel[i*3]);
-		vl3_vcopy(block.lla_acc, &self->ram.lla_acc[i*3]);
+		vl3v_copy(block.lla_pos, &self->ram.lla_pos[i*3]);
+		vl3v_copy(block.lla_vel, &self->ram.lla_vel[i*3]);
+		vl3v_copy(block.lla_acc, &self->ram.lla_acc[i*3]);
 		
-		vl3_vcopy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
-		vl3_vcopy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
-		vl3_vcopy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
+		vl3v_copy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
+		vl3v_copy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
+		vl3v_copy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
 //
 //		vl_vcopy(block.ref_pos, &self->ram.[i*3]);
 //		vl_vcopy(block.ref_vel, &self->ram.lla_vel[i*3]);
 //		vl_vcopy(block.ref_acc, &self->ram.lla_acc[i*3]);
 		
-		vl3_vcopy(block.tied_acc, &self->ram.tied_acc[i*3]);
-		vl3_vcopy(block.tied_grs, &self->ram.tied_grs[i*3]);
+		vl3v_copy(block.tied_acc, &self->ram.tied_acc[i*3]);
+		vl3v_copy(block.tied_grs, &self->ram.tied_grs[i*3]);
 		
 		fwrite(&block, sizeof(s_trcdata_bin_block), 1, file_data);
 	}
