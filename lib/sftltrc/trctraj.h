@@ -20,15 +20,15 @@ typedef struct trctraj_intf
 {
 	char 				desc[32];
 	
-	s8_t (*init) 		(void *traj_data);
-	s8_t (*free) 		(void *traj_data);
-	s8_t (*pack) 		(void *traj_data, s_trcspl *spl);
-	s8_t (*unpack) 		(void *traj_data, s_trcspl *spl);
-	s8_t (*save) 		(void *traj_data, u8_t **v_file);
-	s8_t (*load) 		(void *traj_data, u8_t **v_file);
-	s8_t (*compile) 	(void *traj_data);
-	s8_t (*pos) 		(void *traj_data, f64_t time, f64_t *pos);
-	s8_t (*rot) 		(void *traj_data, f64_t time, f64_t *rot);
+	s8_t (*init) 		(void *traj);
+	s8_t (*free) 		(void *traj);
+	s8_t (*pack) 		(void *traj, s_trcspl *spl);
+	s8_t (*unpack) 		(void *traj, s_trcspl *spl);
+	s8_t (*save) 		(void *traj, u8_t **v_file);
+	s8_t (*load) 		(void *traj, u8_t **v_file);
+	s8_t (*compile) 	(void *traj);
+	s8_t (*pos) 		(void *traj, f64_t time, f64_t *pos);
+	s8_t (*rot) 		(void *traj, f64_t time, f64_t *rot);
 	
 }	s_trctraj_intf;
 

@@ -24,6 +24,7 @@ add_compile_definitions(IMGUI_DEFINE_MATH_OPERATORS)
 
 include_directories(./)
 include_directories(./lib/)
+include_directories(./lib/sftlstd/include/)
 include_directories(./src/)
 
 if (UNIX)
