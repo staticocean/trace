@@ -23,9 +23,11 @@ add_compile_definitions(IMGUI_DEFINE_MATH_OPERATORS)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-int-to-void-pointer-cast")
 
 include_directories(./)
+include_directories(./src/)
 include_directories(./lib/)
 include_directories(./lib/sftlstd/include/)
-include_directories(./src/)
+include_directories(./lib/sftltrc/include/)
+include_directories(./lib/sftlgui/include/)
 
 if (UNIX)
 
@@ -47,11 +49,13 @@ add_executable(trace ${src_main} ${src_fmemopen} ${src_tinymat} ${src_json11})
 
 add_subdirectory(lib/sftlgui)
 add_subdirectory(lib/sftlstd)
+add_subdirectory(lib/sftltrc)
 #add_subdirectory(lib/json11)
 #add_subdirectory(lib/tinymat)
 
 target_link_libraries(trace LINK_PUBLIC sftlgui)
 target_link_libraries(trace LINK_PUBLIC sftlstd)
+target_link_libraries(trace LINK_PUBLIC sftltrc)
 
 target_link_libraries(trace LINK_PUBLIC fmemopen)
 #target_link_libraries(trace LINK_PUBLIC json11)
