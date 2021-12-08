@@ -29,6 +29,10 @@ typedef struct trcctrl_intf
 	s8_t (*load) 		(void *ctrl, s_trcspl *spl, u8_t **v_file);
 	s8_t (*reset) 		(void *ctrl, s_trcobj *obj);
 	s8_t (*update) 		(void *ctrl, s_trcobj *obj);
+
+	void (*gui_attr)	(void *ctrl, void *attr);
+	void (*gui_edit)	(void *ctrl);
+	void (*gui_view)	(void *ctrl);
 	
 } 	s_trcctrl_intf;
 
@@ -100,6 +104,43 @@ inline
 s8_t trcctrl_update (s_trcctrl *ctrl, s_trcobj *obj)
 {
 	return ctrl->intf->update(ctrl, obj);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcctrl_gui_attr (s_trcctrl *ctrl, s_trcctrl_attr *attr)
+{
+	ctrl->intf->gui_attr(ctrl, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcctrl_gui_edit (s_trcctrl *ctrl)
+{
+	ctrl->intf->gui_edit(ctrl);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcctrl_gui_view (s_trcctrl *ctrl)
+{
+	ctrl->intf->gui_view(ctrl);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s_trcctrl* trcctrl_malloc (s_trcctrl_intf *intf_ctrl, s_trcctrl_attr *attr)
+{
+	s_trcctrl *ctrl = (s_trcctrl*) malloc(intf_ctrl->data_sz);
+	ctrl->intf = intf_ctrl;
+	
+	trcctrl_init(ctrl, attr);
+	
+	return ctrl;
 }
 
 //------------------------------------------------------------------------------

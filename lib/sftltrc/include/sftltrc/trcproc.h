@@ -30,6 +30,10 @@ typedef struct trcproc_intf
 	s8_t (*load) 		(void *proc, s_trcspl *spl, u8_t **v_file);
 	s8_t (*update) 		(void *proc, s_trcobj *obj, s32_t offset);
 	
+	void (*gui_attr)	(void *proc, void *attr);
+	void (*gui_edit)	(void *proc);
+	void (*gui_view)	(void *proc);
+	
 } 	s_trcproc_intf;
 
 //------------------------------------------------------------------------------
@@ -92,6 +96,43 @@ inline
 s8_t trcproc_update (s_trcproc *proc, s_trcobj *obj, s32_t offset)
 {
 	return proc->intf->update(proc, obj, offset);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcproc_gui_attr (s_trcproc *proc, s_trcproc_attr *attr)
+{
+	proc->intf->gui_attr(proc, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcproc_gui_edit (s_trcproc *proc)
+{
+	proc->intf->gui_edit(proc);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcproc_gui_view (s_trcproc *proc)
+{
+	proc->intf->gui_view(proc);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s_trcproc* trcproc_malloc (s_trcproc_intf *intf_proc, s_trcproc_attr *attr)
+{
+	s_trcproc *proc = (s_trcproc*) malloc(intf_proc->data_sz);
+	proc->intf = intf_proc;
+	
+	trcproc_init(proc, attr);
+	
+	return proc;
 }
 
 //------------------------------------------------------------------------------

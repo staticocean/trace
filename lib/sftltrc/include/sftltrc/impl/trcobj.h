@@ -96,13 +96,6 @@ s8_t trcobj_init (s_trcobj *obj, s_trcobj_attr *attr)
 {
 	strcpy(obj->name, attr->name);
 	
-	obj->traj_sz = 0x00;
-	obj->ctrl_sz = 0x00;
-	obj->data_sz = 0x00;
-	
-	obj->log_ls = NULL;
-	obj->log_sz = 0x00;
-	
 	return obj->intf->init(obj, attr);
 }
 
@@ -179,6 +172,38 @@ s_trcobj* trcobj_malloc (s_trcobj_intf *intf_obj, s_trcobj_attr *attr)
 }
 
 //------------------------------------------------------------------------------
+
+static
+s8_t __trcobj_init__ (void *__obj__, void *__attr__)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcobj_free__ (void *__obj__)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcobj_save__ (void *__obj__, s_trcspl *spl, u8_t **v_file)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcobj_load__ (void *__obj__, s_trcspl *spl, u8_t **v_file)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
 //
 //void trcobj_print (s_trcobj *obj)
 //{
@@ -228,112 +253,143 @@ s_trcobj* trcobj_malloc (s_trcobj_intf *intf_obj, s_trcobj_attr *attr)
 
 //------------------------------------------------------------------------------
 
-//void trcobj_addtraj (s_trcobj *obj, void *traj)
-//{
-//	s_trctraj *traj = &self->traj_ls[self->traj_sz];
-//	self->traj_sz += 0x01;
-//
-//	*api = traj_api;
-//	api->init(&api->data, api->config);
-//}
-//
-////------------------------------------------------------------------------------
-//
-//void trcobj_traj_del (s_trcobj *obj, s_trctraj *traj)
-//{
-//	s32_t offset;
-//
-//	api->free(&api->data);
-//
-//	if (obj->traj_sz == 0x00) { return 0x00; }
-//
-//	for (s32_t i = 0; i < obj->traj_sz-1; ++i)
-//	{
-//		if (&obj->traj_ls[i] == api)
-//		{ offset = 0x01; }
-//
-//		obj->traj_ls[i] = obj->traj_ls[i+offset];
-//	}
-//
-//	obj->traj_sz -= 0x01;
-//}
-//
-////------------------------------------------------------------------------------
-//
-//s8_t trcobj_ctrl_add (s_trcobj *obj, s_trcctrl *ctrl)
-//{
-//	ctrl->hash = crc32_iso_str(ctrl->desc);
-//
-//	s_trcctrl *api = &self->ctrl_ls[obj->ctrl_sz];
-//	obj->ctrl_sz++;
-//
-//	*api = *ctrl;
-//	api->init(&api->data, api->config);
-//
-//	return 0x00;
-//}
-//
-////------------------------------------------------------------------------------
-//
-//s8_t trcobj_ctrl_del (s_trcobj *obj, s_trcctrl *ctrl)
-//{
-//	s32_t offset = 0x00;
-//
-//	api->free(&api->data);
-//
-//	if (self->ctrl_sz == 0x00) { return 0x00; }
-//
-//	for (s32_t i = 0; i < self->ctrl_sz-1; ++i)
-//	{
-//		if (&self->ctrl_ls[i] == api)
-//		{ offset = 0x01; }
-//
-//		self->ctrl_ls[i] = self->ctrl_ls[i+offset];
-//	}
-//
-//	self->ctrl_sz -= 0x01;
-//
-//	return 0x00;
-//}
+s_trcobj_intf __trcobj__ = {
+	.guid   = "trcobj",
+
+	.data_sz = sizeof(s_trcobj),
+	.attr_sz = sizeof(s_trcobj_attr),
+	
+	.init   = __trcobj_init__,
+	.free   = __trcobj_free__,
+	.save   = __trcobj_save__,
+	.load   = __trcobj_load__,
+};
 
 //------------------------------------------------------------------------------
 
-//s8_t trcobj_data_add (s_trcobj *self, s_trcdata data_api)
-//{
-//	data_api.hash = crc32_iso_str(data_api.desc);
-//
-//	s_trcdata *api = &self->data_ls[self->data_sz];
-//	self->data_sz += 0x01;
-//
-//	*api = data_api;
-//	api->init(&api->data, api->config);
-//
-//	return 0x00;
-//}
-//
-////------------------------------------------------------------------------------
-//
-//s8_t trcobj_data_del (s_trcobj *self, s_trcdata *api)
-//{
-//	s32_t i;
-//	s32_t offset = 0x00;
-//
-//	api->free(&api->data);
-//
-//	if (self->data_sz == 0x00) { return 0x00; }
-//
-//	for (s32_t i = 0; i < self->data_sz-1; ++i)
-//	{
-//		if (&self->data_ls[i] == api)
-//		{ offset = 0x01; }
-//
-//		self->data_ls[i] = self->data_ls[i+offset];
-//	}
-//
-//	self->data_sz -= 0x01;
-//
-//	return 0x00;
-//}
+s8_t trcobj_init (s_trcobj **obj, s_trcobj_attr *attr)
+{
+	*obj = (s_trcobj*) malloc(sizeof(s_trcobj));
+	
+	(*obj)->intf = &__trcobj__;
+	
+	trcobj_init(*obj, attr);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+void trcobj_traj_add (s_trcobj *obj, s_trctraj *traj)
+{
+	traj.hash = crc32_iso_str(traj->desc);
+	
+	s_trctraj *traj = &self->traj_ls[self->traj_sz];
+	self->traj_sz += 0x01;
+	
+	*api = traj_api;
+	api->init(&api->data, api->config);
+}
+
+//------------------------------------------------------------------------------
+
+void trcobj_traj_del (s_trcobj *obj, s_trctraj *traj)
+{
+	s32_t offset;
+	
+	api->free(&api->data);
+	
+	if (obj->traj_sz == 0x00) { return 0x00; }
+	
+	for (s32_t i = 0; i < obj->traj_sz-1; ++i)
+	{
+		if (&obj->traj_ls[i] == api)
+		{ offset = 0x01; }
+		
+		obj->traj_ls[i] = obj->traj_ls[i+offset];
+	}
+	
+	obj->traj_sz -= 0x01;
+}
+
+//------------------------------------------------------------------------------
+
+s8_t trcobj_ctrl_add (s_trcobj *obj, s_trcctrl *ctrl)
+{
+	ctrl->hash = crc32_iso_str(ctrl->desc);
+	
+	s_trcctrl *api = &self->ctrl_ls[obj->ctrl_sz];
+	obj->ctrl_sz++;
+	
+	*api = *ctrl;
+	api->init(&api->data, api->config);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+s8_t trcobj_ctrl_del (s_trcobj *obj, s_trcctrl *ctrl)
+{
+	s32_t offset = 0x00;
+	
+	api->free(&api->data);
+	
+	if (self->ctrl_sz == 0x00) { return 0x00; }
+	
+	for (s32_t i = 0; i < self->ctrl_sz-1; ++i)
+	{
+		if (&self->ctrl_ls[i] == api)
+		{ offset = 0x01; }
+		
+		self->ctrl_ls[i] = self->ctrl_ls[i+offset];
+	}
+	
+	self->ctrl_sz -= 0x01;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+s8_t trcobj_data_add (s_trcobj *self, s_trcdata data_api)
+{
+	data_api.hash = crc32_iso_str(data_api.desc);
+	
+	s_trcdata *api = &self->data_ls[self->data_sz];
+	self->data_sz += 0x01;
+	
+	*api = data_api;
+	api->init(&api->data, api->config);
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+s8_t trcobj_data_del (s_trcobj *self, s_trcdata *api)
+{
+	s32_t i;
+	s32_t offset = 0x00;
+	
+	api->free(&api->data);
+	
+	if (self->data_sz == 0x00) { return 0x00; }
+	
+	for (s32_t i = 0; i < self->data_sz-1; ++i)
+	{
+		if (&self->data_ls[i] == api)
+		{ offset = 0x01; }
+		
+		self->data_ls[i] = self->data_ls[i+offset];
+	}
+	
+	self->data_sz -= 0x01;
+	
+	return 0x00;
+}
 
 //------------------------------------------------------------------------------
 
@@ -390,61 +446,69 @@ void trcobj_load (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
 	}
 }
 
-//void trcobj_copy (s_trceng *eng, s_trcobj *dest, s_trcobj *src)
-//{
-//	// Prevent GUI glitches in case of task switch
-//	dest->traj_sz = 0x00;
-//	dest->ctrl_sz = 0x00;
-//	dest->data_sz = 0x00;
-//
-//	for (s32_t i = 0; i < src->traj_sz; ++i)
-//	{
-//		trctraj_copy(eng, &dest->traj_ls[i], &src->traj_ls[i]);
-//	}
-//
-//	for (s32_t i = 0; i < src->ctrl_sz; ++i)
-//	{
-//		trcctrl_copy(eng, &dest->ctrl_ls[i], &src->ctrl_ls[i]);
-//	}
-//
-//	for (s32_t i = 0; i < src->data_sz; ++i)
-//	{
-//		trcdata_copy(eng, &dest->data_ls[i], &src->data_ls[i]);
-//	}
-//
-//	dest->traj_sz = src->traj_sz;
-//	dest->ctrl_sz = src->ctrl_sz;
-//	dest->data_sz = src->data_sz;
-//}
+void trcobj_copy (s_trceng *eng, s_trcobj *dest, s_trcobj *src)
+{
+	// Prevent GUI glitches in case of task switch
+	dest->traj_sz = 0x00;
+	dest->ctrl_sz = 0x00;
+	dest->data_sz = 0x00;
+
+	for (s32_t i = 0; i < src->traj_sz; ++i)
+	{
+		trctraj_copy(eng, &dest->traj_ls[i], &src->traj_ls[i]);
+	}
+
+	for (s32_t i = 0; i < src->ctrl_sz; ++i)
+	{
+		trcctrl_copy(eng, &dest->ctrl_ls[i], &src->ctrl_ls[i]);
+	}
+
+	for (s32_t i = 0; i < src->data_sz; ++i)
+	{
+		trcdata_copy(eng, &dest->data_ls[i], &src->data_ls[i]);
+	}
+
+	dest->traj_sz = src->traj_sz;
+	dest->ctrl_sz = src->ctrl_sz;
+	dest->data_sz = src->data_sz;
+}
 
 //------------------------------------------------------------------------------
 
-//void trcobj_print(s_trcobj *obj)
-//{
-//	printf(vl_lsep);
-//	printf("desc        [%s] \r\n", obj->desc);
-//	printf("hash        [%08X] \r\n", obj->hash);
-//	//	printf("ref         [%s] \r\n", obj->ref->name);
-//	printf("traj_sz [%d] \r\n", obj->traj_sz);
-//	printf("ctrl_sz [%d] \r\n", obj->ctrl_sz);
-//	printf("data_sz [%d] \r\n", obj->data_sz);
-//
-//	printf(vl_lsep);
-//	printf("traj_ls \r\n");
-//
-//	for (s32_t i = 0; i < obj->traj_sz; ++i)
-//	{
-//		printf("- [%02d] %s \r\n", i, obj->traj_ls[i].desc);
-//	}
-//
-//	printf(vl_lsep);
-//	printf("ctrl_ls \r\n");
-//
-//	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
-//	{
-//		printf("- [%02d] %s \r\n", i, obj->ctrl_ls[i].desc);
-//	}
-//}
+typedef struct trcobj_init
+{
+	char 		desc[32];
+	
+} s_trcobj_init;
+
+//------------------------------------------------------------------------------
+
+void trcobj_print(s_trcobj *obj)
+{
+	printf(vl_lsep);
+	printf("desc        [%s] \r\n", obj->desc);
+	printf("hash        [%08X] \r\n", obj->hash);
+	//	printf("ref         [%s] \r\n", obj->ref->name);
+	printf("traj_sz [%d] \r\n", obj->traj_sz);
+	printf("ctrl_sz [%d] \r\n", obj->ctrl_sz);
+	printf("data_sz [%d] \r\n", obj->data_sz);
+	
+	printf(vl_lsep);
+	printf("traj_ls \r\n");
+	
+	for (s32_t i = 0; i < obj->traj_sz; ++i)
+	{
+		printf("- [%02d] %s \r\n", i, obj->traj_ls[i].desc);
+	}
+	
+	printf(vl_lsep);
+	printf("ctrl_ls \r\n");
+	
+	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
+	{
+		printf("- [%02d] %s \r\n", i, obj->ctrl_ls[i].desc);
+	}
+}
 
 //------------------------------------------------------------------------------
 //
@@ -465,8 +529,22 @@ void trcobj_load (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
 //    return;
 //}
 
-
 //------------------------------------------------------------------------------
+
+s8_t trcpack_init (s_trcobj *obj, s_trcobj_init attr)
+{
+	obj->traj_sz = 0x00;
+	obj->ctrl_sz = 0x00;
+	obj->data_sz = 0x00;
+	
+	obj->log_ls = NULL;
+	obj->log_sz = 0x00;
+	
+	strcpy(obj->desc, attr.desc);
+	obj->hash = crc32_iso_str(obj->desc);
+	
+	return 0x00;
+}
 
 #endif /* __TRCOBJ__ */
 

@@ -25,7 +25,7 @@
 typedef struct trceng
 {
 	u32_t  				obj_sz;
-	s_trcobj 			*obj_ls;
+	s_trcobj 			**obj_ls;
 	
 	f64_t 				time[2];
 	
@@ -38,22 +38,25 @@ typedef struct trceng
 	u32_t 				update_count;
 	u32_t 				proc_count;
 	
-	u32_t 				refs_sz;
-	s_trcrefs_intf 		**refs_ls;
+	u32_t 				intf_refs_sz;
+	s_trcrefs_intf 		**intf_refs_ls;
 	
-	u32_t 				traj_sz;
-	s_trctraj_intf 		**traj_ls;
+	u32_t 				intf_traj_sz;
+	s_trctraj_intf 		**intf_traj_ls;
 	
-	u32_t 				ctrl_sz;
-	s_trcctrl_intf		**ctrl_ls;
+	u32_t 				intf_ctrl_sz;
+	s_trcctrl_intf		**intf_ctrl_ls;
 	
-	u32_t 				data_sz;
-	s_trcdata_intf		**data_ls;
+	u32_t 				intf_data_sz;
+	s_trcdata_intf		**intf_data_ls;
 	
-	u32_t 				proc_sz;
-	s_trcproc_intf		**proc_ls;
+	u32_t 				intf_proc_sz;
+	s_trcproc_intf		**intf_proc_ls;
 	
-	s_trcspl 			spl;
+	u32_t 				intf_obj_sz;
+	s_trcobj_intf		**intf_obj_ls;
+
+	s_trcspl 			intf_spl;
 	
 }	s_trceng;
 
@@ -63,13 +66,14 @@ typedef struct trceng_attr
 	
 	s_trcproc 			proc;
 	
-	s_trcobj  			*obj_ls;
+	s_trcobj  			**obj_ls;
 	
-	s_trcrefs_intf 		**refs_ls;
-	s_trctraj_intf 		**traj_ls;
-	s_trcctrl_intf 		**ctrl_ls;
-	s_trcdata_intf 		**data_ls;
-	s_trcproc_intf 		**proc_ls;
+	s_trcrefs_intf 		**intf_refs_ls;
+	s_trctraj_intf 		**intf_traj_ls;
+	s_trcctrl_intf 		**intf_ctrl_ls;
+	s_trcdata_intf 		**intf_data_ls;
+	s_trcproc_intf 		**intf_proc_ls;
+	s_trcobj_intf 		**intf_obj_ls;
 	
 	f64_t 				time_limit;
 	f64_t 				time_step;
@@ -78,7 +82,7 @@ typedef struct trceng_attr
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
+s8_t trceng_init (s_trceng *eng, s_trceng_attr *attr)
 {
 	eng->time_limit 	= attr.time_limit;
 	eng->time_step  	= attr.time_step;
@@ -87,23 +91,26 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
 	
 	eng->time_iter 		= eng->time_limit / eng->time_step;
 	
-	eng->refs_ls 		= attr.refs_ls;
-	eng->refs_sz 		= 0x00;
-	
-	eng->obj_ls 		= attr.obj_ls;
+	eng->obj_ls 		= attr->obj_ls;
 	eng->obj_sz 		= 0x00;
 	
-	eng->traj_ls 		= attr.traj_ls;
-	eng->traj_sz 		= 0x00;
+	eng->intf_refs_ls 	= attr->intf_refs_ls;
+	eng->intf_refs_sz 	= 0x00;
 	
-	eng->ctrl_ls 		= attr.ctrl_ls;
-	eng->ctrl_sz 		= 0x00;
+	eng->intf_obj_ls 	= attr->intf_obj_ls;
+	eng->intf_obj_sz 	= 0x00;
 	
-	eng->data_ls 		= attr.data_ls;
-	eng->data_sz 		= 0x00;
+	eng->intf_traj_ls 	= attr->intf_traj_ls;
+	eng->intf_traj_sz 	= 0x00;
 	
-	eng->proc_ls		= attr.proc_ls;
-	eng->proc_sz 		= 0x00;
+	eng->intf_ctrl_ls 	= attr->intf_ctrl_ls;
+	eng->intf_ctrl_sz 	= 0x00;
+	
+	eng->intf_data_ls 	= attr->intf_data_ls;
+	eng->intf_data_sz 	= 0x00;
+	
+	eng->intf_proc_ls	= attr->intf_proc_ls;
+	eng->intf_proc_sz 	= 0x00;
 	
 	eng->update_count 	= 0x00;
 	eng->proc_count   	= 0x00;
@@ -116,8 +123,8 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
 inline
 s32_t trceng_obj_index (s_trceng *eng, s_trcobj *obj)
 {
-	return (u32_t) ((intptr_t) eng->obj_ls - (intptr_t) obj)
-	/ sizeof(s_trcobj);
+	return (s32_t) (((sp_t) eng->obj_ls - (sp_t) obj)
+	/ (sp_t) sizeof(s_trcobj));
 }
 
 //------------------------------------------------------------------------------
@@ -129,65 +136,75 @@ void trceng_print (s_trceng *eng)
 	
 	for (s32_t i = 0; i < eng->obj_sz; ++i)
 	{
-		printf("%s \r\n", eng->obj_ls[i].desc);
+		printf("%s \r\n", eng->obj_ls[i]->name);
 	}
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_refs_add (s_trceng *eng, s_trcrefs_intf *refs)
+s8_t trceng_intf_addrefs (s_trceng *eng, s_trcrefs_intf *intf_refs)
 {
-	eng->refs_ls[eng->refs_sz] = refs;
-	eng->refs_sz++;
+	eng->intf_refs_ls[eng->intf_refs_sz] = intf_refs;
+	eng->intf_refs_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_traj_add (s_trceng *eng, s_trctraj_intf *traj)
+s8_t trceng_intf_addtraj (s_trceng *eng, s_trctraj_intf *intf_traj)
 {
-	eng->traj_ls[eng->traj_sz] = traj;
-	eng->traj_sz++;
+	eng->intf_traj_ls[eng->intf_traj_sz] = intf_traj;
+	eng->intf_traj_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_ctrl_add (s_trceng *eng, s_trcctrl_intf *ctrl)
+s8_t trceng_intf_addctrl (s_trceng *eng, s_trcctrl_intf *ctrl)
 {
-	eng->ctrl_ls[eng->ctrl_sz] = ctrl;
-	eng->ctrl_sz++;
+	eng->intf_ctrl_ls[eng->intf_ctrl_sz] = intf_ctrl;
+	eng->intf_ctrl_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_data_add (s_trceng *eng, s_trcdata_intf *data)
+s8_t trceng_intf_adddata (s_trceng *eng, s_trcdata_intf *intf_data)
 {
-	eng->data_ls[eng->data_sz] = data;
-	eng->data_sz++;
+	eng->intf_data_ls[eng->intf_data_sz] = intf_data;
+	eng->intf_data_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_proc_add (s_trceng *eng, s_trcproc_intf *proc)
+s8_t trceng_intf_addproc (s_trceng *eng, s_trcproc_intf *intf_proc)
 {
-	eng->proc_ls[eng->proc_sz] = proc;
-	eng->proc_sz++;
+	eng->intf_proc_ls[eng->intf_proc_sz] = intf_proc;
+	eng->intf_proc_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s_trcobj* trceng_obj_add (s_trceng *eng, s_trcobj_init attr)
+s8_t trceng_intf_addobj (s_trceng *eng, s_trcobj_intf *intf_obj)
 {
-	s_trcobj *obj = &eng->obj_ls[eng->obj_sz];
+	eng->intf_obj_ls[eng->intf_obj_sz] = intf_obj;
+	eng->intf_obj_sz++;
+	
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+s_trcobj* trceng_addobj (s_trceng *eng, s_trcobj_intf *intf_obj)
+{
+	s_trcobj *obj = eng->obj_ls[eng->obj_sz];
 	
 	trcobj_init(obj, attr);
 	

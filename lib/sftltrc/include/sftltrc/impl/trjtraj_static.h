@@ -86,22 +86,6 @@ s8_t __trctraj_static_free__ (void *__traj__)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_pack__ (void *__traj__, u8_t **v_file)
-{
-	return 0x00;
-}
-
-//------------------------------------------------------------------------------
-
-static
-s8_t __trctraj_static_unpack__ (void *__traj__, s_trcspl **v_file)
-{
-	return 0x00;
-}
-
-//------------------------------------------------------------------------------
-
-static
 s8_t __trctraj_static_save__ (void *__traj__, u8_t **v_file)
 {
 	return 0x00;

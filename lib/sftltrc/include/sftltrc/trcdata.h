@@ -30,6 +30,10 @@ typedef struct trcdata_intf
 	s8_t (*reset) 		(void *data, s_trcobj *obj);
 	s8_t (*render) 		(void *data, s_trcobj *obj);
 	
+	void (*gui_attr)	(void *data, void *attr);
+	void (*gui_edit)	(void *data);
+	void (*gui_view)	(void *data);
+	
 } 	s_trcdata_intf;
 
 //------------------------------------------------------------------------------
@@ -103,6 +107,44 @@ s8_t trcdata_render (s_trcdata *data, s_trcobj *obj)
 }
 
 //------------------------------------------------------------------------------
+
+inline
+void trcdata_gui_attr (s_trcdata *data, s_trcdata_attr *attr)
+{
+	data->intf->gui_attr(data, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcdata_gui_edit (s_trcdata *data)
+{
+	data->intf->gui_edit(data);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcdata_gui_view (s_trcdata *data)
+{
+	data->intf->gui_view(data);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s_trcdata* trcdata_malloc (s_trcdata_intf *intf_data, s_trcdata_attr *attr)
+{
+	s_trcdata *data = (s_trcdata*) malloc(intf_data->data_sz);
+	data->intf = intf_data;
+	
+	trcdata_init(data, attr);
+	
+	return data;
+}
+
+//------------------------------------------------------------------------------
+
 
 //void trcdata_copy (s_trceng *eng, s_trcdata *dest, s_trcdata *src)
 //{

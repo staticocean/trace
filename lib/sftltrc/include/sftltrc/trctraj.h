@@ -31,6 +31,10 @@ typedef struct trctraj_intf
 	s8_t (*pos) 		(void *traj, f64_t time, f64_t *pos);
 	s8_t (*rot) 		(void *traj, f64_t time, f64_t *rot);
 	
+	void (*gui_attr)	(void *traj, void *attr);
+	void (*gui_edit)	(void *traj);
+	void (*gui_view)	(void *traj);
+	
 }	s_trctraj_intf;
 
 //------------------------------------------------------------------------------
@@ -118,6 +122,43 @@ s8_t trctraj_load (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
 	trctraj_compile(traj);
 	
 	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trctraj_gui_attr (s_trctraj *traj, s_trctraj_attr *attr)
+{
+	traj->intf->gui_attr(traj, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trctraj_gui_edit (s_trctraj *traj)
+{
+	traj->intf->gui_edit(traj);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trctraj_gui_view (s_trctraj *traj)
+{
+	traj->intf->gui_view(traj);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s_trctraj* trctraj_malloc (s_trctraj_intf *intf_traj, s_trctraj_attr *attr)
+{
+	s_trctraj *traj = (s_trctraj*) malloc(intf_traj->data_sz);
+	traj->intf = intf_traj;
+	
+	trctraj_init(traj, attr);
+	
+	return traj;
 }
 
 //------------------------------------------------------------------------------

@@ -35,6 +35,10 @@ typedef struct trcrefs_intf
 	s8_t (*rot_abs) 	(void *refs, f64_t *abs, f64_t *ref);
 	s8_t (*rot_ref) 	(void *refs, f64_t *ref, f64_t *abs);
 	
+	void (*gui_attr)	(void *refs, void *attr);
+	void (*gui_edit)	(void *refs);
+	void (*gui_view)	(void *refs);
+	
 }	s_trcrefs_intf;
 
 //------------------------------------------------------------------------------
@@ -89,6 +93,43 @@ inline
 s8_t trcrefs_load (s_trcrefs *refs, s_trcspl *spl, u8_t **v_file)
 {
 	return refs->intf->load(refs, spl, v_file);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcrefs_gui_attr (s_trcrefs *refs, s_trcrefs_attr *attr)
+{
+	refs->intf->gui_attr(refs, attr);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcrefs_gui_edit (s_trcrefs *refs)
+{
+	refs->intf->gui_edit(refs);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+void trcrefs_gui_view (s_trcrefs *refs)
+{
+	refs->intf->gui_view(refs);
+}
+
+//------------------------------------------------------------------------------
+
+inline
+s_trcrefs* trcrefs_malloc (s_trcrefs_intf *intf_refs, s_trcrefs_attr *attr)
+{
+	s_trcrefs *refs = (s_trcrefs*) malloc(intf_refs->data_sz);
+	refs->intf = intf_refs;
+	
+	trcrefs_init(refs, attr);
+	
+	return refs;
 }
 
 //------------------------------------------------------------------------------
