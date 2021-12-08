@@ -2,10 +2,10 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-// trcellp - trace
+// trcrefs_ellp - ellipsoid refernce frame
 
-#ifndef __TRCELLP__
-#define __TRCELLP__
+#ifndef __TRCREFS_ELLP__
+#define __TRCREFS_ELLP__
 
 //------------------------------------------------------------------------------
 
@@ -13,133 +13,44 @@
 #include <sftlstd/env.h>
 #include <sftlstd/vl.h>
 
-#include <sftltrc/trcspl.h>
+#include <sftlrefs/trcrefs.h>
 
 //------------------------------------------------------------------------------
 
-typedef struct trcellp_intf
+typedef struct trcrefs_ellp
 {
-	char 				guid[32];
+	s_trcrefs_ellp 		super;
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	f64_t 				a;
+	f64_t 				b;
+	f64_t 				c;
+	f64_t 				e;
+	f64_t 				f;
 	
-	s8_t (*init) 		(void *ellp, void *attr);
-	s8_t (*free) 		(void *ellp);
-	s8_t (*pack) 		(void *ellp, s_trcspl *spl);
-	s8_t (*unpack) 		(void *ellp, s_trcspl *spl);
-	s8_t (*save) 		(void *ellp, u8_t **v_file);
-	s8_t (*load) 		(void *ellp, u8_t **v_file);
-	s8_t (*lla) 		(void *ellp, f64_t *lla, f64_t *ecef);
-	s8_t (*glla) 		(void *ellp, f64_t *lla, f64_t *ecef);
-	s8_t (*ecef) 		(void *ellp, f64_t *ecef, f64_t *lla);
-	s8_t (*ecefrot) 	(void *ellp, f64_t *ecef, f64_t *c_tn);
-	s8_t (*nwhvel)		(void *ellp, f64_t *lla, f64_t *vel, f64_t *nwh);
+	f64_t 				ee;
+	f64_t 				invaa;
+	f64_t 				l;
+	f64_t 				p1mee;
+	f64_t 				p1meedaa;
+	f64_t 				Hmin;
+	f64_t 				ll4;
+	f64_t 				ll;
+	f64_t 				invcbrt2;
+
+}	s_trcrefs_ellp;
+
+typedef struct trcrefs_ellp_attr
+{
+	s_trcrefs_ellp_attr super;
 	
-}	s_trcellp_intf;
+	f64_t 				a;
+	f64_t 				f;
+
+}	s_trcrefs_ellp_attr;
 
 //------------------------------------------------------------------------------
 
-typedef struct trcellp
-{
-	f64_t 			a;
-	f64_t 			b;
-	f64_t 			c;
-	f64_t 			e;
-	f64_t 			f;
-
-	f64_t 			ee;
-	f64_t 			invaa;
-	f64_t 			l;
-	f64_t 			p1mee;
-	f64_t 			p1meedaa;
-	f64_t 			Hmin;
-	f64_t 			ll4;
-	f64_t 			ll;
-	f64_t 			invcbrt2;
-	
-} 	s_trcellp;
-
-typedef struct trcellp_attr
-{
-	char 			desc[32];
-
-	f64_t 			a;
-	f64_t 			f;
-
-}	s_trcellp_attr;
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_init (s_trcctrl *ctrl, void *attr)
-{
-	return ctrl->intf->init(ctrl, attr);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_free (s_trcctrl *ctrl)
-{
-	return ctrl->intf->free(ctrl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_pack (s_trcctrl *ctrl, s_trcspl *spl)
-{
-	return ctrl->intf->pack(ctrl, spl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_unpack (s_trcctrl *ctrl, s_trcspl *spl)
-{
-	return ctrl->intf->unpack(ctrl, spl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_save (s_trcctrl *ctrl, u8_t **v_file)
-{
-	return ctrl->intf->save(ctrl, v_file);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcellp_load (s_trcctrl *ctrl, u8_t **v_file)
-{
-	return ctrl->intf->load(ctrl, v_file);
-}
-
-//------------------------------------------------------------------------------
-
-static s_trcellp trcellp_wgs84 = {
-	.desc   = "wgs84",
-	.a 		=  6.37813700000000000000e+0006,
-	.f  	=  3.35281066474748071998e-0003,
-};
-
-static s_trcellp trcellp_pz90 = {
-	.desc   = "pz90",
-	.a 		=  6378136,
-	.f  	=  3.35280374301947673491022158624e-0003,
-};
-
-static s_trcellp trcellp_pz90_11 = {
-	.desc   = "pz90_11",
-	.a 		=  6378136,
-	.f  	=  0.0033528037345079697573169141833205,
-};
-
-//------------------------------------------------------------------------------
-
-void trcellp_init (s_trcellp *ellp)
+void trcrefs_init (s_trcref *ellp)
 {
 	ellp->b         = ellp->a * (1 - ellp->f);
 	ellp->ee		= 1 - ellp->b*ellp->b / (ellp->a*ellp->a );
@@ -159,7 +70,7 @@ void trcellp_init (s_trcellp *ellp)
 
 //------------------------------------------------------------------------------
 
-void trcellp_ecef (s_trcellp *ellp, f64_t *ecef, f64_t *lla)
+void trcrefs_ecef (s_trcref *ellp, f64_t *ecef, f64_t *lla)
 {
 	f64_t n = ellp->a / vl_sqrt(1 - ellp->ee * vl_sin(lla[0]) * vl_sin(lla[0]));
 	
@@ -182,7 +93,7 @@ void trcellp_ecef (s_trcellp *ellp, f64_t *ecef, f64_t *lla)
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_lla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
+s8_t trcrefs_lla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
 {
 	const f64_t inv3 = +3.33333333333333333333e-0001;
 	const f64_t inv6 = +1.66666666666666666667e-0001;
@@ -290,9 +201,9 @@ s8_t trcellp_lla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_glla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
+s8_t trcrefs_glla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
 {
-    trcellp_lla(ellp, lla, ecef);
+    trcrefs_lla(ellp, lla, ecef);
 
     f64_t rn = ellp->a / vl_sqrt(1 - ellp->e*ellp->e*vl_sin(lla[0])*vl_sin(lla[0]));
     lla[0] = atan(1 - ellp->ee * rn / (rn + lla[2]));
@@ -302,7 +213,7 @@ s8_t trcellp_glla (s_trcellp *ellp, f64_t *lla, f64_t *ecef)
 
 //------------------------------------------------------------------------------
 
-s8_t trcellp_ecefrot (s_trcellp *ellp, f64_t *ecef, f64_t *c_tn)
+s8_t trcrefs_ecefrot (s_trcref *ellp, f64_t *ecef, f64_t *c_tn)
 {
 	f64_t ctn_tnp[9];
 	
@@ -311,7 +222,7 @@ s8_t trcellp_ecefrot (s_trcellp *ellp, f64_t *ecef, f64_t *c_tn)
 	f64_t *z = &ctn_tnp[6];
 	
 	f64_t lla[3];
-	trcellp_lla(ellp, lla, ecef);
+	trcrefs_lla(ellp, lla, ecef);
 	y[0] =  cos(lla[1]) * cos(lla[0]);
 	y[2] = -sin(lla[1]) * cos(lla[0]);
 	y[1] =  sin(lla[0]);
@@ -335,7 +246,7 @@ s8_t trcellp_ecefrot (s_trcellp *ellp, f64_t *ecef, f64_t *c_tn)
 
 //------------------------------------------------------------------------------
 
-void trcellp_nwhvel (s_trcellp *ellp, f64_t *lla, f64_t *vel, f64_t *nwh)
+void trcrefs_nwhvel (s_trcref *ellp, f64_t *lla, f64_t *vel, f64_t *nwh)
 {
 	f64_t sin_lat = vl_sin(lla[0]);
 	f64_t temp = 1 - ellp->ee * sin_lat*sin_lat;
@@ -350,4 +261,24 @@ void trcellp_nwhvel (s_trcellp *ellp, f64_t *lla, f64_t *vel, f64_t *nwh)
 
 //------------------------------------------------------------------------------
 
-#endif /* __trcellp__ */
+static s_trcref trcrefs_wgs84 = {
+		.desc   = "wgs84",
+		.a 		=  6.37813700000000000000e+0006,
+		.f  	=  3.35281066474748071998e-0003,
+		};
+
+static s_trcref trcrefs_pz90 = {
+		.desc   = "pz90",
+		.a 		=  6378136,
+		.f  	=  3.35280374301947673491022158624e-0003,
+		};
+
+static s_trcref trcrefs_pz90_11 = {
+		.desc   = "pz90_11",
+		.a 		=  6378136,
+		.f  	=  0.0033528037345079697573169141833205,
+		};
+
+//------------------------------------------------------------------------------
+
+#endif /* __TRCREFS_ELLP__ */

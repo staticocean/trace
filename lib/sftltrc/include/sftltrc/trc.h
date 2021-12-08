@@ -11,7 +11,7 @@
 
 #include <sftltrc/trcctrl.h>
 #include <sftltrc/trcdata.h>
-#include <sftltrc/trcellp.h>
+#include <sftltrc/trcrefs.h>
 #include <sftltrc/trceng.h>
 #include <sftltrc/trcobj.h>
 #include <sftltrc/trcproc.h>

@@ -15,7 +15,7 @@
 
 #include <sftltrc/trctraj.h>
 #include <sftltrc/trcspl.h>
-#include <sftltrc/trcellp.h>
+#include <sftltrc/trcrefs.h>
 
 //------------------------------------------------------------------------------
 

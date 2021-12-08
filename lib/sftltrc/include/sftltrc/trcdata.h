@@ -18,17 +18,15 @@
 
 typedef struct trcdata_intf
 {
-	char 				guid[32];
+	char 				desc[32];
 	
 	s32_t				data_sz;
 	s32_t 				attr_sz;
 	
 	s8_t (*init) 		(void *data, void *attr);
 	s8_t (*free) 		(void *data);
-	s8_t (*pack) 		(void *data, s_trcspl *spl);
-	s8_t (*unpack) 		(void *data, s_trcspl *spl);
-	s8_t (*save) 		(void *data, u8_t **v_file);
-	s8_t (*load) 		(void *data, u8_t **v_file);
+	s8_t (*save) 		(void *data, s_trcspl *spl, u8_t **v_file);
+	s8_t (*load) 		(void *data, s_trcspl *spl, u8_t **v_file);
 	s8_t (*reset) 		(void *data, s_trcobj *obj);
 	s8_t (*render) 		(void *data, s_trcobj *obj);
 	
@@ -48,11 +46,19 @@ typedef struct trcdata
 	
 } 	s_trcdata;
 
+typedef struct trcdata_attr
+{
+	char 				name[32];
+	
+} 	s_trcdata_attr;
+
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_init (s_trcdata *data, void *attr)
+s8_t trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
 {
+	memcpy(data->name, attr->name, sizeof(data->name));
+	
 	return data->intf->init(data, attr);
 }
 
@@ -67,33 +73,17 @@ s8_t trcdata_free (s_trcdata *data)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_pack (s_trcdata *data, s_trcspl *spl)
+s8_t trcdata_save (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
 {
-	return data->intf->pack(data, spl);
+	return data->intf->save(data, spl, v_file);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_unpack (s_trcdata *data, s_trcspl *spl)
+s8_t trcdata_load (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
 {
-	return data->intf->unpack(data, spl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcdata_save (s_trcdata *data, u8_t **v_file)
-{
-	return data->intf->save(data, v_file);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trcdata_load (s_trcdata *data, u8_t **v_file)
-{
-	return data->intf->load(data, v_file);
+	return data->intf->load(data, spl, v_file);
 }
 
 //------------------------------------------------------------------------------

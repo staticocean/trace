@@ -25,10 +25,8 @@ typedef struct trctraj_intf
 	
 	s8_t (*init) 		(void *traj, void *attr);
 	s8_t (*free) 		(void *traj);
-	s8_t (*pack) 		(void *traj, s_trcspl *spl);
-	s8_t (*unpack) 		(void *traj, s_trcspl *spl);
-	s8_t (*save) 		(void *traj, u8_t **v_file);
-	s8_t (*load) 		(void *traj, u8_t **v_file);
+	s8_t (*save) 		(void *traj, s_trcspl *spl, u8_t **v_file);
+	s8_t (*load) 		(void *traj, s_trcspl *spl, u8_t **v_file);
 	s8_t (*compile) 	(void *traj);
 	s8_t (*pos) 		(void *traj, f64_t time, f64_t *pos);
 	s8_t (*rot) 		(void *traj, f64_t time, f64_t *rot);
@@ -78,22 +76,6 @@ s8_t trctraj_free (s_trctraj *traj)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_pack (s_trctraj *traj, s_trcspl *spl)
-{
-	return traj->intf->pack(traj, spl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
-s8_t trctraj_unpack (s_trctraj *traj, s_trcspl *spl)
-{
-	return traj->intf->unpack(traj, spl);
-}
-
-//------------------------------------------------------------------------------
-
-inline
 s8_t trctraj_compile (s_trctraj *traj)
 {
 	return traj->intf->compile(traj);
@@ -118,17 +100,17 @@ s8_t trctraj_rot (s_trctraj *traj, f64_t time, f64_t *rot)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_save (s_trctraj *traj, u8_t **v_file)
+s8_t trctraj_save (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
 {
-	return traj->intf->save(traj, v_file);
+	return traj->intf->save(traj, spl, v_file);
 }
 
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_load (s_trctraj *traj, u8_t **v_file)
+s8_t trctraj_load (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
 {
-	traj->intf->load(traj, v_file);
+	traj->intf->load(traj, spl, v_file);
 	
 	// compile trajectory for previews and interaction
 	// to prevent damaged values when executing pos/rot calls

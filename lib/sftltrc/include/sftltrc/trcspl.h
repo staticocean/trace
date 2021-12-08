@@ -62,15 +62,15 @@ void trcspl_add (s_trcspl *spl, void *ptr)
 
 void trcspl_pack (s_trcspl *spl, s_trcspl_ptr *ptr)
 {
-	ptr->guid = crc(ptr);
+	ptr->guid = crc32_iso_lowcstr((char*) ptr);
 }
 
 //------------------------------------------------------------------------------
 
 void trcspl_unpack (s_trcspl *spl, void *ptr)
 {
-	api->ptr_ls[api->ptr_sz] = ptr;
-	api->ptr_sz++;
+	spl->ptr_ls[spl->ptr_sz].ptr = ptr;
+	spl->ptr_sz++;
 }
 
 //------------------------------------------------------------------------------

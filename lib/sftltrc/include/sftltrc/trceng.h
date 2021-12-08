@@ -9,12 +9,11 @@
 
 //------------------------------------------------------------------------------
 
-#include <string.h>
-
 #include <sftlstd/vl.h>
 #include <sftlstd/crc.h>
 
-#include <sftltrc/trcellp.h>
+#include <sftltrc/trcspl.h>
+#include <sftltrc/trcrefs.h>
 #include <sftltrc/trctraj.h>
 #include <sftltrc/trcctrl.h>
 #include <sftltrc/trcdata.h>
@@ -25,53 +24,55 @@
 
 typedef struct trceng
 {
-	u32_t  			obj_sz;
-	s_trcobj 		*obj_ls;
+	u32_t  				obj_sz;
+	s_trcobj 			*obj_ls;
 	
-	f64_t 			time[2];
+	f64_t 				time[2];
 	
-	f64_t 			time_limit;
-	f64_t 			time_step;
-	u32_t 			time_iter;
+	f64_t 				time_limit;
+	f64_t 				time_step;
+	u32_t 				time_iter;
 	
-	s_trcproc 		proc;
+	s_trcproc 			proc;
 	
-	u32_t 			update_count;
-	u32_t 			proc_count;
+	u32_t 				update_count;
+	u32_t 				proc_count;
 	
-	u32_t 			ellp_sz;
-	s_trcellp 		*ellp_ls;
+	u32_t 				refs_sz;
+	s_trcrefs_intf 		**refs_ls;
 	
-	u32_t 			traj_sz;
-	s_trctraj 		*traj_ls;
+	u32_t 				traj_sz;
+	s_trctraj_intf 		**traj_ls;
 	
-	u32_t 			ctrl_sz;
-	s_trcctrl 		*ctrl_ls;
+	u32_t 				ctrl_sz;
+	s_trcctrl_intf		**ctrl_ls;
 	
-	u32_t 			data_sz;
-	s_trcdata 		*data_ls;
+	u32_t 				data_sz;
+	s_trcdata_intf		**data_ls;
 	
-	u32_t 			proc_sz;
-	s_trcproc 		*proc_ls;
+	u32_t 				proc_sz;
+	s_trcproc_intf		**proc_ls;
+	
+	s_trcspl 			spl;
 	
 }	s_trceng;
 
 typedef struct trceng_attr
 {
-	u8_t 			*stack;
+	u8_t 				*stack;
 	
-	s_trcproc 		proc;
+	s_trcproc 			proc;
 	
-	s_trcobj  		*obj_ls;
+	s_trcobj  			*obj_ls;
 	
-	s_trcellp 		*ellp_ls;
-	s_trctraj 		*traj_ls;
-	s_trcctrl 		*ctrl_ls;
-	s_trcdata 		*data_ls;
-	s_trcproc 		*proc_ls;
+	s_trcrefs_intf 		**refs_ls;
+	s_trctraj_intf 		**traj_ls;
+	s_trcctrl_intf 		**ctrl_ls;
+	s_trcdata_intf 		**data_ls;
+	s_trcproc_intf 		**proc_ls;
 	
-	f64_t 			time_limit;
-	f64_t 			time_step;
+	f64_t 				time_limit;
+	f64_t 				time_step;
 	
 }	s_trceng_attr;
 
@@ -86,8 +87,8 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr attr)
 	
 	eng->time_iter 		= eng->time_limit / eng->time_step;
 	
-	eng->ellp_ls 		= attr.ellp_ls;
-	eng->ellp_sz 		= 0x00;
+	eng->refs_ls 		= attr.refs_ls;
+	eng->refs_sz 		= 0x00;
 	
 	eng->obj_ls 		= attr.obj_ls;
 	eng->obj_sz 		= 0x00;
@@ -134,23 +135,19 @@ void trceng_print (s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_ellp_add (s_trceng *eng, s_trcellp *ellp)
+s8_t trceng_refs_add (s_trceng *eng, s_trcrefs_intf *refs)
 {
-	ellp->hash = crc32_iso_str(ellp->desc);
-	
-	eng->ellp_ls[eng->ellp_sz] = api;
-	eng->ellp_sz++;
+	eng->refs_ls[eng->refs_sz] = refs;
+	eng->refs_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_traj_add (s_trceng *eng, s_trctraj *traj)
+s8_t trceng_traj_add (s_trceng *eng, s_trctraj_intf *traj)
 {
-	traj->hash = crc32_iso_str(traj->desc);
-	
-	eng->traj_ls[eng->traj_sz] = api;
+	eng->traj_ls[eng->traj_sz] = traj;
 	eng->traj_sz++;
 	
 	return 0x00;
@@ -158,23 +155,19 @@ s8_t trceng_traj_add (s_trceng *eng, s_trctraj *traj)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_ctrl_add (s_trceng *eng, s_trcctrl *ctrl)
+s8_t trceng_ctrl_add (s_trceng *eng, s_trcctrl_intf *ctrl)
 {
-	ctrl->hash = crc32_iso_str(ctrl->desc);
-	
-	eng->ctrl_ls[eng->ctrl_sz] = api;
-	++eng->ctrl_sz;
+	eng->ctrl_ls[eng->ctrl_sz] = ctrl;
+	eng->ctrl_sz++;
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_data_add (s_trceng *eng, s_trcdata *data)
+s8_t trceng_data_add (s_trceng *eng, s_trcdata_intf *data)
 {
-	data->hash = crc32_iso_str(data->desc);
-	
-	eng->data_ls[eng->data_sz] = *data;
+	eng->data_ls[eng->data_sz] = data;
 	eng->data_sz++;
 	
 	return 0x00;
@@ -182,11 +175,9 @@ s8_t trceng_data_add (s_trceng *eng, s_trcdata *data)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_proc_add (s_trceng *eng, s_trcproc *proc)
+s8_t trceng_proc_add (s_trceng *eng, s_trcproc_intf *proc)
 {
-	proc->hash = crc32_iso_str(proc->desc);
-	
-	eng->proc_ls[eng->proc_sz] = api;
+	eng->proc_ls[eng->proc_sz] = proc;
 	eng->proc_sz++;
 	
 	return 0x00;
