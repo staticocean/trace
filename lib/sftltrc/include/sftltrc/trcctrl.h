@@ -47,12 +47,14 @@ typedef struct trcctrl
 	};
 	
 	char 				name[32];
-	
+	s_trcobj 			*obj;
+
 } 	s_trcctrl;
 
 typedef struct trcctrl_attr
 {
 	char 				name[32];
+	s_trcobj 			*obj;
 	
 } 	s_trcctrl_attr;
 
@@ -62,6 +64,7 @@ inline
 s8_t trcctrl_init (s_trcctrl *ctrl, s_trcctrl_attr *attr)
 {
 	memcpy(ctrl->name, attr->name, sizeof(ctrl->name));
+	ctrl->obj = attr->obj;
 	
 	return ctrl->intf->init(ctrl, attr);
 }
@@ -95,7 +98,7 @@ s8_t trcctrl_load (s_trcctrl *ctrl, s_trcspl *spl, u8_t **v_file)
 inline
 s8_t trcctrl_reset (s_trcctrl *ctrl, s_trcobj *obj)
 {
-	return ctrl->intf->reset(ctrl);
+	return ctrl->intf->reset(ctrl, obj);
 }
 
 //------------------------------------------------------------------------------

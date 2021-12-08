@@ -7,34 +7,31 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
-#include <libcommon/vl3d.h>
-#include <libcommon/imgui_w.h>
-
 #include <nfd.h>
 
-#include <sftltrc/trcobj.h>
-#include <sftltrc/trctraj.h>
-#include <sftltrc/trcctrl.h>
-#include <sftltrc/trcdata.h>
-#include <sftltrc/trcproc.h>
-#include <sftltrc/trceng.h>
+#include <sftlstd/vl.h>
+#include <sftlstd/vl3d.h>
+#include <sftlstd/vl3d_imgui.h>
 
-#include <libgui/imgui/imgui.h>
-#include <libgui/imgui/imgui_internal.h>
+#include <sftlgui/imgui_custom.h>
+
+#include <sftltrc/trc.h>
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 //------------------------------------------------------------------------------
 
-void gui_objsel (char *label, u32_t obj_sz, s_trcobj *obj_ls, s_trcobj **obj)
+void gui_sel_obj (char *label, s_trceng *eng, s_trcobj **obj)
 {
     // to prevent corrupted data accessing wrong mem address
     // first check if an object belongs to the list
 
     u8_t obj_exists = 0x00;
 
-    for (int i = 0; i < obj_sz; ++i)
+    for (int i = 0; i < eng->obj_sz; ++i)
     {
-        if (*obj == &obj_ls[i])
+    	if (*obj == eng->obj_ls[i])
         {
             obj_exists = 0x01;
         }
@@ -42,22 +39,26 @@ void gui_objsel (char *label, u32_t obj_sz, s_trcobj *obj_ls, s_trcobj **obj)
 
     if (obj_exists == 0x00 || *obj == NULL)
     {
-        *obj = &obj_ls[0];
+    	*obj = eng->obj_ls[0];
     }
 
-	if (ImGui::BeginCombo(label, (*obj)->desc, ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo(label, (*obj)->name, ImGuiComboFlags_NoArrowButton))
 	{
-		for (int i = 0; i < obj_sz; ++i)
+		for (int i = 0; i < eng->obj_sz; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = ((*obj) == &obj_ls[i]);
+			bool is_selected = ((*obj) == eng->obj_ls[i]);
 			
-			if (ImGui::Selectable(obj_ls[i].desc, is_selected))
-			{ *obj = &obj_ls[i]; }
+			if (ImGui::Selectable(eng->obj_ls[i]->name, is_selected))
+			{
+				*obj = eng->obj_ls[i];
+			}
 			
 			if (is_selected)
-			{ ImGui::SetItemDefaultFocus(); }
+			{
+				ImGui::SetItemDefaultFocus();
+			}
 			
 			ImGui::PopID();
 		}
@@ -68,62 +69,62 @@ void gui_objsel (char *label, u32_t obj_sz, s_trcobj *obj_ls, s_trcobj **obj)
 
 //------------------------------------------------------------------------------
 
-void gui_ellpsel (char *label, u32_t ellp_offset, s_trcellp *ellp_ls, s_trcellp **ellp)
+void gui_sel_refs (char *label, s_trceng *eng, s_trcrefs **refs)
 {
-	bool is_none = *ellp == NULL;
-	
-	if (ImGui::BeginCombo(label,
-						  is_none ? "none" : (*ellp)->desc,
-						  ImGuiComboFlags_NoArrowButton))
-	{
-		if (ImGui::Selectable("none", is_none)) { *ellp = NULL; }
-		if (is_none) { ImGui::SetItemDefaultFocus(); }
-		
-		// is_none can change after previous 2 lines
-		is_none = *ellp == NULL;
-		
-		for (int i = 0; i < ellp_offset; ++i)
-		{
-			ImGui::PushID(i);
-			
-			bool is_selected = false;
-			
-			if (!is_none && ((*ellp)->hash == ellp_ls[i].hash))
-			{ is_selected = true; }
-			
-			if (ImGui::Selectable(ellp_ls[i].desc, is_selected))
-			{ *ellp = &ellp_ls[i]; }
-			
-			if (is_selected) { ImGui::SetItemDefaultFocus(); }
-			
-			ImGui::PopID();
-		}
-		
-		ImGui::EndCombo();
-	}
+//	bool is_none = *ellp == NULL;
+//
+//	if (ImGui::BeginCombo(label,
+//						  is_none ? "none" : (*ellp)->desc,
+//						  ImGuiComboFlags_NoArrowButton))
+//	{
+//		if (ImGui::Selectable("none", is_none)) { *ellp = NULL; }
+//		if (is_none) { ImGui::SetItemDefaultFocus(); }
+//
+//		// is_none can change after previous 2 lines
+//		is_none = *ellp == NULL;
+//
+//		for (int i = 0; i < ellp_offset; ++i)
+//		{
+//			ImGui::PushID(i);
+//
+//			bool is_selected = false;
+//
+//			if (!is_none && ((*ellp)->hash == ellp_ls[i].hash))
+//			{ is_selected = true; }
+//
+//			if (ImGui::Selectable(ellp_ls[i].desc, is_selected))
+//			{ *ellp = &ellp_ls[i]; }
+//
+//			if (is_selected) { ImGui::SetItemDefaultFocus(); }
+//
+//			ImGui::PopID();
+//		}
+//
+//		ImGui::EndCombo();
+//	}
 }
 
 //------------------------------------------------------------------------------
 
-void gui_procsel (char *label, s_trceng *eng)
+void gui_sel_proc (char *label, s_trceng *eng, s_trcproc **proc)
 {
-	if (ImGui::BeginCombo(label, eng->proc.desc, ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo(label, (*proc)->name, ImGuiComboFlags_NoArrowButton))
 	{
 		for (int i = 0; i < eng->proc_sz; ++i)
 		{
 			ImGui::PushID(i);
 			
-			bool is_selected = (eng->proc.hash == eng->proc_ls[i].hash);
+			bool is_selected = (*proc == eng->proc_ls[i]);
 			
-			if (ImGui::Selectable(eng->proc_ls[i].desc, is_selected) && is_selected == false)
+			if (ImGui::Selectable(eng->proc_ls[i]->name, is_selected) && !is_selected)
 			{
-			    eng->proc.free(&eng->proc.data);
-                eng->proc = eng->proc_ls[i];
-                eng->proc.init(&eng->proc.data, eng->proc.config);
+                *proc = eng->proc_ls[i];
 			}
 			
 			if (is_selected)
-			{ ImGui::SetItemDefaultFocus(); }
+			{
+				ImGui::SetItemDefaultFocus();
+			}
 			
 			ImGui::PopID();
 		}
@@ -134,7 +135,7 @@ void gui_procsel (char *label, s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-void gui_fileopen (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
+void gui_file_open (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -174,7 +175,7 @@ void gui_fileopen (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls,
 
 //------------------------------------------------------------------------------
 
-void gui_filesave (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
+void gui_file_save (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -217,9 +218,9 @@ void gui_vl3d (s_vl3d *vl3d)
 	s_vl3d_view view = vl3d_view_init();
 	vl3d_view_load(vl3d, &view, view);
 
-	s_vl3d_gridline gridline = vl3d_gridline_init(&view);
-	s_vl3d_griddot  griddot  = vl3d_griddot_init (&view);
-	s_vl3d_xyz      xyz      = vl3d_xyz_init     (&view);
+	s_vl3d_gridline gridline = vl3d_gridline_init(view.scale, view.pos);
+	s_vl3d_griddot  griddot  = vl3d_griddot_init (view.scale, view.pos);
+	s_vl3d_xyz      xyz      = vl3d_xyz_init     (view.scale, view.pos);
 	
 	s_vl3d_tbar tbar = vl3d_tbar_init();
 	vl3d_tbar_load(vl3d, &tbar, tbar);
@@ -243,6 +244,6 @@ void gui_vl3d (s_vl3d *vl3d)
 
 //------------------------------------------------------------------------------
 
-#endif /* __GUI_OBJ__ */
+#endif /* __GUI_W__ */
 
 

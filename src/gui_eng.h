@@ -7,20 +7,17 @@
 
 //------------------------------------------------------------------------------
 
-#include <libgui/imgui/imgui.h>
-#include <libgui/implot/implot.h>
+#include <implot/implot.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 #include <sftlstd/vl.h>
-#include <libcommon/imgui_w.h>
+#include <sftlstd/vl3d.h>
+#include <sftlstd/vl3d_imgui.h>
 
-#include <sftltrc/trc_api.h>
-#include <sftltrc/trceng.h>
-#include <sftltrc/trctraj.h>
-#include <sftltrc/trcctrl.h>
-#include <sftltrc/trcdata.h>
-#include <sftltrc/trcellp.h>
+#include <sftlgui/sftlgui.h>
 
-#include <libgui/clip/clip.h>
+#include <sftltrc/trc.h>
 
 #include "gui_obj.h"
 #include "gui_traj.h"
@@ -146,7 +143,7 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 		s_gui_obj *obj_gui = &gui->obj_ls[i];
 		s_trcobj *obj = obj_gui->ref;
 		
-		if (filter.PassFilter(obj->desc))
+		if (filter.PassFilter(obj->name))
 		{
 			bool node_sel = gui->sel_item == &gui->obj_ls[i];
 			
@@ -168,13 +165,12 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 
                 if (ImGui::Selectable("duplicate"))
                 {
-                    s_trcobj_init obj_attr;
-                    sprintf(obj_attr.desc, "%s [D]", obj->desc);
+                    s_trcobj_attr obj_attr;
+                    sprintf(obj_attr.name, "%s [D]", obj->name);
 
-                    s_trcobj *obj_copy = trceng_add_obj(self, obj_attr);
-
-
-                    trcobj_copy(self, obj_copy, obj);
+                    s_trcobj *obj_copy = trceng_add_obj(self, obj->intf, &obj_attr);
+					
+//                    trcobj_copy(self, obj_copy, obj);
                 }
 
 				if (ImGui::Selectable("delete"))
@@ -182,7 +178,7 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 					if (gui->sel_item == obj_gui)
 					{ gui->sel_item = NULL; }
 					
-					trceng_del_obj(self, i);
+//					trceng_del_obj(self, i);
 				}
 				
 				ImGui::EndPopup();

@@ -7,13 +7,14 @@
 
 //------------------------------------------------------------------------------
 
+#include <clip/clip.h>
+#include <imgui/imgui.h>
+
 #include <sftlstd/vl.h>
-#include <libcommon/vl3d.h>
+#include <sftlstd/vl3d.h>
+#include <sftlstd/vl3d_imgui.h>
 
-#include <libgui/imgui/imgui.h>
-#include <sftltrc/trcobj.h>
-
-#include <libgui/clip/clip.h>
+#include <sftltrc/trc.h>
 
 //------------------------------------------------------------------------------
 
@@ -29,29 +30,31 @@ typedef struct gui_clip_attr
 
 }   s_gui_clip_attr;
 
+//------------------------------------------------------------------------------
+
 void gui_clip_init (s_gui_clip *clip, s_gui_clip_attr attr)
 {
     clip->format_traj = clip::register_format("com.trajectory.traj");
     // Do not clear the clipboard TF ?
 //    clip->lock.clear();
-
-    return;
 }
+
+//------------------------------------------------------------------------------
 
 void gui_clip_set_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
 {
     u8_t __traj_data__[256 * 1024];
     u8_t *traj_data = __traj_data__;
 
-    trctraj_save(traj, eng, &traj_data);
+    trctraj_save(traj, &eng->intf_spl, &traj_data);
 
     u32_t traj_data_size = (u32_t) (traj_data - __traj_data__);
 
     clip::lock lock;
     lock.set_data(clip->format_traj, (const char*) __traj_data__, traj_data_size);
-
-    return;
 }
+
+//------------------------------------------------------------------------------
 
 void gui_clip_get_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
 {
@@ -63,11 +66,10 @@ void gui_clip_get_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
     if (traj_data_size > 0x00)
     {
         lock.get_data(clip->format_traj, (char*) __traj_data__, traj_data_size);
-        traj->free(&traj->data);
-        trctraj_load(traj, eng, &traj_data);
-    }
 
-    return;
+        trctraj_free(traj);
+        trctraj_load(traj, &eng->intf_spl, &traj_data);
+    }
 }
 
 //------------------------------------------------------------------------------

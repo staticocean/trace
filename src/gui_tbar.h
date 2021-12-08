@@ -11,16 +11,20 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sftlstd/vl.h>
-#include <libcommon/imgui_w.h>
-#include <libgui/imgui/imgui.h>
-#include <sftltrc/trceng.h>
-#include <libgui/clip/clip.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+#include <clip/clip.h>
 #include <nfd.h>
 
+#include <sftlstd/vl.h>
+#include <sftlstd/vl3d.h>
+#include <sftlstd/vl3d_imgui.h>
+
+#include <sftlgui/sftlgui.h>
+
+#include <sftltrc/trc.h>
+
 #include "gui_eng.h"
-#include "gui_env.h"
-#include "gui_cmd.h"
 #include "gui_conf.h"
 
 //------------------------------------------------------------------------------

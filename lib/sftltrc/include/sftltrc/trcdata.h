@@ -47,12 +47,14 @@ typedef struct trcdata
 	};
 	
 	char 				name[32];
-	
+	s_trcobj 			*obj;
+
 } 	s_trcdata;
 
 typedef struct trcdata_attr
 {
 	char 				name[32];
+	s_trcobj 			*obj;
 	
 } 	s_trcdata_attr;
 
@@ -62,6 +64,7 @@ inline
 s8_t trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
 {
 	memcpy(data->name, attr->name, sizeof(data->name));
+	data->obj = attr->obj;
 	
 	return data->intf->init(data, attr);
 }
@@ -144,7 +147,6 @@ s_trcdata* trcdata_malloc (s_trcdata_intf *intf_data, s_trcdata_attr *attr)
 }
 
 //------------------------------------------------------------------------------
-
 
 //void trcdata_copy (s_trceng *eng, s_trcdata *dest, s_trcdata *src)
 //{

@@ -18,7 +18,7 @@
 
 typedef struct trctraj_intf
 {
-	char 				guid[32];
+	char 				desc[32];
 	
 	s32_t				data_sz;
 	s32_t 				attr_sz;
@@ -48,6 +48,7 @@ typedef struct trctraj
 	};
 	
 	char 				name[32];
+	s_trcobj 			*obj;
 	
 	f64_t 				time[2];
 	
@@ -56,6 +57,7 @@ typedef struct trctraj
 typedef struct trctraj_attr
 {
 	char 				name[32];
+	s_trcobj 			*obj;
 	
 } 	s_trctraj_attr;
 
@@ -65,6 +67,7 @@ inline
 s8_t trctraj_init (s_trctraj *traj, s_trctraj_attr *attr)
 {
 	memcpy(traj->name, attr->name, sizeof(traj->name));
+	traj->obj = attr->obj;
 	
 	return traj->intf->init(traj, attr);
 }
@@ -150,7 +153,6 @@ void trctraj_gui_view (s_trctraj *traj)
 
 //------------------------------------------------------------------------------
 
-inline
 s_trctraj* trctraj_malloc (s_trctraj_intf *intf_traj, s_trctraj_attr *attr)
 {
 	s_trctraj *traj = (s_trctraj*) malloc(intf_traj->data_sz);
@@ -159,6 +161,17 @@ s_trctraj* trctraj_malloc (s_trctraj_intf *intf_traj, s_trctraj_attr *attr)
 	trctraj_init(traj, attr);
 	
 	return traj;
+}
+
+//------------------------------------------------------------------------------
+
+void trctraj_dealloc (s_trctraj *traj)
+{
+	if (traj != NULL)
+	{
+		trctraj_free(traj);
+		free(traj);
+	}
 }
 
 //------------------------------------------------------------------------------

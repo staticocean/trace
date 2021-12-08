@@ -17,7 +17,6 @@
 #include <sftltrc/trcproc.h>
 #include <sftltrc/trcspl.h>
 #include <sftltrc/trctraj.h>
-#include <sftltrc/trcpack.h>
 
 //------------------------------------------------------------------------------
 

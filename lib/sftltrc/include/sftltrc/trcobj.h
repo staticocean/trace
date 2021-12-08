@@ -13,13 +13,12 @@
 #include <sftlstd/env.h>
 
 #include <sftltrc/trcspl.h>
-#include <sftltrc/trcspl.h>
 
 //------------------------------------------------------------------------------
 
 typedef struct trcobj_intf
 {
-	char 				guid[32];
+	char 				desc[32];
 	
 	s32_t				data_sz;
 	s32_t 				attr_sz;
@@ -72,15 +71,6 @@ typedef struct trcobj
 	u32_t 			log_sz;
 	s_trcobj_data 	*log_ls;
 	
-	s32_t 			traj_sz;
-	void 			*traj_ls[8];
-	
-	s32_t 			ctrl_sz;
-	void 			*ctrl_ls[8];
-	
-	s32_t 			data_sz;
-	void 			*data_ls[8];
-	
 } 	s_trcobj;
 
 typedef struct trcobj_attr
@@ -95,10 +85,6 @@ inline
 s8_t trcobj_init (s_trcobj *obj, s_trcobj_attr *attr)
 {
 	strcpy(obj->name, attr->name);
-	
-	obj->traj_sz = 0x00;
-	obj->ctrl_sz = 0x00;
-	obj->data_sz = 0x00;
 	
 	obj->log_ls = NULL;
 	obj->log_sz = 0x00;
@@ -337,58 +323,58 @@ s_trcobj* trcobj_malloc (s_trcobj_intf *intf_obj, s_trcobj_attr *attr)
 
 //------------------------------------------------------------------------------
 
-void trcobj_save (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
-{
-	s_trcobj *v_self = (s_trcobj*) *v_file;
-	*v_file += sizeof(s_trcobj);
-	
-	*v_self = *obj;
-	
-	v_self->time       = NULL;
-	v_self->log_ls   = NULL;
-	v_self->log_sz = 0x00;
-	
-	// support custom widget save/load
-	
-	for (s32_t i = 0; i < obj->traj_sz; ++i)
-	{
-		trctraj_save (&obj->traj_ls[i], eng, v_file);
-	}
-	
-	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
-	{
-		trcctrl_save (&obj->ctrl_ls[i], eng, v_file);
-	}
-	
-	for (s32_t i = 0; i < obj->data_sz; ++i)
-	{
-		trcdata_save (&obj->data_ls[i], eng, v_file);
-	}
-}
-
-void trcobj_load (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
-{
-	s_trcobj *v_self = (s_trcobj*) *v_file;
-	*v_file += sizeof(s_trcobj);
-	
-	*obj = *v_self;
-	
-	// support custom widget save/load
-	for (s32_t i = 0; i < obj->traj_sz; ++i)
-	{
-		trctraj_load(&obj->traj_ls[i], eng, v_file);
-	}
-	
-	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
-	{
-		trcctrl_load(&obj->ctrl_ls[i], eng, v_file);
-	}
-	
-	for (s32_t i = 0; i < obj->data_sz; ++i)
-	{
-		trcdata_load(&obj->data_ls[i], eng, v_file);
-	}
-}
+//void trcobj_save (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
+//{
+//	s_trcobj *v_self = (s_trcobj*) *v_file;
+//	*v_file += sizeof(s_trcobj);
+//
+//	*v_self = *obj;
+//
+//	v_self->time       = NULL;
+//	v_self->log_ls   = NULL;
+//	v_self->log_sz = 0x00;
+//
+//	// support custom widget save/load
+//
+//	for (s32_t i = 0; i < obj->traj_sz; ++i)
+//	{
+//		trctraj_save (&obj->traj_ls[i], eng, v_file);
+//	}
+//
+//	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
+//	{
+//		trcctrl_save (&obj->ctrl_ls[i], eng, v_file);
+//	}
+//
+//	for (s32_t i = 0; i < obj->data_sz; ++i)
+//	{
+//		trcdata_save (&obj->data_ls[i], eng, v_file);
+//	}
+//}
+//
+//void trcobj_load (s_trcobj *obj, s_trceng *eng, u8_t **v_file)
+//{
+//	s_trcobj *v_self = (s_trcobj*) *v_file;
+//	*v_file += sizeof(s_trcobj);
+//
+//	*obj = *v_self;
+//
+//	// support custom widget save/load
+//	for (s32_t i = 0; i < obj->traj_sz; ++i)
+//	{
+//		trctraj_load(&obj->traj_ls[i], eng, v_file);
+//	}
+//
+//	for (s32_t i = 0; i < obj->ctrl_sz; ++i)
+//	{
+//		trcctrl_load(&obj->ctrl_ls[i], eng, v_file);
+//	}
+//
+//	for (s32_t i = 0; i < obj->data_sz; ++i)
+//	{
+//		trcdata_load(&obj->data_ls[i], eng, v_file);
+//	}
+//}
 
 //void trcobj_copy (s_trceng *eng, s_trcobj *dest, s_trcobj *src)
 //{

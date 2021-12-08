@@ -7,29 +7,19 @@
 
 //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <res/fonts/default_font.h>
 
-#include <libgui/imgui/imgui.h>
-#include <lib/picoc/picoc.h>
+#include <imgui/imgui.h>
 #include <nfd.h>
 #include <sftlstd/vl.h>
-#include <libcommon/imgui_theme.h>
-#include <libcommon/imgui_w.h>
+#include <sftlgui/imgui_theme.h>
+#include <sftlgui/imgui_custom.h>
 
-#include <sftltrc/trceng.h>
-#include <sftltrc/trcobj.h>
-#include <sftltrc/trcellp.h>
-#include <sftltrc/trctraj.h>
-#include <sftltrc/trctraj_.h>
-#include <sftltrc/trcctrl.h>
-#include <sftltrc/trcdata.h>
-#include <sftltrc/trcproc.h>
+#include <sftltrc/trc.h>
 
 #include "gui_eng.h"
 #include "gui_obj.h"
@@ -38,39 +28,33 @@
 #include "gui_traj.h"
 #include "gui_ctrl.h"
 #include "gui_data.h"
-#include "gui_cmd.h"
-#include "gui_env.h"
 #include "gui_clip.h"
 
 //------------------------------------------------------------------------------
 
 typedef struct gui
 {
-	float32_t w_height;
-	float32_t w_width;
+	f32_t 		w_height;
+	f32_t 		w_width;
 	
-	s_trceng eng;
-	s_trcobj  st_eng_obj_ls [255];
-	s_trcellp st_eng_ellp_ls[255];
-	s_trctraj st_eng_traj_ls[255];
-	s_trcctrl st_eng_ctrl_ls[255];
-	s_trcdata st_eng_data_ls[255];
-	s_trcproc st_eng_proc_ls[255];
+	s_trceng 	eng;
+	s_trcproc 	*st_eng_proc_ls[255];
+	s_trcrefs 	*st_eng_refs_ls[255];
+	s_trcobj  	*st_eng_obj_ls [255];
+	s_trctraj 	*st_eng_traj_ls[255];
+	s_trcctrl 	*st_eng_ctrl_ls[255];
+	s_trcdata 	*st_eng_data_ls[255];
 	
-	s_gui_obj st_gui_eng_obj[255];
-	
-	s_gui_tbar gui_tbar;
-	s_gui_eng  gui_eng;
-	s_gui_cmd  gui_cmd;
-	s_gui_env  gui_env;
-	s_gui_clip gui_clip;
-	s_gui_conf gui_conf;
+	s_gui_tbar 	gui_tbar;
+	s_gui_eng  	gui_eng;
+	s_gui_clip 	gui_clip;
+	s_gui_conf 	gui_conf;
 	
 } 	s_gui;
 
 typedef struct gui_init_attr
 {
-	u32_t temp;
+	u32_t 		temp;
 	
 }	s_gui_init;
 
@@ -101,8 +85,6 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 
 	self->gui_tbar.eng  = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
-	self->gui_tbar.env  = &self->gui_env;
-    self->gui_tbar.cmd  = &self->gui_cmd;
     self->gui_tbar.conf = &self->gui_conf;
 	self->gui_tbar.height = 40;
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
