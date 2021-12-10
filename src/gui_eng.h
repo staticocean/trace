@@ -151,7 +151,7 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 			bool node_open = ImGui::TreeNodeEx((void*) i,
 											   (node_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
 											   | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick,
-											   (char*) obj->desc);
+											   (char*) obj->name);
 			
 			if (ImGui::BeginPopupContextItem("obj_options"))
 			{
@@ -199,67 +199,67 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 						if (ImGui::SmallButton("add##add_traj"))
 						{ ImGui::OpenPopup("add_traj_popup"); }
 						
-						if (ImGui::BeginPopup("add_traj_popup"))
-						{
-							for (int j = 0; j < self->traj_sz; ++j)
-							{
-								ImGui::PushID(&self->traj_ls[j]);
-								ImGui::Selectable(self->traj_ls[j].desc);
-								
-								if (ImGui::IsItemClicked())
-								{
-									trcobj_add_traj(obj, self->traj_ls[j]);
-								}
-								
-								ImGui::PopID();
-							}
-							
-							ImGui::EndPopup();
-						}
+//						if (ImGui::BeginPopup("add_traj_popup"))
+//						{
+//							for (int j = 0; j < self->traj_sz; ++j)
+//							{
+//								ImGui::PushID(&self->traj_ls[j]);
+//								ImGui::Selectable(self->traj_ls[j].desc);
+//
+//								if (ImGui::IsItemClicked())
+//								{
+//									trcobj_add_traj(obj, self->traj_ls[j]);
+//								}
+//
+//								ImGui::PopID();
+//							}
+//
+//							ImGui::EndPopup();
+//						}
 					}
 					
-					if (traj_open)
-					{
-						if (obj->traj_sz == 0x00)
-						{ ImGui::Text("[no items]"); }
-						
-						for (int j = 0; j < obj->traj_sz; ++j)
-						{
-							ImGui::PushID(&obj->traj_ls[j]);
-							
-							bool traj_sel = gui->sel_item == &obj->traj_ls[j];
-							
-							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->traj_ls[j].name,
-											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->traj_ls[j].name);
-							
-							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_traj(gui, &obj->traj_ls[j]); }
-							
-							if (ImGui::BeginPopupContextItem("traj_menu"))
-							{
-                                if (ImGui::Selectable("copy ")) { gui_clip_set_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
-                                if (ImGui::Selectable("paste")) { gui_clip_get_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
-
-								if (ImGui::Selectable("delete"))
-								{
-									if (gui->sel_item == &obj->traj_ls[j])
-									{ gui->sel_item = NULL; }
-									
-									trcobj_del_traj(obj, &obj->traj_ls[j]);
-								}
-								
-								ImGui::EndPopup();
-							}
-							
-							ImGui::TreePop();
-							
-							ImGui::PopID();
-						}
-						
-						ImGui::TreePop();
-					}
+//					if (traj_open)
+//					{
+//						if (obj->traj_sz == 0x00)
+//						{ ImGui::Text("[no items]"); }
+//
+//						for (int j = 0; j < obj->traj_sz; ++j)
+//						{
+//							ImGui::PushID(&obj->traj_ls[j]);
+//
+//							bool traj_sel = gui->sel_item == &obj->traj_ls[j];
+//
+//							ImGui::AlignTextToFramePadding();
+//							ImGui::TreeNodeEx(obj->traj_ls[j].name,
+//											  (traj_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+//											  | ImGuiTreeNodeFlags_Leaf, obj->traj_ls[j].name);
+//
+//							if (ImGui::IsItemClicked())
+//							{ gui_eng_sel_traj(gui, &obj->traj_ls[j]); }
+//
+//							if (ImGui::BeginPopupContextItem("traj_menu"))
+//							{
+//                                if (ImGui::Selectable("copy ")) { gui_clip_set_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
+//                                if (ImGui::Selectable("paste")) { gui_clip_get_traj(gui->gui_clip, self, &obj->traj_ls[j]); }
+//
+//								if (ImGui::Selectable("delete"))
+//								{
+//									if (gui->sel_item == &obj->traj_ls[j])
+//									{ gui->sel_item = NULL; }
+//
+//									trcobj_del_traj(obj, &obj->traj_ls[j]);
+//								}
+//
+//								ImGui::EndPopup();
+//							}
+//
+//							ImGui::TreePop();
+//
+//							ImGui::PopID();
+//						}
+//
+//						ImGui::TreePop();
+//					}
 				}
 				
 				{
@@ -273,64 +273,64 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 						if (ImGui::SmallButton("add##add_ctrl"))
 						{ ImGui::OpenPopup("add_ctrl_popup"); }
 						
-						if (ImGui::BeginPopup("add_ctrl_popup"))
-						{
-							for (int j = 0; j < self->ctrl_sz; ++j)
-							{
-								ImGui::PushID(&self->ctrl_ls[j]);
-								ImGui::Selectable(self->ctrl_ls[j].desc);
-								
-								if (ImGui::IsItemClicked())
-								{
-									trcobj_add_ctrl(obj, self->ctrl_ls[j]);
-								}
-								
-								ImGui::PopID();
-							}
-							
-							ImGui::EndPopup();
-						}
+//						if (ImGui::BeginPopup("add_ctrl_popup"))
+//						{
+//							for (int j = 0; j < self->ctrl_sz; ++j)
+//							{
+//								ImGui::PushID(&self->ctrl_ls[j]);
+//								ImGui::Selectable(self->ctrl_ls[j].desc);
+//
+//								if (ImGui::IsItemClicked())
+//								{
+//									trcobj_add_ctrl(obj, self->ctrl_ls[j]);
+//								}
+//
+//								ImGui::PopID();
+//							}
+//
+//							ImGui::EndPopup();
+//						}
 					}
 					
-					if (ctrl_open)
-					{
-						if (obj->ctrl_sz == 0x00)
-						{ ImGui::Text("[no items]"); }
-						
-						for (int j = 0; j < obj->ctrl_sz; ++j)
-						{
-							ImGui::PushID(&obj->ctrl_ls[j]);
-							
-							bool ctrl_sel = gui->sel_item == &obj->ctrl_ls[j];
-							
-							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->ctrl_ls[j].name,
-											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_ls[j].name);
-							
-							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_ctrl(gui, &obj->ctrl_ls[j]); }
-							
-							if (ImGui::BeginPopupContextItem("ctrl_menu"))
-							{
-								if (ImGui::Selectable("delete"))
-								{
-									if (gui->sel_item == &obj->ctrl_ls[j])
-									{ gui->sel_item = NULL; }
-									
-									trcobj_del_ctrl(obj, &obj->ctrl_ls[j]);
-								}
-								
-								ImGui::EndPopup();
-							}
-							
-							ImGui::TreePop();
-							
-							ImGui::PopID();
-						}
-						
-						ImGui::TreePop();
-					}
+//					if (ctrl_open)
+//					{
+//						if (obj->ctrl_sz == 0x00)
+//						{ ImGui::Text("[no items]"); }
+//
+//						for (int j = 0; j < obj->ctrl_sz; ++j)
+//						{
+//							ImGui::PushID(&obj->ctrl_ls[j]);
+//
+//							bool ctrl_sel = gui->sel_item == &obj->ctrl_ls[j];
+//
+//							ImGui::AlignTextToFramePadding();
+//							ImGui::TreeNodeEx(obj->ctrl_ls[j].name,
+//											  (ctrl_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+//											  | ImGuiTreeNodeFlags_Leaf, obj->ctrl_ls[j].name);
+//
+//							if (ImGui::IsItemClicked())
+//							{ gui_eng_sel_ctrl(gui, &obj->ctrl_ls[j]); }
+//
+//							if (ImGui::BeginPopupContextItem("ctrl_menu"))
+//							{
+//								if (ImGui::Selectable("delete"))
+//								{
+//									if (gui->sel_item == &obj->ctrl_ls[j])
+//									{ gui->sel_item = NULL; }
+//
+//									trcobj_del_ctrl(obj, &obj->ctrl_ls[j]);
+//								}
+//
+//								ImGui::EndPopup();
+//							}
+//
+//							ImGui::TreePop();
+//
+//							ImGui::PopID();
+//						}
+//
+//						ImGui::TreePop();
+//					}
 				}
 				{
 					ImGui::AlignTextToFramePadding();
@@ -343,62 +343,62 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 						if (ImGui::SmallButton("add##add_data"))
 						{ ImGui::OpenPopup("add_data_popup"); }
 
-						if (ImGui::BeginPopup("add_data_popup"))
-						{
-							for (int j = 0; j < self->data_sz; ++j)
-							{
-								ImGui::PushID(&self->data_ls[j]);
-								ImGui::Selectable(self->data_ls[j].desc);
-
-								if (ImGui::IsItemClicked())
-								{ trcobj_add_data(obj, self->data_ls[j]); }
-
-								ImGui::PopID();
-							}
-
-							ImGui::EndPopup();
-						}
+//						if (ImGui::BeginPopup("add_data_popup"))
+//						{
+//							for (int j = 0; j < self->data_sz; ++j)
+//							{
+//								ImGui::PushID(&self->data_ls[j]);
+//								ImGui::Selectable(self->data_ls[j].desc);
+//
+//								if (ImGui::IsItemClicked())
+//								{ trcobj_add_data(obj, self->data_ls[j]); }
+//
+//								ImGui::PopID();
+//							}
+//
+//							ImGui::EndPopup();
+//						}
 					}
 
-					if (data_open)
-					{
-						if (obj->data_sz == 0x00)
-						{ ImGui::Text("[no items]"); }
-
-						for (int j = 0; j < obj->data_sz; ++j)
-						{
-							ImGui::PushID(&obj->data_ls[j]);
-
-							bool data_sel = gui->sel_item == &obj->data_ls[j];
-							
-							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx(obj->data_ls[j].name,
-											  (data_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
-											  | ImGuiTreeNodeFlags_Leaf, obj->data_ls[j].name);
-
-							if (ImGui::IsItemClicked())
-							{ gui_eng_sel_data(gui, &obj->data_ls[j]); }
-							
-							if (ImGui::BeginPopupContextItem("data_menu"))
-							{
-								if (ImGui::Selectable("delete"))
-								{
-									if (gui->sel_item == &obj->data_ls[j])
-									{ gui->sel_item = NULL; }
-
-									trcobj_del_data(obj, &obj->data_ls[j]);
-								}
-
-								ImGui::EndPopup();
-							}
-
-							ImGui::TreePop();
-
-							ImGui::PopID();
-						}
-
-						ImGui::TreePop();
-					}
+//					if (data_open)
+//					{
+//						if (obj->data_sz == 0x00)
+//						{ ImGui::Text("[no items]"); }
+//
+//						for (int j = 0; j < obj->data_sz; ++j)
+//						{
+//							ImGui::PushID(&obj->data_ls[j]);
+//
+//							bool data_sel = gui->sel_item == &obj->data_ls[j];
+//
+//							ImGui::AlignTextToFramePadding();
+//							ImGui::TreeNodeEx(obj->data_ls[j].name,
+//											  (data_sel ? ImGuiTreeNodeFlags_Selected : 0x00)
+//											  | ImGuiTreeNodeFlags_Leaf, obj->data_ls[j].name);
+//
+//							if (ImGui::IsItemClicked())
+//							{ gui_eng_sel_data(gui, &obj->data_ls[j]); }
+//
+//							if (ImGui::BeginPopupContextItem("data_menu"))
+//							{
+//								if (ImGui::Selectable("delete"))
+//								{
+//									if (gui->sel_item == &obj->data_ls[j])
+//									{ gui->sel_item = NULL; }
+//
+//									trcobj_del_data(obj, &obj->data_ls[j]);
+//								}
+//
+//								ImGui::EndPopup();
+//							}
+//
+//							ImGui::TreePop();
+//
+//							ImGui::PopID();
+//						}
+//
+//						ImGui::TreePop();
+//					}
 				}
 				
 				ImGui::TreePop();
@@ -442,11 +442,11 @@ inline u8_t gui_eng_updateeng(s_gui_eng *gui, s_trceng *self)
 			
 			for (int i = 0; i < self->obj_sz; ++i)
 			{
-				if (self->obj_ls[i].log_ls != NULL)
-				{ free(self->obj_ls[i].log_ls); }
+				if (self->obj_ls[i]->log_ls != NULL)
+				{ free(self->obj_ls[i]->log_ls); }
 				
-				self->obj_ls[i].log_ls = (s_trcobj_data*) malloc(sizeof(s_trcobj_data) * (self->time_iter+1));
-				self->obj_ls[i].log_sz = 0x00;
+				self->obj_ls[i]->log_ls = (s_trcobj_data*) malloc(sizeof(s_trcobj_data) * (self->time_iter+1));
+				self->obj_ls[i]->log_sz = 0x00;
 			}
 			
 			trceng_log(self);
@@ -549,11 +549,11 @@ inline u8_t gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
 		
 		if (gui->state == gui_eng_state_deinit)
 		{
-			ImGui::Text("DATA PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
-			ImGui::SameLine();
-			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-			ImGui::Dummy(ImVec2(0, 5));
-			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+//			ImGui::Text("DATA PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
+//			ImGui::SameLine();
+//			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+//			ImGui::Dummy(ImVec2(0, 5));
+//			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_standby)
@@ -569,35 +569,35 @@ inline u8_t gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
 		
 		ImGui::BeginChild("##scroll_view");
 		{
-			if (gui->state == gui_eng_state_standby)
-			{
-				for (int i = 0; i < self->obj_sz; ++i)
-				{
-					s_trcobj *obj = &self->obj_ls[i];
-					
-					ImGui::PushID(obj);
-					
-					if (ImGui::CollapsingHeader(obj->desc))
-					{
-						if (ImPlot::BeginPlot(obj->desc))
-						{
-							int stride = 10;
-							
-							ImPlot::PlotLine("pos_error [m]  ",
-									&obj->log_ls[0].time[0], &obj->log_ls[0].pos_error,
-									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
-							
-							ImPlot::PlotLine("rot_error [rad]",
-									&obj->log_ls[0].time[0], &obj->log_ls[0].rot_error,
-									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
-							
-							ImPlot::EndPlot();
-						}
-					}
-					
-					ImGui::PopID();
-				}
-			}
+//			if (gui->state == gui_eng_state_standby)
+//			{
+//				for (int i = 0; i < self->obj_sz; ++i)
+//				{
+//					s_trcobj *obj = &self->obj_ls[i];
+//
+//					ImGui::PushID(obj);
+//
+//					if (ImGui::CollapsingHeader(obj->desc))
+//					{
+//						if (ImPlot::BeginPlot(obj->desc))
+//						{
+//							int stride = 10;
+//
+//							ImPlot::PlotLine("pos_error [m]  ",
+//									&obj->log_ls[0].time[0], &obj->log_ls[0].pos_error,
+//									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
+//
+//							ImPlot::PlotLine("rot_error [rad]",
+//									&obj->log_ls[0].time[0], &obj->log_ls[0].rot_error,
+//									obj->log_sz / stride, 0x00, stride*sizeof(s_trcobj_data));
+//
+//							ImPlot::EndPlot();
+//						}
+//					}
+//
+//					ImGui::PopID();
+//				}
+//			}
 		}
 		ImGui::EndChild();
 		

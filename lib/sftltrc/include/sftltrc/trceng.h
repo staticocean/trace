@@ -79,6 +79,8 @@ typedef struct trceng_attr
 {
 	u8_t 				*stack;
 	
+	s_trcproc 			*proc;
+	
 	s_trcproc  			**proc_ls;
 	s_trcrefs  			**refs_ls;
 	s_trcobj  			**obj_ls;
@@ -108,6 +110,8 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr *attr)
 	if (eng->time_step < 1E-6) { eng->time_step = 1E-6; }
 	
 	eng->time_iter 		= eng->time_limit / eng->time_step;
+	
+	eng->proc 			= attr->proc;
 	
 	eng->proc_ls 		= attr->proc_ls;
 	eng->proc_sz 		= 0x00;

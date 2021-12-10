@@ -23,7 +23,6 @@
 
 #include "gui_eng.h"
 #include "gui_obj.h"
-#include "gui_map.h"
 #include "gui_tbar.h"
 #include "gui_traj.h"
 #include "gui_ctrl.h"
@@ -38,12 +37,19 @@ typedef struct gui
 	f32_t 		w_width;
 	
 	s_trceng 	eng;
-	s_trcproc 	*st_eng_proc_ls[255];
-	s_trcrefs 	*st_eng_refs_ls[255];
-	s_trcobj  	*st_eng_obj_ls [255];
-	s_trctraj 	*st_eng_traj_ls[255];
-	s_trcctrl 	*st_eng_ctrl_ls[255];
-	s_trcdata 	*st_eng_data_ls[255];
+	s_trcproc 	*st_eng_proc_ls[256];
+	s_trcrefs 	*st_eng_refs_ls[256];
+	s_trcobj  	*st_eng_obj_ls [256];
+	s_trctraj 	*st_eng_traj_ls[256];
+	s_trcctrl 	*st_eng_ctrl_ls[256];
+	s_trcdata 	*st_eng_data_ls[256];
+	
+	s_trcproc_intf 	*st_eng_proc_intf_ls[256];
+	s_trcrefs_intf 	*st_eng_refs_intf_ls[256];
+	s_trcobj_intf  	*st_eng_obj_intf_ls [256];
+	s_trctraj_intf 	*st_eng_traj_intf_ls[256];
+	s_trcctrl_intf 	*st_eng_ctrl_intf_ls[256];
+	s_trcdata_intf 	*st_eng_data_intf_ls[256];
 	
 	s_gui_tbar 	gui_tbar;
 	s_gui_eng  	gui_eng;
@@ -94,548 +100,554 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 	    .gui_clip = &self->gui_clip,
     });
 	
-	trceng_init(&self->eng, (s_trceng_init) {
+	trceng_init(&self->eng, (s_trceng_attr) {
 			
-			.proc      = self->st_eng_proc_ls[0],
+			.proc     = self->st_eng_proc_ls[0],
 			
-			.obj_ls  = self->st_eng_obj_ls,
+			.proc_ls  = self->st_eng_proc_ls,
+			.refs_ls  = self->st_eng_refs_ls,
+			.obj_ls   = self->st_eng_obj_ls,
+			.traj_ls  = self->st_eng_traj_ls,
+			.ctrl_ls  = self->st_eng_ctrl_ls,
+			.data_ls  = self->st_eng_data_ls,
 			
-			.ellp_ls = self->st_eng_ellp_ls,
-			.traj_ls = self->st_eng_traj_ls,
-			.ctrl_ls = self->st_eng_ctrl_ls,
-			.data_ls = self->st_eng_data_ls,
-			.proc_ls = self->st_eng_proc_ls,
+			.proc_intf_ls = self->st_eng_proc_intf_ls,
+			.refs_intf_ls = self->st_eng_refs_intf_ls,
+			.obj_intf_ls  = self->st_eng_obj_intf_ls,
+			.traj_intf_ls = self->st_eng_traj_intf_ls,
+			.ctrl_intf_ls = self->st_eng_ctrl_intf_ls,
+			.data_intf_ls = self->st_eng_data_intf_ls,
 			
 			.time_limit = 3600.0,
 			.time_step = 0.01,
 	});
 	
-	trcellp_init(&trcellp_wgs84);
-	trcellp_init(&trcellp_pz90);
-	trcellp_init(&trcellp_pz90_11);
-	
-	trceng_add_ellpapi(&self->eng, trcellp_wgs84);
-	trceng_add_ellpapi(&self->eng, trcellp_pz90);
-	trceng_add_ellpapi(&self->eng, trcellp_pz90_11);
-	
-	static s_trctraj_static_init trctraj_static_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-			
-			.ellp_en = 0x00,
-			.ellp = NULL,
-			
-			.pos = { 0, 0, 0 },
-			.rot = { 1, 0, 0, 0, 1, 0, 0, 0, 1 },
-	};
-	
-	trceng_add_trajapi(&self->eng, (s_trctraj) {
-			
-			.desc = "default_traj_static",
-			.name = "default_traj_static",
-			
-			.config_size = sizeof(s_trctraj_static_init),
-			.config = &trctraj_static_config_,
-			
-			.data_size = sizeof(s_trctraj_static),
-			.data = NULL,
-			
-			.init = trctraj_static_init_,
-			.free = trctraj_static_free_,
-			.save = trctraj_static_save_,
-			.load = trctraj_static_load_,
-			.compile = trctraj_static_compile_,
-			.info = trctraj_static_info_,
-			.pos  = trctraj_static_pos_,
-			.rot  = trctraj_static_rot_,
-	});
-	
-	static s_trctraj_orb_init trctraj_orb_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-			
-			.sync_en = 0x00,
-			
-			.radius = 0.0,
-			.rate = 0.0,
-			
-			.s_rate = 0.0,
-	};
-	
-	vl3_mid(trctraj_orb_config_.tilt);
-	vl3_mid(trctraj_orb_config_.s_tilt);
-	
-	trceng_add_trajapi(&self->eng, (s_trctraj) {
-			
-			.desc = "default_traj_orb",
-			.name = "default_traj_orb",
-			
-			.config_size = sizeof(s_trctraj_orb_init),
-			.config = &trctraj_orb_config_,
-			
-			.data_size = sizeof(s_trctraj_orb),
-			.data = NULL,
-			
-			.init = trctraj_orb_init_,
-			.free = trctraj_orb_free_,
-			.save = trctraj_orb_save_,
-			.load = trctraj_orb_load_,
-			.compile = trctraj_orb_compile_,
-			.info = trctraj_orb_info_,
-			.pos = trctraj_orb_pos_,
-			.rot = trctraj_orb_rot_,
-	});
-	
-	static s_trctraj_bz_init trctraj_bz_config_ = {
-			
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-			
-			.ellp_en = 0x00,
-			.ellp = NULL,
-			
-			.pts = NULL,
-	};
-	
-	trceng_add_trajapi(&self->eng, (s_trctraj) {
-			
-			.desc = "default_traj_bz",
-			.name = "default_traj_bz",
-			
-			.config_size = sizeof(s_trctraj_bz_init),
-			.config = &trctraj_bz_config_,
-			
-			.data_size = sizeof(s_trctraj_bz),
-			.data = NULL,
-			
-			.init = trctraj_bz_init_,
-			.free = trctraj_bz_free_,
-			.save = trctraj_bz_save_,
-			.load = trctraj_bz_load_,
-			.compile = trctraj_bz_compile_,
-			.info = trctraj_bz_info_,
-			.pos = trctraj_bz_pos_,
-			.rot = trctraj_bz_rot_,
-	});
-	
-	static s_trctraj_bz_init trctraj_bz2_config_ = {
-			
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-			
-			.ellp_en = 0x00,
-			.ellp = NULL,
-			
-			.pts = NULL,
-	};
-	
-	trceng_add_trajapi(&self->eng, (s_trctraj) {
-			
-			.desc = "default_traj_bz2",
-			.name = "default_traj_bz2",
-			
-			.config_size = sizeof(s_trctraj_bz_init),
-			.config = &trctraj_bz_config_,
-			
-			.data_size = sizeof(s_trctraj_bz),
-			.data = NULL,
-			
-			.init = trctraj_bz_init_,
-			.free = trctraj_bz_free_,
-			.save = trctraj_bz_save_,
-			.load = trctraj_bz_load_,
-			.compile = trctraj_bz_compile_,
-			.info = trctraj_bz_info_,
-			.pos = trctraj_bz_pos_,
-			.rot = trctraj_bz_rot_,
-	});
-	
-	static s_trctraj_navsat_init trctraj_navsat_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-	};
-	
-	trceng_add_trajapi(&self->eng, (s_trctraj) {
-			
-			.desc = "default_traj_navsat",
-			.name = "default_traj_navsat",
-			
-			.config_size = sizeof(s_trctraj_navsat_init),
-			.config = &trctraj_navsat_config_,
-			
-			.data_size = sizeof(s_trctraj_navsat),
-			.data = NULL,
-			
-			.init = trctraj_navsat_init_,
-			.free = trctraj_navsat_free_,
-			.save = trctraj_navsat_save_,
-			.load = trctraj_navsat_load_,
-			.compile = trctraj_navsat_compile_,
-			.info = trctraj_navsat_info_,
-			.pos = trctraj_navsat_pos_,
-			.rot = trctraj_navsat_rot_,
-	});
-	
-	static s_trcctrl_upos_init trcctrl_upos_config_ = {
-	
-	};
-	
-	static s_trcctrl_cpos_init trcctrl_cpos_config_ = {
-	
-	};
-	
-	static s_trcctrl_urot_init trcctrl_urot_config_ = {
-	
-	};
-	
-	static s_trcctrl_crot_init trcctrl_crot_config_ = {
-	
-	};
-	
+//	trcellp_init(&trcellp_wgs84);
+//	trcellp_init(&trcellp_pz90);
+//	trcellp_init(&trcellp_pz90_11);
+//
+//	trceng_add_ellpapi(&self->eng, trcellp_wgs84);
+//	trceng_add_ellpapi(&self->eng, trcellp_pz90);
+//	trceng_add_ellpapi(&self->eng, trcellp_pz90_11);
+//
+//	static s_trctraj_static_init trctraj_static_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//
+//			.ellp_en = 0x00,
+//			.ellp = NULL,
+//
+//			.pos = { 0, 0, 0 },
+//			.rot = { 1, 0, 0, 0, 1, 0, 0, 0, 1 },
+//	};
+//
+//	trceng_add_trajapi(&self->eng, (s_trctraj) {
+//
+//			.desc = "default_traj_static",
+//			.name = "default_traj_static",
+//
+//			.config_size = sizeof(s_trctraj_static_init),
+//			.config = &trctraj_static_config_,
+//
+//			.data_size = sizeof(s_trctraj_static),
+//			.data = NULL,
+//
+//			.init = trctraj_static_init_,
+//			.free = trctraj_static_free_,
+//			.save = trctraj_static_save_,
+//			.load = trctraj_static_load_,
+//			.compile = trctraj_static_compile_,
+//			.info = trctraj_static_info_,
+//			.pos  = trctraj_static_pos_,
+//			.rot  = trctraj_static_rot_,
+//	});
+//
+//	static s_trctraj_orb_init trctraj_orb_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//
+//			.sync_en = 0x00,
+//
+//			.radius = 0.0,
+//			.rate = 0.0,
+//
+//			.s_rate = 0.0,
+//	};
+//
+//	vl3_mid(trctraj_orb_config_.tilt);
+//	vl3_mid(trctraj_orb_config_.s_tilt);
+//
+//	trceng_add_trajapi(&self->eng, (s_trctraj) {
+//
+//			.desc = "default_traj_orb",
+//			.name = "default_traj_orb",
+//
+//			.config_size = sizeof(s_trctraj_orb_init),
+//			.config = &trctraj_orb_config_,
+//
+//			.data_size = sizeof(s_trctraj_orb),
+//			.data = NULL,
+//
+//			.init = trctraj_orb_init_,
+//			.free = trctraj_orb_free_,
+//			.save = trctraj_orb_save_,
+//			.load = trctraj_orb_load_,
+//			.compile = trctraj_orb_compile_,
+//			.info = trctraj_orb_info_,
+//			.pos = trctraj_orb_pos_,
+//			.rot = trctraj_orb_rot_,
+//	});
+//
+//	static s_trctraj_bz_init trctraj_bz_config_ = {
+//
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//
+//			.ellp_en = 0x00,
+//			.ellp = NULL,
+//
+//			.pts = NULL,
+//	};
+//
+//	trceng_add_trajapi(&self->eng, (s_trctraj) {
+//
+//			.desc = "default_traj_bz",
+//			.name = "default_traj_bz",
+//
+//			.config_size = sizeof(s_trctraj_bz_init),
+//			.config = &trctraj_bz_config_,
+//
+//			.data_size = sizeof(s_trctraj_bz),
+//			.data = NULL,
+//
+//			.init = trctraj_bz_init_,
+//			.free = trctraj_bz_free_,
+//			.save = trctraj_bz_save_,
+//			.load = trctraj_bz_load_,
+//			.compile = trctraj_bz_compile_,
+//			.info = trctraj_bz_info_,
+//			.pos = trctraj_bz_pos_,
+//			.rot = trctraj_bz_rot_,
+//	});
+//
+//	static s_trctraj_bz_init trctraj_bz2_config_ = {
+//
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//
+//			.ellp_en = 0x00,
+//			.ellp = NULL,
+//
+//			.pts = NULL,
+//	};
+//
+//	trceng_add_trajapi(&self->eng, (s_trctraj) {
+//
+//			.desc = "default_traj_bz2",
+//			.name = "default_traj_bz2",
+//
+//			.config_size = sizeof(s_trctraj_bz_init),
+//			.config = &trctraj_bz_config_,
+//
+//			.data_size = sizeof(s_trctraj_bz),
+//			.data = NULL,
+//
+//			.init = trctraj_bz_init_,
+//			.free = trctraj_bz_free_,
+//			.save = trctraj_bz_save_,
+//			.load = trctraj_bz_load_,
+//			.compile = trctraj_bz_compile_,
+//			.info = trctraj_bz_info_,
+//			.pos = trctraj_bz_pos_,
+//			.rot = trctraj_bz_rot_,
+//	});
+//
+//	static s_trctraj_navsat_init trctraj_navsat_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//	};
+//
+//	trceng_add_trajapi(&self->eng, (s_trctraj) {
+//
+//			.desc = "default_traj_navsat",
+//			.name = "default_traj_navsat",
+//
+//			.config_size = sizeof(s_trctraj_navsat_init),
+//			.config = &trctraj_navsat_config_,
+//
+//			.data_size = sizeof(s_trctraj_navsat),
+//			.data = NULL,
+//
+//			.init = trctraj_navsat_init_,
+//			.free = trctraj_navsat_free_,
+//			.save = trctraj_navsat_save_,
+//			.load = trctraj_navsat_load_,
+//			.compile = trctraj_navsat_compile_,
+//			.info = trctraj_navsat_info_,
+//			.pos = trctraj_navsat_pos_,
+//			.rot = trctraj_navsat_rot_,
+//	});
+//
+//	static s_trcctrl_upos_init trcctrl_upos_config_ = {
+//
+//	};
+//
+//	static s_trcctrl_cpos_init trcctrl_cpos_config_ = {
+//
+//	};
+//
+//	static s_trcctrl_urot_init trcctrl_urot_config_ = {
+//
+//	};
+//
+//	static s_trcctrl_crot_init trcctrl_crot_config_ = {
+//
+//	};
+//
+////	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+////
+////			.desc   = "default_ctrl_upos",
+////			.name   = "default_ctrl_upos",
+////
+////			.config_size = sizeof(s_trcctrl_upos_init),
+////			.config = &trcctrl_upos_config_,
+////
+////			.data_size = sizeof(s_trcctrl_upos),
+////			.data   = NULL,
+////
+////			.init   = trcctrl_upos_init_,
+////			.free   = trcctrl_upos_free_,
+////			.save   = trcctrl_upos_save_,
+////			.load   = trcctrl_upos_load_,
+////			.reset  = trcctrl_upos_reset_,
+////			.update = trcctrl_upos_update_,
+////	});
+//
 //	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
 //
-//			.desc   = "default_ctrl_upos",
-//			.name   = "default_ctrl_upos",
+//			.desc   = "default_ctrl_cpos",
+//			.name   = "default_ctrl_cpos",
 //
-//			.config_size = sizeof(s_trcctrl_upos_init),
-//			.config = &trcctrl_upos_config_,
+//			.config_size = sizeof(s_trcctrl_cpos_init),
+//			.config = &trcctrl_cpos_config_,
 //
-//			.data_size = sizeof(s_trcctrl_upos),
+//			.data_size = sizeof(s_trcctrl_cpos),
 //			.data   = NULL,
 //
-//			.init   = trcctrl_upos_init_,
-//			.free   = trcctrl_upos_free_,
-//			.save   = trcctrl_upos_save_,
-//			.load   = trcctrl_upos_load_,
-//			.reset  = trcctrl_upos_reset_,
-//			.update = trcctrl_upos_update_,
+//			.init   = trcctrl_cpos_init_,
+//			.free   = trcctrl_cpos_free_,
+//			.save   = trcctrl_cpos_save_,
+//			.load   = trcctrl_cpos_load_,
+//			.reset  = trcctrl_cpos_reset_,
+//			.update = trcctrl_cpos_update_,
 //	});
-	
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-			
-			.desc   = "default_ctrl_cpos",
-			.name   = "default_ctrl_cpos",
-			
-			.config_size = sizeof(s_trcctrl_cpos_init),
-			.config = &trcctrl_cpos_config_,
-			
-			.data_size = sizeof(s_trcctrl_cpos),
-			.data   = NULL,
-			
-			.init   = trcctrl_cpos_init_,
-			.free   = trcctrl_cpos_free_,
-			.save   = trcctrl_cpos_save_,
-			.load   = trcctrl_cpos_load_,
-			.reset  = trcctrl_cpos_reset_,
-			.update = trcctrl_cpos_update_,
-	});
-	
+//
+////	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+////
+////			.desc   = "default_ctrl_urot",
+////			.name   = "default_ctrl_urot",
+////
+////			.config_size = sizeof(s_trcctrl_urot_init),
+////			.config = &trcctrl_urot_config_,
+////
+////			.data_size = sizeof(s_trcctrl_urot),
+////			.data   = NULL,
+////
+////			.init   = trcctrl_urot_init_,
+////			.free   = trcctrl_urot_free_,
+////			.save   = trcctrl_urot_save_,
+////			.load   = trcctrl_urot_load_,
+////			.reset  = trcctrl_urot_reset_,
+////			.update = trcctrl_urot_update_,
+////	});
+//
 //	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
 //
-//			.desc   = "default_ctrl_urot",
-//			.name   = "default_ctrl_urot",
+//			.desc   = "default_ctrl_crot",
+//			.name   = "default_ctrl_crot",
 //
-//			.config_size = sizeof(s_trcctrl_urot_init),
-//			.config = &trcctrl_urot_config_,
+//			.config_size = sizeof(s_trcctrl_crot_init),
+//			.config = &trcctrl_crot_config_,
 //
-//			.data_size = sizeof(s_trcctrl_urot),
+//			.data_size = sizeof(s_trcctrl_crot),
 //			.data   = NULL,
 //
-//			.init   = trcctrl_urot_init_,
-//			.free   = trcctrl_urot_free_,
-//			.save   = trcctrl_urot_save_,
-//			.load   = trcctrl_urot_load_,
-//			.reset  = trcctrl_urot_reset_,
-//			.update = trcctrl_urot_update_,
+//			.init   = trcctrl_crot_init_,
+//			.free   = trcctrl_crot_free_,
+//			.save   = trcctrl_crot_save_,
+//			.load   = trcctrl_crot_load_,
+//			.reset  = trcctrl_crot_reset_,
+//			.update = trcctrl_crot_update_,
 //	});
-	
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-			
-			.desc   = "default_ctrl_crot",
-			.name   = "default_ctrl_crot",
-			
-			.config_size = sizeof(s_trcctrl_crot_init),
-			.config = &trcctrl_crot_config_,
-			
-			.data_size = sizeof(s_trcctrl_crot),
-			.data   = NULL,
-			
-			.init   = trcctrl_crot_init_,
-			.free   = trcctrl_crot_free_,
-			.save   = trcctrl_crot_save_,
-			.load   = trcctrl_crot_load_,
-			.reset  = trcctrl_crot_reset_,
-			.update = trcctrl_crot_update_,
-	});
-	
-	static s_trcctrl_egms_init trcctrl_egms_config_ = {
-			.eng = &self->eng,
-			.ref = self->eng.obj_ls,
-	};
-	
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-			
-			.desc   = "default_ctrl_egms",
-			.name   = "default_ctrl_egms",
-			
-			.config_size = sizeof(s_trcctrl_egms_init),
-			.config = &trcctrl_egms_config_,
-			
-			.data_size = sizeof(s_trcctrl_egms),
-			.data   = NULL,
-			
-			.init   = trcctrl_egms_init_,
-			.free   = trcctrl_egms_free_,
-			.save   = trcctrl_egms_save_,
-			.load   = trcctrl_egms_load_,
-			.reset  = trcctrl_egms_reset_,
-			.update = trcctrl_egms_update_,
-	});
-	
-	static s_trcctrl_egmsnpo_init trcctrl_egmsnpo_config_ = {
-			.eng = &self->eng,
-			.ref = self->eng.obj_ls,
-			};
-	
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-		
-		.desc   = "default_ctrl_egmsnpo",
-		.name   = "default_ctrl_egmsnpo",
-		
-		.config_size = sizeof(s_trcctrl_egmsnpo_init),
-		.config = &trcctrl_egmsnpo_config_,
-		
-		.data_size = sizeof(s_trcctrl_egmsnpo),
-		.data   = NULL,
-		
-		.init   = trcctrl_egmsnpo_init_,
-		.free   = trcctrl_egmsnpo_free_,
-		.save   = trcctrl_egmsnpo_save_,
-		.load   = trcctrl_egmsnpo_load_,
-		.reset  = trcctrl_egmsnpo_reset_,
-		.update = trcctrl_egmsnpo_update_,
-		});
-	
-	
-	static s_trcctrl_gms_init trcctrl_gms_config_ = {
-			.eng = &self->eng,
-			.ref = self->eng.obj_ls,
-	};
-	
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-			
-			.desc   = "default_ctrl_gms",
-			.name   = "default_ctrl_gms",
-			
-			.config_size = sizeof(s_trcctrl_gms_init),
-			.config = &trcctrl_gms_config_,
-			
-			.data_size = sizeof(s_trcctrl_gms),
-			.data   = NULL,
-			
-			.init   = trcctrl_gms_init_,
-			.free   = trcctrl_gms_free_,
-			.save   = trcctrl_gms_save_,
-			.load   = trcctrl_gms_load_,
-			.reset  = trcctrl_gms_reset_,
-			.update = trcctrl_gms_update_,
-	});
-
-	static s_trcctrl_varot_attr trcctrl_varot_config_ = {
-	        .eng = &self->eng,
-	        .ref = self->eng.obj_ls,
-	        };
-
-	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
-
-	    .desc   = "default_ctrl_varot",
-	    .name   = "default_ctrl_varot",
-
-	    .config_size = sizeof(s_trcctrl_varot_attr),
-	    .config = &trcctrl_varot_config_,
-
-	    .data_size = sizeof(s_trcctrl_varot),
-	    .data   = NULL,
-
-	    .init   = trcctrl_varot_init_,
-	    .free   = trcctrl_varot_free_,
-	    .save   = trcctrl_varot_save_,
-	    .load   = trcctrl_varot_load_,
-	    .reset  = trcctrl_varot_reset_,
-	    .update = trcctrl_varot_update_,
-	    });
-	
-//	static s_trcctrl_gm_init trcctrl_gm_config_ = {
-//			.order = 12,
-//			.file_name = "res/ctrl/gm/egm2008.txt",
+//
+//	static s_trcctrl_egms_init trcctrl_egms_config_ = {
+//			.eng = &self->eng,
+//			.ref = self->eng.obj_ls,
 //	};
 //
 //	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
 //
-//			.desc   = "default_ctrl_gm",
-//			.name   = "default_ctrl_gm",
+//			.desc   = "default_ctrl_egms",
+//			.name   = "default_ctrl_egms",
 //
-//			.config_size = sizeof(s_trcctrl_gm_init),
-//			.config = &trcctrl_gm_config_,
+//			.config_size = sizeof(s_trcctrl_egms_init),
+//			.config = &trcctrl_egms_config_,
 //
-//			.data_size = sizeof(s_trcctrl_gm),
+//			.data_size = sizeof(s_trcctrl_egms),
 //			.data   = NULL,
 //
-//			.init   = trcctrl_gm_init_,
-//			.free   = trcctrl_gm_free_,
-//			.save   = trcctrl_gm_save_,
-//			.load   = trcctrl_gm_load_,
-//			.reset  = trcctrl_gm_reset_,
-//			.update = trcctrl_gm_update_,
+//			.init   = trcctrl_egms_init_,
+//			.free   = trcctrl_egms_free_,
+//			.save   = trcctrl_egms_save_,
+//			.load   = trcctrl_egms_load_,
+//			.reset  = trcctrl_egms_reset_,
+//			.update = trcctrl_egms_update_,
 //	});
-	
-	static s_trcdata_text_init trcdata_text_config_ = {
-	
-	};
-	
-	trceng_add_dataapi(&self->eng, (s_trcdata) {
-			
-			.desc   = "default_data_text",
-			.name   = "default_data_text",
-			
-			.config_size = sizeof(s_trcdata_text_init),
-			.config = &trcdata_text_config_,
-			
-			.data_size = sizeof(s_trcdata_text),
-			.data   = NULL,
-			
-			.init   = trcdata_text_init_,
-			.free   = trcdata_text_free_,
-			.save   = trcdata_text_save_,
-			.load   = trcdata_text_load_,
-			.reset  = trcdata_text_reset_,
-			.render = trcdata_text_render_,
-	});
-	
-	static s_trcdata_ram_init trcdata_ram_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-	};
-	
-	trceng_add_dataapi(&self->eng, (s_trcdata) {
-			
-			.desc   = "default_data_ram",
-			.name   = "default_data_ram",
-			
-			.config_size = sizeof(s_trcdata_ram_init),
-			.config = &trcdata_ram_config_,
-			
-			.data_size = sizeof(s_trcdata_ram),
-			.data   = NULL,
-			
-			.init   = trcdata_ram_init_,
-			.free   = trcdata_ram_free_,
-			.save   = trcdata_ram_save_,
-			.load   = trcdata_ram_load_,
-			.reset  = trcdata_ram_reset_,
-			.render = trcdata_ram_render_,
-	});
-	
-	static s_trcdata_ramld_init trcdata_ramld_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-	};
-	
-	trceng_add_dataapi(&self->eng, (s_trcdata) {
-			
-			.desc   = "default_data_ramld",
-			.name   = "default_data_ramld",
-			
-			.config_size = sizeof(s_trcdata_ramld_init),
-			.config = &trcdata_ramld_config_,
-			
-			.data_size = sizeof(s_trcdata_ramld),
-			.data   = NULL,
-			
-			.init   = trcdata_ramld_init_,
-			.free   = trcdata_ramld_free_,
-			.save   = trcdata_ramld_save_,
-			.load   = trcdata_ramld_load_,
-			.reset  = trcdata_ramld_reset_,
-			.render = trcdata_ramld_render_,
-	});
-	
-	static s_trcdata_mat_init trcdata_mat_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-	};
-	
-	trceng_add_dataapi(&self->eng, (s_trcdata) {
-			
-			.desc   = "default_data_mat",
-			.name   = "default_data_mat",
-			
-			.config_size = sizeof(s_trcdata_mat_init),
-			.config = &trcdata_mat_config_,
-			
-			.data_size = sizeof(s_trcdata_mat),
-			.data   = NULL,
-			
-			.init   = trcdata_mat_init_,
-			.free   = trcdata_mat_free_,
-			.save   = trcdata_mat_save_,
-			.load   = trcdata_mat_load_,
-			.reset  = trcdata_mat_reset_,
-			.render = trcdata_mat_render_,
-	});
-	
-	static s_trcdata_bin_init trcdata_bin_config_ = {
-			.eng = &self->eng,
-			.ref = &self->eng.obj_ls[0],
-	};
-	
-	trceng_add_dataapi(&self->eng, (s_trcdata) {
-			
-			.desc   = "default_data_bin",
-			.name   = "default_data_bin",
-			
-			.config_size = sizeof(s_trcdata_bin_init),
-			.config = &trcdata_bin_config_,
-			
-			.data_size = sizeof(s_trcdata_bin),
-			.data   = NULL,
-			
-			.init   = trcdata_bin_init_,
-			.free   = trcdata_bin_free_,
-			.save   = trcdata_bin_save_,
-			.load   = trcdata_bin_load_,
-			.reset  = trcdata_bin_reset_,
-			.render = trcdata_bin_render_,
-	});
-	
-	static s_trcproc_euler_attr trcproc_euler_config_ = {
-            .rot_tol  = 1E-6,
-            .rot_var  = 1E-6,
-            .rot_step = 1E-6,
-
-            .pos_tol  = 1E-3,
-            .pos_var  = 1E-3,
-            .pos_step = 1E-3,
-	};
-	
-	trceng_add_procapi(&self->eng, (s_trcproc) {
-
-            .desc   = "default_proc_euler",
-//            .name   = "default_proc_euler",
-			
-			.config_size = sizeof(s_trcproc_euler_attr),
-			.config = &trcproc_euler_config_,
-			
-			.data_size = sizeof(s_trcproc_euler),
-			.data   = NULL,
-			
-			.init   = trcproc_euler_init_,
-			.free   = trcproc_euler_free_,
-			.save   = trcproc_euler_save_,
-			.load   = trcproc_euler_load_,
-			.update = trcproc_euler_update_,
-	});
-	
+//
+//	static s_trcctrl_egmsnpo_init trcctrl_egmsnpo_config_ = {
+//			.eng = &self->eng,
+//			.ref = self->eng.obj_ls,
+//			};
+//
+//	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+//
+//		.desc   = "default_ctrl_egmsnpo",
+//		.name   = "default_ctrl_egmsnpo",
+//
+//		.config_size = sizeof(s_trcctrl_egmsnpo_init),
+//		.config = &trcctrl_egmsnpo_config_,
+//
+//		.data_size = sizeof(s_trcctrl_egmsnpo),
+//		.data   = NULL,
+//
+//		.init   = trcctrl_egmsnpo_init_,
+//		.free   = trcctrl_egmsnpo_free_,
+//		.save   = trcctrl_egmsnpo_save_,
+//		.load   = trcctrl_egmsnpo_load_,
+//		.reset  = trcctrl_egmsnpo_reset_,
+//		.update = trcctrl_egmsnpo_update_,
+//		});
+//
+//
+//	static s_trcctrl_gms_init trcctrl_gms_config_ = {
+//			.eng = &self->eng,
+//			.ref = self->eng.obj_ls,
+//	};
+//
+//	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+//
+//			.desc   = "default_ctrl_gms",
+//			.name   = "default_ctrl_gms",
+//
+//			.config_size = sizeof(s_trcctrl_gms_init),
+//			.config = &trcctrl_gms_config_,
+//
+//			.data_size = sizeof(s_trcctrl_gms),
+//			.data   = NULL,
+//
+//			.init   = trcctrl_gms_init_,
+//			.free   = trcctrl_gms_free_,
+//			.save   = trcctrl_gms_save_,
+//			.load   = trcctrl_gms_load_,
+//			.reset  = trcctrl_gms_reset_,
+//			.update = trcctrl_gms_update_,
+//	});
+//
+//	static s_trcctrl_varot_attr trcctrl_varot_config_ = {
+//	        .eng = &self->eng,
+//	        .ref = self->eng.obj_ls,
+//	        };
+//
+//	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+//
+//	    .desc   = "default_ctrl_varot",
+//	    .name   = "default_ctrl_varot",
+//
+//	    .config_size = sizeof(s_trcctrl_varot_attr),
+//	    .config = &trcctrl_varot_config_,
+//
+//	    .data_size = sizeof(s_trcctrl_varot),
+//	    .data   = NULL,
+//
+//	    .init   = trcctrl_varot_init_,
+//	    .free   = trcctrl_varot_free_,
+//	    .save   = trcctrl_varot_save_,
+//	    .load   = trcctrl_varot_load_,
+//	    .reset  = trcctrl_varot_reset_,
+//	    .update = trcctrl_varot_update_,
+//	    });
+//
+////	static s_trcctrl_gm_init trcctrl_gm_config_ = {
+////			.order = 12,
+////			.file_name = "res/ctrl/gm/egm2008.txt",
+////	};
+////
+////	trceng_add_ctrlapi(&self->eng, (s_trcctrl) {
+////
+////			.desc   = "default_ctrl_gm",
+////			.name   = "default_ctrl_gm",
+////
+////			.config_size = sizeof(s_trcctrl_gm_init),
+////			.config = &trcctrl_gm_config_,
+////
+////			.data_size = sizeof(s_trcctrl_gm),
+////			.data   = NULL,
+////
+////			.init   = trcctrl_gm_init_,
+////			.free   = trcctrl_gm_free_,
+////			.save   = trcctrl_gm_save_,
+////			.load   = trcctrl_gm_load_,
+////			.reset  = trcctrl_gm_reset_,
+////			.update = trcctrl_gm_update_,
+////	});
+//
+//	static s_trcdata_text_init trcdata_text_config_ = {
+//
+//	};
+//
+//	trceng_add_dataapi(&self->eng, (s_trcdata) {
+//
+//			.desc   = "default_data_text",
+//			.name   = "default_data_text",
+//
+//			.config_size = sizeof(s_trcdata_text_init),
+//			.config = &trcdata_text_config_,
+//
+//			.data_size = sizeof(s_trcdata_text),
+//			.data   = NULL,
+//
+//			.init   = trcdata_text_init_,
+//			.free   = trcdata_text_free_,
+//			.save   = trcdata_text_save_,
+//			.load   = trcdata_text_load_,
+//			.reset  = trcdata_text_reset_,
+//			.render = trcdata_text_render_,
+//	});
+//
+//	static s_trcdata_ram_init trcdata_ram_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//	};
+//
+//	trceng_add_dataapi(&self->eng, (s_trcdata) {
+//
+//			.desc   = "default_data_ram",
+//			.name   = "default_data_ram",
+//
+//			.config_size = sizeof(s_trcdata_ram_init),
+//			.config = &trcdata_ram_config_,
+//
+//			.data_size = sizeof(s_trcdata_ram),
+//			.data   = NULL,
+//
+//			.init   = trcdata_ram_init_,
+//			.free   = trcdata_ram_free_,
+//			.save   = trcdata_ram_save_,
+//			.load   = trcdata_ram_load_,
+//			.reset  = trcdata_ram_reset_,
+//			.render = trcdata_ram_render_,
+//	});
+//
+//	static s_trcdata_ramld_init trcdata_ramld_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//	};
+//
+//	trceng_add_dataapi(&self->eng, (s_trcdata) {
+//
+//			.desc   = "default_data_ramld",
+//			.name   = "default_data_ramld",
+//
+//			.config_size = sizeof(s_trcdata_ramld_init),
+//			.config = &trcdata_ramld_config_,
+//
+//			.data_size = sizeof(s_trcdata_ramld),
+//			.data   = NULL,
+//
+//			.init   = trcdata_ramld_init_,
+//			.free   = trcdata_ramld_free_,
+//			.save   = trcdata_ramld_save_,
+//			.load   = trcdata_ramld_load_,
+//			.reset  = trcdata_ramld_reset_,
+//			.render = trcdata_ramld_render_,
+//	});
+//
+//	static s_trcdata_mat_init trcdata_mat_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//	};
+//
+//	trceng_add_dataapi(&self->eng, (s_trcdata) {
+//
+//			.desc   = "default_data_mat",
+//			.name   = "default_data_mat",
+//
+//			.config_size = sizeof(s_trcdata_mat_init),
+//			.config = &trcdata_mat_config_,
+//
+//			.data_size = sizeof(s_trcdata_mat),
+//			.data   = NULL,
+//
+//			.init   = trcdata_mat_init_,
+//			.free   = trcdata_mat_free_,
+//			.save   = trcdata_mat_save_,
+//			.load   = trcdata_mat_load_,
+//			.reset  = trcdata_mat_reset_,
+//			.render = trcdata_mat_render_,
+//	});
+//
+//	static s_trcdata_bin_init trcdata_bin_config_ = {
+//			.eng = &self->eng,
+//			.ref = &self->eng.obj_ls[0],
+//	};
+//
+//	trceng_add_dataapi(&self->eng, (s_trcdata) {
+//
+//			.desc   = "default_data_bin",
+//			.name   = "default_data_bin",
+//
+//			.config_size = sizeof(s_trcdata_bin_init),
+//			.config = &trcdata_bin_config_,
+//
+//			.data_size = sizeof(s_trcdata_bin),
+//			.data   = NULL,
+//
+//			.init   = trcdata_bin_init_,
+//			.free   = trcdata_bin_free_,
+//			.save   = trcdata_bin_save_,
+//			.load   = trcdata_bin_load_,
+//			.reset  = trcdata_bin_reset_,
+//			.render = trcdata_bin_render_,
+//	});
+//
+//	static s_trcproc_euler_attr trcproc_euler_config_ = {
+//            .rot_tol  = 1E-6,
+//            .rot_var  = 1E-6,
+//            .rot_step = 1E-6,
+//
+//            .pos_tol  = 1E-3,
+//            .pos_var  = 1E-3,
+//            .pos_step = 1E-3,
+//	};
+//
+//	trceng_add_procapi(&self->eng, (s_trcproc) {
+//
+//            .desc   = "default_proc_euler",
+////            .name   = "default_proc_euler",
+//
+//			.config_size = sizeof(s_trcproc_euler_attr),
+//			.config = &trcproc_euler_config_,
+//
+//			.data_size = sizeof(s_trcproc_euler),
+//			.data   = NULL,
+//
+//			.init   = trcproc_euler_init_,
+//			.free   = trcproc_euler_free_,
+//			.save   = trcproc_euler_save_,
+//			.load   = trcproc_euler_load_,
+//			.update = trcproc_euler_update_,
+//	});
+//
 //	static s_trcproc_fps_init trcproc_fps_config_ = {
 //			.temp = 0x00,
 //	};
@@ -657,12 +669,12 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 //			.update = trcproc_fps_update_,
 //	});
 	
-	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_gui_obj); ++i)
-	{
-		gui_obj_init(&self->st_gui_eng_obj[i],
-					 (s_gui_obj_init) {.ref = &self->eng.obj_ls[i]}
-		);
-	}
+//	for (int i = 0; i < sizeof(self->st_gui_eng_obj) / sizeof(s_gui_obj); ++i)
+//	{
+//		gui_obj_init(&self->st_gui_eng_obj[i],
+//					 (s_gui_obj_init) {.ref = &self->eng.obj_ls[i]}
+//		);
+//	}
 	
 	//-------------------------------------------------------------------------------------------
 	

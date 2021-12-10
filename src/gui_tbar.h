@@ -33,9 +33,7 @@ typedef struct gui_tbar
 {
 	s_trceng   *eng;
 	s_gui_eng   *eng_gui;
-	s_gui_env   *env;
-    s_gui_cmd   *cmd;
-    s_gui_conf  *conf;
+	s_gui_conf  *conf;
 	
 	int height;
 	
@@ -93,37 +91,32 @@ inline void gui_tbar_menu_file(s_gui_tbar *tbar)
 
 inline void gui_tbar_menu_newobject(s_gui_tbar *tbar)
 {
-	s_trctraj *traj_static = trceng_find_traj(tbar->eng, crc32_iso_str("default_traj_static"));
-	s_trcctrl *ctrl_cpos   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_cpos"  ));
-	s_trcctrl *ctrl_crot   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_crot"  ));
-	s_trcdata *data_ram    = trceng_find_data(tbar->eng, crc32_iso_str("default_data_ram"   ));
+//	s_trctraj *traj_static = trceng_find_traj(tbar->eng, crc32_iso_str("default_traj_static"));
+//	s_trcctrl *ctrl_cpos   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_cpos"  ));
+//	s_trcctrl *ctrl_crot   = trceng_find_ctrl(tbar->eng, crc32_iso_str("default_ctrl_crot"  ));
+//	s_trcdata *data_ram    = trceng_find_data(tbar->eng, crc32_iso_str("default_data_ram"   ));
+//
+//	s_trcobj *obj = trceng_add_obj(tbar->eng, (s_trcobj_init) { .desc = "object" });
 	
-	s_trcobj *obj = trceng_add_obj(tbar->eng, (s_trcobj_init) { .desc = "object" });
-	
-	if (obj && traj_static) { trcobj_add_traj(obj, *traj_static); }
-	if (obj && ctrl_cpos  ) { trcobj_add_ctrl(obj, *ctrl_cpos  ); }
-	if (obj && ctrl_crot  ) { trcobj_add_ctrl(obj, *ctrl_crot  ); }
-	if (obj && data_ram   ) { trcobj_add_data(obj, *data_ram   ); }
-	
-	if (obj == NULL) { /* TO-DO Create error popup */ }
-	
-	return;
+//	if (obj && traj_static) { trcobj_add_traj(obj, *traj_static); }
+//	if (obj && ctrl_cpos  ) { trcobj_add_ctrl(obj, *ctrl_cpos  ); }
+//	if (obj && ctrl_crot  ) { trcobj_add_ctrl(obj, *ctrl_crot  ); }
+//	if (obj && data_ram   ) { trcobj_add_data(obj, *data_ram   ); }
+//
+//	if (obj == NULL) { /* TO-DO Create error popup */ }
 }
 
 inline void gui_tbar_menu_terminal(s_gui_tbar *tbar)
 {
-	if (ImGui::MenuItem(tbar->cmd->visible ? "Hide" : "Show", "CTRL+P"))
-	{ tbar->cmd->visible = !tbar->cmd->visible; }
-	
-	ImGui::Separator();
-	
-	if (ImGui::MenuItem("Reset", ""))
-	{ gui_cmd_clearlog(tbar->cmd); gui_env_reset(tbar->env); }
-	
+//	if (ImGui::MenuItem(tbar->cmd->visible ? "Hide" : "Show", "CTRL+P"))
+//	{ tbar->cmd->visible = !tbar->cmd->visible; }
+//
+//	ImGui::Separator();
+//
+//	if (ImGui::MenuItem("Reset", ""))
+//	{ gui_cmd_clearlog(tbar->cmd); gui_env_reset(tbar->env); }
 	
 	ImGui::EndMenu();
-	
-	return;
 }
 
 inline void gui_tbar_menu_version(s_gui_tbar *tbar)
@@ -143,8 +136,6 @@ inline void gui_tbar_menu_version(s_gui_tbar *tbar)
 	ImGui::MenuItem("Click to copy", NULL, false, false);
 	
 	ImGui::EndMenu();
-	
-	return;
 }
 
 inline bool gui_tbar_button(const char *label, ImVec2 size = ImVec2(0,0))
@@ -161,7 +152,7 @@ inline u8_t gui_tbar_main(s_gui_tbar *tbar)
 	static f64_t time_limit_min = 0.0;
 	static f64_t time_step_min = 0.001;
 	static f64_t time_step_max = 100.0;
-	static u32_t  time_iter_min = 0x00;
+	static u32_t time_iter_min = 0x00;
 	
 	{
 		ImVec2 popup_pos = ImGui::GetCursorScreenPos() + ImVec2(0, ImGui::GetTextLineHeightWithSpacing());
@@ -241,7 +232,7 @@ inline u8_t gui_tbar_main(s_gui_tbar *tbar)
 	tbar->eng->time_iter = tbar->eng->time_limit / tbar->eng->time_step;
 	
 	ImGui::SetNextItemWidth(180);
-	gui_procsel("##proc", tbar->eng);
+	gui_sel_proc("##proc", tbar->eng, &tbar->eng->proc);
 	ImGui::SameLine(0,0);
 	
 	if(gui_tbar_button("RENDER", ImVec2(80,0)))
