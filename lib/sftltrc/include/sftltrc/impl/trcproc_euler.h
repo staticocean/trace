@@ -20,68 +20,95 @@
 
 typedef struct trcproc_euler
 {
-	f64_t pos[3][3];
-	f64_t rot[3][9];
+	s_trcproc  			super;
 	
-	f64_t rd1[2][9];
+	f64_t 				pos[3][3];
+	f64_t 				rot[3][9];
 	
-	s_vl_rd1 rd1_data;
+	f64_t 				rd1[2][9];
+	
+	s_vl_rd1 			rd1_data;
 
-    f64_t rot_tol;
-    f64_t rot_var;
-    f64_t rot_step;
+    f64_t 				rot_tol;
+    f64_t 				rot_var;
+    f64_t 				rot_step;
 
-    f64_t pos_tol;
-    f64_t pos_var;
-    f64_t pos_step;
+    f64_t 				pos_tol;
+    f64_t 				pos_var;
+    f64_t 				pos_step;
 	
 }   s_trcproc_euler;
 
 typedef struct trcproc_euler_attr
 {
-    f64_t rot_tol;
-    f64_t rot_var;
-    f64_t rot_step;
+    f64_t 				rot_tol;
+    f64_t 				rot_var;
+    f64_t 				rot_step;
 
-    f64_t pos_tol;
-    f64_t pos_var;
-    f64_t pos_step;
+    f64_t 				pos_tol;
+    f64_t 				pos_var;
+    f64_t 				pos_step;
 
 }   s_trcproc_euler_attr;
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcproc_euler_init(s_trcproc_euler *self, s_trcproc_euler_attr attr)
+static
+s8_t __trcproc_euler_init__ (s_trcproc *proc, s_trcproc_euler_attr *attr)
 {
-    // Target position accuracy after integration
-    self->rot_tol  = attr.rot_tol;
-    self->rot_var  = attr.rot_var;
-    self->rot_step = attr.rot_step;
+	s_trcproc_euler *proc_euler = (s_trcproc_euler*) proc;
+	s_trcproc_euler_attr *attr_euler = (s_trcproc_euler_attr*) attr;
+	
+	// Target position accuracy after integration
+	proc_euler->rot_tol  = attr_euler->rot_tol;
+	proc_euler->rot_var  = attr_euler->rot_var;
+	proc_euler->rot_step = attr_euler->rot_step;
 
-    self->pos_tol  = attr.pos_tol;
-    self->pos_var  = attr.pos_var;
-    self->pos_step = attr.pos_step;
+	proc_euler->pos_tol  = attr_euler->pos_tol;
+	proc_euler->pos_var  = attr_euler->pos_var;
+	proc_euler->pos_step = attr_euler->pos_step;
 
 	return 0x00;
 }
 
-inline u8_t trcproc_euler_save(s_trcproc_euler *self, s_trcproc_euler_attr *attr, u8_t **v_file)
+
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcproc_euler_free__ (s_trcproc *proc)
 {
 	return 0x00;
 }
 
-inline u8_t trcproc_euler_load(s_trcproc_euler *self, s_trcproc_euler_attr *attr, u8_t **v_file)
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcproc_euler_save__ (s_trcproc_euler *proc, s_trcproc_euler_attr *attr,
+							 u8_t **v_file)
 {
 	return 0x00;
 }
 
-inline void __trcproc_euler_correct_calc__(s_trcproc_euler *self, s_trcobj *obj, u32_t offset, f64_t *d_grs, f64_t *d_acc)
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcproc_euler_load__ (s_trcproc_euler *proc, s_trcproc_euler_attr *attr,
+							 u8_t **v_file)
+{
+	return 0x00;
+}
+
+//------------------------------------------------------------------------------
+
+static
+void __trcproc_euler_correct_calc__ (s_trcproc_euler *proc, s_trcobj *obj,
+									 u32_t offset, f64_t *d_grs, f64_t *d_acc)
 {
     f64_t tied_acc[3];
     f64_t tied_grs[9];
 
     f64_t d_inert_acc[3];
-    vl3_vsum(d_inert_acc, &obj->log_ls[offset-1].pos[2][0], d_acc);
+    vl3v_sumv(d_inert_acc, &obj->log_ls[offset-1].pos[2][0], d_acc);
 
     f64_t d_inert_grs[9];
     f64_t d_grs_skew[9];
@@ -102,17 +129,18 @@ inline void __trcproc_euler_correct_calc__(s_trcproc_euler *self, s_trcobj *obj,
     vl3_msumm(&obj->rot[0][0], &obj->rot[0][0], inert_grs, obj->log_ls[offset+1].time[1]);
     vl3_rnorm(&obj->rot[0][0]);
 
-    vl3_vsumm(&obj->pos[0][0], &obj->pos[0][0], &obj->pos[1][0], obj->log_ls[offset].time[1]);
-    vl3_vsumm(&obj->pos[0][0], &obj->pos[0][0], inert_acc, obj->log_ls[offset].time[1]*obj->log_ls[offset].time[1]*0.5);
+    vl3v_sumvm(&obj->pos[0][0], &obj->pos[0][0], &obj->pos[1][0], obj->log_ls[offset].time[1]);
+    vl3v_sumvm(&obj->pos[0][0], &obj->pos[0][0], inert_acc, obj->log_ls[offset].time[1]*obj->log_ls[offset].time[1]*0.5);
 
-    vl3_vsumm(&obj->pos[1][0], &obj->pos[1][0], inert_acc, obj->log_ls[offset].time[1]);
+    vl3v_sumvm(&obj->pos[1][0], &obj->pos[1][0], inert_acc, obj->log_ls[offset].time[1]);
 
     vl3v_copy(&obj->pos[2][0], inert_acc);
-
-    return;
 }
 
-inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t offset)
+//------------------------------------------------------------------------------
+
+static
+s8_t __trcproc_euler_update__ (s_trcproc_euler *self, s_trcobj *obj, u32_t offset)
 {
     // Calcaulate diff estimates
     {
@@ -135,13 +163,13 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
         else  							 { vl3_vinter(&self->pos[2][0], &l1->pos[0][0], &l0->pos[0][0], -1.0); }
 
         vl3_vset(vel, 0.0);
-        vl3_vsumm(vel, vel, &self->pos[0][0], -1.0 / (2.0 * h));
-        vl3_vsumm(vel, vel, &self->pos[2][0], +1.0 / (2.0 * h));
+        vl3v_sumvm(vel, vel, &self->pos[0][0], -1.0 / (2.0 * h));
+        vl3v_sumvm(vel, vel, &self->pos[2][0], +1.0 / (2.0 * h));
 
         vl3_vset(acc, 0.0);
-        vl3_vsumm(acc, acc, &self->pos[0][0], +1.0 / (h * h));
-        vl3_vsumm(acc, acc, &self->pos[1][0], -2.0 / (h * h));
-        vl3_vsumm(acc, acc, &self->pos[2][0], +1.0 / (h * h));
+        vl3v_sumvm(acc, acc, &self->pos[0][0], +1.0 / (h * h));
+        vl3v_sumvm(acc, acc, &self->pos[1][0], -2.0 / (h * h));
+        vl3v_sumvm(acc, acc, &self->pos[2][0], +1.0 / (h * h));
 
         //handle last and first
         //acc
@@ -194,35 +222,35 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
                 s_trcobj rM[3] = {*obj, *obj, *obj};
                 s_trcobj rR[3] = {*obj, *obj, *obj};
 
-                __trcproc_euler_correct_calc__(self, &rL[0], offset, vl_vec(-self->rot_var, 0.0, 0.0), vl_vec_zeros);
-                __trcproc_euler_correct_calc__(self, &rL[1], offset, vl_vec(0.0, -self->rot_var, 0.0), vl_vec_zeros);
-                __trcproc_euler_correct_calc__(self, &rL[2], offset, vl_vec(0.0, 0.0, -self->rot_var), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rL[0], offset, vl3v(-self->rot_var, 0.0, 0.0), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rL[1], offset, vl3v(0.0, -self->rot_var, 0.0), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rL[2], offset, vl3v(0.0, 0.0, -self->rot_var), vl_vec_zeros);
 
-                __trcproc_euler_correct_calc__(self, &rM[0], offset, vl_vec(0.0, 0.0, 0.0), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rM[0], offset, vl3v(0.0, 0.0, 0.0), vl_vec_zeros);
                 memcpy(&rM[1], &rM[0], sizeof(s_trcobj));
                 memcpy(&rM[2], &rM[0], sizeof(s_trcobj));
 
-                __trcproc_euler_correct_calc__(self, &rR[0], offset, vl_vec(+self->rot_var, 0.0, 0.0), vl_vec_zeros);
-                __trcproc_euler_correct_calc__(self, &rR[1], offset, vl_vec(0.0, +self->rot_var, 0.0), vl_vec_zeros);
-                __trcproc_euler_correct_calc__(self, &rR[2], offset, vl_vec(0.0, 0.0, +self->rot_var), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rR[0], offset, vl3v(+self->rot_var, 0.0, 0.0), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rR[1], offset, vl3v(0.0, +self->rot_var, 0.0), vl_vec_zeros);
+                __trcproc_euler_correct_calc__(self, &rR[2], offset, vl3v(0.0, 0.0, +self->rot_var), vl_vec_zeros);
 
                 // re = rotation error
                 f64_t reL[3] = {
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rL[0].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rL[1].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rL[2].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rL[0].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rL[1].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rL[2].rot[0][0]),
                 };
 
                 f64_t reM[3] = {
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rM[0].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rM[1].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rM[2].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rM[0].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rM[1].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rM[2].rot[0][0]),
                 };
 
                 f64_t reR[3] = {
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rR[0].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rR[1].rot[0][0]),
-                        vl3_mdist(&obj->log_ls[offset].rot[0][0], &rR[2].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rR[0].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rR[1].rot[0][0]),
+                        vl3m_dist(&obj->log_ls[offset].rot[0][0], &rR[2].rot[0][0]),
                 };
 
                 rot_error = reM[0];
@@ -252,23 +280,23 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
 
             do
             {
-                ++counter;
+                counter++;
 
                 s_trcobj pL[3] = {*obj, *obj, *obj};
                 s_trcobj pM[3] = {*obj, *obj, *obj};
                 s_trcobj pR[3] = {*obj, *obj, *obj};
 
-                __trcproc_euler_correct_calc__(self, &pL[0], offset, vl_vec_zeros, vl_vec(-self->pos_var, 0.0, 0.0));
-                __trcproc_euler_correct_calc__(self, &pL[1], offset, vl_vec_zeros, vl_vec(0.0, -self->pos_var, 0.0));
-                __trcproc_euler_correct_calc__(self, &pL[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, -self->pos_var));
+                __trcproc_euler_correct_calc__(self, &pL[0], offset, vl_vec_zeros, vl3v(-self->pos_var, 0.0, 0.0));
+                __trcproc_euler_correct_calc__(self, &pL[1], offset, vl_vec_zeros, vl3v(0.0, -self->pos_var, 0.0));
+                __trcproc_euler_correct_calc__(self, &pL[2], offset, vl_vec_zeros, vl3v(0.0, 0.0, -self->pos_var));
 
-                __trcproc_euler_correct_calc__(self, &pM[0], offset, vl_vec_zeros, vl_vec(0.0, 0.0, 0.0));
+                __trcproc_euler_correct_calc__(self, &pM[0], offset, vl_vec_zeros, vl3v(0.0, 0.0, 0.0));
                 memcpy(&pM[1], &pM[0], sizeof(s_trcobj));
                 memcpy(&pM[2], &pM[0], sizeof(s_trcobj));
 
-                __trcproc_euler_correct_calc__(self, &pR[0], offset, vl_vec_zeros, vl_vec(+self->pos_var, 0.0, 0.0));
-                __trcproc_euler_correct_calc__(self, &pR[1], offset, vl_vec_zeros, vl_vec(0.0, +self->pos_var, 0.0));
-                __trcproc_euler_correct_calc__(self, &pR[2], offset, vl_vec_zeros, vl_vec(0.0, 0.0, +self->pos_var));
+                __trcproc_euler_correct_calc__(self, &pR[0], offset, vl_vec_zeros, vl3v(+self->pos_var, 0.0, 0.0));
+                __trcproc_euler_correct_calc__(self, &pR[1], offset, vl_vec_zeros, vl3v(0.0, +self->pos_var, 0.0));
+                __trcproc_euler_correct_calc__(self, &pR[2], offset, vl_vec_zeros, vl3v(0.0, 0.0, +self->pos_var));
 
                 // re = rotation error
                 f64_t peL[3] = {
@@ -313,7 +341,7 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
 
         // Calculate and write to pos/rot error L2 norm
         obj->log_ls[offset].pos_error = vl3_vdist(&obj->log_ls[offset].pos[0][0], &obj->pos[0][0]);
-        obj->log_ls[offset].rot_error = vl3_mdist(&obj->log_ls[offset].rot[0][0], &obj->rot[0][0]);
+        obj->log_ls[offset].rot_error = vl3m_dist(&obj->log_ls[offset].rot[0][0], &obj->rot[0][0]);
     }
 
     return 0x00;
@@ -321,23 +349,33 @@ inline u8_t trcproc_euler_update(s_trcproc_euler *self, s_trcobj *obj, u32_t off
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcproc_euler_init_ (void **data, void *config)
-{
-	*data = (s_trcproc_euler*) malloc(sizeof(s_trcproc_euler));
-	
-	s_trcproc_euler *proc = (s_trcproc_euler*) *data;
-    s_trcproc_euler_attr *attr = (s_trcproc_euler_attr*) config;
-	
-	return trcproc_euler_init(proc, *attr);
-}
+s_trcproc_intf __trcproc_euler__ = {
 
-inline u8_t trcproc_euler_free_ (void **data)
+		.desc 		= "trcproc_euler",
+
+		.data_sz 	= sizeof(s_trcproc_euler),
+		.attr_sz 	= sizeof(s_trcproc_euler_attr),
+		
+		.init 		= __trcproc_euler_init__,
+		.free 		= __trcproc_euler_free__,
+		.save 		= __trcproc_euler_save__,
+		.load 		= __trcproc_euler_load__,
+		.update 	= __trcproc_euler_update__,
+		
+		.gui_attr 	= NULL,
+		.gui_edit 	= NULL,
+		.gui_view 	= NULL,
+};
+
+//------------------------------------------------------------------------------
+
+void trcproc_euler_init (s_trcproc_euler **proc, s_trcproc_euler_attr *attr)
 {
-	s_trcproc_euler *proc = (s_trcproc_euler*) *data;
+	*proc = malloc(sizeof(s_trcproc_euler));
 	
-	free(proc);
+	(*proc)->intf = &__trcproc_euler__;
 	
-	return 0x00;
+	trcproc_init(&(*proc)->super, &attr->super);
 }
 
 //------------------------------------------------------------------------------

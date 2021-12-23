@@ -33,28 +33,31 @@
 
 typedef struct gui
 {
-	f32_t 		w_height;
-	f32_t 		w_width;
+	f32_t 			w_height;
+	f32_t 			w_width;
 	
-	s_trceng 	eng;
-	s_trcproc 	*st_eng_proc_ls[256];
-	s_trcrefs 	*st_eng_refs_ls[256];
-	s_trcobj  	*st_eng_obj_ls [256];
-	s_trctraj 	*st_eng_traj_ls[256];
-	s_trcctrl 	*st_eng_ctrl_ls[256];
-	s_trcdata 	*st_eng_data_ls[256];
+	s_trceng 		eng;
 	
-	s_trcproc_intf 	*st_eng_proc_intf_ls[256];
-	s_trcrefs_intf 	*st_eng_refs_intf_ls[256];
-	s_trcobj_intf  	*st_eng_obj_intf_ls [256];
-	s_trctraj_intf 	*st_eng_traj_intf_ls[256];
-	s_trcctrl_intf 	*st_eng_ctrl_intf_ls[256];
-	s_trcdata_intf 	*st_eng_data_intf_ls[256];
+	s_trcproc 		*proc_ls		[256];
+	s_trcrefs 		*refs_ls		[256];
+	s_trcobj  		*obj_ls 		[256];
+	s_trctraj 		*traj_ls		[256];
+	s_trcctrl 		*ctrl_ls		[256];
+	s_trcdata 		*data_ls		[256];
 	
-	s_gui_tbar 	gui_tbar;
-	s_gui_eng  	gui_eng;
-	s_gui_clip 	gui_clip;
-	s_gui_conf 	gui_conf;
+	s_trcproc_intf 	*proc_intf_ls	[256];
+	s_trcrefs_intf 	*refs_intf_ls	[256];
+	s_trcobj_intf  	*obj_intf_ls 	[256];
+	s_trctraj_intf 	*traj_intf_ls	[256];
+	s_trcctrl_intf 	*ctrl_intf_ls	[256];
+	s_trcdata_intf 	*data_intf_ls	[256];
+	
+	s_gui_obj  		gui_obj_ls 		[256];
+	
+	s_gui_tbar 		gui_tbar;
+	s_gui_eng  		gui_eng;
+	s_gui_clip 		gui_clip;
+	s_gui_conf 		gui_conf;
 	
 } 	s_gui;
 
@@ -66,9 +69,7 @@ typedef struct gui_init_attr
 
 //------------------------------------------------------------------------------
 
-//static 	s_gui_map map;
-
-inline u8_t gui_init(s_gui *self, s_gui_init attr)
+u8_t gui_init (s_gui *self, s_gui_init attr)
 {
     gui_clip_init(&self->gui_clip, (s_gui_clip_attr) {});
 
@@ -96,31 +97,33 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
 	gui_eng_init(&self->gui_eng, (s_gui_eng_init) {
-	    .obj_ls = self->st_gui_eng_obj,
+	    .obj_ls = self->gui_obj_ls,
 	    .gui_clip = &self->gui_clip,
     });
 	
-	trceng_init(&self->eng, (s_trceng_attr) {
-			
-			.proc     = self->st_eng_proc_ls[0],
-			
-			.proc_ls  = self->st_eng_proc_ls,
-			.refs_ls  = self->st_eng_refs_ls,
-			.obj_ls   = self->st_eng_obj_ls,
-			.traj_ls  = self->st_eng_traj_ls,
-			.ctrl_ls  = self->st_eng_ctrl_ls,
-			.data_ls  = self->st_eng_data_ls,
-			
-			.proc_intf_ls = self->st_eng_proc_intf_ls,
-			.refs_intf_ls = self->st_eng_refs_intf_ls,
-			.obj_intf_ls  = self->st_eng_obj_intf_ls,
-			.traj_intf_ls = self->st_eng_traj_intf_ls,
-			.ctrl_intf_ls = self->st_eng_ctrl_intf_ls,
-			.data_intf_ls = self->st_eng_data_intf_ls,
-			
-			.time_limit = 3600.0,
-			.time_step = 0.01,
-	});
+	s_trceng_attr trceng_attr = {
+		
+		.proc     		= self->proc_ls[0],
+		
+		.proc_ls  		= self->proc_ls,
+		.refs_ls  		= self->refs_ls,
+		.obj_ls   		= self->obj_ls,
+		.traj_ls  		= self->traj_ls,
+		.ctrl_ls  		= self->ctrl_ls,
+		.data_ls  		= self->data_ls,
+		
+		.proc_intf_ls 	= self->proc_intf_ls,
+		.refs_intf_ls 	= self->refs_intf_ls,
+		.obj_intf_ls  	= self->obj_intf_ls,
+		.traj_intf_ls	= self->traj_intf_ls,
+		.ctrl_intf_ls 	= self->ctrl_intf_ls,
+		.data_intf_ls 	= self->data_intf_ls,
+		
+		.time_limit 	= 3600.0,
+		.time_step 		= 0.01,
+	};
+	
+	trceng_init(&self->eng, &trceng_attr);
 	
 //	trcellp_init(&trcellp_wgs84);
 //	trcellp_init(&trcellp_pz90);
@@ -706,28 +709,10 @@ inline u8_t gui_init(s_gui *self, s_gui_init attr)
 	style_ref.TabBorderSize = 0.0;
 	style_ref.WindowBorderSize = 0.0;
 	
-	gui_env_init(&self->gui_env, (s_gui_env_init) {
-			.eng = &self->eng,
-			.traj_sz = &self->eng.traj_sz,
-			.ctrl_sz = &self->eng.ctrl_sz,
-			.data_sz = &self->eng.data_sz,
-			
-			.traj_ls = self->eng.traj_ls,
-			.ctrl_ls = self->eng.ctrl_ls,
-			.data_ls = self->eng.data_ls,
-	});
-	
-	gui_cmd_init(&self->gui_cmd, (s_gui_cmd_init)
-			{
-					.env = &self->gui_env,
-					.visible = false,
-					.title = "env",
-			});
-
 	// !!! INIT DEFAULT PROC before loading
 	// because load will try to free it
 	self->eng.proc = self->eng.proc_ls[0];
-    self->eng.proc.init(&self->eng.proc.data, self->eng.proc.config);
+//    self->eng.proc.init(&self->eng.proc.data, self->eng.proc.config);
 
 	trceng_load(&self->eng, self->gui_tbar.file_path);
 
@@ -827,43 +812,43 @@ inline u8_t gui_main(s_gui *self)
 				
 				case gui_eng_type_traj:
 				{
-					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
-					gui_traj_edit(traj);
-					
-					if      (traj->hash == traj_hash_static) { gui_traj_edit_static (traj); }
-					else if (traj->hash == traj_hash_orb   ) { gui_traj_edit_orb    (traj); }
-					else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
-					else if (traj->hash == traj_hash_bz2   ) { gui_traj_edit_bz2    (traj); }
-					else if (traj->hash == traj_hash_navsat) { gui_traj_edit_navsat (traj); }
+//					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
+//					gui_traj_edit(traj);
+//
+//					if      (traj->hash == traj_hash_static) { gui_traj_edit_static (traj); }
+//					else if (traj->hash == traj_hash_orb   ) { gui_traj_edit_orb    (traj); }
+//					else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
+//					else if (traj->hash == traj_hash_bz2   ) { gui_traj_edit_bz2    (traj); }
+//					else if (traj->hash == traj_hash_navsat) { gui_traj_edit_navsat (traj); }
 					
 					break;
 				}
 				
 				case gui_eng_type_ctrl:
 				{
-					s_trcctrl *ctrl = (s_trcctrl*) self->gui_eng.sel_item;
-					gui_ctrl_edit(ctrl);
-					
-					if      (ctrl->hash == ctrl_hash_gm     ) { gui_ctrl_edit_gm     (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms   ) { gui_ctrl_edit_egms   (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egmsnpo) { gui_ctrl_edit_egmsnpo(ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms    ) { gui_ctrl_edit_gms    (ctrl); }
-					else if (ctrl->hash == ctrl_hash_varot  ) { gui_ctrl_edit_varot  (ctrl); }
-//                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
+//					s_trcctrl *ctrl = (s_trcctrl*) self->gui_eng.sel_item;
+//					gui_ctrl_edit(ctrl);
+//
+//					if      (ctrl->hash == ctrl_hash_gm     ) { gui_ctrl_edit_gm     (ctrl); }
+//					else if (ctrl->hash == ctrl_hash_egms   ) { gui_ctrl_edit_egms   (ctrl); }
+//					else if (ctrl->hash == ctrl_hash_egmsnpo) { gui_ctrl_edit_egmsnpo(ctrl); }
+//					else if (ctrl->hash == ctrl_hash_gms    ) { gui_ctrl_edit_gms    (ctrl); }
+//					else if (ctrl->hash == ctrl_hash_varot  ) { gui_ctrl_edit_varot  (ctrl); }
+////                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
 					
 					break;
 				}
 				
 				case gui_eng_type_data:
 				{
-					s_trcdata *data = (s_trcdata*) self->gui_eng.sel_item;
-					gui_data_edit(data);
-					
-					if      (data->hash == data_hash_text ) { gui_data_edit_text (data); }
-					else if (data->hash == data_hash_ram  ) { gui_data_edit_ram  (data); }
-					else if (data->hash == data_hash_ramld) { gui_data_edit_ramld(data); }
-					else if (data->hash == data_hash_mat  ) { gui_data_edit_mat  (data); }
-					else if (data->hash == data_hash_bin  ) { gui_data_edit_bin  (data); }
+//					s_trcdata *data = (s_trcdata*) self->gui_eng.sel_item;
+//					gui_data_edit(data);
+//
+//					if      (data->hash == data_hash_text ) { gui_data_edit_text (data); }
+//					else if (data->hash == data_hash_ram  ) { gui_data_edit_ram  (data); }
+//					else if (data->hash == data_hash_ramld) { gui_data_edit_ramld(data); }
+//					else if (data->hash == data_hash_mat  ) { gui_data_edit_mat  (data); }
+//					else if (data->hash == data_hash_bin  ) { gui_data_edit_bin  (data); }
 					
 					break;
 				}
@@ -898,37 +883,37 @@ inline u8_t gui_main(s_gui *self)
 				
 				case gui_eng_type_traj:
 				{
-					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
-					
-					if      (traj->hash == traj_hash_static) { gui_traj_view_static (traj); }
-					else if (traj->hash == traj_hash_orb   ) { gui_traj_view_orb    (traj); }
-					else if (traj->hash == traj_hash_bz    ) { gui_traj_view_bz((s_trctraj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
-					else if (traj->hash == traj_hash_bz2   ) { gui_traj_view_bz2    (traj); }
-					else if (traj->hash == traj_hash_navsat) { gui_traj_view_navsat (traj); }
+//					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
+//
+//					if      (traj->hash == traj_hash_static) { gui_traj_view_static (traj); }
+//					else if (traj->hash == traj_hash_orb   ) { gui_traj_view_orb    (traj); }
+//					else if (traj->hash == traj_hash_bz    ) { gui_traj_view_bz((s_trctraj_bz *) traj->data, "##test", ImVec2(-1, -1), 0x00); }
+//					else if (traj->hash == traj_hash_bz2   ) { gui_traj_view_bz2    (traj); }
+//					else if (traj->hash == traj_hash_navsat) { gui_traj_view_navsat (traj); }
 					
 					break;
 				}
 				
 				case gui_eng_type_ctrl:
 				{
-					s_trcctrl *ctrl = (s_trcctrl*) self->gui_eng.sel_item;
-					
-					if      (ctrl->hash == ctrl_hash_gm  ) { gui_ctrl_view_gm  (ctrl); }
-					else if (ctrl->hash == ctrl_hash_egms) { gui_ctrl_view_egms(ctrl); }
-					else if (ctrl->hash == ctrl_hash_gms ) { gui_ctrl_view_gms (ctrl); }
+//					s_trcctrl *ctrl = (s_trcctrl*) self->gui_eng.sel_item;
+//
+//					if      (ctrl->hash == ctrl_hash_gm  ) { gui_ctrl_view_gm  (ctrl); }
+//					else if (ctrl->hash == ctrl_hash_egms) { gui_ctrl_view_egms(ctrl); }
+//					else if (ctrl->hash == ctrl_hash_gms ) { gui_ctrl_view_gms (ctrl); }
 					
 					break;
 				}
 				
 				case gui_eng_type_data:
 				{
-					s_trcdata *data = (s_trcdata*) self->gui_eng.sel_item;
-					
-					if      (data->hash == data_hash_text ) { gui_data_view_text  (data); }
-					else if (data->hash == data_hash_ram  ) { gui_data_view_ram   (data); }
-					else if (data->hash == data_hash_ramld) { gui_data_view_ramld (data); }
-					else if (data->hash == data_hash_mat  ) { gui_data_view_mat   (data); }
-					else if (data->hash == data_hash_bin  ) { gui_data_view_bin   (data); }
+//					s_trcdata *data = (s_trcdata*) self->gui_eng.sel_item;
+//
+//					if      (data->hash == data_hash_text ) { gui_data_view_text  (data); }
+//					else if (data->hash == data_hash_ram  ) { gui_data_view_ram   (data); }
+//					else if (data->hash == data_hash_ramld) { gui_data_view_ramld (data); }
+//					else if (data->hash == data_hash_mat  ) { gui_data_view_mat   (data); }
+//					else if (data->hash == data_hash_bin  ) { gui_data_view_bin   (data); }
 					
 					break;
 				}
@@ -972,18 +957,18 @@ inline u8_t gui_main(s_gui *self)
 			
 			f64_t d = 0.5 * (1.0 + vl_sin(d_)) * (1.0 / view.scale / 4.0);
 			
-			f64_t pt_norm = vl_gauss1(0.0, 0.0, pt_disp);
+			f64_t pt_norm = rand_gauss1(0.0, 0.0, pt_disp);
 			f64_t gain;
 			ImVec4 color_v4;
 			
 			s_vl3d_point point;
 			s_vl3d_line  line;
 			
-			s_vl_hpr view_hpr = vl_hpr(&view.rot[0][0]);
+			s_vl3hpr view_hpr = vl3hpr_mat(&view.rot[0][0]);
 			view_hpr.heading += io.DeltaTime * 0.01;
 			view_hpr.pitch   += io.DeltaTime * 0.02;
 			view_hpr.roll    += io.DeltaTime * 0.03;
-			vl3_rot(&view.rot[0][0], view_hpr);
+			vl3m_rot(&view.rot[0][0], view_hpr);
 			
 			for (int x = 0; x < cnt; ++x)
 			{
@@ -992,7 +977,7 @@ inline u8_t gui_main(s_gui *self)
 					for (int z = 0; z < cnt; ++z)
 					{
 						gain = vl_sqrt(x * x + y * y + z * z);
-						gain = 0.4 * vl_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
+						gain = 0.4 * rand_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
 						
@@ -1000,138 +985,138 @@ inline u8_t gui_main(s_gui *self)
 						point.size = pt_size;
 						
 						gain = vl_sqrt(x * x + y * y + z * z);
-						gain = 0.2 * vl_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
+						gain = 0.2 * rand_gauss1(gain * a_state, 0.0, pt_disp) / pt_norm;
 						color_v4 = ImGui::ColorConvertU32ToFloat4(vl3d_col_d);
 						color_v4.w *= gain;
 						
 						line.color = ImGui::ColorConvertFloat4ToU32(color_v4);
 						
-						vl3_vcopy(point.p0, vl_vec(x * d, y * d, z * d));
+						vl3v_copy(point.p0, vl3v(x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(x * d, y * d, -z * d));
+						vl3v_copy(point.p0, vl3v(x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(x * d, -y * d, z * d));
+						vl3v_copy(point.p0, vl3v(x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(x * d, -y * d, -z * d));
+						vl3v_copy(point.p0, vl3v(x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(-x * d, y * d, z * d));
+						vl3v_copy(point.p0, vl3v(-x * d, y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(-x * d, y * d, -z * d));
+						vl3v_copy(point.p0, vl3v(-x * d, y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(-x * d, -y * d, z * d));
+						vl3v_copy(point.p0, vl3v(-x * d, -y * d, z * d));
 						vl3d_add_point(&vl3d, point);
 						
-						vl3_vcopy(point.p0, vl_vec(-x * d, -y * d, -z * d));
+						vl3v_copy(point.p0, vl3v(-x * d, -y * d, -z * d));
 						vl3d_add_point(&vl3d, point);
 						
 						// 1
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x + d, d*y, d*z));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x + d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, d*y + d, d*z));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, d*y, d*z + d));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 2
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x + d, d*y, -d*z));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x + d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, d*y + d, -d*z));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, d*y, -d*z - d));
+						vl3v_copy(line.p0, vl3v(d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 3
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x + d, -d*y, d*z));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x + d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, -d*y - d, d*z));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, -d*y, d*z + d));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 4
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x + d, -d*y, -d*z));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x + d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, -d*y - d, -d*z));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(d*x, -d*y, -d*z - d));
+						vl3v_copy(line.p0, vl3v(d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 5
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x - d, d*y, d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x - d, d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, d*y + d, d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, d*y + d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, d*y, d*z + d));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 6
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x - d, d*y, -d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x - d, d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, d*y + d, -d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, d*y + d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, d*y, -d*z - d));
+						vl3v_copy(line.p0, vl3v(-d*x, d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 7
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x - d, -d*y, d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x - d, -d*y, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y - d, d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, -d*y - d, d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y, d*z + d));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, -d*y, d*z + d));
 						vl3d_add_line(&vl3d, line);
 						
 						// 8
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x - d, -d*y, -d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x - d, -d*y, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y - d, -d*z));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, -d*y - d, -d*z));
 						vl3d_add_line(&vl3d, line);
 						
-						vl3_vcopy(line.p0, vl_vec(-d*x, -d*y, -d*z));
-						vl3_vcopy(line.p1, vl_vec(-d*x, -d*y, -d*z - d));
+						vl3v_copy(line.p0, vl3v(-d*x, -d*y, -d*z));
+						vl3v_copy(line.p1, vl3v(-d*x, -d*y, -d*z - d));
 						vl3d_add_line(&vl3d, line);
 					}
 				}
@@ -1153,11 +1138,6 @@ inline u8_t gui_main(s_gui *self)
 		}
 		
 		ImGui::End();
-	}
-	
-	{
-		// Scripting view
-		gui_cmd_render(&self->gui_cmd);
 	}
 	
 	return 0x00;

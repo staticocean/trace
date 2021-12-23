@@ -18,6 +18,8 @@
 #include <sftltrc/trcspl.h>
 #include <sftltrc/trctraj.h>
 
+#include <sftltrc/impl/trcproc_euler.h>
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRC__ */

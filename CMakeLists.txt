@@ -28,6 +28,7 @@ include_directories(./lib/)
 include_directories(./lib/sftlstd/include/)
 include_directories(./lib/sftltrc/include/)
 include_directories(./lib/sftlgui/include/)
+#include_directories(./lib/tinymat/build/CMakeFiles/)
 
 if (UNIX)
 
@@ -38,12 +39,12 @@ endif (UNIX)
 if (WIN32)
 
     file(GLOB src_main      ./src/* ./src/win/*)
-    file(GLOB src_fmemopen  ./lib/fmemopen/*)
+    file(GLOB src_fmemopen  ./lib/fmemopen/libfmemopen.c)
 
 endif (WIN32)
 
-file(GLOB src_tinymat   ./lib/tinymat/*)
-file(GLOB src_json11    ./lib/json11/*)
+#file(GLOB src_tinymat   ./lib/tinymat/src/tinymatwriter.cpp)
+file(GLOB src_json11    ./lib/json11/json11.cpp)
 
 add_executable(trace ${src_main} ${src_fmemopen} ${src_tinymat} ${src_json11})
 
@@ -57,7 +58,7 @@ target_link_libraries(trace LINK_PUBLIC sftlgui)
 target_link_libraries(trace LINK_PUBLIC sftlstd)
 target_link_libraries(trace LINK_PUBLIC sftltrc)
 
-target_link_libraries(trace LINK_PUBLIC fmemopen)
+#target_link_libraries(trace LINK_PUBLIC fmemopen)
 #target_link_libraries(trace LINK_PUBLIC json11)
 #target_link_libraries(trace LINK_PUBLIC tinymat)
 
