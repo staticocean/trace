@@ -33,8 +33,8 @@
 
 typedef struct gui
 {
-	f32_t 			w_height;
-	f32_t 			w_width;
+	t_f32 			w_height;
+	t_f32 			w_width;
 	
 	s_trceng 		eng;
 	
@@ -61,15 +61,15 @@ typedef struct gui
 	
 } 	s_gui;
 
-typedef struct gui_init_attr
+typedef struct gui_attr
 {
-	t_u32 		temp;
+	t_u32 		none;
 	
-}	s_gui_init;
+}	s_gui_attr;
 
 //------------------------------------------------------------------------------
 
-t_u8 gui_init (s_gui *self, s_gui_init attr)
+t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 {
     gui_clip_init(&self->gui_clip, (s_gui_clip_attr) {});
 
@@ -951,9 +951,9 @@ inline t_u8 gui_main(s_gui *self)
 			a_time += 0.5 * io.DeltaTime;
 			t_f64 a_state = 0.5 * (1.0 + vld_sin(a_time));
 			
-			static t_f64 d_ = 1.5 * vl_pi;
+			static t_f64 d_ = 1.5 * vld_pi;
 			d_ += io.DeltaTime;
-			if (d_ > 2.5*vl_pi) { d_ = 2.5*vl_pi; }
+			if (d_ > 2.5*vld_pi) { d_ = 2.5*vld_pi; }
 			
 			t_f64 d = 0.5 * (1.0 + vld_sin(d_)) * (1.0 / view.scale / 4.0);
 			

@@ -233,11 +233,11 @@ inline t_u8 trctraj_navsat_parseagp(s_trctraj_navsat *self)
 				   &self->data_ls[self->data_sz].sqrta,
 				   &self->data_ls[self->data_sz].m0);
 			
-			self->data_ls[self->data_sz].domg *= vl_pi;
-			self->data_ls[self->data_sz].omg0 *= vl_pi;
-			self->data_ls[self->data_sz].i *= vl_pi;
-			self->data_ls[self->data_sz].w *= vl_pi;
-			self->data_ls[self->data_sz].m0 *= vl_pi;
+			self->data_ls[self->data_sz].domg *= vld_pi;
+			self->data_ls[self->data_sz].omg0 *= vld_pi;
+			self->data_ls[self->data_sz].i *= vld_pi;
+			self->data_ls[self->data_sz].w *= vld_pi;
+			self->data_ls[self->data_sz].m0 *= vld_pi;
 			
 			++self->data_sz;
 		}

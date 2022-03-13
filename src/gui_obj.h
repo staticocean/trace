@@ -54,7 +54,7 @@ inline t_u8 gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 {
 //	ImGui::PushID(self);
 //
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::InputText("##desc", self->desc, 255);
 //	// !!! UPDATE HASH !!!
 //	self->hash = crc32_iso_str(self->desc);
@@ -74,14 +74,14 @@ inline t_u8 gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 //	ImGui::Text("pos_inert");
 //	gui_hint("[kg]");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::DragScalar("##pos_inert", ImGuiDataType_Double,
 //			&self->pos_inert, 1.0, &pos_inert_min, NULL, "%.3f");
 //
 //	ImGui::Text("rot_inert");
 //	gui_hint("[kg m2]");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::DragScalar("##rot_inert", ImGuiDataType_Double,
 //			&self->rot_inert, 1.0, &rot_inert_min, NULL, "%.3f");
 //

@@ -139,7 +139,7 @@ void gui_file_open (char *file_path, t_u32 filter_sz, nfdfilteritem_t *filter_ls
 {
 	ImGui::PushID(file_path);
 	
-	if (width < 0) width = ImGui::GetContentRegionAvailWidth();
+	if (width < 0) width = ImGui::GetContentRegionAvail().x;
 	
 	ImGui::SetNextItemWidth(width-40);
 	char *file_name = file_path + strlen(file_path);
@@ -190,7 +190,7 @@ void gui_file_save (char *file_path, t_u32 filter_sz, nfdfilteritem_t *filter_ls
 	
 	ImGui::SameLine(0.0, 0.0);
 	
-	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvailWidth(),0)))
+	if(ImGui::Button("SEL", ImVec2(ImGui::GetContentRegionAvail().x,0)))
 	{
 		nfdchar_t *user_path;
 		nfdresult_t result = NFD_SaveDialog(&user_path, filter_ls, filter_sz, file_path, NULL);

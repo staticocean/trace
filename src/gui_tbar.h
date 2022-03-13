@@ -232,7 +232,7 @@ inline t_u8 gui_tbar_main(s_gui_tbar *tbar)
 	tbar->eng->time_iter = tbar->eng->time_limit / tbar->eng->time_step;
 	
 	ImGui::SetNextItemWidth(180);
-	gui_sel_proc("##proc", tbar->eng, &tbar->eng->proc);
+//	gui_sel_proc("##proc", tbar->eng, &tbar->eng->proc);
 	ImGui::SameLine(0,0);
 	
 	if(gui_tbar_button("RENDER", ImVec2(80,0)))

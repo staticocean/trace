@@ -123,7 +123,7 @@ inline t_u8 gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 	static ImGuiTextFilter filter;
 	static void* selected_item = NULL;
 	
-	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 	filter.Draw("");
 	
 	ImGui::Dummy(ImVec2(0, 5));

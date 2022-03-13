@@ -23,7 +23,7 @@ inline void gui_data_edit (s_trcdata *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -51,12 +51,12 @@ inline void gui_data_edit_text(s_trcdata *self)
 //
 //	ImGui::Text("file  ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::InputText("##file", data->file_name, 256);
 //
 //	ImGui::Text("size  ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::Text("%.1f kb", (float) data->file_size / 1024);
 //
 //	ImGui::Dummy(ImVec2(0, 5));
@@ -130,7 +130,7 @@ inline void gui_data_edit_ram(s_trcdata *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
 //	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 //
@@ -435,7 +435,7 @@ inline void gui_data_edit_ramld(s_trcdata *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
 //	if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 //
@@ -513,32 +513,32 @@ inline void gui_data_edit_mat(s_trcdata *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("hpr   ");
 //	ImGui::SameLine();
-//	imgui_bool("##hpr", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->hpr_en);
+//	imgui_bool("##hpr", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->hpr_en);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("lla   ");
 //	ImGui::SameLine();
-//	imgui_bool("##lla", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->lla_en);
+//	imgui_bool("##lla", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->lla_en);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ecef  ");
 //	ImGui::SameLine();
-//	imgui_bool("##ecef", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ecef_en);
+//	imgui_bool("##ecef", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->ecef_en);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("tied  ");
 //	ImGui::SameLine();
-//	imgui_bool("##tied", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->tied_en);
+//	imgui_bool("##tied", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->tied_en);
 //
 //    ImGui::AlignTextToFramePadding();
 //    ImGui::Text("abs   ");
 //    ImGui::SameLine();
-//    imgui_bool("##abs", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->abs_en);
+//    imgui_bool("##abs", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->abs_en);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("latdev");
 //	ImGui::SameLine();
-//	imgui_bool("##latdev", ImVec2(ImGui::GetContentRegionAvailWidth(),0), &data->ld_en);
+//	imgui_bool("##latdev", ImVec2(ImGui::GetContentRegionAvail().x,0), &data->ld_en);
 //
 //	ImGui::Dummy(ImVec2(0, 5));
 //	ImGui::Separator();

@@ -20,7 +20,7 @@ inline void gui_ctrl_edit(s_trcctrl *self)
 {
 	ImGui::PushID(self);
 	
-	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 	ImGui::InputText("##name", self->name, 255);
 	
 	ImGui::Dummy(ImVec2(0, 5));
@@ -67,7 +67,7 @@ inline void gui_ctrl_edit_egms(s_trcctrl *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 //	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 //
@@ -117,7 +117,7 @@ inline void gui_ctrl_edit_egmsnpo(s_trcctrl *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 //	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 //
@@ -166,7 +166,7 @@ inline void gui_ctrl_edit_gms(s_trcctrl *self)
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", ctrl->eng->obj_sz, ctrl->eng->obj_ls, &ctrl->ref);
 //	if (ctrl->ref != NULL) { ctrl->ref_hash = ctrl->ref->hash; }
 //
@@ -210,7 +210,7 @@ inline void gui_ctrl_edit_varot(s_trcctrl *self)
 //    ImGui::AlignTextToFramePadding();
 //    ImGui::Text("ref   ");
 //    ImGui::SameLine();
-//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //    gui_objsel("##ref", data->eng->obj_sz, data->eng->obj_ls, &data->ref);
 //    if (data->ref != NULL) { data->ref_hash = data->ref->hash; }
 //
@@ -243,12 +243,12 @@ inline void gui_ctrl_edit_gm(s_trcctrl *self)
 //
 //    ImGui::Text("file  ");
 //    ImGui::SameLine();
-//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //    ImGui::InputText("##file_name", ctrl->file_name, 256);
 //
 //    ImGui::Text("order ");
 //    ImGui::SameLine();
-//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //    ImGui::InputScalar("##order", ImGuiDataType_U32, &ctrl->order,
 //            NULL, NULL, "%u", ImGuiInputTextFlags_None);
 }
@@ -294,8 +294,8 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //            t_f64 ecef[3];
 //
 //            t_f64 lla[3] = {
-//                    vl_pi * (t_f64) i / res - 0.5*vl_pi,
-//                    vld_2pi * (t_f64) j / (2*res) - vl_pi,
+//                    vld_pi * (t_f64) i / res - 0.5*vld_pi,
+//                    vld_2pi * (t_f64) j / (2*res) - vld_pi,
 //                    0.0
 //            };
 //

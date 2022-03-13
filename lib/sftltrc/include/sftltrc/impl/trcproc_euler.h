@@ -373,7 +373,7 @@ s_trcproc_intf __trcproc_euler__ = {
 
 void trcproc_euler_init (s_trcproc_euler **proc, s_trcproc_euler_attr *attr)
 {
-	*proc = malloc(sizeof(s_trcproc_euler));
+	*proc = (s_trcproc_euler*) malloc(sizeof(s_trcproc_euler));
 	
 	(*proc)->super.intf = &__trcproc_euler__;
 	

@@ -55,7 +55,7 @@
 //{
 //	ImGui::PushID(self);
 //
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::InputText("##name", self->name, 255);
 //
 //	ImGui::Dummy(ImVec2(0, 5));
@@ -86,7 +86,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", traj->eng->obj_sz, traj->eng->obj_ls, &traj->ref);
 //	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 //
@@ -115,18 +115,18 @@
 //		ImGui::AlignTextToFramePadding();
 //		ImGui::Text("lat   "); ImGui::SameLine();
 //		ImGui::SameLine();
-//		imgui_lat("##lat", &traj->pos[0], ImGui::GetContentRegionAvailWidth());
+//		imgui_lat("##lat", &traj->pos[0], ImGui::GetContentRegionAvail().x);
 //
 //		ImGui::AlignTextToFramePadding();
 //		ImGui::Text("lon   "); ImGui::SameLine();
 //		ImGui::SameLine();
-//		imgui_lon("##lon", &traj->pos[1], ImGui::GetContentRegionAvailWidth());
+//		imgui_lon("##lon", &traj->pos[1], ImGui::GetContentRegionAvail().x);
 //
 //		ImGui::AlignTextToFramePadding();
 //		ImGui::Text("alt   "); ImGui::SameLine();
 //		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 //		ImGui::SameLine();
-//		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //		ImGui::DragScalar("##alt", ImGuiDataType_Double, &traj->pos[2], 1.0, NULL, NULL, "%.3f");
 //	}
 //
@@ -193,16 +193,16 @@
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 //	ImGui::SameLine();
 //	t_f64 radius_min = 0.0;
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
 //
 //	ImGui::Text("rate  ");
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 //	ImGui::SameLine();
-//	t_f64 rate_deg = vl_deg(traj->rate);
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	t_f64 rate_deg = vld_deg(traj->rate);
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.9f");
-//	traj->rate = vl_rad(rate_deg);
+//	traj->rate = vld_rad(rate_deg);
 //
 //	ImGui::Text("tilt  "); ImGui::SameLine();
 //	imgui_rot("##tilt", traj->tilt);
@@ -214,10 +214,10 @@
 //	ImGui::Text("s_rate");
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 //	ImGui::SameLine();
-//	t_f64 s_rate_deg = vl_deg(traj->s_rate);
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	t_f64 s_rate_deg = vld_deg(traj->s_rate);
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.9f");
-//	traj->s_rate = vl_rad(s_rate_deg);
+//	traj->s_rate = vld_rad(s_rate_deg);
 //
 //	ImGui::Text("s_tilt"); ImGui::SameLine();
 //	imgui_rot("##s_tilt", traj->s_tilt);
@@ -309,7 +309,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", traj->eng->obj_sz, traj->eng->obj_ls, &traj->ref);
 //	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 //
@@ -381,11 +381,11 @@
 //
 //        else
 //        {
-//            t_f64 lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
+//            t_f64 lla_deg[3] = {vld_deg(traj->pts[i].pos_p[0]), vld_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
 //            imgui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 //
-//            traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
-//            traj->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+//            traj->pts[i].pos_p[0] = vld_rad(lla_deg[0]);
+//            traj->pts[i].pos_p[1] = vld_rad(lla_deg[1]);
 //            traj->pts[i].pos_p[2] = lla_deg[2];
 //        }
 //
@@ -644,7 +644,7 @@
 //					{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.x + i * step_x); }
 //				} else
 //				{
-//					ImFormatString(axis_label, sizeof(axis_label), " %f", vl_deg(view_top.p0.x + i * step_x));
+//					ImFormatString(axis_label, sizeof(axis_label), " %f", vld_deg(view_top.p0.x + i * step_x));
 //				}
 //
 //				window->DrawList->AddText(b, col_text_u32, axis_label);
@@ -668,7 +668,7 @@
 //					{ ImFormatString(axis_label, sizeof(axis_label), " %f", view_top.p0.y + i * step_y); }
 //				} else
 //				{
-//					ImFormatString(axis_label, sizeof(axis_label), " %f", vl_deg(view_top.p0.y + i * step_y));
+//					ImFormatString(axis_label, sizeof(axis_label), " %f", vld_deg(view_top.p0.y + i * step_y));
 //				}
 //
 //				window->DrawList->AddText(a, col_text_u32, axis_label);
@@ -767,8 +767,8 @@
 //
 //                else
 //                {
-////                    t_f64 lla_deg[3] = {vl_deg(),
-////                                        vl_deg(self->pts[i].pos_p[1]),
+////                    t_f64 lla_deg[3] = {vld_deg(),
+////                                        vld_deg(self->pts[i].pos_p[1]),
 ////                                        self->pts[i].pos_p[2]};
 //
 //                    ImGui::Text("lat ");
@@ -788,8 +788,8 @@
 //                    ImGui::DragScalar("##alt", ImGuiDataType_Double, &self->pts[i].pos_p[2],
 //                                      1, NULL, NULL, "%.3f");
 //
-////                    self->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
-////                    self->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+////                    self->pts[i].pos_p[0] = vld_rad(lla_deg[0]);
+////                    self->pts[i].pos_p[1] = vld_rad(lla_deg[1]);
 ////                    self->pts[i].pos_p[2] = lla_deg[2];
 //                }
 //
@@ -1428,7 +1428,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", traj->eng->obj_sz, traj->eng->obj_ls, &traj->ref);
 //	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 //
@@ -1500,11 +1500,11 @@
 //
 //		else
 //		{
-//			t_f64 lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
+//			t_f64 lla_deg[3] = {vld_deg(traj->pts[i].pos_p[0]), vld_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
 //			imgui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 //
-//			traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
-//			traj->pts[i].pos_p[1] = vl_rad(lla_deg[1]);
+//			traj->pts[i].pos_p[0] = vld_rad(lla_deg[0]);
+//			traj->pts[i].pos_p[1] = vld_rad(lla_deg[1]);
 //			traj->pts[i].pos_p[2] = lla_deg[2];
 //		}
 //
@@ -1606,7 +1606,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	gui_objsel("##ref", traj->eng->obj_sz, traj->eng->obj_ls, &traj->ref);
 //	if (traj->ref != NULL) { traj->ref_hash = traj->ref->hash; }
 //
@@ -1623,7 +1623,7 @@
 //
 //	ImGui::Text("type  ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	int file_type = traj->file_type;
 //	char *file_types[] = {
 //			"none",
@@ -1641,7 +1641,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("resol ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	ImGui::SliderInt("##resolution", &traj->resolution, 1, 1000);
 //
 //	if (traj->data_sz > 0x00)
@@ -1653,7 +1653,7 @@
 //		char satnum[32];
 //		sprintf(satnum, "SAT %d", traj->data_ls[traj->sat_offset].satnum);
 //
-//		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //		if (ImGui::BeginCombo("##satnum", satnum, ImGuiComboFlags_None))
 //		{
 //			for (int i = 0; i < traj->data_sz; ++i)
@@ -1673,7 +1673,7 @@
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("time  ");
 //	ImGui::SameLine();
-//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+//	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 //	imgui_datetime("##datetime",
 //		 &traj->day, &traj->month, &traj->year,
 //		 &traj->hour, &traj->min, &traj->sec);
