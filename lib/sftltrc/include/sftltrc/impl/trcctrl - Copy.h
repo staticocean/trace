@@ -11,7 +11,7 @@
 
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <sftltrc/trcobj.h>
 
@@ -19,49 +19,49 @@
 
 typedef struct trcctrl_upos
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_upos;
 
 typedef struct trcctrl_upos_init
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_upos_init;
 
 typedef struct trcctrl_cpos
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_cpos;
 
 typedef struct trcctrl_cpos_init
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_cpos_init;
 
 typedef struct trcctrl_urot
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_urot;
 
 typedef struct trcctrl_urot_init
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_urot_init;
 
 typedef struct trcctrl_crot
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_crot;
 
 typedef struct trcctrl_crot_init
 {
-	u32_t temp;
+	t_u32 temp;
 	
 }   s_trcctrl_crot_init;
 
@@ -143,47 +143,47 @@ typedef struct trcctrl_crot_init
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcctrl_upos_init(s_trcctrl_upos *self, s_trcctrl_upos_init attr)
+inline t_u8 trcctrl_upos_init(s_trcctrl_upos *self, s_trcctrl_upos_init attr)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_save(s_trcctrl_upos *self, s_trcctrl_upos_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_upos_save(s_trcctrl_upos *self, s_trcctrl_upos_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_load(s_trcctrl_upos *self, s_trcctrl_upos_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_upos_load(s_trcctrl_upos *self, s_trcctrl_upos_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_reset(s_trcctrl_upos *self, s_trcobj *obj)
+inline t_u8 trcctrl_upos_reset(s_trcctrl_upos *self, s_trcobj *obj)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_update(s_trcctrl_upos *self, s_trcobj *obj)
+inline t_u8 trcctrl_upos_update(s_trcctrl_upos *self, s_trcobj *obj)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_init(s_trcctrl_cpos *self, s_trcctrl_cpos_init attr)
+inline t_u8 trcctrl_cpos_init(s_trcctrl_cpos *self, s_trcctrl_cpos_init attr)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_save(s_trcctrl_cpos *self, s_trcctrl_cpos_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_cpos_save(s_trcctrl_cpos *self, s_trcctrl_cpos_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_load(s_trcctrl_cpos *self, s_trcctrl_cpos_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_cpos_load(s_trcctrl_cpos *self, s_trcctrl_cpos_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_reset(s_trcctrl_cpos *self, s_trcobj *obj)
+inline t_u8 trcctrl_cpos_reset(s_trcctrl_cpos *self, s_trcobj *obj)
 {
 	if (obj->traj_sz > 0x00)
 	{
@@ -194,7 +194,7 @@ inline u8_t trcctrl_cpos_reset(s_trcctrl_cpos *self, s_trcobj *obj)
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_update(s_trcctrl_cpos *self, s_trcobj *obj)
+inline t_u8 trcctrl_cpos_update(s_trcctrl_cpos *self, s_trcobj *obj)
 {
 	if (obj->traj_sz > 0x00)
 	{
@@ -205,47 +205,47 @@ inline u8_t trcctrl_cpos_update(s_trcctrl_cpos *self, s_trcobj *obj)
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_init(s_trcctrl_urot *self, s_trcctrl_urot_init attr)
+inline t_u8 trcctrl_urot_init(s_trcctrl_urot *self, s_trcctrl_urot_init attr)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_save(s_trcctrl_urot *self, s_trcctrl_urot_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_urot_save(s_trcctrl_urot *self, s_trcctrl_urot_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_load(s_trcctrl_urot *self, s_trcctrl_urot_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_urot_load(s_trcctrl_urot *self, s_trcctrl_urot_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_reset(s_trcctrl_urot *self, s_trcobj *obj)
+inline t_u8 trcctrl_urot_reset(s_trcctrl_urot *self, s_trcobj *obj)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_update(s_trcctrl_urot *self, s_trcobj *obj)
+inline t_u8 trcctrl_urot_update(s_trcctrl_urot *self, s_trcobj *obj)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_init(s_trcctrl_crot *self, s_trcctrl_crot_init attr)
+inline t_u8 trcctrl_crot_init(s_trcctrl_crot *self, s_trcctrl_crot_init attr)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_save(s_trcctrl_crot *self, s_trcctrl_crot_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_crot_save(s_trcctrl_crot *self, s_trcctrl_crot_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_load(s_trcctrl_crot *self, s_trcctrl_crot_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_crot_load(s_trcctrl_crot *self, s_trcctrl_crot_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_reset(s_trcctrl_crot *self, s_trcobj *obj)
+inline t_u8 trcctrl_crot_reset(s_trcctrl_crot *self, s_trcobj *obj)
 {
 	if (obj->traj_sz > 0x00)
 	{
@@ -256,7 +256,7 @@ inline u8_t trcctrl_crot_reset(s_trcctrl_crot *self, s_trcobj *obj)
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_update(s_trcctrl_crot *self, s_trcobj *obj)
+inline t_u8 trcctrl_crot_update(s_trcctrl_crot *self, s_trcobj *obj)
 {
 	if (obj->traj_sz > 0x00)
 	{
@@ -269,7 +269,7 @@ inline u8_t trcctrl_crot_update(s_trcctrl_crot *self, s_trcobj *obj)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcctrl_upos_init_(void **data, void *config)
+inline t_u8 trcctrl_upos_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_upos*) malloc(sizeof(s_trcctrl_upos));
 	
@@ -279,7 +279,7 @@ inline u8_t trcctrl_upos_init_(void **data, void *config)
 	return trcctrl_upos_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_upos_free_(void **data)
+inline t_u8 trcctrl_upos_free_(void **data)
 {
 	s_trcctrl_upos *ctrl = (s_trcctrl_upos*) *data;
 	free(ctrl);
@@ -287,17 +287,17 @@ inline u8_t trcctrl_upos_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_upos_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_upos_load_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_upos_reset_(void *data, void *obj)
+inline t_u8 trcctrl_upos_reset_(void *data, void *obj)
 {
 	s_trcctrl_upos *ctrl = (s_trcctrl_upos*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -305,7 +305,7 @@ inline u8_t trcctrl_upos_reset_(void *data, void *obj)
 	return trcctrl_upos_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_upos_update_(void *data, void *obj)
+inline t_u8 trcctrl_upos_update_(void *data, void *obj)
 {
 	s_trcctrl_upos *ctrl = (s_trcctrl_upos*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -313,7 +313,7 @@ inline u8_t trcctrl_upos_update_(void *data, void *obj)
 	return trcctrl_upos_update(ctrl, obj_);
 }
 
-inline u8_t trcctrl_cpos_init_(void **data, void *config)
+inline t_u8 trcctrl_cpos_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_cpos*) malloc(sizeof(s_trcctrl_cpos));
 	
@@ -323,17 +323,17 @@ inline u8_t trcctrl_cpos_init_(void **data, void *config)
 	return trcctrl_cpos_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_cpos_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_cpos_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_cpos_load_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_free_(void **data)
+inline t_u8 trcctrl_cpos_free_(void **data)
 {
 	s_trcctrl_cpos *ctrl = (s_trcctrl_cpos*) *data;
 	free(ctrl);
@@ -341,7 +341,7 @@ inline u8_t trcctrl_cpos_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_cpos_reset_(void *data, void *obj)
+inline t_u8 trcctrl_cpos_reset_(void *data, void *obj)
 {
 	s_trcctrl_cpos *ctrl = (s_trcctrl_cpos*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -349,7 +349,7 @@ inline u8_t trcctrl_cpos_reset_(void *data, void *obj)
 	return trcctrl_cpos_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_cpos_update_(void *data, void *obj)
+inline t_u8 trcctrl_cpos_update_(void *data, void *obj)
 {
 	s_trcctrl_cpos *ctrl = (s_trcctrl_cpos*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -357,7 +357,7 @@ inline u8_t trcctrl_cpos_update_(void *data, void *obj)
 	return trcctrl_cpos_update(ctrl, obj_);
 }
 
-inline u8_t trcctrl_urot_init_(void **data, void *config)
+inline t_u8 trcctrl_urot_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_urot*) malloc(sizeof(s_trcctrl_urot));
 	
@@ -367,17 +367,17 @@ inline u8_t trcctrl_urot_init_(void **data, void *config)
 	return trcctrl_urot_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_urot_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_urot_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_urot_load_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_free_(void **data)
+inline t_u8 trcctrl_urot_free_(void **data)
 {
 	s_trcctrl_urot *ctrl = (s_trcctrl_urot*) *data;
 	free(ctrl);
@@ -385,7 +385,7 @@ inline u8_t trcctrl_urot_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_urot_reset_(void *data, void *obj)
+inline t_u8 trcctrl_urot_reset_(void *data, void *obj)
 {
 	s_trcctrl_urot *ctrl = (s_trcctrl_urot*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -393,7 +393,7 @@ inline u8_t trcctrl_urot_reset_(void *data, void *obj)
 	return trcctrl_urot_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_urot_update_(void *data, void *obj)
+inline t_u8 trcctrl_urot_update_(void *data, void *obj)
 {
 	s_trcctrl_urot *ctrl = (s_trcctrl_urot*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -401,7 +401,7 @@ inline u8_t trcctrl_urot_update_(void *data, void *obj)
 	return trcctrl_urot_update(ctrl, obj_);
 }
 
-inline u8_t trcctrl_crot_init_(void **data, void *config)
+inline t_u8 trcctrl_crot_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_crot*) malloc(sizeof(s_trcctrl_crot));
 	
@@ -411,17 +411,17 @@ inline u8_t trcctrl_crot_init_(void **data, void *config)
 	return trcctrl_crot_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_crot_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_crot_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_crot_load_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_free_(void **data)
+inline t_u8 trcctrl_crot_free_(void **data)
 {
 	s_trcctrl_crot *ctrl = (s_trcctrl_crot*) *data;
 	free(ctrl);
@@ -429,7 +429,7 @@ inline u8_t trcctrl_crot_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_crot_reset_(void *data, void *obj)
+inline t_u8 trcctrl_crot_reset_(void *data, void *obj)
 {
 	s_trcctrl_crot *ctrl = (s_trcctrl_crot*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -437,7 +437,7 @@ inline u8_t trcctrl_crot_reset_(void *data, void *obj)
 	return trcctrl_crot_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_crot_update_(void *data, void *obj)
+inline t_u8 trcctrl_crot_update_(void *data, void *obj)
 {
 	s_trcctrl_crot *ctrl = (s_trcctrl_crot*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -448,28 +448,28 @@ inline u8_t trcctrl_crot_update_(void *data, void *obj)
 //------------------------------------------------------------------------------
 
 
-//	f64_t dp0_p1[3];
-//	f64_t dp0_p2[3];
+//	t_f64 dp0_p1[3];
+//	t_f64 dp0_p2[3];
 //
 //	vl_vmul_s(dp0_p1, self->parent->pos[1], self->parent->time[1]);
 //	vl_vmul_s(dp0_p2, self->parent->pos[2], self->parent->time[2]);
 //	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
 //	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
 //
-//	f64_t dp1_p2[3];
+//	t_f64 dp1_p2[3];
 //
 //	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
 //	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
 //
-//	f64_t dp2_f[3];
+//	t_f64 dp2_f[3];
 //
 //	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
 //	vl_vcopy(ctrl->parent->pos[2], dp2_f);
 //
-//	f64_t dr0_r1[9];
-//	f64_t dr0_r2[9];
-//	f64_t r1_sk[9];
-//	f64_t r2_sk[9];
+//	t_f64 dr0_r1[9];
+//	t_f64 dr0_r2[9];
+//	t_f64 r1_sk[9];
+//	t_f64 r2_sk[9];
 //
 //	vl_skew(r1_sk, ctrl->parent->rot[1]);
 //	vl_skew(r2_sk, ctrl->parent->rot[2]);
@@ -483,7 +483,7 @@ inline u8_t trcctrl_crot_update_(void *data, void *obj)
 //	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
 //	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
 //
-//	f64_t dr1_r2[3];
+//	t_f64 dr1_r2[3];
 //
 //	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
 //	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
@@ -502,28 +502,28 @@ inline u8_t trcctrl_crot_update_(void *data, void *obj)
 //{
 //	ins_ctrl_uins_t *ctrl = (ins_ctrl_uins_t*) __ctrl__;
 //
-//	f64_t dp2_f[3];
+//	t_f64 dp2_f[3];
 //
 //	vl_vmul_s(dp2_f, ctrl->parent->pos_force, 1 / ctrl->parent->pos_inert);
 //	vl_vsum(ctrl->parent->pos[2], ctrl->parent->pos[2], dp2_f);
 //
-//	f64_t dp0_p1[3];
-//	f64_t dp0_p2[3];
+//	t_f64 dp0_p1[3];
+//	t_f64 dp0_p2[3];
 //
 //	vl_vmul_s(dp0_p1, ctrl->parent->pos[1], ctrl->parent->time[1]);
 //	vl_vmul_s(dp0_p2, ctrl->parent->pos[2], ctrl->parent->time[2]);
 //	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p1);
 //	vl_vsum(ctrl->parent->pos[0], ctrl->parent->pos[0], dp0_p2);
 //
-//	f64_t dp1_p2[3];
+//	t_f64 dp1_p2[3];
 //
 //	vl_vmul_s(dp1_p2, ctrl->parent->pos[2], ctrl->parent->time[1]);
 //	vl_vsum(ctrl->parent->pos[1], ctrl->parent->pos[1], dp1_p2);
 //
-//	f64_t dr0_r1[9];
-//	f64_t dr0_r2[9];
-//	f64_t r1_sk[9];
-//	f64_t r2_sk[9];
+//	t_f64 dr0_r1[9];
+//	t_f64 dr0_r2[9];
+//	t_f64 r1_sk[9];
+//	t_f64 r2_sk[9];
 //
 //	vl_skew(r1_sk, ctrl->parent->rot[1]);
 //	vl_skew(r2_sk, ctrl->parent->rot[2]);
@@ -554,10 +554,10 @@ inline u8_t trcctrl_crot_update_(void *data, void *obj)
 //
 //	ins_ctrl_corb_get_pos(ctrl, ctrl->parent->pos[0], ctrl->parent->time[0]);
 //
-//	f64_t dr0_r1[9];
-//	f64_t dr0_r2[9];
-//	f64_t r1_sk[9];
-//	f64_t r2_sk[9];
+//	t_f64 dr0_r1[9];
+//	t_f64 dr0_r2[9];
+//	t_f64 r1_sk[9];
+//	t_f64 r2_sk[9];
 //
 //	vl_skew(r1_sk, ctrl->parent->rot[1]);
 //	vl_skew(r2_sk, ctrl->parent->rot[2]);
@@ -571,7 +571,7 @@ inline u8_t trcctrl_crot_update_(void *data, void *obj)
 //	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r1);
 //	vl_msum(ctrl->parent->rot[0], ctrl->parent->rot[0], dr0_r2);
 //
-//	f64_t dr1_r2[3];
+//	t_f64 dr1_r2[3];
 //
 //	vl_mmul_v(dr1_r2, r2_sk, ctrl->parent->rot[1]);
 //	vl_mmul_s(dr1_r2, dr1_r2, ctrl->parent->time[1]);
@@ -676,7 +676,7 @@ typedef struct trcctrl_egms
 {
 	s_trceng *eng;
 	s_trcobj *ref;
-	u32_t ref_hash;
+	t_u32 ref_hash;
 	
 }   s_trcctrl_egms;
 
@@ -688,7 +688,7 @@ typedef struct trcctrl_egms_init
 	
 }   s_trcctrl_egms_init;
 
-inline u8_t trcctrl_egms_init(s_trcctrl_egms *self, s_trcctrl_egms_init attr)
+inline t_u8 trcctrl_egms_init(s_trcctrl_egms *self, s_trcctrl_egms_init attr)
 {
 	self->eng = attr.eng;
 	self->ref = attr.ref;
@@ -699,12 +699,12 @@ inline u8_t trcctrl_egms_init(s_trcctrl_egms *self, s_trcctrl_egms_init attr)
 	return 0x00;
 }
 
-inline u8_t trcctrl_egms_save(s_trcctrl_egms *self, s_trcctrl_egms_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_egms_save(s_trcctrl_egms *self, s_trcctrl_egms_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_egms_load(s_trcctrl_egms *self, s_trcctrl_egms_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_egms_load(s_trcctrl_egms *self, s_trcctrl_egms_init *attr, t_u8 **v_file)
 {
 	self->eng = attr->eng;
 	
@@ -717,56 +717,56 @@ inline u8_t trcctrl_egms_load(s_trcctrl_egms *self, s_trcctrl_egms_init *attr, u
 
 inline static void __trcctrl_egms_calc__(s_trcobj *ref, s_trcobj *obj)
 {
-	const f64_t beta  = 0.0053171;
-	const f64_t beta1 = 71E-7;
-	const f64_t q     = 0.00346775;
-	const f64_t ge    = 9.78049;
-	const f64_t a     = 6378136;
-	const f64_t e2    = 0.0066943662;
+	const t_f64 beta  = 0.0053171;
+	const t_f64 beta1 = 71E-7;
+	const t_f64 q     = 0.00346775;
+	const t_f64 ge    = 9.78049;
+	const t_f64 a     = 6378136;
+	const t_f64 e2    = 0.0066943662;
 	
-	f64_t ecef[3];
+	t_f64 ecef[3];
 	
-	vl3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
-	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
+	vld3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vld3m_tmulv(ecef, &ref->rot[0][0], ecef);
 	
-	f64_t lla[3];
+	t_f64 lla[3];
 	
 	trcellp_lla(&trcellp_pz90, lla, ecef);
 	
-	f64_t g0 = ge*(1 + beta*pow(sin(lla[0]),2) + beta1*pow(sin(2*lla[0]),2));
+	t_f64 g0 = ge*(1 + beta*pow(sin(lla[0]),2) + beta1*pow(sin(2*lla[0]),2));
 	
-	f64_t g_hor[3] = {
+	t_f64 g_hor[3] = {
 			g0*sin(2*lla[0])*(lla[2]/a)*((e2)/a - 2*q),
 			g0 + (lla[2]/a)*((3*lla[2]/a) - 2*q*ge*pow(cos(lla[0]),2)
 			+ (e2)*(3*pow(sin(lla[0]),2) - 1) - q*(1+6*pow(sin(lla[0]),2))),
 			0.0
 	};
 	
-	vl3v_muls(g_hor, g_hor, -1.0);
+	vld3v_muls(g_hor, g_hor, -1.0);
 	
-	f64_t ecef_ctn[9];
+	t_f64 ecef_ctn[9];
 	trcellp_ecefrot(&trcellp_pz90, ecef, ecef_ctn);
 	
-	f64_t g_ecef[3];
-	vl3_mmul_v(g_ecef, ecef_ctn, g_hor);
+	t_f64 g_ecef[3];
+	vld3m_mulv(g_ecef, ecef_ctn, g_hor);
 	
-	f64_t g_inert[3];
-	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
-	vl3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
+	t_f64 g_inert[3];
+	vld3m_mulv(g_inert, &ref->rot[0][0], g_ecef);
+	vld3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
 	
 	return;
 }
 
-inline u8_t trcctrl_egms_reset(s_trcctrl_egms *self, s_trcobj *obj)
+inline t_u8 trcctrl_egms_reset(s_trcctrl_egms *self, s_trcobj *obj)
 {
 	__trcctrl_egms_calc__(self->ref, obj);
 	
 	return 0x00;
 }
 
-inline u8_t trcctrl_egms_update(s_trcctrl_egms *self, s_trcobj *obj)
+inline t_u8 trcctrl_egms_update(s_trcctrl_egms *self, s_trcobj *obj)
 {
 	__trcctrl_egms_calc__(self->ref, obj);
 	
@@ -775,7 +775,7 @@ inline u8_t trcctrl_egms_update(s_trcctrl_egms *self, s_trcobj *obj)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcctrl_egms_init_(void **data, void *config)
+inline t_u8 trcctrl_egms_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_egms*) malloc(sizeof(s_trcctrl_egms));
 	
@@ -785,7 +785,7 @@ inline u8_t trcctrl_egms_init_(void **data, void *config)
 	return trcctrl_egms_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_egms_free_(void **data)
+inline t_u8 trcctrl_egms_free_(void **data)
 {
 	s_trcctrl_egms *ctrl = (s_trcctrl_egms*) *data;
 	free(ctrl);
@@ -793,12 +793,12 @@ inline u8_t trcctrl_egms_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_egms_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_egms_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_egms_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_egms_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcctrl_egms *ctrl = (s_trcctrl_egms*) data;
 	s_trcctrl_egms_init *attr = (s_trcctrl_egms_init*) config;
@@ -806,7 +806,7 @@ inline u8_t trcctrl_egms_load_(void *data, void *config, u8_t **v_file)
 	return trcctrl_egms_load(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_egms_reset_(void *data, void *obj)
+inline t_u8 trcctrl_egms_reset_(void *data, void *obj)
 {
 	s_trcctrl_egms *ctrl = (s_trcctrl_egms*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -814,7 +814,7 @@ inline u8_t trcctrl_egms_reset_(void *data, void *obj)
 	return trcctrl_egms_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_egms_update_(void *data, void *obj)
+inline t_u8 trcctrl_egms_update_(void *data, void *obj)
 {
 	s_trcctrl_egms *ctrl = (s_trcctrl_egms*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -828,7 +828,7 @@ typedef struct trcctrl_egmsnpo
 {
 	s_trceng *eng;
 	s_trcobj *ref;
-	u32_t ref_hash;
+	t_u32 ref_hash;
 	
 }   s_trcctrl_egmsnpo;
 
@@ -840,7 +840,7 @@ typedef struct trcctrl_egmsnpo_init
 	
 }   s_trcctrl_egmsnpo_init;
 
-inline u8_t trcctrl_egmsnpo_init (s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init attr)
+inline t_u8 trcctrl_egmsnpo_init (s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init attr)
 {
 	self->eng = attr.eng;
 	self->ref = attr.ref;
@@ -851,12 +851,12 @@ inline u8_t trcctrl_egmsnpo_init (s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_ini
 	return 0x00;
 }
 
-inline u8_t trcctrl_egmsnpo_save (s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_egmsnpo_save (s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_egmsnpo_load(s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_egmsnpo_load(s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init *attr, t_u8 **v_file)
 {
 	self->eng = attr->eng;
 	
@@ -869,8 +869,8 @@ inline u8_t trcctrl_egmsnpo_load(s_trcctrl_egmsnpo *self, s_trcctrl_egmsnpo_init
 
 inline static void __trcctrl_egmsnpo_calc__(s_trcobj *ref, s_trcobj *obj)
 {
-	const f64_t mu = 398600.44E+9;
-	const f64_t e = 2.633267E+25;
+	const t_f64 mu = 398600.44E+9;
+	const t_f64 e = 2.633267E+25;
 	
 //	R = norm(ecef) + alt_mem;
 //	gr = - mu/R^2 - e/R^4 * (1-3*sin(lat_mem)^2);
@@ -882,48 +882,48 @@ inline static void __trcctrl_egmsnpo_calc__(s_trcobj *ref, s_trcobj *obj)
 //	acc_n = gn - centr_acc(1);
 //	acc_h = gh - centr_acc(2);
 	
-	f64_t ecef[3];
+	t_f64 ecef[3];
 	
-	vl3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
-	vl3_mtmul_v(ecef, &ref->rot[0][0], ecef);
+	vld3v_subv(ecef, &obj->pos[0][0], &ref->pos[0][0]);
+	vld3m_tmulv(ecef, &ref->rot[0][0], ecef);
 	
-	f64_t lla[3];
+	t_f64 lla[3];
 	
 	trcellp_lla(&trcellp_pz90_11, lla, ecef);
 	
-	f64_t r = vl3v_norm(ecef);
-	f64_t gr = -mu / (r*r) - e / (r*r*r*r) * (1-3*sin(lla[0])*sin(lla[0]));
-	f64_t gm = -e / (r*r*r*r) * sin(2*lla[0]);
-	f64_t gh = -gr;
-	f64_t gn = -gm;
+	t_f64 r = vld3v_norm(ecef);
+	t_f64 gr = -mu / (r*r) - e / (r*r*r*r) * (1-3*sin(lla[0])*sin(lla[0]));
+	t_f64 gm = -e / (r*r*r*r) * sin(2*lla[0]);
+	t_f64 gh = -gr;
+	t_f64 gn = -gm;
 	
-	f64_t g_hor[3] = {
+	t_f64 g_hor[3] = {
 			gn, gh, 0.0
 	};
 	
-	vl3v_muls(g_hor, g_hor, -1.0);
+	vld3v_muls(g_hor, g_hor, -1.0);
 	
-	f64_t ecef_ctn[9];
+	t_f64 ecef_ctn[9];
 	trcellp_ecefrot(&trcellp_pz90, ecef, ecef_ctn);
 	
-	f64_t g_ecef[3];
-	vl3_mmul_v(g_ecef, ecef_ctn, g_hor);
+	t_f64 g_ecef[3];
+	vld3m_mulv(g_ecef, ecef_ctn, g_hor);
 	
-	f64_t g_inert[3];
-	vl3_mmul_v(g_inert, &ref->rot[0][0], g_ecef);
-	vl3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
+	t_f64 g_inert[3];
+	vld3m_mulv(g_inert, &ref->rot[0][0], g_ecef);
+	vld3v_muls(g_inert, g_inert, 1.0 * obj->pos_inert);
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, g_inert);
 }
 
-inline u8_t trcctrl_egmsnpo_reset(s_trcctrl_egmsnpo *self, s_trcobj *obj)
+inline t_u8 trcctrl_egmsnpo_reset(s_trcctrl_egmsnpo *self, s_trcobj *obj)
 {
 	__trcctrl_egmsnpo_calc__(self->ref, obj);
 	
 	return 0x00;
 }
 
-inline u8_t trcctrl_egmsnpo_update(s_trcctrl_egmsnpo *self, s_trcobj *obj)
+inline t_u8 trcctrl_egmsnpo_update(s_trcctrl_egmsnpo *self, s_trcobj *obj)
 {
 	__trcctrl_egmsnpo_calc__(self->ref, obj);
 	
@@ -932,7 +932,7 @@ inline u8_t trcctrl_egmsnpo_update(s_trcctrl_egmsnpo *self, s_trcobj *obj)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcctrl_egmsnpo_init_(void **data, void *config)
+inline t_u8 trcctrl_egmsnpo_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_egmsnpo*) malloc(sizeof(s_trcctrl_egmsnpo));
 	
@@ -942,7 +942,7 @@ inline u8_t trcctrl_egmsnpo_init_(void **data, void *config)
 	return trcctrl_egmsnpo_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_egmsnpo_free_(void **data)
+inline t_u8 trcctrl_egmsnpo_free_(void **data)
 {
 	s_trcctrl_egmsnpo *ctrl = (s_trcctrl_egmsnpo*) *data;
 	free(ctrl);
@@ -950,12 +950,12 @@ inline u8_t trcctrl_egmsnpo_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_egmsnpo_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_egmsnpo_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_egmsnpo_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_egmsnpo_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcctrl_egmsnpo *ctrl = (s_trcctrl_egmsnpo*) data;
 	s_trcctrl_egmsnpo_init *attr = (s_trcctrl_egmsnpo_init*) config;
@@ -963,7 +963,7 @@ inline u8_t trcctrl_egmsnpo_load_(void *data, void *config, u8_t **v_file)
 	return trcctrl_egmsnpo_load(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_egmsnpo_reset_(void *data, void *obj)
+inline t_u8 trcctrl_egmsnpo_reset_(void *data, void *obj)
 {
 	s_trcctrl_egmsnpo *ctrl = (s_trcctrl_egmsnpo*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -971,7 +971,7 @@ inline u8_t trcctrl_egmsnpo_reset_(void *data, void *obj)
 	return trcctrl_egmsnpo_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_egmsnpo_update_(void *data, void *obj)
+inline t_u8 trcctrl_egmsnpo_update_(void *data, void *obj)
 {
 	s_trcctrl_egmsnpo *ctrl = (s_trcctrl_egmsnpo*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -985,7 +985,7 @@ typedef struct trcctrl_gms
 {
 	s_trceng 		*eng;
 	s_trcobj 		*ref;
-	u32_t 			ref_hash;
+	t_u32 			ref_hash;
 	
 }   s_trcctrl_gms;
 
@@ -998,7 +998,7 @@ typedef struct trcctrl_gms_attr
 
 //------------------------------------------------------------------------------
 
-u8_t trcctrl_gms_init (s_trcctrl *ctrl, s_trcctrl_gms_init attr)
+t_u8 trcctrl_gms_init (s_trcctrl *ctrl, s_trcctrl_gms_init attr)
 {
 	s_trcctrl_gms *ctrl_gms = (s_trcctrl_gms*) ctrl;
 	
@@ -1012,7 +1012,7 @@ u8_t trcctrl_gms_init (s_trcctrl *ctrl, s_trcctrl_gms_init attr)
 }
 
 
-inline u8_t trcctrl_gms_init_(void **data, void *config)
+inline t_u8 trcctrl_gms_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_gms*) malloc(sizeof(s_trcctrl_gms));
 	
@@ -1023,7 +1023,7 @@ inline u8_t trcctrl_gms_init_(void **data, void *config)
 }
 
 
-inline u8_t trcctrl_gms_free_(void **data)
+inline t_u8 trcctrl_gms_free_(void **data)
 {
 	s_trcctrl_gms *ctrl = (s_trcctrl_gms*) *data;
 	free(ctrl);
@@ -1031,19 +1031,19 @@ inline u8_t trcctrl_gms_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_gms_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_gms_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
 
 
-inline u8_t trcctrl_gms_save (s_trcctrl_gms *gms, s_trcctrl_gms_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_gms_save (s_trcctrl_gms *gms, s_trcctrl_gms_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_gms_load (s_trcctrl_gms *gms, s_trcctrl_gms_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_gms_load (s_trcctrl_gms *gms, s_trcctrl_gms_init *attr, t_u8 **v_file)
 {
 	self->eng = attr->eng;
 	
@@ -1054,7 +1054,7 @@ inline u8_t trcctrl_gms_load (s_trcctrl_gms *gms, s_trcctrl_gms_init *attr, u8_t
 	return 0x00;
 }
 
-inline u8_t trcctrl_gms_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_gms_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcctrl_gms *ctrl = (s_trcctrl_gms*) data;
 	s_trcctrl_gms_init *attr = (s_trcctrl_gms_init*) config;
@@ -1064,21 +1064,21 @@ inline u8_t trcctrl_gms_load_(void *data, void *config, u8_t **v_file)
 
 inline void __trcctrl_gms_calc__(s_trcobj *ref, s_trcobj *obj)
 {
-	const f64_t g = 6.67428E-11;
+	const t_f64 g = 6.67428E-11;
 	
-	f64_t force_magn = 0.0;
-	f64_t dist2 = vl3_vdist2(&ref->pos[0][0], &obj->pos[0][0]);
+	t_f64 force_magn = 0.0;
+	t_f64 dist2 = vld3v_dist2(&ref->pos[0][0], &obj->pos[0][0]);
 	
 	if (dist2 > 1E-16)
 	{ force_magn = g * ref->pos_inert * obj->pos_inert / dist2; }
 	
-	f64_t force_dir[3];
-	vl3_vset(force_dir, 0.0);
+	t_f64 force_dir[3];
+	vld3v_set(force_dir, 0.0);
 	
 	if (dist2 > 1E-16)
 	{
-		vl3v_subv(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
-		vl3v_muls(force_dir, force_dir, force_magn / vl_sqrt(dist2));
+		vld3v_subv(force_dir, &ref->pos[0][0], &obj->pos[0][0]);
+		vld3v_muls(force_dir, force_dir, force_magn / vld_sqrt(dist2));
 	}
 	
 	vl3_vsum(obj->pos_force, obj->pos_force, force_dir);
@@ -1086,14 +1086,14 @@ inline void __trcctrl_gms_calc__(s_trcobj *ref, s_trcobj *obj)
 	return;
 }
 
-inline u8_t trcctrl_gms_reset(s_trcctrl_gms *self, s_trcobj *obj)
+inline t_u8 trcctrl_gms_reset(s_trcctrl_gms *self, s_trcobj *obj)
 {
 	__trcctrl_gms_calc__(self->ref, obj);
 	
 	return 0x00;
 }
 
-inline u8_t trcctrl_gms_reset_(void *data, void *obj)
+inline t_u8 trcctrl_gms_reset_(void *data, void *obj)
 {
 	s_trcctrl_gms *ctrl = (s_trcctrl_gms*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -1101,14 +1101,14 @@ inline u8_t trcctrl_gms_reset_(void *data, void *obj)
 	return trcctrl_gms_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_gms_update(s_trcctrl_gms *self, s_trcobj *obj)
+inline t_u8 trcctrl_gms_update(s_trcctrl_gms *self, s_trcobj *obj)
 {
 	__trcctrl_gms_calc__(self->ref, obj);
 	
 	return 0x00;
 }
 
-inline u8_t trcctrl_gms_update_(void *data, void *obj)
+inline t_u8 trcctrl_gms_update_(void *data, void *obj)
 {
 	s_trcctrl_gms *ctrl = (s_trcctrl_gms*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;

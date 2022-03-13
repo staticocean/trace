@@ -20,15 +20,15 @@ typedef struct trcdata_intf
 {
 	char 				desc[32];
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	t_s32				data_sz;
+	t_s32 				attr_sz;
 	
-	s8_t (*init) 		(void *data, void *attr);
-	s8_t (*free) 		(void *data);
-	s8_t (*save) 		(void *data, s_trcspl *spl, u8_t **v_file);
-	s8_t (*load) 		(void *data, s_trcspl *spl, u8_t **v_file);
-	s8_t (*reset) 		(void *data, s_trcobj *obj);
-	s8_t (*render) 		(void *data, s_trcobj *obj);
+	t_s8 (*init) 		(void *data, void *attr);
+	t_s8 (*free) 		(void *data);
+	t_s8 (*save) 		(void *data, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*load) 		(void *data, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*reset) 		(void *data, s_trcobj *obj);
+	t_s8 (*render) 		(void *data, s_trcobj *obj);
 	
 	void (*gui_attr)	(void *data, void *attr);
 	void (*gui_edit)	(void *data);
@@ -61,7 +61,7 @@ typedef struct trcdata_attr
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
+t_s8 trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
 {
 	memcpy(data->name, attr->name, sizeof(data->name));
 	data->obj = attr->obj;
@@ -72,7 +72,7 @@ s8_t trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_free (s_trcdata *data)
+t_s8 trcdata_free (s_trcdata *data)
 {
 	return data->intf->free(data);
 }
@@ -80,7 +80,7 @@ s8_t trcdata_free (s_trcdata *data)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_save (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
+t_s8 trcdata_save (s_trcdata *data, s_trcspl *spl, t_u8 **v_file)
 {
 	return data->intf->save(data, spl, v_file);
 }
@@ -88,7 +88,7 @@ s8_t trcdata_save (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_load (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
+t_s8 trcdata_load (s_trcdata *data, s_trcspl *spl, t_u8 **v_file)
 {
 	return data->intf->load(data, spl, v_file);
 }
@@ -96,7 +96,7 @@ s8_t trcdata_load (s_trcdata *data, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_reset (s_trcdata *data, s_trcobj *obj)
+t_s8 trcdata_reset (s_trcdata *data, s_trcobj *obj)
 {
 	return data->intf->reset(data, obj);
 }
@@ -104,7 +104,7 @@ s8_t trcdata_reset (s_trcdata *data, s_trcobj *obj)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcdata_render (s_trcdata *data, s_trcobj *obj)
+t_s8 trcdata_render (s_trcdata *data, s_trcobj *obj)
 {
 	return data->intf->render(data, obj);
 }
@@ -150,8 +150,8 @@ s_trcdata* trcdata_malloc (s_trcdata_intf *intf_data, s_trcdata_attr *attr)
 
 //void trcdata_copy (s_trceng *eng, s_trcdata *dest, s_trcdata *src)
 //{
-//	u8_t *data_ref = (u8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
-//	u8_t *data_ptr = data_ref;
+//	t_u8 *data_ref = (t_u8*) malloc(1024 * 1024 * 256); // 256 Mb Max
+//	t_u8 *data_ptr = data_ref;
 //
 //	trcdata_save (src , eng, &data_ptr);
 //

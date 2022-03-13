@@ -23,12 +23,12 @@ typedef struct trcdata_mat
 	s_trcdata_ram   ram;
 	s_trcdata_ramld ramld;
 	
-	u8_t 	hpr_en;
-    u8_t 	lla_en;
-    u8_t 	abs_en;
-	u8_t 	ecef_en;
-	u8_t 	tied_en;
-	u8_t 	ld_en;
+	t_u8 	hpr_en;
+    t_u8 	lla_en;
+    t_u8 	abs_en;
+	t_u8 	ecef_en;
+	t_u8 	tied_en;
+	t_u8 	ld_en;
 	
 	char file_name[256];
 	TinyMATWriterFile *file_data;
@@ -42,7 +42,7 @@ typedef struct trcdata_mat_init
 	
 } 	s_trcdata_mat_init;
 
-inline u8_t trcdata_mat_init(s_trcdata_mat *self, s_trcdata_mat_init attr)
+inline t_u8 trcdata_mat_init(s_trcdata_mat *self, s_trcdata_mat_init attr)
 {
 	self->file_data = NULL;
 	sprintf(self->file_name, "mat file not selected");
@@ -67,7 +67,7 @@ inline u8_t trcdata_mat_init(s_trcdata_mat *self, s_trcdata_mat_init attr)
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_save(s_trcdata_mat *self, s_trcdata_mat_init *attr, u8_t **v_file)
+inline t_u8 trcdata_mat_save(s_trcdata_mat *self, s_trcdata_mat_init *attr, t_u8 **v_file)
 {
 	s_trcdata_ram_init data_ram_attr = {
 			.eng = attr->eng,
@@ -85,7 +85,7 @@ inline u8_t trcdata_mat_save(s_trcdata_mat *self, s_trcdata_mat_init *attr, u8_t
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_load(s_trcdata_mat *self, s_trcdata_mat_init *attr, u8_t **v_file)
+inline t_u8 trcdata_mat_load(s_trcdata_mat *self, s_trcdata_mat_init *attr, t_u8 **v_file)
 {
 	self->file_data = NULL;
 	
@@ -106,7 +106,7 @@ inline u8_t trcdata_mat_load(s_trcdata_mat *self, s_trcdata_mat_init *attr, u8_t
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
+inline t_u8 trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
 {
 	s_trcdata_ram *ram = &self->ram;
 	s_trcdata_ramld *ramld = &self->ramld;
@@ -135,7 +135,7 @@ inline u8_t trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
 					self->file_data, "roll", ram->roll, ram->offset);
 			
 			TinyMATWriter_writeMatrixND_rowmajor(
-					self->file_data, "ctn", ram->ctn, (const s32_t[]) { 3, 3, (s32_t) ram->offset }, 3);
+					self->file_data, "ctn", ram->ctn, (const t_s32[]) { 3, 3, (t_s32) ram->offset }, 3);
 		}
 		
 		// LLA
@@ -157,7 +157,7 @@ inline u8_t trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
 		if (self->ecef_en != 0x00)
 		{
             TinyMATWriter_writeMatrixND_rowmajor(
-                    self->file_data, "ecef_rot", ram->ecef_rot, (const s32_t[]) { 3, 3, (s32_t) ram->offset }, 3);
+                    self->file_data, "ecef_rot", ram->ecef_rot, (const t_s32[]) { 3, 3, (t_s32) ram->offset }, 3);
 
             TinyMATWriter_writeMatrix2D_rowmajor(
 					self->file_data, "ecef_pos", ram->ecef_pos, 3, ram->offset);
@@ -185,7 +185,7 @@ inline u8_t trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
         if (self->abs_en != 0x00)
         {
             TinyMATWriter_writeMatrixND_rowmajor(
-                    self->file_data, "abs_rot", ram->abs_rot, (const s32_t[]) { 3, 3, (s32_t) ram->offset }, 3);
+                    self->file_data, "abs_rot", ram->abs_rot, (const t_s32[]) { 3, 3, (t_s32) ram->offset }, 3);
 
             TinyMATWriter_writeMatrix2D_rowmajor(
                     self->file_data, "abs_hpr", ram->abs_hpr, 3, ram->offset);
@@ -214,7 +214,7 @@ inline u8_t trcdata_mat_render(s_trcdata_mat *self, s_trcobj *obj)
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_reset(s_trcdata_mat *self, s_trcobj *obj)
+inline t_u8 trcdata_mat_reset(s_trcdata_mat *self, s_trcobj *obj)
 {
 	if (self->file_data != NULL)
 	{
@@ -229,7 +229,7 @@ inline u8_t trcdata_mat_reset(s_trcdata_mat *self, s_trcobj *obj)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcdata_mat_init_ (void **data, void *config)
+inline t_u8 trcdata_mat_init_ (void **data, void *config)
 {
 	*data = (s_trcdata_mat*) malloc(sizeof(s_trcdata_mat));
 	
@@ -239,7 +239,7 @@ inline u8_t trcdata_mat_init_ (void **data, void *config)
 	return trcdata_mat_init(data_, *data_init);
 }
 
-inline u8_t trcdata_mat_free_ (void **data)
+inline t_u8 trcdata_mat_free_ (void **data)
 {
 	s_trcdata_mat *data_ = (s_trcdata_mat*) *data;
 	
@@ -251,12 +251,12 @@ inline u8_t trcdata_mat_free_ (void **data)
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcdata_mat_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcdata_mat_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcdata_mat_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcdata_mat *data_ = (s_trcdata_mat*) data;
 	s_trcdata_mat_init *attr = (s_trcdata_mat_init*) config;
@@ -264,7 +264,7 @@ inline u8_t trcdata_mat_load_(void *data, void *config, u8_t **v_file)
 	return trcdata_mat_load(data_, attr, v_file);
 }
 
-inline u8_t trcdata_mat_render_(void *data, void *obj)
+inline t_u8 trcdata_mat_render_(void *data, void *obj)
 {
 	s_trcdata_mat *data_ = (s_trcdata_mat*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -272,7 +272,7 @@ inline u8_t trcdata_mat_render_(void *data, void *obj)
 	return trcdata_mat_render(data_, obj_);
 }
 
-inline u8_t trcdata_mat_reset_(void *data, void *obj)
+inline t_u8 trcdata_mat_reset_(void *data, void *obj)
 {
 	s_trcdata_mat *data_ = (s_trcdata_mat*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;

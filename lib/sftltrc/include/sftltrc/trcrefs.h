@@ -11,7 +11,7 @@
 
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <sftltrc/trcspl.h>
 
@@ -21,19 +21,19 @@ typedef struct trcrefs_intf
 {
 	char 				desc[32];
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	t_s32				data_sz;
+	t_s32 				attr_sz;
 	
-	s8_t (*init) 		(void *refs, void *attr);
-	s8_t (*free) 		(void *refs);
-	s8_t (*save) 		(void *refs, s_trcspl *spl, u8_t **v_file);
-	s8_t (*load) 		(void *refs, s_trcspl *spl, u8_t **v_file);
-	s8_t (*pos_abs) 	(void *refs, f64_t *abs, f64_t *ref);
-	s8_t (*pos_ref) 	(void *refs, f64_t *ref, f64_t *abs);
-	s8_t (*vel_abs) 	(void *refs, f64_t *abs, f64_t *ref);
-	s8_t (*vel_ref) 	(void *refs, f64_t *ref, f64_t *abs);
-	s8_t (*rot_abs) 	(void *refs, f64_t *abs, f64_t *ref);
-	s8_t (*rot_ref) 	(void *refs, f64_t *ref, f64_t *abs);
+	t_s8 (*init) 		(void *refs, void *attr);
+	t_s8 (*free) 		(void *refs);
+	t_s8 (*save) 		(void *refs, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*load) 		(void *refs, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*pos_abs) 	(void *refs, t_f64 *abs, t_f64 *ref);
+	t_s8 (*pos_ref) 	(void *refs, t_f64 *ref, t_f64 *abs);
+	t_s8 (*vel_abs) 	(void *refs, t_f64 *abs, t_f64 *ref);
+	t_s8 (*vel_ref) 	(void *refs, t_f64 *ref, t_f64 *abs);
+	t_s8 (*rot_abs) 	(void *refs, t_f64 *abs, t_f64 *ref);
+	t_s8 (*rot_ref) 	(void *refs, t_f64 *ref, t_f64 *abs);
 	
 	void (*gui_attr)	(void *refs, void *attr);
 	void (*gui_edit)	(void *refs);
@@ -64,7 +64,7 @@ typedef struct trcrefs_attr
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcrefs_init (s_trcrefs *refs, s_trcrefs_attr *attr)
+t_s8 trcrefs_init (s_trcrefs *refs, s_trcrefs_attr *attr)
 {
 	memcpy(refs->name, attr->name, sizeof(refs->name));
 	
@@ -74,7 +74,7 @@ s8_t trcrefs_init (s_trcrefs *refs, s_trcrefs_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcrefs_free (s_trcrefs *refs)
+t_s8 trcrefs_free (s_trcrefs *refs)
 {
 	return refs->intf->free(refs);
 }
@@ -82,7 +82,7 @@ s8_t trcrefs_free (s_trcrefs *refs)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcrefs_save (s_trcrefs *refs, s_trcspl *spl, u8_t **v_file)
+t_s8 trcrefs_save (s_trcrefs *refs, s_trcspl *spl, t_u8 **v_file)
 {
 	return refs->intf->save(refs, spl, v_file);
 }
@@ -90,7 +90,7 @@ s8_t trcrefs_save (s_trcrefs *refs, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcrefs_load (s_trcrefs *refs, s_trcspl *spl, u8_t **v_file)
+t_s8 trcrefs_load (s_trcrefs *refs, s_trcspl *spl, t_u8 **v_file)
 {
 	return refs->intf->load(refs, spl, v_file);
 }
@@ -135,7 +135,7 @@ s_trcrefs* trcrefs_malloc (s_trcrefs_intf *intf_refs, s_trcrefs_attr *attr)
 //------------------------------------------------------------------------------
 
 //inline
-//s8_t trcrefs_toabs (s_trcrefs *refs, f64_t *abs, f64_t *ref)
+//t_s8 trcrefs_toabs (s_trcrefs *refs, t_f64 *abs, t_f64 *ref)
 //{
 //	return refs->intf->toabs(refs, abs, rel);
 //}
@@ -143,7 +143,7 @@ s_trcrefs* trcrefs_malloc (s_trcrefs_intf *intf_refs, s_trcrefs_attr *attr)
 ////------------------------------------------------------------------------------
 //
 //inline
-//s8_t trcrefs_toref (s_trcrefs *refs, f64_t *ref, f64_t *abs)
+//t_s8 trcrefs_toref (s_trcrefs *refs, t_f64 *ref, t_f64 *abs)
 //{
 //	return refs->intf->toref(refs, ref, abs);
 //}

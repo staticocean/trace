@@ -11,7 +11,7 @@
 
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <sftltrc/trctraj.h>
 #include <sftltrc/trcspl.h>
@@ -36,21 +36,21 @@ typedef struct trctraj_navsat_data
 	int     	day;
 	int     	month;
 	int     	year;
-	f64_t 	atime;
-	f64_t 	tcorr;
-	f64_t 	dtcorr;
-	f64_t  	domg;
+	t_f64 	atime;
+	t_f64 	tcorr;
+	t_f64 	dtcorr;
+	t_f64  	domg;
 	
-	f64_t  		omg0;
-	f64_t 		i;
-	f64_t 		w;
-	f64_t 		e;
-	f64_t 		sqrta;
-	f64_t 		m0;
+	t_f64  		omg0;
+	t_f64 		i;
+	t_f64 		w;
+	t_f64 		e;
+	t_f64 		sqrta;
+	t_f64 		m0;
 	
-	f64_t 	ee;
-	f64_t 	a;
-	f64_t 	n;
+	t_f64 	ee;
+	t_f64 	a;
+	t_f64 	n;
 	
 } 	s_trctraj_navsat_data;
 
@@ -58,12 +58,12 @@ typedef struct trctraj_navsat
 {
 	s_trceng 	*eng;
 	s_trcobj 	*ref;
-	u32_t 	ref_hash;
+	t_u32 	ref_hash;
 	
 	char 		file_path[512];
 	trctraj_navsat_filetype_t file_type;
 	
-	u32_t 	data_sz;
+	t_u32 	data_sz;
 	s_trctraj_navsat_data data_ls[64];
 	
 	int      	resolution;
@@ -90,7 +90,7 @@ typedef struct trctraj_navsat_init
 
 //------------------------------------------------------------------------------
 
-inline u8_t trctraj_navsat_init(s_trctraj_navsat *self, s_trctraj_navsat_init attr)
+inline t_u8 trctraj_navsat_init(s_trctraj_navsat *self, s_trctraj_navsat_init attr)
 {
 	self->eng = attr.eng;
 	
@@ -107,12 +107,12 @@ inline u8_t trctraj_navsat_init(s_trctraj_navsat *self, s_trctraj_navsat_init at
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_save(s_trctraj_navsat *self, s_trctraj_navsat_init *attr, u8_t **v_file)
+inline t_u8 trctraj_navsat_save(s_trctraj_navsat *self, s_trctraj_navsat_init *attr, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_load(s_trctraj_navsat *self, s_trctraj_navsat_init *attr, u8_t **v_file)
+inline t_u8 trctraj_navsat_load(s_trctraj_navsat *self, s_trctraj_navsat_init *attr, t_u8 **v_file)
 {
 	self->eng = attr->eng;
 	
@@ -128,63 +128,63 @@ inline u8_t trctraj_navsat_load(s_trctraj_navsat *self, s_trctraj_navsat_init *a
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_pos_local(s_trctraj_navsat *self, f64_t time, f64_t *pos, int satnum)
+inline t_u8 trctraj_navsat_pos_local(s_trctraj_navsat *self, t_f64 time, t_f64 *pos, int satnum)
 {
-	const f64_t omge = 7.2921151467E-6;
+	const t_f64 omge = 7.2921151467E-6;
 	
-	u32_t i;
+	t_u32 i;
 	s_trctraj_navsat_data *data = &self->data_ls[satnum];
 	
 	int ref_week = self->ref_week;
-	f64_t ref_sec  = self->ref_sec + time;
+	t_f64 ref_sec  = self->ref_sec + time;
 	
 	while (ref_sec > 604800) { ref_sec -= 604800; ++ref_week; }
 	
-	f64_t tk = (ref_week - data->week)*604800*0 + (ref_sec - data->tow);
+	t_f64 tk = (ref_week - data->week)*604800*0 + (ref_sec - data->tow);
 	
 	if ((ref_sec - data->tow) < -302400) { tk += 604800; }
 	if ((ref_sec - data->tow) > +302400) { tk -= 604800; }
 	
-	f64_t mk = data->m0 + data->n*tk;
-	f64_t ek = mk;
+	t_f64 mk = data->m0 + data->n*tk;
+	t_f64 ek = mk;
 	
-	for (s32_t i = 0; i < self->resolution; ++i)
-	{ ek = mk + data->e * vl_sin(ek); }
+	for (t_s32 i = 0; i < self->resolution; ++i)
+	{ ek = mk + data->e * vld_sin(ek); }
 	
-	f64_t vk = atan2(vl_sqrt(1-data->ee)*vl_sin(ek), (vl_cos(ek) - data->e));
-	f64_t uk = vk + data->w;
-	f64_t rk = data->a * (1 - data->e * vl_cos(ek));
-	f64_t dx = rk * vl_cos(uk);
-	f64_t dy = rk * vl_sin(uk);
-	f64_t omgk = data->omg0 + (data->domg - omge)*tk - omge*data->tow;
+	t_f64 vk = atan2(vld_sqrt(1-data->ee)*vld_sin(ek), (vld_cos(ek) - data->e));
+	t_f64 uk = vk + data->w;
+	t_f64 rk = data->a * (1 - data->e * vld_cos(ek));
+	t_f64 dx = rk * vld_cos(uk);
+	t_f64 dy = rk * vld_sin(uk);
+	t_f64 omgk = data->omg0 + (data->domg - omge)*tk - omge*data->tow;
 	
-	pos[0] = dx * vl_cos(omgk) - dy * vl_cos(data->i) * vl_sin(omgk);
-	pos[1] = dy * vl_sin(data->i);
-	pos[2] = -dx * vl_sin(omgk) + dy * vl_cos(data->i) * vl_cos(omgk);
+	pos[0] = dx * vld_cos(omgk) - dy * vld_cos(data->i) * vld_sin(omgk);
+	pos[1] = dy * vld_sin(data->i);
+	pos[2] = -dx * vld_sin(omgk) + dy * vld_cos(data->i) * vld_cos(omgk);
 	
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_pos(s_trctraj_navsat *self, f64_t time, f64_t *pos)
+inline t_u8 trctraj_navsat_pos(s_trctraj_navsat *self, t_f64 time, t_f64 *pos)
 {
 	if (self->ref != NULL)
 	{
 		trctraj_navsat_pos_local(self, time, pos, self->sat_offset);
-		vl3_mmul_v(pos, &self->ref->rot[0][0], pos);
+		vld3m_mulv(pos, &self->ref->rot[0][0], pos);
 		vl3_vsum(pos, pos, &self->ref->pos[0][0]);
 	}
 	
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_rot (s_trctraj_navsat *self, f64_t time, f64_t *rot)
+inline t_u8 trctraj_navsat_rot (s_trctraj_navsat *self, t_f64 time, t_f64 *rot)
 {
 	vl3_mid(rot);
 	
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_parseagp(s_trctraj_navsat *self)
+inline t_u8 trctraj_navsat_parseagp(s_trctraj_navsat *self)
 {
 	FILE *file_data = fopen(self->file_path, "r");
 	
@@ -248,7 +248,7 @@ inline u8_t trctraj_navsat_parseagp(s_trctraj_navsat *self)
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_parseagl(s_trctraj_navsat *self)
+inline t_u8 trctraj_navsat_parseagl(s_trctraj_navsat *self)
 {
 	FILE *file_data = fopen(self->file_path, "r");
 	
@@ -265,13 +265,13 @@ inline u8_t trctraj_navsat_parseagl(s_trctraj_navsat *self)
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_compile(s_trctraj_navsat *self)
+inline t_u8 trctraj_navsat_compile(s_trctraj_navsat *self)
 {
-	u32_t i;
+	t_u32 i;
 	
-	const f64_t mu = 3.986004418E+14;
+	const t_f64 mu = 3.986004418E+14;
 	
-	f64_t jd = floor(365.25*self->year) + floor(30.6001*(self->month+1)) + self->day
+	t_f64 jd = floor(365.25*self->year) + floor(30.6001*(self->month+1)) + self->day
 			+ self->hour + self->min / 60.0 + self->sec / 60.0 + 1720981.5;
 	
 	self->ref_week = floor((jd - 2444244.5) / 7.0);
@@ -286,13 +286,13 @@ inline u8_t trctraj_navsat_compile(s_trctraj_navsat *self)
 		default: break;
 	}
 	
-	for (s32_t i = 0; i < self->data_sz; ++i)
+	for (t_s32 i = 0; i < self->data_sz; ++i)
 	{
 		s_trctraj_navsat_data *data = &self->data_ls[i];
 		
 		data->a = data->sqrta * data->sqrta;
 		data->ee = data->e * data->e;
-		data->n = vl_sqrt(mu / (data->a * data->a * data->a));
+		data->n = vld_sqrt(mu / (data->a * data->a * data->a));
 	}
 	
 	return 0x00;
@@ -301,13 +301,13 @@ inline u8_t trctraj_navsat_compile(s_trctraj_navsat *self)
 //------------------------------------------------------------------------------
 
 // API
-//u8_t (*init) 		(void *data, void *config)
-//u8_t (*free) 		(void *data);
-//u8_t (*compile) 	(void *data);
-//u8_t (*rot) 		(void *data, f64_t time, f64_t *pos);
-//u8_t (*pos) 		(void *data, f64_t time, f64_t *rot);
+//t_u8 (*init) 		(void *data, void *config)
+//t_u8 (*free) 		(void *data);
+//t_u8 (*compile) 	(void *data);
+//t_u8 (*rot) 		(void *data, t_f64 time, t_f64 *pos);
+//t_u8 (*pos) 		(void *data, t_f64 time, t_f64 *rot);
 
-inline u8_t trctraj_navsat_init_ (void **data, void *config)
+inline t_u8 trctraj_navsat_init_ (void **data, void *config)
 {
 	*data = (s_trctraj_navsat*) malloc(sizeof(s_trctraj_navsat));
 	
@@ -317,7 +317,7 @@ inline u8_t trctraj_navsat_init_ (void **data, void *config)
 	return trctraj_navsat_init(traj, *traj_init);
 }
 
-inline u8_t trctraj_navsat_free_ (void **data)
+inline t_u8 trctraj_navsat_free_ (void **data)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) *data;
 	
@@ -326,42 +326,42 @@ inline u8_t trctraj_navsat_free_ (void **data)
 	return 0x00;
 }
 
-inline u8_t trctraj_navsat_save_ (void *data, void *config, u8_t **v_file)
+inline t_u8 trctraj_navsat_save_ (void *data, void *config, t_u8 **v_file)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	s_trctraj_navsat_init *attr = (s_trctraj_navsat_init*) config;
 	return trctraj_navsat_save(traj, attr, v_file);
 }
 
-inline u8_t trctraj_navsat_load_ (void *data, void *config, u8_t **v_file)
+inline t_u8 trctraj_navsat_load_ (void *data, void *config, t_u8 **v_file)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	s_trctraj_navsat_init *attr = (s_trctraj_navsat_init*) config;
 	return trctraj_navsat_load(traj, attr, v_file);
 }
 
-inline u8_t trctraj_navsat_compile_(void *data)
+inline t_u8 trctraj_navsat_compile_(void *data)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	
 	return trctraj_navsat_compile(traj);
 }
 
-inline u8_t trctraj_navsat_pos_(void *data, f64_t time, f64_t *pos)
+inline t_u8 trctraj_navsat_pos_(void *data, t_f64 time, t_f64 *pos)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	
 	return trctraj_navsat_pos(traj, time, pos);
 }
 
-inline u8_t trctraj_navsat_rot_(void *data, f64_t time, f64_t *rot)
+inline t_u8 trctraj_navsat_rot_(void *data, t_f64 time, t_f64 *rot)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	
 	return trctraj_navsat_rot(traj, time, rot);
 }
 
-inline u8_t trctraj_navsat_info_(void *data, s_trctraj_info *info)
+inline t_u8 trctraj_navsat_info_(void *data, s_trctraj_info *info)
 {
 	s_trctraj_navsat *traj = (s_trctraj_navsat*) data;
 	

@@ -7,7 +7,7 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -62,7 +62,7 @@ inline void gui_ctrl_edit_egms(s_trcctrl *self)
 ////
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) ctrl->eng);
+////	ImGui::Text("%08X", (t_u32) ctrl->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -112,7 +112,7 @@ inline void gui_ctrl_edit_egmsnpo(s_trcctrl *self)
 //	//
 //	//	ImGui::Text("eng   ");
 //	//	ImGui::SameLine();
-//	//	ImGui::Text("%08X", (u32_t) ctrl->eng);
+//	//	ImGui::Text("%08X", (t_u32) ctrl->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -161,7 +161,7 @@ inline void gui_ctrl_edit_gms(s_trcctrl *self)
 ////
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) ctrl->eng);
+////	ImGui::Text("%08X", (t_u32) ctrl->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -275,13 +275,13 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //
 //    int res = 25;
 //
-//    f64_t ecef[3];
-//    f64_t lla[3] = { 0.0, 0.0, 0.0 };
+//    t_f64 ecef[3];
+//    t_f64 lla[3] = { 0.0, 0.0, 0.0 };
 //    trcellp_ecef(&trcellp_wgs84, ecef, lla);
 //
-//    f64_t g[3];
+//    t_f64 g[3];
 //    trcctrl_gm_calc(ctrl, g, ecef);
-//    f64_t gm = vl3v_norm(g);
+//    t_f64 gm = vld3v_norm(g);
 //
 //    printf("\ng: ");
 //    vl3_vprint(g);
@@ -291,21 +291,21 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //    {
 //        for (int j = 0; j < 2*res; ++j)
 //        {
-//            f64_t ecef[3];
+//            t_f64 ecef[3];
 //
-//            f64_t lla[3] = {
-//                    vl_pi * (f64_t) i / res - 0.5*vl_pi,
-//                    vl_2pi * (f64_t) j / (2*res) - vl_pi,
+//            t_f64 lla[3] = {
+//                    vl_pi * (t_f64) i / res - 0.5*vl_pi,
+//                    vld_2pi * (t_f64) j / (2*res) - vl_pi,
 //                    0.0
 //            };
 //
 //            trcellp_ecef(&trcellp_wgs84, ecef, lla);
 //
-//            f64_t g[3];
+//            t_f64 g[3];
 //            trcctrl_gm_calc(ctrl, g, ecef);
-//            f64_t gm = vl3v_norm(g);
+//            t_f64 gm = vld3v_norm(g);
 //
-//            u8_t c = (gm / 10.0) * 255;
+//            t_u8 c = (gm / 10.0) * 255;
 //            point.color = IM_COL32(c, c, c, 255);
 //            vl3_vcopy(point.p0, ecef);
 //
@@ -352,7 +352,7 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //            vl_vcopy(trngl.p1, &data->data_ls[i * di].pos[0][0]);
 //            vl_vcopy(trngl.p2, &data->data_ls[i * di].pos[0][0]);
 //
-//            f64_t rot[9];
+//            t_f64 rot[9];
 //            vl_tnp(rot, &data->data_ls[i * di].rot[0][0]);
 //            vl_mmul_s(rot, rot, 0.025 / view.scale);
 //
@@ -377,7 +377,7 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 //            vl_vcopy(trngl.p1, &data->data_ls[i].pos[0][0]);
 //            vl_vcopy(trngl.p2, &data->data_ls[i].pos[0][0]);
 //
-//            f64_t rot[9];
+//            t_f64 rot[9];
 //            vl_tnp(rot, &data->data_ls[i].rot[0][0]);
 //            vl_mmul_s(rot, rot, 10.0 / view.scale);
 //

@@ -30,7 +30,7 @@ typedef struct trcdata_text
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_init__ (s_trcdata **data)
+t_s8 __trcdata_text_init__ (s_trcdata **data)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	
@@ -47,7 +47,7 @@ s8_t __trcdata_text_init__ (s_trcdata **data)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_free__ (s_trcdata **data)
+t_s8 __trcdata_text_free__ (s_trcdata **data)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	
@@ -68,7 +68,7 @@ s8_t __trcdata_text_free__ (s_trcdata **data)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_save__ (s_trcdata *data, u8_t **v_file)
+t_s8 __trcdata_text_save__ (s_trcdata *data, t_u8 **v_file)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	
@@ -78,7 +78,7 @@ s8_t __trcdata_text_save__ (s_trcdata *data, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_load__ (s_trcdata *data, u8_t **v_file)
+t_s8 __trcdata_text_load__ (s_trcdata *data, t_u8 **v_file)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	
@@ -92,7 +92,7 @@ s8_t __trcdata_text_load__ (s_trcdata *data, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_render__ (s_trcdata *data, s_trcobj *obj)
+t_s8 __trcdata_text_render__ (s_trcdata *data, s_trcobj *obj)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	
@@ -103,7 +103,7 @@ s8_t __trcdata_text_render__ (s_trcdata *data, s_trcobj *obj)
 	
 	FILE *file_handle = fopen(data_text->file_name, "w+");
 	
-	for (s32_t i = 0; i < obj->log_sz; ++i)
+	for (t_s32 i = 0; i < obj->log_sz; ++i)
 	{
 		self->file_size += sprintf(file_ptr, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 			obj->log_ls[i].time[0],
@@ -136,7 +136,7 @@ s8_t __trcdata_text_render__ (s_trcdata *data, s_trcobj *obj)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trcdata_text_reset__ (s_trcdata *data, s_trcobj *obj)
+t_s8 __trcdata_text_reset__ (s_trcdata *data, s_trcobj *obj)
 {
 	s_trcdata_text *data_text = (s_trcdata_text*) *data;
 	

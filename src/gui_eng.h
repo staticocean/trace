@@ -11,7 +11,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -65,7 +65,7 @@ typedef struct gui_eng_init
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
+inline t_u8 gui_eng_init(s_gui_eng *gui, s_gui_eng_init attr)
 {
     gui->gui_clip = attr.gui_clip;
 	gui->state = gui_eng_state_standby;
@@ -116,7 +116,7 @@ inline void gui_eng_sel_data(s_gui_eng *gui, s_trcdata *data)
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
+inline t_u8 gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 {
 	ImGui::PushID(self);
 	
@@ -419,7 +419,7 @@ inline u8_t gui_eng_objlist(s_gui_eng *gui, s_trceng *self)
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_eng_updateeng(s_gui_eng *gui, s_trceng *self)
+inline t_u8 gui_eng_updateeng(s_gui_eng *gui, s_trceng *self)
 {
 	switch (gui->state)
 	{
@@ -507,7 +507,7 @@ inline u8_t gui_eng_updateeng(s_gui_eng *gui, s_trceng *self)
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
+inline t_u8 gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
 {
 	ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
 	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -540,20 +540,20 @@ inline u8_t gui_eng_updategui(s_gui_eng *gui, s_trceng *self)
 		
 		if (gui->state == gui_eng_state_proc)
 		{
-			ImGui::Text("PROC PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
+			ImGui::Text("PROC PASS %02.0f%%", 100 * (t_f64) self->proc_count / self->update_count);
 			ImGui::SameLine();
 			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 			ImGui::Dummy(ImVec2(0, 5));
-			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+			imgui_loadbar("##progress", (t_f64) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_deinit)
 		{
-//			ImGui::Text("DATA PASS %02.0f%%", 100 * (f64_t) self->proc_count / self->update_count);
+//			ImGui::Text("DATA PASS %02.0f%%", 100 * (t_f64) self->proc_count / self->update_count);
 //			ImGui::SameLine();
 //			if (ImGui::Button("INTERRUPT", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
 //			ImGui::Dummy(ImVec2(0, 5));
-//			imgui_loadbar("##progress", (f64_t) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
+//			imgui_loadbar("##progress", (t_f64) self->proc_count / self->update_count, ImVec2(-1, 6), bg, col);
 		}
 		
 		if (gui->state == gui_eng_state_standby)

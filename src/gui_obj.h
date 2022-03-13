@@ -11,7 +11,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -26,7 +26,7 @@
 typedef struct gui_obj
 {
 	s_trcobj *ref;
-	u8_t hide;
+	t_u8 hide;
 	
 	s_vl3d traj_vl3d_eng;
 	s_vl3d_obj traj_vl3d_objlist[8000];
@@ -41,7 +41,7 @@ typedef struct gui_obj_init
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
+inline t_u8 gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
 {
 	gui->ref = attr.ref;
 	
@@ -50,7 +50,7 @@ inline u8_t gui_obj_init(s_gui_obj *gui, s_gui_obj_init attr)
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
+inline t_u8 gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 {
 //	ImGui::PushID(self);
 //
@@ -68,8 +68,8 @@ inline u8_t gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 ////	imgui_hash("##hash", self->hash);
 ////	ImGui::NextColumn();
 //
-//	f64_t pos_inert_min = 0.0;
-//	f64_t rot_inert_min = 0.0;
+//	t_f64 pos_inert_min = 0.0;
+//	t_f64 rot_inert_min = 0.0;
 //
 //	ImGui::Text("pos_inert");
 //	gui_hint("[kg]");
@@ -113,8 +113,8 @@ inline u8_t gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 ////	ImGui::Separator();
 ////	ImGui::Dummy(ImVec2(0, 5));
 ////
-////	f64_t min = -1.0;
-////	f64_t max = +1.0;
+////	t_f64 min = -1.0;
+////	t_f64 max = +1.0;
 ////
 ////	ImGui::Text("ROT");
 ////	ImGui::SameLine();
@@ -137,7 +137,7 @@ inline u8_t gui_obj_edit(s_gui_obj *gui, s_trcobj *self)
 
 //------------------------------------------------------------------------------
 
-inline u8_t gui_obj_view(s_gui_obj *gui, s_trcobj *self)
+inline t_u8 gui_obj_view(s_gui_obj *gui, s_trcobj *self)
 {
 //	vl3d_init(&gui->traj_vl3d_eng, (s_vl3d_attr) {
 //			.obj_sz = sizeof(gui->traj_vl3d_objlist) / sizeof(s_vl3d_obj),
@@ -146,16 +146,16 @@ inline u8_t gui_obj_view(s_gui_obj *gui, s_trcobj *self)
 //
 //	for (int i = 0; i < self->traj_sz; ++i)
 //	{
-//		f64_t p0[3];
-//		f64_t p1[3];
+//		t_f64 p0[3];
+//		t_f64 p1[3];
 //
 //		s_trctraj traj = self->traj_ls[i];
 //		s_trctraj_info traj_info;
 //
 //		traj.info(traj.data, &traj_info);
 //
-//		f64_t time = traj_info.preview_time[0];
-//		f64_t time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
+//		t_f64 time = traj_info.preview_time[0];
+//		t_f64 time_step = (traj_info.preview_time[1] - traj_info.preview_time[0]) / 1000.0;
 //
 //		for (int t = 0; t < 1000-1; ++t)
 //		{

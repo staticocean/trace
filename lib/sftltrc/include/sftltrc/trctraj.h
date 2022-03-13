@@ -20,16 +20,16 @@ typedef struct trctraj_intf
 {
 	char 				desc[32];
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	t_s32				data_sz;
+	t_s32 				attr_sz;
 	
-	s8_t (*init) 		(void *traj, void *attr);
-	s8_t (*free) 		(void *traj);
-	s8_t (*save) 		(void *traj, s_trcspl *spl, u8_t **v_file);
-	s8_t (*load) 		(void *traj, s_trcspl *spl, u8_t **v_file);
-	s8_t (*compile) 	(void *traj);
-	s8_t (*pos) 		(void *traj, f64_t time, f64_t *pos);
-	s8_t (*rot) 		(void *traj, f64_t time, f64_t *rot);
+	t_s8 (*init) 		(void *traj, void *attr);
+	t_s8 (*free) 		(void *traj);
+	t_s8 (*save) 		(void *traj, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*load) 		(void *traj, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*compile) 	(void *traj);
+	t_s8 (*pos) 		(void *traj, t_f64 time, t_f64 *pos);
+	t_s8 (*rot) 		(void *traj, t_f64 time, t_f64 *rot);
 	
 	void (*gui_attr)	(void *traj, void *attr);
 	void (*gui_edit)	(void *traj);
@@ -50,7 +50,7 @@ typedef struct trctraj
 	char 				name[32];
 	s_trcobj 			*obj;
 	
-	f64_t 				time[2];
+	t_f64 				time[2];
 	
 } 	s_trctraj;
 
@@ -64,7 +64,7 @@ typedef struct trctraj_attr
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_init (s_trctraj *traj, s_trctraj_attr *attr)
+t_s8 trctraj_init (s_trctraj *traj, s_trctraj_attr *attr)
 {
 	memcpy(traj->name, attr->name, sizeof(traj->name));
 	traj->obj = attr->obj;
@@ -75,7 +75,7 @@ s8_t trctraj_init (s_trctraj *traj, s_trctraj_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_free (s_trctraj *traj)
+t_s8 trctraj_free (s_trctraj *traj)
 {
 	return traj->intf->free(traj);
 }
@@ -83,7 +83,7 @@ s8_t trctraj_free (s_trctraj *traj)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_compile (s_trctraj *traj)
+t_s8 trctraj_compile (s_trctraj *traj)
 {
 	return traj->intf->compile(traj);
 }
@@ -91,7 +91,7 @@ s8_t trctraj_compile (s_trctraj *traj)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_pos (s_trctraj *traj, f64_t time, f64_t *pos)
+t_s8 trctraj_pos (s_trctraj *traj, t_f64 time, t_f64 *pos)
 {
 	return traj->intf->pos(traj, time, pos);
 }
@@ -99,7 +99,7 @@ s8_t trctraj_pos (s_trctraj *traj, f64_t time, f64_t *pos)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_rot (s_trctraj *traj, f64_t time, f64_t *rot)
+t_s8 trctraj_rot (s_trctraj *traj, t_f64 time, t_f64 *rot)
 {
 	return traj->intf->rot(traj, time, rot);
 }
@@ -107,7 +107,7 @@ s8_t trctraj_rot (s_trctraj *traj, f64_t time, f64_t *rot)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_save (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
+t_s8 trctraj_save (s_trctraj *traj, s_trcspl *spl, t_u8 **v_file)
 {
 	return traj->intf->save(traj, spl, v_file);
 }
@@ -115,7 +115,7 @@ s8_t trctraj_save (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trctraj_load (s_trctraj *traj, s_trcspl *spl, u8_t **v_file)
+t_s8 trctraj_load (s_trctraj *traj, s_trcspl *spl, t_u8 **v_file)
 {
 	traj->intf->load(traj, spl, v_file);
 	
@@ -178,8 +178,8 @@ void trctraj_dealloc (s_trctraj *traj)
 
 //void trctraj_copy (s_trceng *eng, s_trctraj *dest, s_trctraj *src)
 //{
-//	u8_t *data_ref = (u8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
-//	u8_t *data_ptr = data_ref;
+//	t_u8 *data_ref = (t_u8*) malloc(1024 * 1024 * 256); // 256 Mb Max
+//	t_u8 *data_ptr = data_ref;
 //
 //	trctraj_save (src , eng, &data_ptr);
 //

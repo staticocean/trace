@@ -20,15 +20,15 @@ typedef struct trcctrl_intf
 {
 	char 				desc[32];
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	t_s32				data_sz;
+	t_s32 				attr_sz;
 	
-	s8_t (*init) 		(void *ctrl, void *attr);
-	s8_t (*free) 		(void *ctrl);
-	s8_t (*save) 		(void *ctrl, s_trcspl *spl, u8_t **v_file);
-	s8_t (*load) 		(void *ctrl, s_trcspl *spl, u8_t **v_file);
-	s8_t (*reset) 		(void *ctrl, s_trcobj *obj);
-	s8_t (*update) 		(void *ctrl, s_trcobj *obj);
+	t_s8 (*init) 		(void *ctrl, void *attr);
+	t_s8 (*free) 		(void *ctrl);
+	t_s8 (*save) 		(void *ctrl, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*load) 		(void *ctrl, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*reset) 		(void *ctrl, s_trcobj *obj);
+	t_s8 (*update) 		(void *ctrl, s_trcobj *obj);
 
 	void (*gui_attr)	(void *ctrl, void *attr);
 	void (*gui_edit)	(void *ctrl);
@@ -61,7 +61,7 @@ typedef struct trcctrl_attr
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_init (s_trcctrl *ctrl, s_trcctrl_attr *attr)
+t_s8 trcctrl_init (s_trcctrl *ctrl, s_trcctrl_attr *attr)
 {
 	memcpy(ctrl->name, attr->name, sizeof(ctrl->name));
 	ctrl->obj = attr->obj;
@@ -72,7 +72,7 @@ s8_t trcctrl_init (s_trcctrl *ctrl, s_trcctrl_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_free (s_trcctrl *ctrl)
+t_s8 trcctrl_free (s_trcctrl *ctrl)
 {
 	return ctrl->intf->free(ctrl);
 }
@@ -80,7 +80,7 @@ s8_t trcctrl_free (s_trcctrl *ctrl)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_save (s_trcctrl *ctrl, s_trcspl *spl, u8_t **v_file)
+t_s8 trcctrl_save (s_trcctrl *ctrl, s_trcspl *spl, t_u8 **v_file)
 {
 	return ctrl->intf->save(ctrl, spl, v_file);
 }
@@ -88,7 +88,7 @@ s8_t trcctrl_save (s_trcctrl *ctrl, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_load (s_trcctrl *ctrl, s_trcspl *spl, u8_t **v_file)
+t_s8 trcctrl_load (s_trcctrl *ctrl, s_trcspl *spl, t_u8 **v_file)
 {
 	return ctrl->intf->load(ctrl, spl, v_file);
 }
@@ -96,7 +96,7 @@ s8_t trcctrl_load (s_trcctrl *ctrl, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_reset (s_trcctrl *ctrl, s_trcobj *obj)
+t_s8 trcctrl_reset (s_trcctrl *ctrl, s_trcobj *obj)
 {
 	return ctrl->intf->reset(ctrl, obj);
 }
@@ -104,7 +104,7 @@ s8_t trcctrl_reset (s_trcctrl *ctrl, s_trcobj *obj)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcctrl_update (s_trcctrl *ctrl, s_trcobj *obj)
+t_s8 trcctrl_update (s_trcctrl *ctrl, s_trcobj *obj)
 {
 	return ctrl->intf->update(ctrl, obj);
 }
@@ -150,8 +150,8 @@ s_trcctrl* trcctrl_malloc (s_trcctrl_intf *intf_ctrl, s_trcctrl_attr *attr)
 
 //void trcctrl_copy (s_trcctrl *dest, s_trcctrl *src)
 //{
-//	u8_t *data_ref = (u8_t*) malloc(1024 * 1024 * 256); // 256 Mb Max
-//	u8_t *data_ptr = data_ref;
+//	t_u8 *data_ref = (t_u8*) malloc(1024 * 1024 * 256); // 256 Mb Max
+//	t_u8 *data_ptr = data_ref;
 //
 //	trcctrl_save (src , eng, &data_ptr);
 //

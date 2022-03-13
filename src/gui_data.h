@@ -11,7 +11,7 @@
 #include <imgui/imgui_internal.h>
 #include <implot/implot.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -125,7 +125,7 @@ inline void gui_data_edit_ram(s_trcdata *self)
 //
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) data->eng);
+////	ImGui::Text("%08X", (t_u32) data->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -147,10 +147,10 @@ inline void gui_data_edit_ram(s_trcdata *self)
 //	ImGui::PopID();
 }
 
-inline u8_t gui_data_view_ram(s_trcdata *self)
+inline t_u8 gui_data_view_ram(s_trcdata *self)
 {
 //	s_trcdata_ram *data = (s_trcdata_ram*) self->data;
-//	u8_t mode = 0x00;
+//	t_u8 mode = 0x00;
 //
 //	// DO NOT MOVE DOWN because return will break IMGUI ID stack without ImGui::PopID();
 //	if (data->offset == 0x00)
@@ -219,17 +219,17 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //					vl3_vcopy(trngl.p1, &data->ecef_pos[i * di * 3]);
 //					vl3_vcopy(trngl.p2, &data->ecef_pos[i * di * 3]);
 //
-//					f64_t rot[9];
-//					vl3m_tnp(rot, &data->ecef_rot[i * di * 9]);
-//					vl3_mmul_s(rot, rot, 0.015 / view.scale);
+//					t_f64 rot[9];
+//					vld3m_tnp(rot, &data->ecef_rot[i * di * 9]);
+//					vld3m_muls(rot, rot, 0.015 / view.scale);
 //
 //					// top middle
 //
-//					vl3v_muls(&rot[0], &rot[0], 3.0);
+//					vld3v_muls(&rot[0], &rot[0], 3.0);
 //					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 //
 //					// left
-//					vl3v_subv(trngl.p1, trngl.p1, &rot[6]);
+//					vld3v_subv(trngl.p1, trngl.p1, &rot[6]);
 //
 //					// right
 //					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);
@@ -244,15 +244,15 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //					vl3_vcopy(trngl.p1, &data->ecef_pos[i*3]);
 //					vl3_vcopy(trngl.p2, &data->ecef_pos[i*3]);
 //
-//					f64_t rot[9];
-//					vl3m_tnp(rot, &data->ecef_rot[i*9]);
-//					vl3_mmul_s(rot, rot, 10.0 / view.scale);
+//					t_f64 rot[9];
+//					vld3m_tnp(rot, &data->ecef_rot[i*9]);
+//					vld3m_muls(rot, rot, 10.0 / view.scale);
 //
 //					// top middle
 //					vl3_vsum(trngl.p0, trngl.p0, &rot[0]);
 //
 //					// left
-//					vl3v_subv(trngl.p1, trngl.p1, &rot[6]);
+//					vld3v_subv(trngl.p1, trngl.p1, &rot[6]);
 //
 //					// right
 //					vl3_vsum(trngl.p2, trngl.p2, &rot[6]);
@@ -269,7 +269,7 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //		}
 //
 //		int offset = 0x00;
-//		int stride = 10*sizeof(f64_t);
+//		int stride = 10*sizeof(t_f64);
 //
 //		if (ImGui::BeginTabItem("details"))
 //		{
@@ -279,7 +279,7 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("heading"))
 //				{
-//					ImPlot::PlotLine("heading", data->time, data->heading, data->offset / stride, offset, stride*sizeof(f64_t));
+//					ImPlot::PlotLine("heading", data->time, data->heading, data->offset / stride, offset, stride*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -288,7 +288,7 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("pitch"))
 //				{
-//					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset / stride, offset, stride*sizeof(f64_t));
+//					ImPlot::PlotLine("pitch", data->time, data->pitch, data->offset / stride, offset, stride*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -297,7 +297,7 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("roll"))
 //				{
-//					ImPlot::PlotLine("roll", data->time, data->roll, data->offset / stride, offset, stride*sizeof(f64_t));
+//					ImPlot::PlotLine("roll", data->time, data->roll, data->offset / stride, offset, stride*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -306,9 +306,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("tied_acc"))
 //				{
-//					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//					ImPlot::PlotLine("acc_x", data->time3, &data->tied_acc[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("acc_y", data->time3, &data->tied_acc[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("acc_z", data->time3, &data->tied_acc[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -317,9 +317,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("tied_grs"))
 //				{
-//					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//					ImPlot::PlotLine("grs_x", data->time3, &data->tied_grs[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("grs_y", data->time3, &data->tied_grs[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("grs_z", data->time3, &data->tied_grs[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -330,14 +330,14 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //				{
 //					if (ImPlot::BeginPlot("lla_pos lat,lon"))
 //					{
-//						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//						ImPlot::PlotLine("lla_pos_lat", data->time3, &data->lla_pos[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//						ImPlot::PlotLine("lla_pos_lon", data->time3, &data->lla_pos[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //						ImPlot::EndPlot();
 //					}
 //
 //					if (ImPlot::BeginPlot("lla_pos alt"))
 //					{
-//						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//						ImPlot::PlotLine("lla_pos_alt", data->time3, &data->lla_pos[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //						ImPlot::EndPlot();
 //					}
 //				}
@@ -346,9 +346,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //				{
 //					if (ImPlot::BeginPlot("lla_vel"))
 //					{
-//						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//						ImPlot::PlotLine("vel_lat", data->time3, &data->lla_vel[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//						ImPlot::PlotLine("vel_lon", data->time3, &data->lla_vel[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//						ImPlot::PlotLine("vel_alt", data->time3, &data->lla_vel[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //						ImPlot::EndPlot();
 //					}
 //				}
@@ -359,9 +359,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("ecef_pos"))
 //				{
-//					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//					ImPlot::PlotLine("ecef_pos_x", data->time3, &data->ecef_pos[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_pos_y", data->time3, &data->ecef_pos[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_pos_z", data->time3, &data->ecef_pos[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -370,9 +370,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("ecef_vel"))
 //				{
-//					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//					ImPlot::PlotLine("ecef_vel_x", data->time3, &data->ecef_vel[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_vel_y", data->time3, &data->ecef_vel[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_vel_z", data->time3, &data->ecef_vel[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -381,9 +381,9 @@ inline u8_t gui_data_view_ram(s_trcdata *self)
 //			{
 //				if (ImPlot::BeginPlot("ecef_acc"))
 //				{
-//					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset / stride, offset, stride * 3*sizeof(f64_t));
-//					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset / stride, offset, stride * 3*sizeof(f64_t));
+//					ImPlot::PlotLine("ecef_acc_x", data->time3, &data->ecef_acc[0], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_acc_y", data->time3, &data->ecef_acc[1], data->offset / stride, offset, stride * 3*sizeof(t_f64));
+//					ImPlot::PlotLine("ecef_acc_z", data->time3, &data->ecef_acc[2], data->offset / stride, offset, stride * 3*sizeof(t_f64));
 //					ImPlot::EndPlot();
 //				}
 //			}
@@ -430,7 +430,7 @@ inline void gui_data_edit_ramld(s_trcdata *self)
 //
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) data->eng);
+////	ImGui::Text("%08X", (t_u32) data->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -469,7 +469,7 @@ inline void gui_data_view_ramld(s_trcdata *self)
 //	{
 //		if (ImPlot::BeginPlot("lateral deviation"))
 //		{
-//			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset / 10, 0, 10*sizeof(f64_t));
+//			ImPlot::PlotLine("lateral deviation", data->time, data->ld, data->offset / 10, 0, 10*sizeof(t_f64));
 //			ImPlot::EndPlot();
 //		}
 //	}

@@ -10,7 +10,7 @@
 #include <clip/clip.h>
 #include <imgui/imgui.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -43,12 +43,12 @@ void gui_clip_init (s_gui_clip *clip, s_gui_clip_attr attr)
 
 void gui_clip_set_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
 {
-    u8_t __traj_data__[256 * 1024];
-    u8_t *traj_data = __traj_data__;
+    t_u8 __traj_data__[256 * 1024];
+    t_u8 *traj_data = __traj_data__;
 
     trctraj_save(traj, &eng->intf_spl, &traj_data);
 
-    u32_t traj_data_size = (u32_t) (traj_data - __traj_data__);
+    t_u32 traj_data_size = (t_u32) (traj_data - __traj_data__);
 
     clip::lock lock;
     lock.set_data(clip->format_traj, (const char*) __traj_data__, traj_data_size);
@@ -58,10 +58,10 @@ void gui_clip_set_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
 
 void gui_clip_get_traj (s_gui_clip *clip, s_trceng *eng, s_trctraj *traj)
 {
-    u8_t __traj_data__[256 * 1024];
-    u8_t *traj_data = __traj_data__;
+    t_u8 __traj_data__[256 * 1024];
+    t_u8 *traj_data = __traj_data__;
     clip::lock lock;
-    u32_t traj_data_size = lock.get_data_length(clip->format_traj);
+    t_u32 traj_data_size = lock.get_data_length(clip->format_traj);
 
     if (traj_data_size > 0x00)
     {

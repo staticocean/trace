@@ -11,7 +11,7 @@
 
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <sftlrefs/trcrefs.h>
 
@@ -21,21 +21,21 @@ typedef struct trcrefs_ellp
 {
 	s_trcrefs_ellp 		super;
 	
-	f64_t 				a;
-	f64_t 				b;
-	f64_t 				c;
-	f64_t 				e;
-	f64_t 				f;
+	t_f64 				a;
+	t_f64 				b;
+	t_f64 				c;
+	t_f64 				e;
+	t_f64 				f;
 	
-	f64_t 				ee;
-	f64_t 				invaa;
-	f64_t 				l;
-	f64_t 				p1mee;
-	f64_t 				p1meedaa;
-	f64_t 				Hmin;
-	f64_t 				ll4;
-	f64_t 				ll;
-	f64_t 				invcbrt2;
+	t_f64 				ee;
+	t_f64 				invaa;
+	t_f64 				l;
+	t_f64 				p1mee;
+	t_f64 				p1meedaa;
+	t_f64 				Hmin;
+	t_f64 				ll4;
+	t_f64 				ll;
+	t_f64 				invcbrt2;
 
 }	s_trcrefs_ellp;
 
@@ -43,8 +43,8 @@ typedef struct trcrefs_ellp_attr
 {
 	s_trcrefs_ellp_attr super;
 	
-	f64_t 				a;
-	f64_t 				f;
+	t_f64 				a;
+	t_f64 				f;
 
 }	s_trcrefs_ellp_attr;
 
@@ -54,7 +54,7 @@ void trcrefs_init (s_trcref *ellp)
 {
 	ellp->b         = ellp->a * (1 - ellp->f);
 	ellp->ee		= 1 - ellp->b*ellp->b / (ellp->a*ellp->a );
-	ellp->e 		= vl_sqrt(ellp->ee);
+	ellp->e 		= vld_sqrt(ellp->ee);
 	ellp->invaa		= 1.0 / (ellp->a * ellp->a);
 	ellp->l		 	= (ellp->e * ellp->e) / 2.0;
 	ellp->p1mee		= 1.0 - (ellp->e * ellp->e);
@@ -70,70 +70,70 @@ void trcrefs_init (s_trcref *ellp)
 
 //------------------------------------------------------------------------------
 
-void trcrefs_ecef (s_trcref *ellp, f64_t *ecef, f64_t *lla)
+void trcrefs_ecef (s_trcref *ellp, t_f64 *ecef, t_f64 *lla)
 {
-	f64_t n = ellp->a / vl_sqrt(1 - ellp->ee * vl_sin(lla[0]) * vl_sin(lla[0]));
+	t_f64 n = ellp->a / vld_sqrt(1 - ellp->ee * vld_sin(lla[0]) * vld_sin(lla[0]));
 	
 	if (ecef != lla)
 	{
-		ecef[0] = (n + lla[2]) * vl_cos(lla[0]) * vl_cos(lla[1]);
-		ecef[1] = (n * (1 - ellp->ee) + lla[2]) * vl_sin(lla[0]);
-		ecef[2] = -(n + lla[2]) * vl_cos(lla[0]) * vl_sin(lla[1]);
+		ecef[0] = (n + lla[2]) * vld_cos(lla[0]) * vld_cos(lla[1]);
+		ecef[1] = (n * (1 - ellp->ee) + lla[2]) * vld_sin(lla[0]);
+		ecef[2] = -(n + lla[2]) * vld_cos(lla[0]) * vld_sin(lla[1]);
 	}
 	
 	else
 	{
-		f64_t lla_[3] = { lla[0], lla[1], lla[2] };
+		t_f64 lla_[3] = { lla[0], lla[1], lla[2] };
 		
-		ecef[0] = (n + lla_[2]) * vl_cos(lla_[0]) * vl_cos(lla_[1]);
-		ecef[1] = (n * (1 - ellp->ee) + lla_[2]) * vl_sin(lla_[0]);
-		ecef[2] = -(n + lla_[2]) * vl_cos(lla_[0]) * vl_sin(lla_[1]);
+		ecef[0] = (n + lla_[2]) * vld_cos(lla_[0]) * vld_cos(lla_[1]);
+		ecef[1] = (n * (1 - ellp->ee) + lla_[2]) * vld_sin(lla_[0]);
+		ecef[2] = -(n + lla_[2]) * vld_cos(lla_[0]) * vld_sin(lla_[1]);
 	}
 }
 
 //------------------------------------------------------------------------------
 
-s8_t trcrefs_lla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
+t_s8 trcrefs_lla (s_trcref *ellp, t_f64 *lla, t_f64 *ecef)
 {
-	const f64_t inv3 = +3.33333333333333333333e-0001;
-	const f64_t inv6 = +1.66666666666666666667e-0001;
+	const t_f64 inv3 = +3.33333333333333333333e-0001;
+	const t_f64 inv6 = +1.66666666666666666667e-0001;
 	
-	f64_t x, y, z;
+	t_f64 x, y, z;
 	// The variables below correspond to symbols used in the paper
 	// "Accurate Conversion of Earth-Centered, Earth-Fixed Coordinates
 	// to Geodetic Coordinates"
-	f64_t beta;
-	f64_t C;
-	f64_t dFdt;
-	f64_t dt;
-	f64_t dw;
-	f64_t dz;
-	f64_t F;
-	f64_t G;
-	f64_t H;
-	f64_t i;
-	f64_t k;
-	f64_t m;
-	f64_t n;
-	f64_t p;
-	f64_t P;
-	f64_t t;
-	f64_t u;
-	f64_t v;
-	f64_t w;
+	t_f64 beta;
+	t_f64 C;
+	t_f64 dFdt;
+	t_f64 dt;
+	t_f64 dw;
+	t_f64 dz;
+	t_f64 F;
+	t_f64 G;
+	t_f64 H;
+	t_f64 i;
+	t_f64 k;
+	t_f64 m;
+	t_f64 n;
+	t_f64 p;
+	t_f64 P;
+	t_f64 t;
+	t_f64 u;
+	t_f64 v;
+	t_f64 w;
 	// Intermediate variables
-	f64_t j;
-	f64_t ww; // w^2
-	f64_t mpn; // m+n
-	f64_t g;
-	f64_t tt; // t^2
-	f64_t ttt; // t^3
-	f64_t tttt; // t^4
-	f64_t zu; // z * u
-	f64_t wv; // w * v
-	f64_t invuv; // 1 / (u * v)
-	f64_t da;
-	f64_t t1, t2, t3, t4, t5, t6, t7;
+	t_f64 j;
+	t_f64 ww; // w^2
+	t_f64 mpn; // m+n
+	t_f64 g;
+	t_f64 tt; // t^2
+	t_f64 ttt; // t^3
+	t_f64 tttt; // t^4
+	t_f64 zu; // z * u
+	t_f64 wv; // w * v
+	t_f64 invuv; // 1 / (u * v)
+	t_f64 da;
+	t_f64 t1, t2, t3, t4, t5, t6, t7;
 	
 	x =  ecef[0];
 	y = -ecef[2];
@@ -201,11 +201,11 @@ s8_t trcrefs_lla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
 
 //------------------------------------------------------------------------------
 
-s8_t trcrefs_glla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
+t_s8 trcrefs_glla (s_trcref *ellp, t_f64 *lla, t_f64 *ecef)
 {
     trcrefs_lla(ellp, lla, ecef);
 
-    f64_t rn = ellp->a / vl_sqrt(1 - ellp->e*ellp->e*vl_sin(lla[0])*vl_sin(lla[0]));
+    t_f64 rn = ellp->a / vld_sqrt(1 - ellp->e*ellp->e*vld_sin(lla[0])*vld_sin(lla[0]));
     lla[0] = atan(1 - ellp->ee * rn / (rn + lla[2]));
 
     return 0x00;
@@ -213,49 +213,49 @@ s8_t trcrefs_glla (s_trcref *ellp, f64_t *lla, f64_t *ecef)
 
 //------------------------------------------------------------------------------
 
-s8_t trcrefs_ecefrot (s_trcref *ellp, f64_t *ecef, f64_t *c_tn)
+t_s8 trcrefs_ecefrot (s_trcref *ellp, t_f64 *ecef, t_f64 *c_tn)
 {
-	f64_t ctn_tnp[9];
+	t_f64 ctn_tnp[9];
 	
-	f64_t *x = &ctn_tnp[0];
-	f64_t *y = &ctn_tnp[3];
-	f64_t *z = &ctn_tnp[6];
+	t_f64 *x = &ctn_tnp[0];
+	t_f64 *y = &ctn_tnp[3];
+	t_f64 *z = &ctn_tnp[6];
 	
-	f64_t lla[3];
+	t_f64 lla[3];
 	trcrefs_lla(ellp, lla, ecef);
 	y[0] =  cos(lla[1]) * cos(lla[0]);
 	y[2] = -sin(lla[1]) * cos(lla[0]);
 	y[1] =  sin(lla[0]);
 	
-	f64_t north[3] = { 0.0, ellp->a, 0.0 };
-	vl3v_subv(x, north, ecef);
-	vl3v_muls(x, x, 1.0 / vl3v_norm(x));
+	t_f64 north[3] = { 0.0, ellp->a, 0.0 };
+	vld3v_subv(x, north, ecef);
+	vld3v_muls(x, x, 1.0 / vld3v_norm(x));
 	
-	f64_t xy[3];
-	vl3v_muls(xy, y, vl3v_dot(x, y));
-	vl3v_subv(x, x, xy);
-	vl3v_muls(x, x, 1.0 / vl3v_norm(x));
+	t_f64 xy[3];
+	vld3v_muls(xy, y, vld3v_dot(x, y));
+	vld3v_subv(x, x, xy);
+	vld3v_muls(x, x, 1.0 / vld3v_norm(x));
 	
-	vl3v_cross(z, x, y);
-	vl3v_muls(z, z, 1.0 / vl3v_norm(z));
+	vld3v_cross(z, x, y);
+	vld3v_muls(z, z, 1.0 / vld3v_norm(z));
 	
-	vl3m_tnp(c_tn, ctn_tnp);
+	vld3m_tnp(c_tn, ctn_tnp);
 	
 	return 0x00;
 }
 
 //------------------------------------------------------------------------------
 
-void trcrefs_nwhvel (s_trcref *ellp, f64_t *lla, f64_t *vel, f64_t *nwh)
+void trcrefs_nwhvel (s_trcref *ellp, t_f64 *lla, t_f64 *vel, t_f64 *nwh)
 {
-	f64_t sin_lat = vl_sin(lla[0]);
-	f64_t temp = 1 - ellp->ee * sin_lat*sin_lat;
+	t_f64 sin_lat = vld_sin(lla[0]);
+	t_f64 temp = 1 - ellp->ee * sin_lat*sin_lat;
 	
-	f64_t M = ellp->a * ellp->p1mee / vl_pow(temp, 1.5);
-	f64_t N = ellp->a / vl_pow(temp, 0.5);
+	t_f64 M = ellp->a * ellp->p1mee / vl_pow(temp, 1.5);
+	t_f64 N = ellp->a / vl_pow(temp, 0.5);
 	
 	nwh[0] = vel[0] * M;
-	nwh[1] = vel[1] * N * vl_cos(lla[0]);
+	nwh[1] = vel[1] * N * vld_cos(lla[0]);
 	nwh[2] = vel[2];
 }
 

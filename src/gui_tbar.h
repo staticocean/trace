@@ -16,7 +16,7 @@
 #include <clip/clip.h>
 #include <nfd.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -147,12 +147,12 @@ inline bool gui_tbar_button(const char *label, ImVec2 size = ImVec2(0,0))
 	return res;
 }
 
-inline u8_t gui_tbar_main(s_gui_tbar *tbar)
+inline t_u8 gui_tbar_main(s_gui_tbar *tbar)
 {
-	static f64_t time_limit_min = 0.0;
-	static f64_t time_step_min = 0.001;
-	static f64_t time_step_max = 100.0;
-	static u32_t time_iter_min = 0x00;
+	static t_f64 time_limit_min = 0.0;
+	static t_f64 time_step_min = 0.001;
+	static t_f64 time_step_max = 100.0;
+	static t_u32 time_iter_min = 0x00;
 	
 	{
 		ImVec2 popup_pos = ImGui::GetCursorScreenPos() + ImVec2(0, ImGui::GetTextLineHeightWithSpacing());

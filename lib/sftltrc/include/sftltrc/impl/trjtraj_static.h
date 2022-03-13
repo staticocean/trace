@@ -11,7 +11,7 @@
 
 #include <sftlstd/types.h>
 #include <sftlstd/env.h>
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include <sftltrc/trctraj.h>
 #include <sftltrc/trcspl.h>
@@ -24,16 +24,16 @@ typedef struct trctraj_static
 	s_trctraj 		super;
 	
 	s_trcobj 		*ref;
-	u32_t 			ref_hash;
+	t_u32 			ref_hash;
 	
-	u8_t 			ellp_en;
+	t_u8 			ellp_en;
 	s_trcellp 		*ellp;
-	u32_t 			ellp_hash;
+	t_u32 			ellp_hash;
 	
-	f64_t 			pos[3];
-	f64_t 			pos_cache[3];
-	f64_t 			rot[9];
-	f64_t 			rot_cache[9];
+	t_f64 			pos[3];
+	t_f64 			pos_cache[3];
+	t_f64 			rot[9];
+	t_f64 			rot_cache[9];
 	
 } 	s_trctraj_static;
 
@@ -43,18 +43,18 @@ typedef struct trctraj_static_attr
 	
 	s_trcobj 		*ref;
 	
-	u8_t 			ellp_en;
+	t_u8 			ellp_en;
 	s_trcellp  		*ellp;
 	
-	f64_t 			pos[3];
-	f64_t 			rot[9];
+	t_f64 			pos[3];
+	t_f64 			rot[9];
 	
 } 	s_trctraj_static_attr;
 
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_init__ (void *__traj__, s_trctraj_static_init *__attr__)
+t_s8 __trctraj_static_init__ (void *__traj__, s_trctraj_static_init *__attr__)
 {
 	s_trctraj_static 	  *traj = (s_trctraj_static*     ) *__traj__;
 	s_trctraj_static_attr *attr = (s_trctraj_static_attr*) __attr__;
@@ -69,8 +69,8 @@ s8_t __trctraj_static_init__ (void *__traj__, s_trctraj_static_init *__attr__)
 	if (traj->ellp != NULL)
 	{ traj->ellp_hash = self->ellp->hash; }
 	
-	vl3v_copy(traj->pos, attr->pos);
-	vl3m_copy(traj->rot, attr->rot);
+	vld3v_copy(traj->pos, attr->pos);
+	vld3m_copy(traj->rot, attr->rot);
 	
 	return 0x00;
 }
@@ -78,7 +78,7 @@ s8_t __trctraj_static_init__ (void *__traj__, s_trctraj_static_init *__attr__)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_free__ (void *__traj__)
+t_s8 __trctraj_static_free__ (void *__traj__)
 {
 	return 0x00;
 }
@@ -86,7 +86,7 @@ s8_t __trctraj_static_free__ (void *__traj__)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_save__ (void *__traj__, u8_t **v_file)
+t_s8 __trctraj_static_save__ (void *__traj__, t_u8 **v_file)
 {
 	return 0x00;
 }
@@ -94,7 +94,7 @@ s8_t __trctraj_static_save__ (void *__traj__, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_load__ (void *__traj__, u8_t **v_file)
+t_s8 __trctraj_static_load__ (void *__traj__, t_u8 **v_file)
 {
 	s_trctraj_static *traj = (s_trctraj_static*) __traj__;
 	
@@ -108,16 +108,16 @@ s8_t __trctraj_static_load__ (void *__traj__, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_compile__ (s_trctraj *traj)
+t_s8 __trctraj_static_compile__ (s_trctraj *traj)
 {
 	if (self->ellp_en != 0x00)
 	{
 		trcellp_ecef(self->ellp, self->pos_cache, self->pos);
 		
-		f64_t ecef_ctn[9];
+		t_f64 ecef_ctn[9];
 		trcellp_ecefrot(self->ellp, self->pos_cache, ecef_ctn);
 		
-		vl3_mmul_m(self->rot_cache, ecef_ctn, self->rot);
+		vld3m_mulm(self->rot_cache, ecef_ctn, self->rot);
 	}
 	
 	return 0x00;
@@ -126,15 +126,15 @@ s8_t __trctraj_static_compile__ (s_trctraj *traj)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_pos__ (s_trctraj *traj, f64_t time, f64_t *pos)
+t_s8 __trctraj_static_pos__ (s_trctraj *traj, t_f64 time, t_f64 *pos)
 {
 	if (self->ellp_en == 0x00)
-	{ vl3v_copy(pos, self->pos); }
+	{ vld3v_copy(pos, self->pos); }
 	
 	else
-	{ vl3v_copy(pos, self->pos_cache); }
+	{ vld3v_copy(pos, self->pos_cache); }
 	
-	vl3_mmul_v(pos, &self->ref->rot[0][0], pos);
+	vld3m_mulv(pos, &self->ref->rot[0][0], pos);
 	vl3_vsum(pos, pos, &self->ref->pos[0][0]);
 	
 	return 0x00;
@@ -143,15 +143,15 @@ s8_t __trctraj_static_pos__ (s_trctraj *traj, f64_t time, f64_t *pos)
 //------------------------------------------------------------------------------
 
 static
-s8_t __trctraj_static_rot__ (s_trctraj *traj, f64_t time, f64_t *rot)
+t_s8 __trctraj_static_rot__ (s_trctraj *traj, t_f64 time, t_f64 *rot)
 {
 	if (self->ellp_en == 0x00)
-	{ vl3m_copy(rot, self->rot); }
+	{ vld3m_copy(rot, self->rot); }
 	
 	else
-	{ vl3m_copy(rot, self->rot_cache); }
+	{ vld3m_copy(rot, self->rot_cache); }
 	
-	vl3_mmul_m(rot, &self->ref->rot[0][0], rot);
+	vld3m_mulm(rot, &self->ref->rot[0][0], rot);
 	
 	return 0x00;
 }
@@ -177,7 +177,7 @@ s_trctraj_intf __trctraj_static__ = {
 
 //------------------------------------------------------------------------------
 
-s8_t trctraj_static_init (s_trctraj_static **traj, void *attr)
+t_s8 trctraj_static_init (s_trctraj_static **traj, void *attr)
 {
 	*traj = malloc(sizeof(s_trctraj_static));
 	

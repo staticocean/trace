@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 
 #include "trc_api.h"
 #include "trcobj.h"
@@ -18,29 +18,29 @@
 
 typedef struct __trcctrl_gm_k__
 {
-	u32_t n;
-	u32_t m;
+	t_u32 n;
+	t_u32 m;
 	
-	f64_t C;
-	f64_t S;
-	f64_t dC;
-	f64_t dS;
+	t_f64 C;
+	t_f64 S;
+	t_f64 dC;
+	t_f64 dS;
 	
 }   __s_trcctrl_gm_k__;
 
 typedef struct trcctrl_gm
 {
-	u32_t order;
+	t_u32 order;
 	char file_name[256];
 	
-	u32_t  data_size;
+	t_u32  data_size;
 	__s_trcctrl_gm_k__ *data_ls;
 	
 }   s_trcctrl_gm;
 
 typedef struct trcctrl_gm_init
 {
-	u32_t order;
+	t_u32 order;
 	char file_name[256];
 	
 }   s_trcctrl_gm_init;
@@ -65,7 +65,7 @@ inline char *__sgets__(char *s, int n, const char **strp){
 	return s;
 }
 
-inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
+inline t_u8 trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 {
 	strcpy(self->file_name, attr.file_name);
 	self->order = attr.order;
@@ -83,13 +83,13 @@ inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 		size_t file_size = ftell (file_handle);
 		rewind (file_handle);
 		
-		u8_t *file_data = (u8_t*) malloc(file_size);
+		t_u8 *file_data = (t_u8*) malloc(file_size);
 		fread(file_data, 0x01, file_size, file_handle);
 		
 		fclose(file_handle);
 		
-		u32_t line_count = 0x00;
-		u32_t offset;
+		t_u32 line_count = 0x00;
+		t_u32 offset;
 		
 		for (offset = 0x00; offset < file_size; ++offset)
 		{
@@ -123,7 +123,7 @@ inline u8_t trcctrl_gm_init(s_trcctrl_gm *self, s_trcctrl_gm_init attr)
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_save(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_gm_save(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, t_u8 **v_file)
 {
 	memcpy(*v_file, self->data_ls, self->data_size * sizeof(__s_trcctrl_gm_k__));
 	*v_file += self->data_size * sizeof(__s_trcctrl_gm_k__);
@@ -131,7 +131,7 @@ inline u8_t trcctrl_gm_save(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_load(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **v_file)
+inline t_u8 trcctrl_gm_load(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, t_u8 **v_file)
 {
 	self->data_ls = (__s_trcctrl_gm_k__*) malloc(self->data_size * sizeof(__s_trcctrl_gm_k__));
 	memcpy(self->data_ls, *v_file, self->data_size * sizeof(__s_trcctrl_gm_k__));
@@ -140,7 +140,7 @@ inline u8_t trcctrl_gm_load(s_trcctrl_gm *self, s_trcctrl_gm_init *attr, u8_t **
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_reset(s_trcctrl_gm *self, s_trcobj *obj)
+inline t_u8 trcctrl_gm_reset(s_trcctrl_gm *self, s_trcobj *obj)
 {
 	return 0x00;
 }
@@ -154,15 +154,15 @@ inline int factorial(int n) {
 	return result;
 }
 
-inline void legendre_order0(f64_t *L, f64_t *Ld, u32_t N, f64_t x)
+inline void legendre_order0(t_f64 *L, t_f64 *Ld, t_u32 N, t_f64 x)
 {
 	L[0] = 1;
 	L[1] = x;
 	Ld[0] = 0;
 	Ld[1] = 1;
 	
-	u32_t i;
-	u32_t n;
+	t_u32 i;
+	t_u32 n;
 	
 	for (i = 2; i < N; ++i) {
 		
@@ -175,7 +175,7 @@ inline void legendre_order0(f64_t *L, f64_t *Ld, u32_t N, f64_t x)
 	return;
 }
 
-inline void associated_legendre(f64_t *P, f64_t *Pd, u32_t N, f64_t x)
+inline void associated_legendre(t_f64 *P, t_f64 *Pd, t_u32 N, t_f64 x)
 {
 	// Evaluates all fully normalized associated Legendre polynomials
 	// of degree and order less than or equal to N-1, and their first derivatives at x.
@@ -184,24 +184,24 @@ inline void associated_legendre(f64_t *P, f64_t *Pd, u32_t N, f64_t x)
 	// P(m+1,n+1) = P_n^m(x)
 	// Pd(m+1, n+1) = d/dx P_n^m(x)
 	
-	u32_t i;
-	u32_t j;
-	u32_t m;
-	u32_t n;
+	t_u32 i;
+	t_u32 j;
+	t_u32 m;
+	t_u32 n;
 	
-	f64_t full_derivs[N][N];
+	t_f64 full_derivs[N][N];
 	
 	// compute P^n_0
 	
-	f64_t L[N];
-	f64_t Ld[N];
+	t_f64 L[N];
+	t_f64 Ld[N];
 	legendre_order0(L, Ld, N,x);
 	
-	memcpy(&P[0], L, sizeof(f64_t)*N);
-	memcpy(&Pd[0], Ld, sizeof(f64_t)*N);
+	memcpy(&P[0], L, sizeof(t_f64)*N);
+	memcpy(&Pd[0], Ld, sizeof(t_f64)*N);
 	
 	// calculate all derivatives up to order N of of P^n_0
-	memcpy(&full_derivs[0][0], Ld, sizeof(f64_t)*N);
+	memcpy(&full_derivs[0][0], Ld, sizeof(t_f64)*N);
 	
 	for (j = 1; j < N; ++j)
 	{
@@ -220,7 +220,7 @@ inline void associated_legendre(f64_t *P, f64_t *Pd, u32_t N, f64_t x)
 	{
 		for (n = m; n < N; ++n)
 		{
-			f64_t factor = 1;
+			t_f64 factor = 1;
 			
 			P[m*N+n] = factor * vl_pow((1 - x*x), ((m - 1) / 2)) * full_derivs[m - 1][n];
 			Pd[m*N+n] = -factor * ((m - 1) / 2) * pow((1 - x*x), (((m - 1) / 2) - 1)) * 2 * x
@@ -236,7 +236,7 @@ inline void associated_legendre(f64_t *P, f64_t *Pd, u32_t N, f64_t x)
 		{
 			if (n >= m)
 			{
-				f64_t factor = (2 * n + 1) * factorial(n - m) / factorial(n + m);
+				t_f64 factor = (2 * n + 1) * factorial(n - m) / factorial(n + m);
 				if (m != 0) { factor = factor * 2; }
 				factor = sqrt(factor);
 				
@@ -249,49 +249,49 @@ inline void associated_legendre(f64_t *P, f64_t *Pd, u32_t N, f64_t x)
 	return;
 }
 
-inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
+inline t_u8 trcctrl_gm_calc(s_trcctrl_gm *self, t_f64 *g, t_f64 *ecef)
 {
-	f64_t lla[3];
+	t_f64 lla[3];
 	
 	trcellp_glla(&trcellp_wgs84, lla, ecef);
 	
-	f64_t MU = 3.986004415e14;      // Gravitational parameter of Earth    [km^3 s^-2]
-	f64_t A  = 6.3781363e6;          // Mean equitorial radius              [m]
+	t_f64 MU = 3.986004415e14;      // Gravitational parameter of Earth    [km^3 s^-2]
+	t_f64 A  = 6.3781363e6;          // Mean equitorial radius              [m]
 	
-	f64_t el = lla[0];
-	f64_t az = lla[1];
-	f64_t r  = vl3v_norm(ecef);
+	t_f64 el = lla[0];
+	t_f64 az = lla[1];
+	t_f64 r  = vld3v_norm(ecef);
 	
-	f64_t u = MU / r;
-	f64_t g_[3];
+	t_f64 u = MU / r;
+	t_f64 g_[3];
 	g_[0] = -MU / (r*r);
 	
-	u32_t N = self->order;
+	t_u32 N = self->order;
 	
-	f64_t P[N*N];
-	f64_t Pd[N*N];
+	t_f64 P[N*N];
+	t_f64 Pd[N*N];
 	
 	associated_legendre(P, Pd, N, sin(el));
 	
-	u32_t i;
-	u32_t N_ = 0x00;
+	t_u32 i;
+	t_u32 N_ = 0x00;
 	
-	for (s32_t i = 0; i < self->order+1; ++i)
+	for (t_s32 i = 0; i < self->order+1; ++i)
 	{
 		N_ += i;
 	}
 	
-	for (s32_t i = 0; i < N_-3; ++i)
+	for (t_s32 i = 0; i < N_-3; ++i)
 	{
 		__s_trcctrl_gm_k__ *k = &self->data_ls[i];
 		
-		u32_t n = k->n;
-		u32_t m = k->m;
-		f64_t    C = k->C;
-		f64_t    S = k->S;
+		t_u32 n = k->n;
+		t_u32 m = k->m;
+		t_f64    C = k->C;
+		t_f64    S = k->S;
 		
-		f64_t Pnm  = P [m*N + n];
-		f64_t Pnmd = Pd[m*N + n];
+		t_f64 Pnm  = P [m*N + n];
+		t_f64 Pnmd = Pd[m*N + n];
 		
 		u = u + vl_pow(A,n) * MU * (Pnm * (C * cos(m * az) + S * sin(m * az))) / vl_pow(r, n+1);
 		
@@ -300,7 +300,7 @@ inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
 		g_[2] += vl_pow(A,n) * MU * m * Pnm * (S * cos(m * az) - C * sin(m * az)) / vl_pow(r, (n + 2) * sin(el));
 	}
 //
-//    f64_t rot[9] = {
+//    t_f64 rot[9] = {
 //            sin(el)*cos(az), cos(el)*cos(az), -sin(az),
 //            sin(el)*sin(az), cos(el)*sin(az),  cos(az),
 //            cos(el),         -sin(el),        0
@@ -308,17 +308,17 @@ inline u8_t trcctrl_gm_calc(s_trcctrl_gm *self, f64_t *g, f64_t *ecef)
 //
 //    vl_mmul_v(g, rot, g_);
 	
-	vl3v_copy(g, g_);
+	vld3v_copy(g, g_);
 	
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_update(s_trcctrl_gm *self, s_trcobj *obj)
+inline t_u8 trcctrl_gm_update(s_trcctrl_gm *self, s_trcobj *obj)
 {
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_init_(void **data, void *config)
+inline t_u8 trcctrl_gm_init_(void **data, void *config)
 {
 	*data = (s_trcctrl_gm*) malloc(sizeof(s_trcctrl_gm));
 	
@@ -328,7 +328,7 @@ inline u8_t trcctrl_gm_init_(void **data, void *config)
 	return trcctrl_gm_init(ctrl, *init);
 }
 
-inline u8_t trcctrl_gm_free_(void **data)
+inline t_u8 trcctrl_gm_free_(void **data)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) *data;
 	
@@ -343,7 +343,7 @@ inline u8_t trcctrl_gm_free_(void **data)
 	return 0x00;
 }
 
-inline u8_t trcctrl_gm_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_gm_save_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) data;
 	s_trcctrl_gm_init *attr = (s_trcctrl_gm_init*) config;
@@ -351,7 +351,7 @@ inline u8_t trcctrl_gm_save_(void *data, void *config, u8_t **v_file)
 	return trcctrl_gm_save(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_gm_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_gm_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) data;
 	s_trcctrl_gm_init *attr = (s_trcctrl_gm_init*) config;
@@ -359,7 +359,7 @@ inline u8_t trcctrl_gm_load_(void *data, void *config, u8_t **v_file)
 	return trcctrl_gm_load(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_gm_reset_(void *data, void *obj)
+inline t_u8 trcctrl_gm_reset_(void *data, void *obj)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -367,7 +367,7 @@ inline u8_t trcctrl_gm_reset_(void *data, void *obj)
 	return trcctrl_gm_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_gm_update_(void *data, void *obj)
+inline t_u8 trcctrl_gm_update_(void *data, void *obj)
 {
 	s_trcctrl_gm *ctrl = (s_trcctrl_gm*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -381,11 +381,11 @@ typedef struct trcctrl_varot
 {
     s_trceng 	*eng;
     s_trcobj 	*ref;
-    u32_t 	ref_hash;
+    t_u32 	ref_hash;
 
-    u8_t 	ellp_en;
+    t_u8 	ellp_en;
     s_trcellp 	*ellp;
-    u32_t 	ellp_hash;
+    t_u32 	ellp_hash;
 
 }   s_trcctrl_varot;
 
@@ -398,7 +398,7 @@ typedef struct trcctrl_varot_attr
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcctrl_varot_init(s_trcctrl_varot *self, s_trcctrl_varot_attr attr)
+inline t_u8 trcctrl_varot_init(s_trcctrl_varot *self, s_trcctrl_varot_attr attr)
 {
     self->eng = attr.eng;
 
@@ -412,12 +412,12 @@ inline u8_t trcctrl_varot_init(s_trcctrl_varot *self, s_trcctrl_varot_attr attr)
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_save(s_trcctrl_varot *self, s_trcctrl_varot_attr *attr, u8_t **v_file)
+inline t_u8 trcctrl_varot_save(s_trcctrl_varot *self, s_trcctrl_varot_attr *attr, t_u8 **v_file)
 {
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_load(s_trcctrl_varot *self, s_trcctrl_varot_attr *attr, u8_t **v_file)
+inline t_u8 trcctrl_varot_load(s_trcctrl_varot *self, s_trcctrl_varot_attr *attr, t_u8 **v_file)
 {
     self->eng = attr->eng;
 
@@ -438,81 +438,81 @@ inline u8_t trcctrl_varot_load(s_trcctrl_varot *self, s_trcctrl_varot_attr *attr
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_reset(s_trcctrl_varot *self, s_trcobj *obj)
+inline t_u8 trcctrl_varot_reset(s_trcctrl_varot *self, s_trcobj *obj)
 {
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
+inline t_u8 trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
 {
-    f64_t local_pos_0[3];
-    f64_t local_pos_1[3];
-    f64_t local_dpos[3];
+    t_f64 local_pos_0[3];
+    t_f64 local_pos_1[3];
+    t_f64 local_dpos[3];
 
     if (obj->log_sz > 0x00)
     {
-        vl3v_subv(local_pos_0,
+        vld3v_subv(local_pos_0,
                  &obj->log_ls[obj->log_sz-1].pos[0][0],
                         &self->ref->log_ls[self->ref->log_sz-1].pos[0][0]);
 
-        vl3_mtmul_v(local_pos_0,
+        vld3m_tmulv(local_pos_0,
                     &self->ref->log_ls[self->ref->log_sz-1].rot[0][0], local_pos_0);
 
-        vl3v_subv(local_pos_1, &obj->pos[0][0], &self->ref->pos[0][0]);
-        vl3_mtmul_v(local_pos_1, &self->ref->rot[0][0], local_pos_1);
+        vld3v_subv(local_pos_1, &obj->pos[0][0], &self->ref->pos[0][0]);
+        vld3m_tmulv(local_pos_1, &self->ref->rot[0][0], local_pos_1);
 
-        vl3v_subv(local_dpos, local_pos_1, local_pos_0);
+        vld3v_subv(local_dpos, local_pos_1, local_pos_0);
 
-        if (vl3v_norm(local_dpos) > 1E-3)
+        if (vld3v_norm(local_dpos) > 1E-3)
         {
-            vl3v_muls(local_dpos, local_dpos, 1.0 / vl3v_norm(local_dpos));
+            vld3v_muls(local_dpos, local_dpos, 1.0 / vld3v_norm(local_dpos));
 
             if (self->ellp_en != 0x00)
             {
-                f64_t ecef_rot[9];
-                f64_t nhw_dpos[3];
+                t_f64 ecef_rot[9];
+                t_f64 nhw_dpos[3];
 
                 // Get local ctn matrix (hor->ecef)
                 trcellp_ecefrot(self->ellp, local_pos_1, ecef_rot);
                 // Get velocity in hor CS
-                vl3_mtmul_v(nhw_dpos, ecef_rot, local_dpos);
+                vld3m_tmulv(nhw_dpos, ecef_rot, local_dpos);
 
-                f64_t rot_nwh_tnp[9] = {
+                t_f64 rot_nwh_tnp[9] = {
                         nhw_dpos[0], nhw_dpos[1], nhw_dpos[2],
                         0.0, 1.0, 0.0,
                         0.0, 0.0, 0.0,
                         };
 
-                f64_t *x = &rot_nwh_tnp[0];
-                f64_t *y = &rot_nwh_tnp[3];
-                f64_t *z = &rot_nwh_tnp[6];
+                t_f64 *x = &rot_nwh_tnp[0];
+                t_f64 *y = &rot_nwh_tnp[3];
+                t_f64 *z = &rot_nwh_tnp[6];
 
-                vl3v_muls(x, x, 1.0 / vl3v_norm(x));
+                vld3v_muls(x, x, 1.0 / vld3v_norm(x));
 
-                f64_t xy[3];
-                vl3v_muls(xy, x, vl3v_dot(x,y));
-                vl3v_subv(y, y, xy);
-                vl3v_muls(y, y, 1.0 / vl3v_norm(y));
+                t_f64 xy[3];
+                vld3v_muls(xy, x, vld3v_dot(x,y));
+                vld3v_subv(y, y, xy);
+                vld3v_muls(y, y, 1.0 / vld3v_norm(y));
 
-                vl3v_cross(z, x, y);
-                vl3v_muls(z, z, 1.0 / vl3v_norm(z));
+                vld3v_cross(z, x, y);
+                vld3v_muls(z, z, 1.0 / vld3v_norm(z));
 
-                f64_t rot_nhw[9];
-                vl3m_tnp(rot_nhw, rot_nwh_tnp);
+                t_f64 rot_nhw[9];
+                vld3m_tnp(rot_nhw, rot_nwh_tnp);
 
                 s_vl_hpr rot_nwh_hpr = vl_hpr(rot_nhw);
                 rot_nwh_hpr.roll = 0.0;
                 vl3_rot(rot_nhw, rot_nwh_hpr);
 
-                f64_t r_ref[9];
-                vl3_mmul_m(r_ref, ecef_rot, rot_nhw);
-                vl3_mmul_m(&obj->rot[0][0], &self->ref->rot[0][0], r_ref);
+                t_f64 r_ref[9];
+                vld3m_mulm(r_ref, ecef_rot, rot_nhw);
+                vld3m_mulm(&obj->rot[0][0], &self->ref->rot[0][0], r_ref);
 
-                vl3_rnorm(&obj->rot[0][0]);
+                vld3m_rnorm(&obj->rot[0][0]);
 
                 if (obj->log_sz == 0x01)
                 {
-                    vl3m_copy(&obj->log_ls[obj->log_sz-1].rot[0][0], &obj->rot[0][0]);
+                    vld3m_copy(&obj->log_ls[obj->log_sz-1].rot[0][0], &obj->rot[0][0]);
                 }
             }
         }
@@ -521,7 +521,7 @@ inline u8_t trcctrl_varot_update(s_trcctrl_varot *self, s_trcobj *obj)
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_init_(void **data, void *config)
+inline t_u8 trcctrl_varot_init_(void **data, void *config)
 {
     *data = (s_trcctrl_varot*) malloc(sizeof(s_trcctrl_varot));
 
@@ -531,7 +531,7 @@ inline u8_t trcctrl_varot_init_(void **data, void *config)
     return trcctrl_varot_init(ctrl, *attr);
 }
 
-inline u8_t trcctrl_varot_free_(void **data)
+inline t_u8 trcctrl_varot_free_(void **data)
 {
     s_trcctrl_varot *ctrl = (s_trcctrl_varot*) *data;
     free(ctrl);
@@ -539,7 +539,7 @@ inline u8_t trcctrl_varot_free_(void **data)
     return 0x00;
 }
 
-inline u8_t trcctrl_varot_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_varot_save_(void *data, void *config, t_u8 **v_file)
 {
     s_trcctrl_varot *ctrl = (s_trcctrl_varot*) data;
     s_trcctrl_varot_attr *attr = (s_trcctrl_varot_attr*) config;
@@ -547,7 +547,7 @@ inline u8_t trcctrl_varot_save_(void *data, void *config, u8_t **v_file)
     return trcctrl_varot_save(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_varot_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcctrl_varot_load_(void *data, void *config, t_u8 **v_file)
 {
     s_trcctrl_varot *ctrl = (s_trcctrl_varot*) data;
     s_trcctrl_varot_attr *attr = (s_trcctrl_varot_attr*) config;
@@ -555,7 +555,7 @@ inline u8_t trcctrl_varot_load_(void *data, void *config, u8_t **v_file)
     return trcctrl_varot_load(ctrl, attr, v_file);
 }
 
-inline u8_t trcctrl_varot_reset_(void *data, void *obj)
+inline t_u8 trcctrl_varot_reset_(void *data, void *obj)
 {
     s_trcctrl_varot *ctrl = (s_trcctrl_varot*) data;
     s_trcobj *obj_ = (s_trcobj*) obj;
@@ -563,7 +563,7 @@ inline u8_t trcctrl_varot_reset_(void *data, void *obj)
     return trcctrl_varot_reset(ctrl, obj_);
 }
 
-inline u8_t trcctrl_varot_update_(void *data, void *obj)
+inline t_u8 trcctrl_varot_update_(void *data, void *obj)
 {
     s_trcctrl_varot *ctrl = (s_trcctrl_varot*) data;
     s_trcobj *obj_ = (s_trcobj*) obj;

@@ -11,7 +11,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -192,14 +192,14 @@
 //	ImGui::Text("radius");
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[m]"); }
 //	ImGui::SameLine();
-//	f64_t radius_min = 0.0;
+//	t_f64 radius_min = 0.0;
 //	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 //	ImGui::DragScalar("##radius", ImGuiDataType_Double, &traj->radius, 1.0, &radius_min, NULL, "%.3f");
 //
 //	ImGui::Text("rate  ");
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 //	ImGui::SameLine();
-//	f64_t rate_deg = vl_deg(traj->rate);
+//	t_f64 rate_deg = vl_deg(traj->rate);
 //	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 //	ImGui::DragScalar("##rate", ImGuiDataType_Double, &rate_deg, 0.1, NULL, NULL, "%.9f");
 //	traj->rate = vl_rad(rate_deg);
@@ -214,7 +214,7 @@
 //	ImGui::Text("s_rate");
 //	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[deg/s]"); }
 //	ImGui::SameLine();
-//	f64_t s_rate_deg = vl_deg(traj->s_rate);
+//	t_f64 s_rate_deg = vl_deg(traj->s_rate);
 //	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
 //	ImGui::DragScalar("##s_rate", ImGuiDataType_Double, &s_rate_deg, 0.1, NULL, NULL, "%.9f");
 //	traj->s_rate = vl_rad(s_rate_deg);
@@ -247,14 +247,14 @@
 //
 //	if (fabs(traj->rate) > 1E-9)
 //	{
-//		f64_t time = 0.0;
-//		f64_t time_limit = vl_2pi / fabs(traj->rate);
-//		f64_t time_step = time_limit / 1000;
+//		t_f64 time = 0.0;
+//		t_f64 time_limit = vld_2pi / fabs(traj->rate);
+//		t_f64 time_step = time_limit / 1000;
 //		int time_iter = time_limit / time_step;
 //
-//		f64_t p0[3];
-//		f64_t p1[3];
-//		f64_t rot[9];
+//		t_f64 p0[3];
+//		t_f64 p1[3];
+//		t_f64 rot[9];
 //
 //		trctraj_orb_pos(traj, time, p0);
 //		trctraj_orb_pos(traj, time, p1);
@@ -317,7 +317,7 @@
 //	ImGui::Text("ellp  ");
 //	ImGui::SameLine();
 //	ImGui::SetNextItemWidth(-40);
-//	u8_t ellp_en = traj->ellp_en;
+//	t_u8 ellp_en = traj->ellp_en;
 //	s_trcellp *ellp_ref = traj->ellp;
 //	gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_ls, &traj->ellp);
 //	ImGui::SameLine(0.0, 0.0);
@@ -330,7 +330,7 @@
 //	    // if we turn off ellp support then convert degrees to m
 //	    if (traj->ellp_en == 0x00)
 //        {
-//            f64_t pos_ecef[3];
+//            t_f64 pos_ecef[3];
 //
 //            for (int i = 0; i < traj->pts_offset; ++i)
 //            {
@@ -342,7 +342,7 @@
 //	    // if we turn on ellp support then convert m to lla
 //	    if (traj->ellp_en != 0x00)
 //        {
-//            f64_t pos_lla[3];
+//            t_f64 pos_lla[3];
 //
 //            for (int i = 0; i < traj->pts_offset; ++i)
 //            {
@@ -369,7 +369,7 @@
 //
 //        ImGui::BeginGroup();
 //
-//        f64_t time_min = 0.0;
+//        t_f64 time_min = 0.0;
 //        ImGui::SetNextItemWidth(50);
 //        ImGui::DragScalar("##time", ImGuiDataType_Double, &traj->pts[i].time, 1.0, &time_min, NULL, "%.0f");
 //        ImGui::SameLine();
@@ -381,7 +381,7 @@
 //
 //        else
 //        {
-//            f64_t lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
+//            t_f64 lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
 //            imgui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 //
 //            traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
@@ -435,8 +435,8 @@
 //
 //inline void gui_traj_view_bz(s_trctraj_bz *self, const char* label, ImVec2 size, bool view_res)
 //{
-//	u32_t del_index = 0x00;
-//	u8_t del_req = 0x00;
+//	t_u32 del_index = 0x00;
+//	t_u8 del_req = 0x00;
 //
 //	s_view_data view_top;
 //	s_view_data view_bot;
@@ -624,7 +624,7 @@
 //		// draw grid TODO:: replace with rectangles coz they are drawn faster on GPUs
 //		{
 //			char axis_label[64];
-//			s32_t exp;
+//			t_s32 exp;
 //
 //			frexp(view_top.width / 10, &exp);
 //			float step_x = (float) ldexp(1.0, exp);
@@ -735,7 +735,7 @@
 //
 //                ImGui::Text("time");
 //				if (ImGui::IsItemHovered()) { ImGui::SetTooltip("[sec]"); }
-//                const f64_t time_min = 0.0;
+//                const t_f64 time_min = 0.0;
 //                ImGui::SameLine();
 //                ImGui::SetNextItemWidth(160);
 //                ImGui::DragScalar("##time", ImGuiDataType_Double, &self->pts[i].time,
@@ -767,7 +767,7 @@
 //
 //                else
 //                {
-////                    f64_t lla_deg[3] = {vl_deg(),
+////                    t_f64 lla_deg[3] = {vl_deg(),
 ////                                        vl_deg(self->pts[i].pos_p[1]),
 ////                                        self->pts[i].pos_p[2]};
 //
@@ -874,7 +874,7 @@
 //
 //			ImVec2 p;
 //
-//			f64_t vel[3];
+//			t_f64 vel[3];
 //
 //			trctraj_bz_vel(self, self->pts[i].time, vel);
 //
@@ -925,7 +925,7 @@
 //
 //		// draw trajectory
 //		// tmeporarily disable ellipsoid projection if enabled to cast to plane
-//		u8_t ellp_en_temp = self->ellp_en;
+//		t_u8 ellp_en_temp = self->ellp_en;
 //		self->ellp_en = 0x00;
 //
 //		s_trcobj *ref_temp = self->ref;
@@ -933,11 +933,11 @@
 //
 //		if (self->pts_offset > 0x01)
 //		{
-//			f64_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
-//			f64_t time = self->pts[0].time;
+//			t_f64 time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
+//			t_f64 time = self->pts[0].time;
 //
-//			f64_t p0[3];
-//			f64_t p1[3];
+//			t_f64 p0[3];
+//			t_f64 p1[3];
 //
 //			for (int i = 0; i < 1000; ++i)
 //			{
@@ -1000,11 +1000,11 @@
 ////		// heading
 ////		if (self->pts_offset > 0x01)
 ////		{
-////			f64_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
-////			f64_t time = self->pts[0].time;
+////			t_f64 time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
+////			t_f64 time = self->pts[0].time;
 ////
-////			f64_t p0[3];
-////			f64_t r0[9];
+////			t_f64 p0[3];
+////			t_f64 r0[9];
 ////
 ////			for (int i = 0; i < 100; ++i)
 ////			{
@@ -1029,11 +1029,11 @@
 ////		// velocity
 ////		if (self->pts_offset > 0x01)
 ////		{
-////			f64_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
-////			f64_t time = self->pts[0].time;
+////			t_f64 time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 100.0;
+////			t_f64 time = self->pts[0].time;
 ////
-////			f64_t p0[3];
-////			f64_t v0[3];
+////			t_f64 p0[3];
+////			t_f64 v0[3];
 ////
 ////			for (int i = 0; i < 100; ++i)
 ////			{
@@ -1203,7 +1203,7 @@
 //		{
 //			ImVec2 view_pt = inv_transform(&view_bot, io.MousePos);
 //
-//			f64_t pt_pos[3];
+//			t_f64 pt_pos[3];
 //
 //			trctraj_bz_pos(self, view_pt.x, pt_pos);
 //
@@ -1242,7 +1242,7 @@
 //		// draw grid TODO:: replace with rectangles coz they are drawn faster on GPUs
 //		{
 //			char axis_label[64];
-//			s32_t exp;
+//			t_s32 exp;
 //
 //			frexp(view_bot.width / 10, &exp);
 //			float step_x = (float) ldexp(1.0, exp);
@@ -1335,16 +1335,16 @@
 //
 //		// draw trajectory
 //		// tmeporarily disable ellipsoid projection if enabled to cast to plane
-//		u8_t ellp_en_temp = self->ellp_en;
+//		t_u8 ellp_en_temp = self->ellp_en;
 //		self->ellp_en = 0x00;
 //
 //		if (self->pts_offset > 0x01)
 //		{
-//			f64_t time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
-//			f64_t time = self->pts[0].time;
+//			t_f64 time_step = (self->pts[self->pts_offset - 1].time - self->pts[0].time) / 1000.0;
+//			t_f64 time = self->pts[0].time;
 //
-//			f64_t p0[3];
-//			f64_t p1[3];
+//			t_f64 p0[3];
+//			t_f64 p1[3];
 //
 //			for (int i = 0; i < 1000; ++i)
 //			{
@@ -1423,7 +1423,7 @@
 ////
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) traj->eng);
+////	ImGui::Text("%08X", (t_u32) traj->eng);
 //
 //	ImGui::AlignTextToFramePadding();
 //	ImGui::Text("ref   ");
@@ -1436,7 +1436,7 @@
 //	ImGui::Text("ellp  ");
 //	ImGui::SameLine();
 //	ImGui::SetNextItemWidth(-40);
-//	u8_t ellp_en = traj->ellp_en;
+//	t_u8 ellp_en = traj->ellp_en;
 //	s_trcellp *ellp_ref = traj->ellp;
 //	gui_ellpsel("##ellp", traj->eng->ellp_offset, traj->eng->ellp_ls, &traj->ellp);
 //	ImGui::SameLine(0.0, 0.0);
@@ -1449,7 +1449,7 @@
 //		// if we turn off ellp support then convert degrees to m
 //		if (traj->ellp_en == 0x00)
 //		{
-//			f64_t pos_ecef[3];
+//			t_f64 pos_ecef[3];
 //
 //			for (int i = 0; i < traj->pts_offset; ++i)
 //			{
@@ -1461,7 +1461,7 @@
 //		// if we turn on ellp support then convert m to lla
 //		if (traj->ellp_en != 0x00)
 //		{
-//			f64_t pos_lla[3];
+//			t_f64 pos_lla[3];
 //
 //			for (int i = 0; i < traj->pts_offset; ++i)
 //			{
@@ -1488,7 +1488,7 @@
 //
 //		ImGui::BeginGroup();
 //
-//		f64_t time_min = 0.0;
+//		t_f64 time_min = 0.0;
 //		ImGui::SetNextItemWidth(50);
 //		ImGui::DragScalar("##time", ImGuiDataType_Double, &traj->pts[i].time, 1.0, &time_min, NULL, "%.0f");
 //		ImGui::SameLine();
@@ -1500,7 +1500,7 @@
 //
 //		else
 //		{
-//			f64_t lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
+//			t_f64 lla_deg[3] = {vl_deg(traj->pts[i].pos_p[0]), vl_deg(traj->pts[i].pos_p[1]), traj->pts[i].pos_p[2]};
 //			imgui_vec("##point", lla_deg, 0.001, NULL, NULL, "%.3f");
 //
 //			traj->pts[i].pos_p[0] = vl_rad(lla_deg[0]);
@@ -1556,8 +1556,8 @@
 //{
 //	s_trctraj_bz *self = (s_trctraj_bz*) traj->data;
 //
-//	u32_t del_index = 0x00;
-//	u8_t del_req = 0x00;
+//	t_u32 del_index = 0x00;
+//	t_u8 del_req = 0x00;
 //
 //	s_view_data view_top;
 //	s_view_data view_bot;
@@ -1597,7 +1597,7 @@
 ////
 ////	ImGui::Text("eng   ");
 ////	ImGui::SameLine();
-////	ImGui::Text("%08X", (u32_t) traj->eng);
+////	ImGui::Text("%08X", (t_u32) traj->eng);
 //
 //	ImGui::Dummy(ImVec2(0, 5));
 //	ImGui::Separator();
@@ -1709,14 +1709,14 @@
 //
 //			for (int i = 0; i < traj->data_sz; ++i)
 //			{
-//				f64_t time = 0.0;
-//				f64_t time_limit = 3600*12;
-//				f64_t time_step = time_limit / 64;
+//				t_f64 time = 0.0;
+//				t_f64 time_limit = 3600*12;
+//				t_f64 time_step = time_limit / 64;
 //				int time_iter = time_limit / time_step;
 //
-//				f64_t p0[3];
-//				f64_t p1[3];
-//				f64_t rot[9];
+//				t_f64 p0[3];
+//				t_f64 p1[3];
+//				t_f64 rot[9];
 //
 //				trctraj_navsat_pos_local(traj, time, p0, i);
 //				trctraj_navsat_pos_local(traj, time, p1, i);

@@ -32,7 +32,7 @@ include_directories(./lib/sftlgui/include/)
 
 if (UNIX)
 
-    file(GLOB src_main      ./src/* ./src/unix/*)
+    file(GLOB src_main      ./src/* ./src/linux/*)
 
 endif (UNIX)
 

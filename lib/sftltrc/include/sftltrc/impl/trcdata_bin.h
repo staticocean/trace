@@ -31,7 +31,7 @@ typedef struct trcdata_bin_init
 	
 } 	s_trcdata_bin_init;
 
-inline u8_t trcdata_bin_init(s_trcdata_bin *self, s_trcdata_bin_init attr)
+inline t_u8 trcdata_bin_init(s_trcdata_bin *self, s_trcdata_bin_init attr)
 {
 	sprintf(self->file_name, "file not selected");
 	
@@ -43,7 +43,7 @@ inline u8_t trcdata_bin_init(s_trcdata_bin *self, s_trcdata_bin_init attr)
 	return 0x00;
 }
 
-inline u8_t trcdata_bin_save(s_trcdata_bin *self, s_trcdata_bin_init *attr, u8_t **v_file)
+inline t_u8 trcdata_bin_save(s_trcdata_bin *self, s_trcdata_bin_init *attr, t_u8 **v_file)
 {
 	s_trcdata_ram_init data_ram_attr = {
 			.eng = attr->eng,
@@ -55,7 +55,7 @@ inline u8_t trcdata_bin_save(s_trcdata_bin *self, s_trcdata_bin_init *attr, u8_t
 	return 0x00;
 }
 
-inline u8_t trcdata_bin_load(s_trcdata_bin *self, s_trcdata_bin_init *attr, u8_t **v_file)
+inline t_u8 trcdata_bin_load(s_trcdata_bin *self, s_trcdata_bin_init *attr, t_u8 **v_file)
 {
 	s_trcdata_ram_init data_ram_attr = {
 			.eng = attr->eng,
@@ -69,30 +69,30 @@ inline u8_t trcdata_bin_load(s_trcdata_bin *self, s_trcdata_bin_init *attr, u8_t
 
 typedef struct __attribute__((packed))  trcdata_bin_block
 {
-	f64_t time;
+	t_f64 time;
 	
-	f64_t heading;
-	f64_t pitch;
-	f64_t roll;
+	t_f64 heading;
+	t_f64 pitch;
+	t_f64 roll;
 	
-	f64_t lla_pos[3];
-	f64_t lla_vel[3];
-	f64_t lla_acc[3];
+	t_f64 lla_pos[3];
+	t_f64 lla_vel[3];
+	t_f64 lla_acc[3];
 	
-	f64_t ecef_pos[3];
-	f64_t ecef_vel[3];
-	f64_t ecef_acc[3];
+	t_f64 ecef_pos[3];
+	t_f64 ecef_vel[3];
+	t_f64 ecef_acc[3];
 	
-//	f64_t ref_pos[3];
-//	f64_t ref_vel[3];
-//	f64_t ref_acc[3];
+//	t_f64 ref_pos[3];
+//	t_f64 ref_vel[3];
+//	t_f64 ref_acc[3];
 	
-	f64_t tied_acc[3];
-	f64_t tied_grs[3];
+	t_f64 tied_acc[3];
+	t_f64 tied_grs[3];
 	
 }	s_trcdata_bin_block;
 
-inline u8_t trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
+inline t_u8 trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
 {
 	s_trcdata_ram *ram = &self->ram;
 	
@@ -100,10 +100,10 @@ inline u8_t trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
 	
 	FILE *file_data = fopen(self->file_name, "wb+");
 	
-	u32_t i;
+	t_u32 i;
 	s_trcdata_bin_block block;
 	
-	for (s32_t i = 0; i < self->ram.offset; ++i)
+	for (t_s32 i = 0; i < self->ram.offset; ++i)
 	{
 		block.time = self->ram.time[i];
 		
@@ -111,20 +111,20 @@ inline u8_t trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
 		block.pitch   = self->ram.pitch[i];
 		block.roll    = self->ram.roll[i];
 		
-		vl3v_copy(block.lla_pos, &self->ram.lla_pos[i*3]);
-		vl3v_copy(block.lla_vel, &self->ram.lla_vel[i*3]);
-		vl3v_copy(block.lla_acc, &self->ram.lla_acc[i*3]);
+		vld3v_copy(block.lla_pos, &self->ram.lla_pos[i*3]);
+		vld3v_copy(block.lla_vel, &self->ram.lla_vel[i*3]);
+		vld3v_copy(block.lla_acc, &self->ram.lla_acc[i*3]);
 		
-		vl3v_copy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
-		vl3v_copy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
-		vl3v_copy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
+		vld3v_copy(block.ecef_pos, &self->ram.ecef_pos[i*3]);
+		vld3v_copy(block.ecef_vel, &self->ram.ecef_vel[i*3]);
+		vld3v_copy(block.ecef_acc, &self->ram.ecef_acc[i*3]);
 //
 //		vl_vcopy(block.ref_pos, &self->ram.[i*3]);
 //		vl_vcopy(block.ref_vel, &self->ram.lla_vel[i*3]);
 //		vl_vcopy(block.ref_acc, &self->ram.lla_acc[i*3]);
 		
-		vl3v_copy(block.tied_acc, &self->ram.tied_acc[i*3]);
-		vl3v_copy(block.tied_grs, &self->ram.tied_grs[i*3]);
+		vld3v_copy(block.tied_acc, &self->ram.tied_acc[i*3]);
+		vld3v_copy(block.tied_grs, &self->ram.tied_grs[i*3]);
 		
 		fwrite(&block, sizeof(s_trcdata_bin_block), 1, file_data);
 	}
@@ -134,7 +134,7 @@ inline u8_t trcdata_bin_render(s_trcdata_bin *self, s_trcobj *obj)
 	return 0x00;
 }
 
-inline u8_t trcdata_bin_reset(s_trcdata_bin *self, s_trcobj *obj)
+inline t_u8 trcdata_bin_reset(s_trcdata_bin *self, s_trcobj *obj)
 {
 	trcdata_ram_reset(&self->ram, obj);
 	
@@ -143,7 +143,7 @@ inline u8_t trcdata_bin_reset(s_trcdata_bin *self, s_trcobj *obj)
 
 //------------------------------------------------------------------------------
 
-inline u8_t trcdata_bin_init_ (void **data, void *config)
+inline t_u8 trcdata_bin_init_ (void **data, void *config)
 {
 	*data = (s_trcdata_mat*) malloc(sizeof(s_trcdata_bin));
 	
@@ -153,19 +153,19 @@ inline u8_t trcdata_bin_init_ (void **data, void *config)
 	return trcdata_bin_init(data_, *data_init);
 }
 
-inline u8_t trcdata_bin_free_ (void **data)
+inline t_u8 trcdata_bin_free_ (void **data)
 {
 	s_trcdata_bin *data_ = (s_trcdata_bin*) *data;
 	
 	return 0x00;
 }
 
-inline u8_t trcdata_bin_save_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcdata_bin_save_(void *data, void *config, t_u8 **v_file)
 {
 	return 0x00;
 }
 
-inline u8_t trcdata_bin_load_(void *data, void *config, u8_t **v_file)
+inline t_u8 trcdata_bin_load_(void *data, void *config, t_u8 **v_file)
 {
 	s_trcdata_bin *data_ = (s_trcdata_bin*) data;
 	s_trcdata_bin_init *attr = (s_trcdata_bin_init*) config;
@@ -173,7 +173,7 @@ inline u8_t trcdata_bin_load_(void *data, void *config, u8_t **v_file)
 	return trcdata_bin_load(data_, attr, v_file);
 }
 
-inline u8_t trcdata_bin_render_(void *data, void *obj)
+inline t_u8 trcdata_bin_render_(void *data, void *obj)
 {
 	s_trcdata_bin *data_ = (s_trcdata_bin*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;
@@ -181,7 +181,7 @@ inline u8_t trcdata_bin_render_(void *data, void *obj)
 	return trcdata_bin_render(data_, obj_);
 }
 
-inline u8_t trcdata_bin_reset_(void *data, void *obj)
+inline t_u8 trcdata_bin_reset_(void *data, void *obj)
 {
 	s_trcdata_bin *data_ = (s_trcdata_bin*) data;
 	s_trcobj *obj_ = (s_trcobj*) obj;

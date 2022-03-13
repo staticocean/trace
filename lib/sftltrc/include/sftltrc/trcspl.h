@@ -22,7 +22,7 @@
 typedef struct trcspl_ptr
 {
 	void			*ptr;
-	u64_t 			guid;
+	t_u64 			guid;
 
 }	s_trcspl_ptr;
 
@@ -30,14 +30,14 @@ typedef struct trcspl_ptr
 
 typedef struct trcspl
 {
-	s32_t 			ptr_sz;
+	t_s32 			ptr_sz;
 	s_trcspl_ptr 	ptr_ls[TRCSPL_PTR_SZ];
 	
 }	s_trcspl;
 
 typedef struct trcspl_attr
 {
-	u32_t 			temp;
+	t_u32 			temp;
 
 }	s_trcspl_attr;
 

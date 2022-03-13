@@ -9,7 +9,7 @@
 
 #include <nfd.h>
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -27,7 +27,7 @@ void gui_sel_obj (char *label, s_trceng *eng, s_trcobj **obj)
     // to prevent corrupted data accessing wrong mem address
     // first check if an object belongs to the list
 
-    u8_t obj_exists = 0x00;
+    t_u8 obj_exists = 0x00;
 
     for (int i = 0; i < eng->obj_sz; ++i)
     {
@@ -135,7 +135,7 @@ void gui_sel_proc (char *label, s_trceng *eng, s_trcproc **proc)
 
 //------------------------------------------------------------------------------
 
-void gui_file_open (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
+void gui_file_open (char *file_path, t_u32 filter_sz, nfdfilteritem_t *filter_ls, float width = -1)
 {
 	ImGui::PushID(file_path);
 	
@@ -175,7 +175,7 @@ void gui_file_open (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls
 
 //------------------------------------------------------------------------------
 
-void gui_file_save (char *file_path, u32_t filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
+void gui_file_save (char *file_path, t_u32 filter_sz, nfdfilteritem_t *filter_ls, int width = -1)
 {
 	ImGui::PushID(file_path);
 	

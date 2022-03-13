@@ -7,7 +7,7 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
@@ -55,7 +55,7 @@ void gui_conf_view (s_gui_conf *conf)
 //
 //        if (ImGui::BeginChild("##scroll_view"))
 //        {
-//            static u32_t default_proc_euler = crc32_iso_str("default_proc_euler");
+//            static t_u32 default_proc_euler = crc32_iso_str("default_proc_euler");
 //
 //            if (conf->eng->proc.hash == default_proc_euler)
 //            {

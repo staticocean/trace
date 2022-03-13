@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vl.h>
+#include <sftlstd/vld3.h>
 #include <sftlstd/crc.h>
 
 #include <sftltrc/trcspl.h>
@@ -24,60 +24,60 @@
 
 typedef struct trceng
 {
-	f64_t 				time[2];
+	t_f64 				time[2];
 	
-	f64_t 				time_limit;
-	f64_t 				time_step;
-	u32_t 				time_iter;
+	t_f64 				time_limit;
+	t_f64 				time_step;
+	t_u32 				time_iter;
 	
 	s_trcproc 			*proc;
 	
-	u32_t 				update_count;
-	u32_t 				proc_count;
+	t_u32 				update_count;
+	t_u32 				proc_count;
 
 	s_trcspl 			intf_spl;
 	
-	s32_t 				proc_sz;
+	t_s32 				proc_sz;
 	s_trcproc 			**proc_ls;
 	
-	s32_t 				refs_sz;
+	t_s32 				refs_sz;
 	s_trcrefs			**refs_ls;
 	
-	s32_t  				obj_sz;
+	t_s32  				obj_sz;
 	s_trcobj 			**obj_ls;
 	
-	s32_t 				traj_sz;
+	t_s32 				traj_sz;
 	s_trctraj			**traj_ls;
 	
-	s32_t 				ctrl_sz;
+	t_s32 				ctrl_sz;
 	s_trcctrl			**ctrl_ls;
 	
-	s32_t 				data_sz;
+	t_s32 				data_sz;
 	s_trcdata			**data_ls;
 	
-	s32_t 				proc_intf_sz;
+	t_s32 				proc_intf_sz;
 	s_trcproc_intf		**proc_intf_ls;
 	
-	s32_t 				refs_intf_sz;
+	t_s32 				refs_intf_sz;
 	s_trcrefs_intf 		**refs_intf_ls;
 	
-	s32_t 				obj_intf_sz;
+	t_s32 				obj_intf_sz;
 	s_trcobj_intf		**obj_intf_ls;
 	
-	s32_t 				traj_intf_sz;
+	t_s32 				traj_intf_sz;
 	s_trctraj_intf 		**traj_intf_ls;
 	
-	s32_t 				ctrl_intf_sz;
+	t_s32 				ctrl_intf_sz;
 	s_trcctrl_intf		**ctrl_intf_ls;
 	
-	s32_t 				data_intf_sz;
+	t_s32 				data_intf_sz;
 	s_trcdata_intf		**data_intf_ls;
 
 }	s_trceng;
 
 typedef struct trceng_attr
 {
-	u8_t 				*stack;
+	t_u8 				*stack;
 	
 	s_trcproc 			*proc;
 	
@@ -95,14 +95,14 @@ typedef struct trceng_attr
 	s_trcctrl_intf 		**ctrl_intf_ls;
 	s_trcdata_intf 		**data_intf_ls;
 	
-	f64_t 				time_limit;
-	f64_t 				time_step;
+	t_f64 				time_limit;
+	t_f64 				time_step;
 	
 }	s_trceng_attr;
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_init (s_trceng *eng, s_trceng_attr *attr)
+t_s8 trceng_init (s_trceng *eng, s_trceng_attr *attr)
 {
 	eng->time_limit 	= attr->time_limit;
 	eng->time_step  	= attr->time_step;
@@ -158,10 +158,10 @@ s8_t trceng_init (s_trceng *eng, s_trceng_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s32_t trceng_obj_index (s_trceng *eng, s_trcobj *obj)
+t_s32 trceng_obj_index (s_trceng *eng, s_trcobj *obj)
 {
-	return (s32_t) (((sp_t) eng->obj_ls - (sp_t) obj)
-	/ (sp_t) sizeof(s_trcobj));
+	return (t_s32) (((t_sp) eng->obj_ls - (t_sp) obj)
+	/ (t_sp) sizeof(s_trcobj));
 }
 
 //------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ void trceng_print (s_trceng *eng)
 	printf("obj_sz %d \r\n", eng->obj_sz);
 	printf("obj_ls \r\n");
 	
-	for (s32_t i = 0; i < eng->obj_sz; ++i)
+	for (t_s32 i = 0; i < eng->obj_sz; ++i)
 	{
 		printf("%s \r\n", eng->obj_ls[i]->name);
 	}
@@ -179,7 +179,7 @@ void trceng_print (s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_proc_intf (s_trceng *eng, s_trcproc_intf *proc_intf)
+t_s8 trceng_add_proc_intf (s_trceng *eng, s_trcproc_intf *proc_intf)
 {
 	eng->proc_intf_ls[eng->proc_intf_sz] = proc_intf;
 	eng->proc_intf_sz++;
@@ -189,7 +189,7 @@ s8_t trceng_add_proc_intf (s_trceng *eng, s_trcproc_intf *proc_intf)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_refs_intf (s_trceng *eng, s_trcrefs_intf *refs_intf)
+t_s8 trceng_add_refs_intf (s_trceng *eng, s_trcrefs_intf *refs_intf)
 {
 	eng->refs_intf_ls[eng->refs_intf_sz] = refs_intf;
 	eng->refs_intf_sz++;
@@ -199,7 +199,7 @@ s8_t trceng_add_refs_intf (s_trceng *eng, s_trcrefs_intf *refs_intf)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_obj_intf (s_trceng *eng, s_trcobj_intf *obj_intf)
+t_s8 trceng_add_obj_intf (s_trceng *eng, s_trcobj_intf *obj_intf)
 {
 	eng->obj_intf_ls[eng->obj_intf_sz] = obj_intf;
 	eng->obj_intf_sz++;
@@ -209,7 +209,7 @@ s8_t trceng_add_obj_intf (s_trceng *eng, s_trcobj_intf *obj_intf)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_traj_intf (s_trceng *eng, s_trctraj_intf *traj_intf)
+t_s8 trceng_add_traj_intf (s_trceng *eng, s_trctraj_intf *traj_intf)
 {
 	eng->traj_intf_ls[eng->traj_intf_sz] = traj_intf;
 	eng->traj_intf_sz++;
@@ -219,7 +219,7 @@ s8_t trceng_add_traj_intf (s_trceng *eng, s_trctraj_intf *traj_intf)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_ctrl_intf (s_trceng *eng, s_trcctrl_intf *ctrl_intf)
+t_s8 trceng_add_ctrl_intf (s_trceng *eng, s_trcctrl_intf *ctrl_intf)
 {
 	eng->ctrl_intf_ls[eng->ctrl_intf_sz] = ctrl_intf;
 	eng->ctrl_intf_sz++;
@@ -229,7 +229,7 @@ s8_t trceng_add_ctrl_intf (s_trceng *eng, s_trcctrl_intf *ctrl_intf)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_add_data_intf (s_trceng *eng, s_trcdata_intf *data_intf)
+t_s8 trceng_add_data_intf (s_trceng *eng, s_trcdata_intf *data_intf)
 {
 	eng->data_intf_ls[eng->data_intf_sz] = data_intf;
 	eng->data_intf_sz++;
@@ -317,52 +317,52 @@ s_trcdata* trceng_add_data (s_trceng *eng,
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_save (s_trceng *eng, char *file_name)
+t_s8 trceng_save (s_trceng *eng, char *file_name)
 {
-	u8_t *__v_file__ = (u8_t*) malloc(256*1024*1024);
-	u8_t *v_file = __v_file__;
+	t_u8 *__v_file__ = (t_u8*) malloc(256*1024*1024);
+	t_u8 *v_file = __v_file__;
 	
 	s_trceng *v_self = (s_trceng*) v_file;
 	v_file += sizeof(s_trceng);
 	
 	*v_self = *eng;
 	
-	for (s32_t i = 0; i < eng->proc_sz; ++i)
+	for (t_s32 i = 0; i < eng->proc_sz; ++i)
 	{
 		trcproc_save(eng->proc_ls[i], &eng->intf_spl, &v_file);
 	}
 	
-	for (s32_t i = 0; i < eng->refs_sz; ++i)
+	for (t_s32 i = 0; i < eng->refs_sz; ++i)
 	{
 		trcrefs_save(eng->refs_ls[i], &eng->intf_spl, &v_file);
 	}
 	
-	for (s32_t i = 0; i < eng->obj_sz; ++i)
+	for (t_s32 i = 0; i < eng->obj_sz; ++i)
 	{
 		trcobj_save(eng->obj_ls[i], &eng->intf_spl, &v_file);
 	}
 	
-	for (s32_t i = 0; i < eng->traj_sz; ++i)
+	for (t_s32 i = 0; i < eng->traj_sz; ++i)
 	{
 		trctraj_save(eng->traj_ls[i], &eng->intf_spl, &v_file);
 	}
 	
-	for (s32_t i = 0; i < eng->ctrl_sz; ++i)
+	for (t_s32 i = 0; i < eng->ctrl_sz; ++i)
 	{
 		trcctrl_save(eng->ctrl_ls[i], &eng->intf_spl, &v_file);
 	}
 	
-	for (s32_t i = 0; i < eng->data_sz; ++i)
+	for (t_s32 i = 0; i < eng->data_sz; ++i)
 	{
 		trcdata_save(eng->data_ls[i], &eng->intf_spl, &v_file);
 	}
 	
 	// must be after we did all the allocation on v_file
 	// do not move up
-	u32_t file_size = v_file - __v_file__;
+	t_u32 file_size = v_file - __v_file__;
 	
 	FILE *file_handle = fopen(file_name, "wb+");
-	fwrite(&file_size, 1, sizeof(u32_t), file_handle);
+	fwrite(&file_size, 1, sizeof(t_u32), file_handle);
 	fwrite(__v_file__, 1, v_file - __v_file__, file_handle);
 	fclose(file_handle);
 	
@@ -373,7 +373,7 @@ s8_t trceng_save (s_trceng *eng, char *file_name)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_load (s_trceng *eng, char *file_name)
+t_s8 trceng_load (s_trceng *eng, char *file_name)
 {
 //	FILE *file_handle = fopen(file_name, "rb");
 //
@@ -381,7 +381,7 @@ s8_t trceng_load (s_trceng *eng, char *file_name)
 //	{
 //		eng->proc.free(&self->proc.data);
 //
-//		for (s32_t i = 0; i < self->obj_sz; ++i)
+//		for (t_s32 i = 0; i < self->obj_sz; ++i)
 //		{
 //			if (self->obj_ls[i].log_ls != NULL)
 //			{
@@ -389,27 +389,27 @@ s8_t trceng_load (s_trceng *eng, char *file_name)
 //				eng->obj_ls[i].log_ls = NULL;
 //			}
 //
-//			for (s32_t j = 0; j < self->obj_ls[i].traj_sz; ++j)
+//			for (t_s32 j = 0; j < self->obj_ls[i].traj_sz; ++j)
 //			{
 //				eng->obj_ls[i].traj_ls[j].free(&self->obj_ls[i].traj_ls[j].data);
 //			}
 //
-//			for (s32_t j = 0; j < self->obj_ls[i].ctrl_sz; ++j)
+//			for (t_s32 j = 0; j < self->obj_ls[i].ctrl_sz; ++j)
 //			{
 //				eng->obj_ls[i].ctrl_ls[j].free(&self->obj_ls[i].ctrl_ls[j].data);
 //			}
 //
-//			for (s32_t j = 0; j < self->obj_ls[i].data_sz; ++j)
+//			for (t_s32 j = 0; j < self->obj_ls[i].data_sz; ++j)
 //			{
 //				eng->obj_ls[i].data_ls[j].free(&self->obj_ls[i].data_ls[j].data);
 //			}
 //		}
 //
-//		u8_t *__v_file__ = (u8_t*) malloc(256*1024*1024);
-//		u8_t *v_file = __v_file__;
-//		u32_t file_size;
+//		t_u8 *__v_file__ = (t_u8*) malloc(256*1024*1024);
+//		t_u8 *v_file = __v_file__;
+//		t_u32 file_size;
 //
-//		fread(&file_size, 1, sizeof(u32_t), file_handle);
+//		fread(&file_size, 1, sizeof(t_u32), file_handle);
 //		fread(__v_file__, 1, file_size, file_handle);
 //		fclose(file_handle);
 //
@@ -424,7 +424,7 @@ s8_t trceng_load (s_trceng *eng, char *file_name)
 //
 //		trcproc_load(&self->proc, self, &v_file);
 //
-//		for (s32_t i = 0; i < self->obj_sz; ++i)
+//		for (t_s32 i = 0; i < self->obj_sz; ++i)
 //		{
 //			s_trcobj *obj = &self->obj_ls[i];
 //
@@ -444,7 +444,7 @@ s8_t trceng_load (s_trceng *eng, char *file_name)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_reset (s_trceng *eng)
+t_s8 trceng_reset (s_trceng *eng)
 {
 //	self->time[0] = 0.0;
 //	self->time[1] = 0.0;
@@ -452,7 +452,7 @@ s8_t trceng_reset (s_trceng *eng)
 //	self->update_count = 0x01;
 //	self->proc_count   = 0x00;
 //
-//	for (s32_t i = 0; i < self->obj_sz; ++i)
+//	for (t_s32 i = 0; i < self->obj_sz; ++i)
 //	{
 //		s_trcobj *obj = &self->obj_ls[i];
 //
@@ -464,8 +464,8 @@ s8_t trceng_reset (s_trceng *eng)
 //		// remove all forces coz they are additive
 //		// thus all the plugins will add and never set
 //		// so we need to zero it manually
-//		vl3_vset(obj->pos_force, 0.0);
-//		vl3_vset(obj->rot_force, 0.0);
+//		vld3v_set(obj->pos_force, 0.0);
+//		vld3v_set(obj->rot_force, 0.0);
 //
 //		if (obj->log_ls != NULL)
 //		{
@@ -473,17 +473,17 @@ s8_t trceng_reset (s_trceng *eng)
 //			obj->log_ls = NULL;
 //		}
 //
-//		for (s32_t j = 0; j < obj->traj_sz; ++j)
+//		for (t_s32 j = 0; j < obj->traj_sz; ++j)
 //		{
 //			obj->traj_ls[j].compile(obj->traj_ls[j].data);
 //		}
 //
-//		for (s32_t j = 0; j < obj->ctrl_sz; ++j)
+//		for (t_s32 j = 0; j < obj->ctrl_sz; ++j)
 //		{
 //			obj->ctrl_ls[j].reset(obj->ctrl_ls[j].data, obj);
 //		}
 //
-//		for (s32_t j = 0; j < obj->data_sz; ++j)
+//		for (t_s32 j = 0; j < obj->data_sz; ++j)
 //		{
 //			obj->data_ls[j].reset(obj->data_ls[j].data, obj);
 //		}
@@ -494,38 +494,38 @@ s8_t trceng_reset (s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_update(s_trceng *self, f64_t d_time)
+t_s8 trceng_update(s_trceng *self, t_f64 d_time)
 {
 //	self->time[0] += d_time;
 //	self->time[1]  = d_time;
 //
-//	for (s32_t i = 0; i < self->obj_sz; ++i)
+//	for (t_s32 i = 0; i < self->obj_sz; ++i)
 //	{
 //		s_trcobj *obj = &self->obj_ls[i];
 //
 //		// remove all forces coz they are additive
 //		// thus all the plugins will add and never set
 //		// so we need to zero it manually
-//		vl3_vset(obj->pos_force, 0.0);
-//		vl3_vset(obj->rot_force, 0.0);
+//		vld3v_set(obj->pos_force, 0.0);
+//		vld3v_set(obj->rot_force, 0.0);
 //
-//		for (s32_t j = 0; j < obj->ctrl_sz; ++j)
+//		for (t_s32 j = 0; j < obj->ctrl_sz; ++j)
 //		{
 //			obj->ctrl_ls[j].update(obj->ctrl_ls[j].data, obj);
 //		}
 //	}
 //
-////	for (s32_t i = 0; i < self->obj_sz; ++i)
+////	for (t_s32 i = 0; i < self->obj_sz; ++i)
 ////	{
-////	    vl3v_subv(&obj->pos[1][0], &obj->pos[0][0], &obj->log_ls[obj->log_sz-1] = &self->obj_ls[i];
+////	    vld3v_subv(&obj->pos[1][0], &obj->pos[0][0], &obj->log_ls[obj->log_sz-1] = &self->obj_ls[i];
 ////
 ////	    // remove all forces coz they are additive
 ////	    // thus all the plugins will add and never set
 ////	    // so we need to zero it manually
-////	    vl3_vset(obj->pos_force, 0.0);
-////	    vl3_vset(obj->rot_force, 0.0);
+////	    vld3v_set(obj->pos_force, 0.0);
+////	    vld3v_set(obj->rot_force, 0.0);
 ////
-////	    for (s32_t j = 0; j < obj->ctrl_sz; ++j)
+////	    for (t_s32 j = 0; j < obj->ctrl_sz; ++j)
 ////	    {
 ////	        obj->ctrl_ls[j].update(obj->ctrl_ls[j].data, obj);
 ////	    }
@@ -539,9 +539,9 @@ s8_t trceng_update(s_trceng *self, f64_t d_time)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_proc (s_trceng *eng)
+t_s8 trceng_proc (s_trceng *eng)
 {
-//	for (s32_t i = 0; i < self->obj_sz; ++i)
+//	for (t_s32 i = 0; i < self->obj_sz; ++i)
 //	{
 //		s_trcobj *obj = &eng->obj_ls[i];
 //		eng->proc.update(eng->proc.data, obj, self->proc_count);
@@ -554,13 +554,13 @@ s8_t trceng_proc (s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_render (s_trceng *eng)
+t_s8 trceng_render (s_trceng *eng)
 {
-//	for (s32_t i = 0; i < eng->obj_sz; ++i)
+//	for (t_s32 i = 0; i < eng->obj_sz; ++i)
 //	{
 //		s_trcobj *obj = &eng->obj_ls[i];
 //
-//		for (s32_t j = 0; j < obj->data_sz; ++j)
+//		for (t_s32 j = 0; j < obj->data_sz; ++j)
 //		{
 //			obj->data_ls[j].render(obj->data_ls[j].data, obj);
 //		}
@@ -571,9 +571,9 @@ s8_t trceng_render (s_trceng *eng)
 
 //------------------------------------------------------------------------------
 
-s8_t trceng_log (s_trceng *eng)
+t_s8 trceng_log (s_trceng *eng)
 {
-//	for (s32_t i = 0; i < self->obj_sz; ++i)
+//	for (t_s32 i = 0; i < self->obj_sz; ++i)
 //	{
 //		s_trcobj *obj = &eng->obj_ls[i];
 //		s_trcobj_data *data = &obj->log_ls[obj->log_sz];
@@ -581,16 +581,16 @@ s8_t trceng_log (s_trceng *eng)
 //		data->time[0] = eng->time[0];
 //		data->time[1] = eng->time[1];
 //
-//		vl3m_copy(&data->rot[0][0], &obj->rot[0][0]);
-//		vl3m_copy(&data->rot[1][0], &obj->rot[1][0]);
-//		vl3m_copy(&data->rot[2][0], &obj->rot[2][0]);
+//		vld3m_copy(&data->rot[0][0], &obj->rot[0][0]);
+//		vld3m_copy(&data->rot[1][0], &obj->rot[1][0]);
+//		vld3m_copy(&data->rot[2][0], &obj->rot[2][0]);
 //
-//		vl3m_copy(&data->pos[0][0], &obj->pos[0][0]);
-//		vl3m_copy(&data->pos[1][0], &obj->pos[1][0]);
-//		vl3m_copy(&data->pos[2][0], &obj->pos[2][0]);
+//		vld3m_copy(&data->pos[0][0], &obj->pos[0][0]);
+//		vld3m_copy(&data->pos[1][0], &obj->pos[1][0]);
+//		vld3m_copy(&data->pos[2][0], &obj->pos[2][0]);
 //
-//		vl3v_copy(data->rot_force, obj->rot_force);
-//		vl3v_copy(data->pos_force, obj->pos_force);
+//		vld3v_copy(data->rot_force, obj->rot_force);
+//		vld3v_copy(data->pos_force, obj->pos_force);
 //
 //		obj->log_sz++;
 //	}

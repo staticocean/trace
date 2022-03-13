@@ -21,14 +21,14 @@ typedef struct trcproc_intf
 {
 	char 				desc[32];
 	
-	s32_t				data_sz;
-	s32_t 				attr_sz;
+	t_s32				data_sz;
+	t_s32 				attr_sz;
 	
-	s8_t (*init) 		(void *proc, void *attr);
-	s8_t (*free) 		(void *proc);
-	s8_t (*save) 		(void *proc, s_trcspl *spl, u8_t **v_file);
-	s8_t (*load) 		(void *proc, s_trcspl *spl, u8_t **v_file);
-	s8_t (*update) 		(void *proc, s_trcobj *obj, s32_t offset);
+	t_s8 (*init) 		(void *proc, void *attr);
+	t_s8 (*free) 		(void *proc);
+	t_s8 (*save) 		(void *proc, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*load) 		(void *proc, s_trcspl *spl, t_u8 **v_file);
+	t_s8 (*update) 		(void *proc, s_trcobj *obj, t_s32 offset);
 	
 	void (*gui_attr)	(void *proc, void *attr);
 	void (*gui_edit)	(void *proc);
@@ -59,7 +59,7 @@ typedef struct trcproc_attr
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_init (s_trcproc *proc, s_trcproc_attr *attr)
+t_s8 trcproc_init (s_trcproc *proc, s_trcproc_attr *attr)
 {
 	memcpy(proc->name, attr->name, sizeof(proc->name));
 	
@@ -69,7 +69,7 @@ s8_t trcproc_init (s_trcproc *proc, s_trcproc_attr *attr)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_free (s_trcproc *proc)
+t_s8 trcproc_free (s_trcproc *proc)
 {
 	return proc->intf->free(proc);
 }
@@ -77,7 +77,7 @@ s8_t trcproc_free (s_trcproc *proc)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_save (s_trcproc *proc, s_trcspl *spl, u8_t **v_file)
+t_s8 trcproc_save (s_trcproc *proc, s_trcspl *spl, t_u8 **v_file)
 {
 	return proc->intf->save(proc, spl, v_file);
 }
@@ -85,7 +85,7 @@ s8_t trcproc_save (s_trcproc *proc, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_load (s_trcproc *proc, s_trcspl *spl, u8_t **v_file)
+t_s8 trcproc_load (s_trcproc *proc, s_trcspl *spl, t_u8 **v_file)
 {
 	return proc->intf->load(proc, spl, v_file);
 }
@@ -93,7 +93,7 @@ s8_t trcproc_load (s_trcproc *proc, s_trcspl *spl, u8_t **v_file)
 //------------------------------------------------------------------------------
 
 inline
-s8_t trcproc_update (s_trcproc *proc, s_trcobj *obj, s32_t offset)
+t_s8 trcproc_update (s_trcproc *proc, s_trcobj *obj, t_s32 offset)
 {
 	return proc->intf->update(proc, obj, offset);
 }
