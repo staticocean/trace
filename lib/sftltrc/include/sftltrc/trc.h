@@ -21,6 +21,10 @@
 #include <sftltrc/impl/trcproc_euler.h>
 #include <sftltrc/impl/trcproc_fps.h>
 
+#include <sftltrc/impl/trcrefs_epz9002.h>
+#include <sftltrc/impl/trcrefs_epz9011.h>
+#include <sftltrc/impl/trcrefs_ewgs84.h>
+
 //------------------------------------------------------------------------------
 
 #endif /* __TRC__ */

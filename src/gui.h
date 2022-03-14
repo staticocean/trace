@@ -168,6 +168,10 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
     trceng_add_proc_intf(&self->eng, &__trcproc_euler__);
     trceng_add_proc_intf(&self->eng, &__trcproc_fps__);
 
+    trceng_add_refs_intf(&self->eng, &__trcrefs_epz9002__);
+    trceng_add_refs_intf(&self->eng, &__trcrefs_epz9011__);
+    trceng_add_refs_intf(&self->eng, &__trcrefs_ewgs84__);
+
 //	trcellp_init(&trcellp_wgs84);
 //	trcellp_init(&trcellp_pz90);
 //	trcellp_init(&trcellp_pz90_11);
