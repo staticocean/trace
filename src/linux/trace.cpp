@@ -423,7 +423,7 @@ int main(int, char**)
     static clock_t diff_ts = 0x00;
 
     s_gui_attr gui_attr = {
-        .none = 0x00,
+        .gscale = 2.0,
     };
 
     gui_init(&gui, &gui_attr);
@@ -493,6 +493,12 @@ int main(int, char**)
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+
+        gui.w_height = height;
+        gui.w_width  = width;
 
         gui_main(&gui);
 

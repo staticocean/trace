@@ -11,14 +11,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <res/fonts/default_font.h>
-
 #include <imgui/imgui.h>
 #include <nfd.h>
+
 #include <sftlstd/vld3.h>
+#include <sftlstd/log.h>
 #include <sftlgui/imgui_theme.h>
 #include <sftlgui/imgui_custom.h>
-
 #include <sftltrc/trc.h>
 
 #include "gui_eng.h"
@@ -35,6 +34,8 @@ typedef struct gui
 {
 	t_f32 			w_height;
 	t_f32 			w_width;
+
+    t_f32           gscale;
 	
 	s_trceng 		eng;
 	
@@ -63,8 +64,8 @@ typedef struct gui
 
 typedef struct gui_attr
 {
-	t_u32 		none;
-	
+    t_f32           gscale;
+
 }	s_gui_attr;
 
 //------------------------------------------------------------------------------
@@ -73,8 +74,46 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 {
     gui_clip_init(&self->gui_clip, (s_gui_clip_attr) {});
 
-	// Init Native File Dialog Extended library
-	NFD_Init();
+	l_init();
+    l_test();
+
+    // Init Native File Dialog Extended library
+    NFD_Init();
+
+    ImGuiIO& io = ImGui::GetIO();
+
+    ImFontConfig font_config;
+    font_config.OversampleH = 4;
+    font_config.OversampleV = 4;
+
+    io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF
+            (default_font_compressed_data_base85,
+             18, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+
+    imgui_theme_set();
+
+    ImGui::StyleColorsLight();
+
+    ImGuiStyle& style_ref = ImGui::GetStyle();
+
+    style_ref.ScrollbarRounding = 0.0;
+    style_ref.ChildRounding     = 0.0;
+    style_ref.WindowRounding    = 0.0;
+    style_ref.FrameRounding     = 0.0;
+    style_ref.GrabRounding      = 0.0;
+    style_ref.PopupRounding     = 0.0;
+    style_ref.TabRounding       = 0.0;
+
+    style_ref.ChildBorderSize   = 0.0;
+    style_ref.FrameBorderSize   = 0.0;
+    style_ref.PopupBorderSize   = 0.0;
+    style_ref.TabBorderSize     = 0.0;
+    style_ref.WindowBorderSize  = 0.0;
+
+    self->gscale = attr->gscale;
+    io.FontGlobalScale = self->gscale;
+
+//    pem_init(&pem, (s_pem_attr) { .t_sz = PEM_T_SZ });
 
 //	s_gui_map *temp_map = new s_gui_map();
 //	map = *temp_map;
@@ -93,8 +132,9 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 	self->gui_tbar.eng  = &self->eng;
 	self->gui_tbar.eng_gui = &self->gui_eng;
     self->gui_tbar.conf = &self->gui_conf;
-	self->gui_tbar.height = 40;
-	sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
+	self->gui_tbar.height = 40*self->gscale;
+
+    sprintf(self->gui_tbar.file_path, "res/saves/default.trj");
 	
 	gui_eng_init(&self->gui_eng, (s_gui_eng_init) {
 	    .obj_ls = self->gui_obj_ls,
@@ -678,37 +718,7 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 //					 (s_gui_obj_init) {.ref = &self->eng.obj_ls[i]}
 //		);
 //	}
-	
-	//-------------------------------------------------------------------------------------------
-	
-	ImGuiIO& io = ImGui::GetIO();
-	
-	ImFontConfig font_config;
-	font_config.OversampleH = 4;
-	font_config.OversampleV = 4;
-	
-	io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF
-			(default_font_compressed_data_base85,
-					18, &font_config, io.Fonts->GetGlyphRangesCyrillic());
-	
-    imgui_theme_set();
-	
-	ImGuiStyle& style_ref = ImGui::GetStyle();
-	
-	style_ref.ScrollbarRounding = 0.0;
-	style_ref.ChildRounding     = 0.0;
-	style_ref.WindowRounding    = 0.0;
-	style_ref.FrameRounding     = 0.0;
-	style_ref.GrabRounding      = 0.0;
-	style_ref.PopupRounding     = 0.0;
-	style_ref.TabRounding       = 0.0;
-	
-	style_ref.ChildBorderSize = 0.0;
-	style_ref.FrameBorderSize = 0.0;
-	style_ref.PopupBorderSize = 0.0;
-	style_ref.TabBorderSize = 0.0;
-	style_ref.WindowBorderSize = 0.0;
-	
+
 	// !!! INIT DEFAULT PROC before loading
 	// because load will try to free it
 	self->eng.proc = self->eng.proc_ls[0];
@@ -727,8 +737,7 @@ inline t_u8 gui_main(s_gui *self)
 {
 	int static_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus
 					   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
-    
-    
+
     #ifdef NDEBUG
 	#else
 	
@@ -784,7 +793,7 @@ inline t_u8 gui_main(s_gui *self)
     {
 		// Object list
 		ImGui::SetNextWindowPos(ImVec2(0, (float) self->gui_tbar.height), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(240, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(240*self->gscale, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("obj_ls", NULL, static_flags);
 		gui_eng_objlist(&self->gui_eng, &self->eng);
 		ImGui::End();
@@ -792,8 +801,8 @@ inline t_u8 gui_main(s_gui *self)
 	
 	{
 		// Object edit
-		ImGui::SetNextWindowPos(ImVec2(240, (float) self->gui_tbar.height), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(240, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowPos(ImVec2(240*self->gscale, (float) self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(240*self->gscale, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("item_edit", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
@@ -863,8 +872,8 @@ inline t_u8 gui_main(s_gui *self)
 	
 	{
 		// Main view
-		ImGui::SetNextWindowPos (ImVec2(240*2, (float) self->gui_tbar.height), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(self->w_width - 240*2, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowPos (ImVec2(240*2*self->gscale, (float) self->gui_tbar.height), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(self->w_width - 240*2*self->gscale, self->w_height - self->gui_tbar.height), ImGuiCond_Always);
 		ImGui::Begin("main_view", NULL, static_flags);
 		
 		if (self->gui_eng.sel_item != NULL)
