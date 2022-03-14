@@ -144,7 +144,7 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 	s_trceng_attr trceng_attr = {
 		
 		.proc     		= self->proc_ls[0],
-		
+
 		.proc_ls  		= self->proc_ls,
 		.refs_ls  		= self->refs_ls,
 		.obj_ls   		= self->obj_ls,
@@ -164,7 +164,10 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
 	};
 	
 	trceng_init(&self->eng, &trceng_attr);
-	
+
+    trceng_add_proc_intf(&self->eng, &__trcproc_euler__);
+    trceng_add_proc_intf(&self->eng, &__trcproc_fps__);
+
 //	trcellp_init(&trcellp_wgs84);
 //	trcellp_init(&trcellp_pz90);
 //	trcellp_init(&trcellp_pz90_11);

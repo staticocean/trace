@@ -366,7 +366,9 @@ int main(int, char**)
         return 1;
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(4000, 4000, "Softael HFT-Terminal", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(
+            4000, 4000,
+            "Softael - Trace", NULL, NULL);
 
     // Setup Vulkan
     if (!glfwVulkanSupported())

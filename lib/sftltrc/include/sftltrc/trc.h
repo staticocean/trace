@@ -19,6 +19,7 @@
 #include <sftltrc/trctraj.h>
 
 #include <sftltrc/impl/trcproc_euler.h>
+#include <sftltrc/impl/trcproc_fps.h>
 
 //------------------------------------------------------------------------------
 
