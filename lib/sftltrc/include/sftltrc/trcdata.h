@@ -40,21 +40,21 @@ typedef struct trcdata_intf
 
 typedef struct trcdata
 {
-	union
-	{
-		s_trcdata_intf *intf;
-		s_trcspl_ptr 	intf_spl_ptr;
-	};
-	
-	char 				name[32];
-	s_trcobj 			*obj;
+    s_trcdata_intf     *intf;
+
+    t_u64               guid;
+
+    char 				name[32];
+	s_trcobj 		   *obj;
 
 } 	s_trcdata;
 
 typedef struct trcdata_attr
 {
+    t_u64               guid;
+
 	char 				name[32];
-	s_trcobj 			*obj;
+	s_trcobj 		   *obj;
 	
 } 	s_trcdata_attr;
 
@@ -63,6 +63,8 @@ typedef struct trcdata_attr
 inline
 t_s8 trcdata_init (s_trcdata *data, s_trcdata_attr *attr)
 {
+    data->guid = attr->guid;
+
 	memcpy(data->name, attr->name, sizeof(data->name));
 	data->obj = attr->obj;
 	
@@ -136,10 +138,10 @@ void trcdata_gui_view (s_trcdata *data)
 //------------------------------------------------------------------------------
 
 inline
-s_trcdata* trcdata_malloc (s_trcdata_intf *intf_data, s_trcdata_attr *attr)
+s_trcdata* trcdata_malloc (s_trcdata_intf *data_intf, s_trcdata_attr *attr)
 {
-	s_trcdata *data = (s_trcdata*) malloc(intf_data->data_sz);
-	data->intf = intf_data;
+	s_trcdata *data = (s_trcdata*) malloc(data_intf->data_sz);
+	data->intf = data_intf;
 	
 	trcdata_init(data, attr);
 	

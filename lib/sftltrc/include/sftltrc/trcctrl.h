@@ -40,20 +40,20 @@ typedef struct trcctrl_intf
 
 typedef struct trcctrl
 {
-	union
-	{
-		s_trcctrl_intf *intf;
-		s_trcspl_ptr 	intf_spl_ptr;
-	};
-	
-	char 				name[32];
+    s_trcctrl_intf     *intf;
+
+    t_u64               guid;
+
+    char 				name[32];
 	s_trcobj 			*obj;
 
 } 	s_trcctrl;
 
 typedef struct trcctrl_attr
 {
-	char 				name[32];
+    t_u64               guid;
+
+    char 				name[32];
 	s_trcobj 			*obj;
 	
 } 	s_trcctrl_attr;
@@ -63,6 +63,8 @@ typedef struct trcctrl_attr
 inline
 t_s8 trcctrl_init (s_trcctrl *ctrl, s_trcctrl_attr *attr)
 {
+    ctrl->guid = attr->guid;
+
 	memcpy(ctrl->name, attr->name, sizeof(ctrl->name));
 	ctrl->obj = attr->obj;
 	
@@ -136,10 +138,10 @@ void trcctrl_gui_view (s_trcctrl *ctrl)
 //------------------------------------------------------------------------------
 
 inline
-s_trcctrl* trcctrl_malloc (s_trcctrl_intf *intf_ctrl, s_trcctrl_attr *attr)
+s_trcctrl* trcctrl_malloc (s_trcctrl_intf *ctrl_intf, s_trcctrl_attr *attr)
 {
-	s_trcctrl *ctrl = (s_trcctrl*) malloc(intf_ctrl->data_sz);
-	ctrl->intf = intf_ctrl;
+	s_trcctrl *ctrl = (s_trcctrl*) malloc(ctrl_intf->data_sz);
+	ctrl->intf = ctrl_intf;
 	
 	trcctrl_init(ctrl, attr);
 	

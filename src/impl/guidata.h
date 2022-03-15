@@ -2,20 +2,15 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-#ifndef __GUI_DATA__
-#define __GUI_DATA__
+// trcctrl - trace
+
+#ifndef __GUIDATA__
+#define __GUIDATA__
 
 //------------------------------------------------------------------------------
 
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <implot/implot.h>
-
-#include <sftlstd/vld3.h>
-#include <sftlstd/vl3d.h>
-#include <sftlstd/vl3d_imgui.h>
-
-#include <sftltrc/trc.h>
+#include <sftlgui/sftlgui.h>
+#include <sftltrc/sftltrc.h>
 
 //------------------------------------------------------------------------------
 
@@ -171,7 +166,7 @@ inline t_u8 gui_data_view_ram(s_trcdata *self)
 //			s_vl3d_obj *obj_ls = (s_vl3d_obj *) malloc(sizeof(s_vl3d_obj) * (data->offset*2 + 2*4096));
 //
 //			s_vl3d_view view = vl3d_view_init();
-//			vl3d_view_load(&vl3d, &view, view);
+//			vl3d__GUI_CTRL___view_load(&vl3d, &view, view);
 //
 //			vl3d_init(&vl3d, (s_vl3d_attr) {
 //				.obj_sz = data->offset*2 + 2*4096,
@@ -630,4 +625,4 @@ inline void gui_data_view_bin(s_trcdata *self)
 
 //------------------------------------------------------------------------------
 
-#endif /* __GUI_DATA__ */
+#endif /* __GUIDATA__ */

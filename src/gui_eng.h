@@ -17,11 +17,14 @@
 
 #include <sftlgui/sftlgui.h>
 
-#include <sftltrc/trc.h>
+#include <sftltrc/sftltrc.h>
 
 #include "gui_obj.h"
-#include "gui_traj.h"
 #include "gui_clip.h"
+
+#include "impl/guitraj.h"
+#include "impl/guictrl.h"
+#include "impl/guidata.h"
 
 //------------------------------------------------------------------------------
 

@@ -40,19 +40,19 @@ typedef struct trcproc_intf
 
 typedef struct trcproc
 {
-	union
-	{
-		s_trcproc_intf *intf;
-		s_trcspl_ptr 	intf_spl_ptr;
-	};
-	
-	char 				name[32];
+    s_trcproc_intf     *intf;
+
+    t_u64               guid;
+
+    char 				name[32];
 	
 } 	s_trcproc;
 
 typedef struct trcproc_attr
 {
-	char 				name[32];
+    t_u64               guid;
+
+    char 				name[32];
 	
 } 	s_trcproc_attr;
 
@@ -61,6 +61,8 @@ typedef struct trcproc_attr
 inline
 t_s8 trcproc_init (s_trcproc *proc, s_trcproc_attr *attr)
 {
+    proc->guid = attr->guid;
+
 	memcpy(proc->name, attr->name, sizeof(proc->name));
 	
 	return proc->intf->init(proc, attr);
@@ -125,10 +127,10 @@ void trcproc_gui_view (s_trcproc *proc)
 //------------------------------------------------------------------------------
 
 inline
-s_trcproc* trcproc_malloc (s_trcproc_intf *intf_proc, s_trcproc_attr *attr)
+s_trcproc* trcproc_malloc (s_trcproc_intf *proc_intf, s_trcproc_attr *attr)
 {
-	s_trcproc *proc = (s_trcproc*) malloc(intf_proc->data_sz);
-	proc->intf = intf_proc;
+	s_trcproc *proc = (s_trcproc*) malloc(proc_intf->data_sz);
+	proc->intf = proc_intf;
 	
 	trcproc_init(proc, attr);
 	

@@ -4,8 +4,8 @@
 
 // trc - trace
 
-#ifndef __TRC__
-#define __TRC__
+#ifndef __SFTLTRC__
+#define __SFTLTRC__
 
 //------------------------------------------------------------------------------
 
@@ -25,8 +25,12 @@
 #include <sftltrc/impl/trcrefs_epz9011.h>
 #include <sftltrc/impl/trcrefs_ewgs84.h>
 
+#include <sftltrc/impl/trctraj_static.h>
+#include <sftltrc/impl/trctraj_orb.h>
+#include <sftltrc/impl/trctraj_bz.h>
+
 //------------------------------------------------------------------------------
 
-#endif /* __TRC__ */
+#endif /* __SFTLTRC__ */
 
 

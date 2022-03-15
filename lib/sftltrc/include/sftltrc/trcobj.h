@@ -38,44 +38,48 @@ typedef struct trcobj_intf
 
 typedef struct trcobj_data
 {
-	t_f64 			time[2];
+	t_f64 			    time[2];
 	
-	t_f64 			pos[3][3];
-	t_f64 			rot[3][9];
+	t_f64 			    pos[3][3];
+	t_f64 			    rot[3][9];
 	
-	t_f64 			pos_force[3];
-	t_f64 			rot_force[3];
+	t_f64 			    pos_force[3];
+	t_f64 			    rot_force[3];
 	
-	t_f64 			pos_error;
-	t_f64 			rot_error;
+	t_f64 			    pos_error;
+	t_f64 			    rot_error;
 	
 }	s_trcobj_data;
 
 typedef struct trcobj
 {
-	s_trcobj_intf  *intf;
+	s_trcobj_intf      *intf;
+
+    t_u64               guid;
+
+    char 			    name[32];
 	
-	char 			name[32];
+	t_f64 			   *time;
 	
-	t_f64 			*time;
+	t_f64 			    pos[3][3];
+	t_f64 			    rot[3][9];
 	
-	t_f64 			pos[3][3];
-	t_f64 			rot[3][9];
+	t_f64 			    pos_force[3];
+	t_f64 			    rot_force[3];
 	
-	t_f64 			pos_force[3];
-	t_f64 			rot_force[3];
+	t_f64 			    pos_inert;
+	t_f64 			    rot_inert;
 	
-	t_f64 			pos_inert;
-	t_f64 			rot_inert;
-	
-	t_u32 			log_sz;
-	s_trcobj_data 	*log_ls;
+	t_u32 			    log_sz;
+	s_trcobj_data 	   *log_ls;
 	
 } 	s_trcobj;
 
 typedef struct trcobj_attr
 {
-	char 			name[32];
+    t_u64               guid;
+
+    char 			    name[32];
 	
 } s_trcobj_attr;
 
@@ -84,6 +88,8 @@ typedef struct trcobj_attr
 inline
 t_s8 trcobj_init (s_trcobj *obj, s_trcobj_attr *attr)
 {
+    obj->guid = attr->guid;
+
 	strcpy(obj->name, attr->name);
 	
 	obj->log_ls = NULL;

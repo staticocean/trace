@@ -37,7 +37,7 @@ typedef struct trcspl
 
 typedef struct trcspl_attr
 {
-	t_u32 			temp;
+	t_s32 			none;
 
 }	s_trcspl_attr;
 
@@ -52,7 +52,7 @@ void trcspl_init (s_trcspl *spl, s_trcspl_attr attr)
 
 void trcspl_add (s_trcspl *spl, void *ptr)
 {
-	spl->ptr_ls[spl->ptr_sz].ptr = ptr;
+	spl->ptr_ls[spl->ptr_sz].ptr  = ptr;
 	spl->ptr_ls[spl->ptr_sz].guid = crc32_iso_str((char*) ptr);
 	
 	spl->ptr_sz++;

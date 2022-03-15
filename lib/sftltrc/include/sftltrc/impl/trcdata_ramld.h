@@ -160,7 +160,7 @@ inline t_u8 trcdata_ramld_render(s_trcdata_ramld *self, s_trcobj *obj)
 				vld3v_subv(ort, ecef, ecef_f);
 				
 				t_f64 path = vld3v_dot(ort, trje);
-				vl3_vsumm(ort, ort, trje, -path);
+				vld3v_msaddv(ort, ort, trje, -path);
 				
 				t_f64 ref_pos[3];
 				vld3v_subv(ref_pos, ecef, ort);

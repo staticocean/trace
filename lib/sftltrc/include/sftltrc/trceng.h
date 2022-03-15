@@ -30,70 +30,70 @@ typedef struct trceng
 	t_f64 				time_step;
 	t_u32 				time_iter;
 	
-	s_trcproc 			*proc;
+	s_trcproc 		   *proc;
 	
-	t_u32 				update_count;
-	t_u32 				proc_count;
+	t_s32 				update_count;
+	t_s32 				proc_count;
 
 	s_trcspl 			intf_spl;
 	
 	t_s32 				proc_sz;
-	s_trcproc 			**proc_ls;
+	s_trcproc 		  **proc_ls;
 	
 	t_s32 				refs_sz;
-	s_trcrefs			**refs_ls;
+	s_trcrefs		  **refs_ls;
 	
 	t_s32  				obj_sz;
-	s_trcobj 			**obj_ls;
+	s_trcobj 	      **obj_ls;
 	
 	t_s32 				traj_sz;
-	s_trctraj			**traj_ls;
+	s_trctraj		  **traj_ls;
 	
 	t_s32 				ctrl_sz;
-	s_trcctrl			**ctrl_ls;
+	s_trcctrl		  **ctrl_ls;
 	
 	t_s32 				data_sz;
-	s_trcdata			**data_ls;
+	s_trcdata		  **data_ls;
 	
 	t_s32 				proc_intf_sz;
-	s_trcproc_intf		**proc_intf_ls;
+	s_trcproc_intf    **proc_intf_ls;
 	
 	t_s32 				refs_intf_sz;
-	s_trcrefs_intf 		**refs_intf_ls;
+	s_trcrefs_intf 	  **refs_intf_ls;
 	
 	t_s32 				obj_intf_sz;
-	s_trcobj_intf		**obj_intf_ls;
+	s_trcobj_intf	  **obj_intf_ls;
 	
 	t_s32 				traj_intf_sz;
-	s_trctraj_intf 		**traj_intf_ls;
+	s_trctraj_intf 	  **traj_intf_ls;
 	
 	t_s32 				ctrl_intf_sz;
-	s_trcctrl_intf		**ctrl_intf_ls;
+	s_trcctrl_intf	  **ctrl_intf_ls;
 	
 	t_s32 				data_intf_sz;
-	s_trcdata_intf		**data_intf_ls;
+	s_trcdata_intf	  **data_intf_ls;
 
 }	s_trceng;
 
 typedef struct trceng_attr
 {
-	t_u8 				*stack;
+	t_s8 			   *stack;
 	
-	s_trcproc 			*proc;
+	s_trcproc 		   *proc;
 	
-	s_trcproc  			**proc_ls;
-	s_trcrefs  			**refs_ls;
-	s_trcobj  			**obj_ls;
-	s_trctraj			**traj_ls;
-	s_trcctrl			**ctrl_ls;
-	s_trcdata			**data_ls;
-	
-	s_trcproc_intf 		**proc_intf_ls;
-	s_trcrefs_intf 		**refs_intf_ls;
-	s_trcobj_intf 		**obj_intf_ls;
-	s_trctraj_intf 		**traj_intf_ls;
-	s_trcctrl_intf 		**ctrl_intf_ls;
-	s_trcdata_intf 		**data_intf_ls;
+	s_trcproc  		  **proc_ls;
+	s_trcrefs  		  **refs_ls;
+	s_trcobj  		  **obj_ls;
+	s_trctraj		  **traj_ls;
+	s_trcctrl		  **ctrl_ls;
+	s_trcdata		  **data_ls;
+
+	s_trcproc_intf 	  **proc_intf_ls;
+	s_trcrefs_intf 	  **refs_intf_ls;
+	s_trcobj_intf 	  **obj_intf_ls;
+	s_trctraj_intf 	  **traj_intf_ls;
+	s_trcctrl_intf 	  **ctrl_intf_ls;
+	s_trcdata_intf 	  **data_intf_ls;
 	
 	t_f64 				time_limit;
 	t_f64 				time_step;

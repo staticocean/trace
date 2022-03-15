@@ -22,7 +22,7 @@
 
 #include <sftlgui/sftlgui.h>
 
-#include <sftltrc/trc.h>
+#include <sftltrc/sftltrc.h>
 
 #include "gui_eng.h"
 #include "gui_conf.h"

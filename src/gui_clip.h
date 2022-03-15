@@ -14,7 +14,7 @@
 #include <sftlstd/vl3d.h>
 #include <sftlstd/vl3d_imgui.h>
 
-#include <sftltrc/trc.h>
+#include <sftltrc/sftltrc.h>
 
 //------------------------------------------------------------------------------
 

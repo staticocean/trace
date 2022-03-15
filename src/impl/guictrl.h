@@ -2,17 +2,15 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-#ifndef __GUI_CTRL__
-#define __GUI_CTRL__
+// trcctrl - trace
+
+#ifndef __GUICTRL__
+#define __GUICTRL__
 
 //------------------------------------------------------------------------------
 
-#include <sftlstd/vld3.h>
-
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-
-#include <sftltrc/trc.h>
+#include <sftlgui/sftlgui.h>
+#include <sftltrc/sftltrc.h>
 
 //------------------------------------------------------------------------------
 
@@ -401,4 +399,4 @@ inline void gui_ctrl_view_gm(s_trcctrl *self)
 
 //------------------------------------------------------------------------------
 
-#endif /* __GUI_CTRL__ */
+#endif /* __GUICTRL__ */

@@ -210,17 +210,6 @@ s_trcproc_intf __trcproc_fps__ = {
 
 //------------------------------------------------------------------------------
 
-void trcproc_fps_init (s_trcproc_fps **proc, s_trcproc_fps_attr *attr)
-{
-    *proc = (s_trcproc_fps*) malloc(sizeof(s_trcproc_fps));
-
-    (*proc)->super.intf = &__trcproc_fps__;
-
-    trcproc_init(&(*proc)->super, &attr->super);
-}
-
-//------------------------------------------------------------------------------
-
 #endif /* __TRCPROC_FPS__ */
 
 

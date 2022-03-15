@@ -220,7 +220,7 @@ inline t_u8 trcdata_ram_render(s_trcdata_ram *self, s_trcobj *obj)
             self->abs_hpr[i*3 + 0x02] = abs_hpr.roll;
             vld3v_copy(&self->abs_pos[i*3], &log->pos[0][0]);
             vld3v_copy(&self->abs_vel[i*3], &log->pos[1][0]);
-            vl3_vsumm(&self->abs_acc[i*3], &log->pos[2][0], log->pos_force, -1.0 / obj->pos_inert);
+            vld3v_msaddv(&self->abs_acc[i*3], &log->pos[2][0], log->pos_force, -1.0 / obj->pos_inert);
 			
 			// support for implot strange api
 			self->time3[i*3 + 0x00] = log->time[0];

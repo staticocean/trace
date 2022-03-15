@@ -15,7 +15,7 @@
 
 #include <sftlgui/imgui_custom.h>
 
-#include <sftltrc/trc.h>
+#include <sftltrc/sftltrc.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>

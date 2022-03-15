@@ -18,14 +18,11 @@
 #include <sftlstd/log.h>
 #include <sftlgui/imgui_theme.h>
 #include <sftlgui/imgui_custom.h>
-#include <sftltrc/trc.h>
+#include <sftltrc/sftltrc.h>
 
 #include "gui_eng.h"
 #include "gui_obj.h"
 #include "gui_tbar.h"
-#include "gui_traj.h"
-#include "gui_ctrl.h"
-#include "gui_data.h"
 #include "gui_clip.h"
 
 //------------------------------------------------------------------------------
@@ -172,14 +169,8 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
     trceng_add_refs_intf(&self->eng, &__trcrefs_epz9011__);
     trceng_add_refs_intf(&self->eng, &__trcrefs_ewgs84__);
 
-//	trcellp_init(&trcellp_wgs84);
-//	trcellp_init(&trcellp_pz90);
-//	trcellp_init(&trcellp_pz90_11);
-//
-//	trceng_add_ellpapi(&self->eng, trcellp_wgs84);
-//	trceng_add_ellpapi(&self->eng, trcellp_pz90);
-//	trceng_add_ellpapi(&self->eng, trcellp_pz90_11);
-//
+    trceng_add_traj_intf(&self->eng, &__trctraj_static__);
+
 //	static s_trctraj_static_init trctraj_static_config_ = {
 //			.eng = &self->eng,
 //			.ref = &self->eng.obj_ls[0],

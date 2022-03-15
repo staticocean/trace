@@ -2,22 +2,15 @@
 // 2021 Softael LLC.
 // Created by staticocean on 11/11/2021
 
-#ifndef __GUI_TRAJ__
-#define __GUI_TRAJ__
+// trcctrl - trace
+
+#ifndef __GUITRAJ_STATIC__
+#define __GUITRAJ_STATIC__
 
 //------------------------------------------------------------------------------
 
-#include <implot/implot.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-
-#include <sftlstd/vld3.h>
-#include <sftlstd/vl3d.h>
-#include <sftlstd/vl3d_imgui.h>
-
-#include <sftltrc/trc.h>
-
-#include "gui_w.h"
+#include <sftlgui/sftlgui.h>
+#include <sftltrc/sftltrc.h>
 
 //------------------------------------------------------------------------------
 
@@ -1822,4 +1815,4 @@
 
 //------------------------------------------------------------------------------
 
-#endif /* __GUI_TRAJ__ */
+#endif /* __GUITRAJ_STATIC__ */
