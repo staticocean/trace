@@ -29,6 +29,11 @@
 #include <sftltrc/impl/trctraj_orb.h>
 #include <sftltrc/impl/trctraj_bz.h>
 
+#include <sftltrc/impl/trcctrl_cpos.h>
+#include <sftltrc/impl/trcctrl_crot.h>
+#include <sftltrc/impl/trcctrl_gms.h>
+#include <sftltrc/impl/trcctrl_egms.h>
+
 //------------------------------------------------------------------------------
 
 #endif /* __SFTLTRC__ */

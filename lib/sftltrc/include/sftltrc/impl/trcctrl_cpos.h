@@ -62,11 +62,11 @@ t_s8 __trcctrl_cpos_reset__ (void *__ctrl__, s_trcobj *obj)
 {
     s_trcctrl_cpos *ctrl = (s_trcctrl_cpos*) __ctrl__;
 
-	if (obj->traj_sz > 0x00)
-	{
-		s_trctraj *traj = &obj->traj_ls[0];
-		traj->pos(traj->data, 0.0, &obj->pos[0][0]);
-	}
+//	if (obj->traj_sz > 0x00)
+//	{
+//		s_trctraj *traj = &obj->traj_ls[0];
+//		traj->pos(traj->data, 0.0, &obj->pos[0][0]);
+//	}
 	
 	return 0x00;
 }
@@ -74,11 +74,13 @@ t_s8 __trcctrl_cpos_reset__ (void *__ctrl__, s_trcobj *obj)
 static
 t_s8 __trcctrl_cpos_update__ (void *__ctrl__, s_trcobj *obj)
 {
-	if (obj->traj_sz > 0x00)
-	{
-		s_trctraj *traj = &obj->traj_ls[0];
-		traj->pos(traj->data, *obj->time, &obj->pos[0][0]);
-	}
+    s_trcctrl_cpos *ctrl = (s_trcctrl_cpos*) __ctrl__;
+
+//	if (obj->traj_sz > 0x00)
+//	{
+//		s_trctraj *traj = &obj->traj_ls[0];
+//		traj->pos(traj->data, *obj->time, &obj->pos[0][0]);
+//	}
 	
 	return 0x00;
 }

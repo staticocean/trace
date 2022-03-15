@@ -159,22 +159,4 @@ t_s8 __trctraj_static_rot__ (void *__traj__, t_f64 time, t_f64 *rot)
 
 //------------------------------------------------------------------------------
 
-s_trctraj_intf __trctraj_static__ = {
-
-        .desc    = "trctraj_static",
-		
-		.data_sz = sizeof(s_trctraj_static),
-		.attr_sz = sizeof(s_trctraj_static_attr),
-		
-		.init    = __trctraj_static_init__,
-		.free    = __trctraj_static_free__,
-		.save    = __trctraj_static_save__,
-		.load    = __trctraj_static_load__,
-		.compile = __trctraj_static_compile__,
-        .pos     = __trctraj_static_pos__,
-        .rot     = __trctraj_static_rot__,
-};
-
-//------------------------------------------------------------------------------
-
 #endif /* __TRCTRAJ_STATIC__ */

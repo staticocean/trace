@@ -44,6 +44,10 @@ void guitraj_edit (s_trctraj *traj)
         traj->intf->gui_edit(traj);
     }
 
+    ImGui::Dummy(ImVec2(0, 5));
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0, 5));
+
     ImGui::PopID();
 }
 
@@ -62,6 +66,27 @@ void guitraj_view (s_trctraj *traj)
     else
     {
         traj->intf->gui_view(traj);
+    }
+
+    ImGui::PopID();
+}
+
+
+//------------------------------------------------------------------------------
+
+extern
+void guitraj_attr (s_trctraj *traj, s_trctraj_attr *attr)
+{
+    ImGui::PushID(traj);
+
+    if (traj->intf->gui_attr == NULL)
+    {
+        ImGui::Text("[Plugin attr is not supported]");
+    }
+
+    else
+    {
+        traj->intf->gui_attr(traj, attr);
     }
 
     ImGui::PopID();

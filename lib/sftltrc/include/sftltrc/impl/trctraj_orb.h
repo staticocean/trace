@@ -213,22 +213,4 @@ t_s8 __trctraj_orb_rot__ (void *__traj__, t_f64 time, t_f64 *rot)
 
 //------------------------------------------------------------------------------
 
-s_trctraj_intf __trctraj_orb__ = {
-
-        .desc    = "trctraj_orb",
-
-        .data_sz = sizeof(s_trctraj_orb),
-        .attr_sz = sizeof(s_trctraj_orb_attr),
-
-        .init    = __trctraj_orb_init__,
-        .free    = __trctraj_orb_free__,
-        .save    = __trctraj_orb_save__,
-        .load    = __trctraj_orb_load__,
-        .compile = __trctraj_orb_compile__,
-        .pos     = __trctraj_orb_pos__,
-        .rot     = __trctraj_orb_rot__,
-};
-
-//------------------------------------------------------------------------------
-
 #endif /* __TRCTRAJ_ORB__ */

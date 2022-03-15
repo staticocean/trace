@@ -19,12 +19,11 @@
 
 #include <sftltrc/sftltrc.h>
 
+#include "guitraj.h"
+#include "guictrl.h"
+#include "guidata.h"
 #include "gui_obj.h"
 #include "gui_clip.h"
-
-#include "impl/guitraj.h"
-#include "impl/guictrl.h"
-#include "impl/guidata.h"
 
 //------------------------------------------------------------------------------
 

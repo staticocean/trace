@@ -20,6 +20,16 @@
 #include <sftlgui/imgui_custom.h>
 #include <sftltrc/sftltrc.h>
 
+#include "guitraj.h"
+#include "impl/guitraj_static.h"
+#include "impl/guitraj_orb.h"
+#include "impl/guitraj_bz.h"
+#include "impl/guitraj_bz2.h"
+
+#include "guictrl.h"
+
+#include "guidata.h"
+
 #include "gui_eng.h"
 #include "gui_obj.h"
 #include "gui_tbar.h"
@@ -169,7 +179,9 @@ t_u8 gui_init (s_gui *self, s_gui_attr *attr)
     trceng_add_refs_intf(&self->eng, &__trcrefs_epz9011__);
     trceng_add_refs_intf(&self->eng, &__trcrefs_ewgs84__);
 
-    trceng_add_traj_intf(&self->eng, &__trctraj_static__);
+    trceng_add_traj_intf(&self->eng, &__guitraj_static__);
+    trceng_add_traj_intf(&self->eng, &__guitraj_orb__);
+//    trceng_add_traj_intf(&self->eng, &__guitraj_bz__);
 
 //	static s_trctraj_static_init trctraj_static_config_ = {
 //			.eng = &self->eng,
