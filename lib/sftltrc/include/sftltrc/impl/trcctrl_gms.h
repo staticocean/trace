@@ -49,6 +49,12 @@ t_s8 __trcctrl_gms_init__ (void *__ctrl__, void *__attr__)
 }
 
 static
+t_s8 __trcctrl_gms_free__ (void *__ctrl__)
+{
+    return 0x00;
+}
+
+static
 t_s8 __trcctrl_gms_save__ (void *__ctrl__, s_trcspl *spl, t_u8 **v_file)
 {
     return 0x00;

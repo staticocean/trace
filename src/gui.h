@@ -821,25 +821,19 @@ inline t_u8 gui_main(s_gui *self)
 			{
 				case gui_eng_type_obj:
 				{
-					s_gui_obj *obj_gui = (s_gui_obj*) self->gui_eng.sel_item;
-					s_trcobj *obj = obj_gui->ref;
-					
-					gui_obj_edit(obj_gui, obj);
+//					s_gui_obj *obj_gui = (s_gui_obj*) self->gui_eng.sel_item;
+//					s_trcobj *obj = obj_gui->ref;
+//
+//					gui_obj_edit(obj_gui, obj);
 					
 					break;
 				}
 				
 				case gui_eng_type_traj:
 				{
-//					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
-//					gui_traj_edit(traj);
-//
-//					if      (traj->hash == traj_hash_static) { gui_traj_edit_static (traj); }
-//					else if (traj->hash == traj_hash_orb   ) { gui_traj_edit_orb    (traj); }
-//					else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
-//					else if (traj->hash == traj_hash_bz2   ) { gui_traj_edit_bz2    (traj); }
-//					else if (traj->hash == traj_hash_navsat) { gui_traj_edit_navsat (traj); }
-					
+					s_trctraj *traj = (s_trctraj*) self->gui_eng.sel_item;
+					guitraj_edit(traj);
+
 					break;
 				}
 				
@@ -847,14 +841,7 @@ inline t_u8 gui_main(s_gui *self)
 				{
 //					s_trcctrl *ctrl = (s_trcctrl*) self->gui_eng.sel_item;
 //					gui_ctrl_edit(ctrl);
-//
-//					if      (ctrl->hash == ctrl_hash_gm     ) { gui_ctrl_edit_gm     (ctrl); }
-//					else if (ctrl->hash == ctrl_hash_egms   ) { gui_ctrl_edit_egms   (ctrl); }
-//					else if (ctrl->hash == ctrl_hash_egmsnpo) { gui_ctrl_edit_egmsnpo(ctrl); }
-//					else if (ctrl->hash == ctrl_hash_gms    ) { gui_ctrl_edit_gms    (ctrl); }
-//					else if (ctrl->hash == ctrl_hash_varot  ) { gui_ctrl_edit_varot  (ctrl); }
-////                    else if (traj->hash == traj_hash_bz    ) { gui_traj_edit_bz     (traj); }
-					
+
 					break;
 				}
 				
@@ -862,13 +849,7 @@ inline t_u8 gui_main(s_gui *self)
 				{
 //					s_trcdata *data = (s_trcdata*) self->gui_eng.sel_item;
 //					gui_data_edit(data);
-//
-//					if      (data->hash == data_hash_text ) { gui_data_edit_text (data); }
-//					else if (data->hash == data_hash_ram  ) { gui_data_edit_ram  (data); }
-//					else if (data->hash == data_hash_ramld) { gui_data_edit_ramld(data); }
-//					else if (data->hash == data_hash_mat  ) { gui_data_edit_mat  (data); }
-//					else if (data->hash == data_hash_bin  ) { gui_data_edit_bin  (data); }
-					
+
 					break;
 				}
 				

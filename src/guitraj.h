@@ -20,7 +20,7 @@ void guitraj_edit (s_trctraj *traj)
 	ImGui::PushID(traj);
 
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-	ImGui::InputText("##name", traj->name, 32);
+	ImGui::InputText("##name", traj->name, sizeof(traj->name));
 
 	ImGui::Dummy(ImVec2(0, 5));
 	ImGui::Separator();
@@ -34,14 +34,14 @@ void guitraj_edit (s_trctraj *traj)
     ImGui::Separator();
     ImGui::Dummy(ImVec2(0, 5));
 
-    if (traj->intf->gui_edit == NULL)
+    if (traj->intf->gui_edit != NULL)
     {
-        ImGui::Text("[Plugin edit is not supported]");
+        traj->intf->gui_edit(traj);
     }
 
     else
     {
-        traj->intf->gui_edit(traj);
+        ImGui::Text("[Plugin edit is not supported]");
     }
 
     ImGui::Dummy(ImVec2(0, 5));
